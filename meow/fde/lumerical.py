@@ -62,6 +62,4 @@ def compute_modes(
         mode = zero_phase(mode)
         modes.append(mode)
 
-    modes = sorted(modes, key=lambda m: np.real(m.neff), reverse=True)
-
-    return modes
+    return sorted(modes, key=lambda m: np.real(m.neff), reverse=True)

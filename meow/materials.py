@@ -260,8 +260,7 @@ def _hash_values(values):
     df = pd.DataFrame(
         {**values["params"], "nr": np.real(values["n"]), "ni": np.imag(values["n"])}
     )
-    h = md5(np.asarray(df.values * 1e9, dtype=np.int64).tobytes()).hexdigest()
-    return h
+    return md5(np.asarray(df.values * 1e9, dtype=np.int64).tobytes()).hexdigest()
 
 
 def _validate_path(path):
