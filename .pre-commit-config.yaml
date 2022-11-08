@@ -1,0 +1,16 @@
+repos:
+- repo: local
+  hooks:
+  - id: nbstripout
+    name: nbstripout
+    entry: nbstripout
+    language: python
+    pass_filenames: true
+    types: [jupyter]
+
+  - id: black
+    name: black
+    entry: black
+    language: python
+    pass_filenames: true
+    types: [python]

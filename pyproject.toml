@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools", "pip", "build", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "meow-sim"
+version = "0.0.0"
+authors = [
+  {name="Rockley Photonics", email="da-team@rockleyphotonics.com"},
+  {name="Floris Laporte", email="floris.laporte@rockleyphotonics.com"},
+]
+description = "Modeling of Eigenmodes and Overlaps in Waveguide Structures"
+requires-python = ">=3.8"
+keywords = [
+  "modeling",
+  "eigenmodes",
+  "overlaps",
+  "waveguides",
+  "eme",
+  "fde",
+  "photonics",
+]
+license = { text = "Apache Software License" }
+readme = "README.md"
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+  "flatten-dict",
+  "gdspy",
+  "loguru",
+  "matplotlib",
+  "numexpr",
+  "numpy",
+  "orjson",
+  "pydantic",
+  "rich",
+  "sax<0.8.0",
+  "scipy",
+  "shapely",
+  "tidy3d-beta==1.4.1",
+  "tqdm",
+  "triangle",
+  "trimesh",
+  "fastprogress",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["meow*"]
+exclude = []
+namespaces = true
+
+[tool.setuptools.package-data]
+"*" = ["*.csv"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+
+[tool.pyright]
+reportPrivateImportUsage = false

@@ -1,6 +1,7 @@
 # IDE settings
 .vscode/
 .idea/
+sandbox
 
 # nbdev
 *.bak
@@ -21,6 +22,9 @@ tmp*
 __pycache__/
 *.py[cod]
 *$py.class
+
+# SQLite
+*.sqlite3
 
 # C extensions
 *.so

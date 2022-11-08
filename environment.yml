@@ -1,0 +1,84 @@
+name: meow
+channels:
+  - conda-forge
+dependencies:
+  # required
+  - gdspy
+  - loguru
+  - matplotlib
+  - numexpr
+  - numpy>=1.22
+  - orjson
+  - pandas
+  - pandas-stubs
+  - pillow
+  - pydantic
+  - rich
+  - scipy
+  - shapely
+  - tqdm
+  - flatten-dict
+
+  # pyproject.toml
+  - build
+  - pip<22
+  - python=3.10
+  - setuptools
+  - wheel
+
+  # dev
+  - bumpversion
+  - ca-certificates
+  - certifi
+  - docutils
+  - flake8
+  - ipykernel
+  - ipympl
+  - isort
+  - jupyter-book
+  - line_profiler
+  - nbstripout
+  - openssl
+  - papermill
+  - pre-commit
+  - pydocstyle
+  - pytest
+  - pytest-cov
+  - recommonmark
+  - sphinx
+  - sphinx_rtd_theme
+  - tox
+  - twine
+
+  # trimesh
+  - lxml
+  - networkx
+  - pyglet
+  - rtree
+  - scipy
+  - shapely
+  - trimesh
+  - xxhash
+
+  # extra
+  - gdsfactory
+  #- mpb
+  #- nomkl
+  #- pymeep=*=mpi_mpich_*
+
+  - pip:
+    # required
+    - fastcore
+    - fastprogress
+    - sax<0.8.0
+    - triangle
+    - tidy3d-beta==1.4.1
+
+    # trimesh
+    - trimesh[easy]
+    - pyembree
+
+    # jax
+    - jax
+    - jaxlib
+    - klujax
