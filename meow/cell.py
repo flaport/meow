@@ -103,7 +103,7 @@ class Cell(BaseModel):
         if axs is None:
             _, axs = plt.subplots(1, len(c), figsize=(3 * len(c), 3))
         c_list = list(c)
-        if not all([(c in "xyz") for c in c_list]):
+        if any(c not in "xyz" for c in c_list):
             raise ValueError(f"Invalid component. Got: {c}. Should be 'x', 'y' or 'z'.")
         axs = np.array(axs, dtype=object).ravel()
         for ax, c in zip(axs, c_list):
@@ -141,10 +141,11 @@ class Cells(list):  # List[Cell]
                 f"Number of meshes should correspond to number of lengths (length of Ls). Got {len(meshes)} != {len(Ls)}."
             )
 
-        cells = []
         z = np.cumsum(np.concatenate([np.asarray([z_min], float), Ls]))
-        for mesh, (z_min, z_max) in zip(meshes, zip(z[:-1], z[1:])):
-            cells.append(Cell(structures, mesh, z_min, z_max))
+        cells = [
+            Cell(structures, mesh, z_min, z_max)
+            for mesh, (z_min, z_max) in zip(meshes, zip(z[:-1], z[1:]))
+        ]
 
         super().__init__(cells)
 

@@ -169,7 +169,7 @@ def _sum_around(field, m, n, r=2):
 
 def invert_mode(mode: Mode) -> Mode:
     """invert a `Mode`"""
-    new_mode = Mode(
+    return Mode(
         neff=mode.neff,
         cs=mode.cs,
         Ex=-mode.Ex,
@@ -179,7 +179,6 @@ def invert_mode(mode: Mode) -> Mode:
         Hy=-mode.Hy,
         Hz=-mode.Hz,
     )
-    return new_mode
 
 
 def inner_product(mode1: Mode, mode2: Mode) -> float:
@@ -192,7 +191,7 @@ def inner_product(mode1: Mode, mode2: Mode) -> float:
 def normalize_product(mode: Mode) -> Mode:
     """normalize a `Mode` according to the `inner_product` with itself"""
     factor = np.sqrt(inner_product(mode, mode))
-    new_mode = Mode(
+    return Mode(
         neff=mode.neff,
         cs=mode.cs,
         Ex=mode.Ex / factor,
@@ -202,7 +201,6 @@ def normalize_product(mode: Mode) -> Mode:
         Hy=mode.Hy / factor,
         Hz=mode.Hz / factor,
     )
-    return new_mode
 
 
 def electric_energy_density(
@@ -210,7 +208,7 @@ def electric_energy_density(
 ) -> np.ndarray[Tuple[int, int], np.dtype[np.float_]]:
     """get the electric energy density contained in a `Mode`"""
     epsx, epsy, epsz = mode.cs.nx**2, mode.cs.ny**2, mode.cs.nz**2
-    e = (
+    return (
         0.5
         * eps0
         * (
@@ -219,7 +217,6 @@ def electric_energy_density(
             + epsz * np.abs(mode.Ez) ** 2
         )
     )
-    return e
 
 
 def electric_energy(mode: Mode) -> float:
@@ -231,8 +228,11 @@ def magnetic_energy_density(
     mode: Mode,
 ) -> np.ndarray[Tuple[int, int], np.dtype[np.float_]]:
     """get the magnetic energy density contained in a `Mode`"""
-    h = 0.5 * mu0 * (np.abs(mode.Hx) ** 2 + np.abs(mode.Hy) ** 2 + np.abs(mode.Hz) ** 2)
-    return h
+    return (
+        0.5
+        * mu0
+        * (np.abs(mode.Hx) ** 2 + np.abs(mode.Hy) ** 2 + np.abs(mode.Hz) ** 2)
+    )
 
 
 def magnetic_energy(mode: Mode) -> float:
@@ -255,9 +255,7 @@ def normalize_energy(mode: Mode) -> Mode:
     e = np.sqrt(2 * electric_energy(mode))
     h = np.sqrt(2 * magnetic_energy(mode))
 
-    # normalize E and H independent of each other...
-    # this way the normalization is independent of units.
-    new_mode = Mode(
+    return Mode(
         neff=mode.neff,
         cs=mode.cs,
         Ex=mode.Ex / e,
@@ -267,7 +265,6 @@ def normalize_energy(mode: Mode) -> Mode:
         Hy=mode.Hy / h,
         Hz=mode.Hz / h,
     )
-    return new_mode
 
 
 def te_fraction(mode: Mode) -> float:

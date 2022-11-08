@@ -101,13 +101,12 @@ class Box(Geometry):
     def _mask2d_single(self, X, Y, z):
         if (z < self.z_min) or (self.z_max < z):
             return np.zeros_like(X, dtype=bool)
-        mask = (
+        return (
             (self.x_min <= X)
             & (X <= self.x_max)
             & (self.y_min <= Y)
             & (Y <= self.y_max)
         )
-        return mask
 
     def _lumadd(self, sim, material_name, mesh_order, unit, xyz):
         x, y, z = xyz
@@ -180,7 +179,7 @@ class Prism(Geometry):
             (y_min, _), (y_max, _) = intersection
             y_min, y_max = min(y_min, y_max), max(y_min, y_max)
             x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-            mask = (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+            return (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
         elif self.axis == "y":
             # x, y, z -> z, x, y
             _, x_min = self.poly.min(0)
@@ -192,16 +191,18 @@ class Prism(Geometry):
             (_, x_min), (_, x_max) = intersection
             x_min, x_max = min(x_min, x_max), max(x_min, x_max)
             y_min, y_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-            mask = (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+            return (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
         else:
             # x, y, z -> x, y, z
             if (z < self.h_min) or (self.h_max < z):
                 return np.zeros_like(X, dtype=bool)
-            mask = np.asarray(
-                [poly.contains(sg.Point(x, y)) for x, y in zip(X.ravel(), Y.ravel())],
+            return np.asarray(
+                [
+                    poly.contains(sg.Point(x, y))
+                    for x, y in zip(X.ravel(), Y.ravel())
+                ],
                 dtype=bool,
             ).reshape(X.shape)
-        return mask
 
     def _lumadd(self, sim, material_name, mesh_order, unit=1e-6, xyz="yzx"):
         name = token_hex(4)
@@ -234,22 +235,10 @@ class Prism(Geometry):
             y, z, x = x, y, z
         xyz = f"{x}{y}{z}"
 
-        if xyz == "yzx":
+        if xyz in ["yzx", "zxy"]:
             raise NotImplementedError(
                 "Only prisms extruded perpendicular to the 'chip surface' are currently supported in Lumerical."
             )
-            sim.setnamed(name, "first axis", "z")
-            sim.setnamed(name, "rotation 1", 90.0)
-            sim.setnamed(name, "second axis", "y")
-            sim.setnamed(name, "rotation 2", -90.0)
-        elif xyz == "zxy":
-            raise NotImplementedError(
-                "Only prisms extruded perpendicular to the 'chip surface' are currently supported in Lumerical."
-            )
-            sim.setnamed(name, "first axis", "y")
-            sim.setnamed(name, "rotation 1", 270.0)
-            sim.setnamed(name, "second axis", "z")
-            sim.setnamed(name, "rotation 2", 270.0)
 
     def _trimesh(self, color=None, scale=None):
         poly = sg.Polygon(self.poly)

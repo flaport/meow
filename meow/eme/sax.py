@@ -104,15 +104,15 @@ def compute_interface_s_matrices(
     enforce_lossy_unitarity: bool = False,
 ):
     """get all the S-matrices of all the interfaces in a collection of `CrossSections`"""
-    interfaces = {}
-    for i, (modes1, modes2) in enumerate(zip(modes[:-1], modes[1:])):
-        interfaces[f"i_{i}_{i+1}"] = compute_interface_s_matrix(
+    return {
+        f"i_{i}_{i + 1}": compute_interface_s_matrix(
             modes1=modes1,
             modes2=modes2,
             enforce_reciprocity=enforce_reciprocity,
             enforce_lossy_unitarity=enforce_lossy_unitarity,
         )
-    return interfaces
+        for i, (modes1, modes2) in enumerate(zip(modes[:-1], modes[1:]))
+    }
 
 
 def compute_propagation_s_matrix(modes: List[Mode]):
@@ -129,10 +129,10 @@ def compute_propagation_s_matrix(modes: List[Mode]):
 
 def compute_propagation_s_matrices(modes: List[List[Mode]]):
     """get all the propagation S-matrices of all the `Modes` belonging to each `CrossSection`"""
-    propagations = {
-        f"p_{i}": compute_propagation_s_matrix(modes_) for i, modes_ in enumerate(modes)
+    return {
+        f"p_{i}": compute_propagation_s_matrix(modes_)
+        for i, modes_ in enumerate(modes)
     }
-    return propagations
 
 
 def get_netlist(propagations, interfaces):
@@ -167,7 +167,7 @@ def _validate_sax_backend(sax_backend):
     if sax_backend is None:
         sax_backend = "klu" if klujax is not None else "default"
 
-    if not sax_backend in ["default", "klu"]:
+    if sax_backend not in ["default", "klu"]:
         raise ValueError(
             f"Invalid SAX Backend. Got: {sax_backend!r}. Should be 'default' or 'klu'."
         )

@@ -60,6 +60,5 @@ def extrude_gds(
         for poly in polys:
             if layer not in extrusions:
                 continue
-            for extrusion in extrusions[layer]:
-                structs.append(extrusion(poly))
+            structs.extend(extrusion(poly) for extrusion in extrusions[layer])
     return structs

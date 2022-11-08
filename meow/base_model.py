@@ -72,7 +72,7 @@ class ModelMetaclass(_ModelMetaclass):
                 complex: lambda value: {"real": np.real(value), "imag": np.imag(value)},
             },
         }
-        if not "Config" in dct:
+        if "Config" not in dct:
             dct["Config"] = type("Config", (), extra_config)
         else:
             config = {**dct["Config"].__dict__}
