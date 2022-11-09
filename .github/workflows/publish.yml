@@ -44,8 +44,8 @@ jobs:
         run: |
           pip install --user twine \
           && twine upload \
-            dist/meow-sim-0.0.1.tar.gz
-            dist/meow_sim-0.0.1-py3-none-any.whl
+            dist/meow-sim-0.0.1.tar.gz \
+            dist/meow_sim-0.0.1-py3-none-any.whl \
           --username __token__ \
           --password ${{ secrets.PYPI_TOKEN }}
 
