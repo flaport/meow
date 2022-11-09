@@ -113,4 +113,4 @@ myst_enable_extensions = [
     "html_image",
 ]
 myst_url_schemes = ("http", "https", "mailto")
-nb_execution_mode = "auto"
+nb_execution_mode = "off"

@@ -36,17 +36,21 @@ dependencies:
   - ipympl
   - isort
   - jupyter-book
+  - jupyter-sphinx
   - line_profiler
+  - make
+  - nbsphinx
   - nbstripout
   - openssl
   - papermill
   - pre-commit
+  - pydata-sphinx-theme
   - pydocstyle
   - pytest
   - pytest-cov
   - recommonmark
   - sphinx
-  - sphinx_rtd_theme
+  - sphinx-book-theme
   - tox
   - twine
 
@@ -82,3 +86,6 @@ dependencies:
     - jax
     - jaxlib
     - klujax
+
+    # dev
+    - autodoc-pydantic

@@ -1,0 +1,75 @@
+name: main
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - ".github/**"
+      - "!.github/workflows/main.yml"
+      - "docs/**"
+      - "*.md"
+      - ".git*"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    container:
+      image: flaport/meow
+      volumes:
+        - ${{ github.workspace }}:/github/workspace
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Run notebooks
+        run: find examples -name "*.ipynb" | grep -v ipynb_checkpoints | xargs -I {} papermill -k python3 {} {}
+      - name: Expose 'examples' as artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: examples
+          path: /github/workspace/examples
+
+  docs:
+    runs-on: ubuntu-latest
+    needs:
+      - run
+    container:
+      image: flaport/meow
+      volumes:
+        - ${{ github.workspace }}:/github/workspace
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Download 'examples' artifact
+        uses: actions/download-artifact@master
+        with:
+          name: examples
+          path: ./examples
+      - name: meow dev-install
+        run: pip install -e .
+      - name: Build docs
+        run: make docs && touch docs/build/html/.nojekyll
+      - name: Store artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: docs
+          path: docs/build/html
+
+  pages:
+    runs-on: ubuntu-latest
+    needs:
+      - docs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Download 'docs' artifact
+        uses: actions/download-artifact@master
+        with:
+          name: docs
+          path: docs/build/html
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.7
+        with:
+          branch: pages
+          folder: docs/build/html
