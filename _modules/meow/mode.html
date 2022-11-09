@@ -1,0 +1,586 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>meow.mode &#8212; meow 0.0.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/autodoc_pydantic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/_static/css/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/meow.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contents
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../examples.html">
+   Examples
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../modules.html">
+   meow
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../meow.html">
+     meow package
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../meow.eme.html">
+       meow.eme package
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../meow.fde.html">
+       meow.fde package
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/gdsfactory/gdsfactory"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/gdsfactory/gdsfactory/issues/new?title=Issue%20on%20page%20%2F_modules/meow/mode.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for meow.mode</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; An EigenMode &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">colors</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">epsilon_0</span> <span class="k">as</span> <span class="n">eps0</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">mu_0</span> <span class="k">as</span> <span class="n">mu0</span>
+
+<span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span> <span class="nn">.cross_section</span> <span class="kn">import</span> <span class="n">CrossSection</span>
+
+
+<div class="viewcode-block" id="Mode"><a class="viewcode-back" href="../../meow.html#meow.mode.Mode">[docs]</a><span class="k">class</span> <span class="nc">Mode</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A `Mode` contains the field information for a given `CrossSection`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        neff: the effective index of the mode</span>
+<span class="sd">        cs: the index cross section for which the mode was calculated</span>
+<span class="sd">        Ex: the Ex-fields of the mode</span>
+<span class="sd">        Ey: the Ey-fields of the mode</span>
+<span class="sd">        Ez: the Ez-fields of the mode</span>
+<span class="sd">        Hx: the Hx-fields of the mode</span>
+<span class="sd">        Hy: the Hy-fields of the mode</span>
+<span class="sd">        Hz: the Hz-fields of the mode</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">neff</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">cs</span><span class="p">:</span> <span class="n">CrossSection</span>
+    <span class="n">Ex</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span>
+    <span class="n">Ey</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span>
+    <span class="n">Ez</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span>
+    <span class="n">Hx</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span>
+    <span class="n">Hy</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span>
+    <span class="n">Hz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">mesh</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span>
+
+    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">mode_cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">num_levels</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">operation</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Not enough axes supplied for the number of fields &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;to plot! </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="si">}</span><span class="s2"> &lt; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">ax_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_visualize</span><span class="p">(</span>
+                    <span class="n">field</span><span class="p">,</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax_</span><span class="p">,</span>
+                    <span class="n">n_cmap</span><span class="o">=</span><span class="n">n_cmap</span><span class="p">,</span>
+                    <span class="n">mode_cmap</span><span class="o">=</span><span class="n">mode_cmap</span><span class="p">,</span>
+                    <span class="n">num_levels</span><span class="o">=</span><span class="n">num_levels</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">field</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">valid_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">,</span> <span class="s2">&quot;Ey&quot;</span><span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">,</span> <span class="s2">&quot;Hx&quot;</span><span class="p">,</span> <span class="s2">&quot;Hy&quot;</span><span class="p">,</span> <span class="s2">&quot;Hz&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_fields</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Invalid field </span><span class="si">{</span><span class="n">field</span><span class="si">!r}</span><span class="s2">. Valid fields: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">valid_fields</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;scaled&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span>  <span class="c1"># currently only propagation in z supported, see Mesh2d</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">n_cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n_cmap</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;c_cmap&quot;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#ffffff&quot;</span><span class="p">,</span> <span class="s2">&quot;#c1d9ed&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">mode_cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mode_cmap</span> <span class="o">=</span> <span class="s2">&quot;inferno&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Y</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">operation</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mode_cmap</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">mode</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">num_levels</span><span class="p">))</span>  <span class="c1"># fmt: skip</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;mode&quot;</span><span class="p">)</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;n</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">n_cmap</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;n&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> [neff=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neff</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">X</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">Y</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Mode.save"><a class="viewcode-back" href="../../meow.html#meow.mode.Mode.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Mode.load"><a class="viewcode-back" href="../../meow.html#meow.mode.Mode.load">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></div></div>
+
+
+<span class="n">Modes</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="zero_phase"><a class="viewcode-back" href="../../meow.html#meow.mode.zero_phase">[docs]</a><span class="k">def</span> <span class="nf">zero_phase</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;normalize (zero out) the phase of a `Mode`&quot;&quot;&quot;</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">e</span> <span class="o">==</span> <span class="n">e</span><span class="o">.</span><span class="n">max</span><span class="p">()))[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">))[</span><span class="n">m</span><span class="p">][</span><span class="n">n</span><span class="p">])</span>
+    <span class="n">new_mode</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">(</span>
+        <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
+        <span class="n">cs</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
+        <span class="n">Ex</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span> <span class="o">*</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="n">Ey</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ey</span> <span class="o">*</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="n">Ez</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ez</span> <span class="o">*</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="n">Hx</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span> <span class="o">*</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="n">Hy</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hy</span> <span class="o">*</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="n">Hz</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hz</span> <span class="o">*</span> <span class="n">phase</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">_sum_around</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">new_mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">),</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">new_mode</span> <span class="o">=</span> <span class="n">invert_mode</span><span class="p">(</span><span class="n">new_mode</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_mode</span></div>
+
+
+<span class="k">def</span> <span class="nf">_sum_around</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">idxs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">r</span><span class="p">,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">idx_tups</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">idxs</span><span class="p">)</span>
+    <span class="n">M</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">idx_tups</span><span class="p">:</span>
+        <span class="n">m_</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">n_</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">j</span><span class="p">,</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="n">field</span><span class="p">[</span><span class="n">m_</span><span class="p">,</span> <span class="n">n_</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">total</span>
+
+
+<div class="viewcode-block" id="invert_mode"><a class="viewcode-back" href="../../meow.html#meow.mode.invert_mode">[docs]</a><span class="k">def</span> <span class="nf">invert_mode</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;invert a `Mode`&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
+        <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
+        <span class="n">cs</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
+        <span class="n">Ex</span><span class="o">=-</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span><span class="p">,</span>
+        <span class="n">Ey</span><span class="o">=-</span><span class="n">mode</span><span class="o">.</span><span class="n">Ey</span><span class="p">,</span>
+        <span class="n">Ez</span><span class="o">=-</span><span class="n">mode</span><span class="o">.</span><span class="n">Ez</span><span class="p">,</span>
+        <span class="n">Hx</span><span class="o">=-</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">,</span>
+        <span class="n">Hy</span><span class="o">=-</span><span class="n">mode</span><span class="o">.</span><span class="n">Hy</span><span class="p">,</span>
+        <span class="n">Hz</span><span class="o">=-</span><span class="n">mode</span><span class="o">.</span><span class="n">Hz</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="inner_product"><a class="viewcode-back" href="../../meow.html#meow.mode.inner_product">[docs]</a><span class="k">def</span> <span class="nf">inner_product</span><span class="p">(</span><span class="n">mode1</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">mode2</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;the inner product of a `Mode` with another `Mode` is uniquely defined.&quot;&quot;&quot;</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">mode1</span><span class="o">.</span><span class="n">mesh</span>
+    <span class="n">cross</span> <span class="o">=</span> <span class="n">mode1</span><span class="o">.</span><span class="n">Ex</span> <span class="o">*</span> <span class="n">mode2</span><span class="o">.</span><span class="n">Hy</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="o">-</span> <span class="n">mode1</span><span class="o">.</span><span class="n">Ey</span> <span class="o">*</span> <span class="n">mode2</span><span class="o">.</span><span class="n">Hx</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
+    <span class="k">return</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">cross</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">y_</span><span class="p">),</span> <span class="n">mesh</span><span class="o">.</span><span class="n">x_</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="normalize_product"><a class="viewcode-back" href="../../meow.html#meow.mode.normalize_product">[docs]</a><span class="k">def</span> <span class="nf">normalize_product</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;normalize a `Mode` according to the `inner_product` with itself&quot;&quot;&quot;</span>
+    <span class="n">factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">inner_product</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">mode</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
+        <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
+        <span class="n">cs</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
+        <span class="n">Ex</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span> <span class="o">/</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">Ey</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ey</span> <span class="o">/</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">Ez</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ez</span> <span class="o">/</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">Hx</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span> <span class="o">/</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">Hy</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hy</span> <span class="o">/</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">Hz</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hz</span> <span class="o">/</span> <span class="n">factor</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="electric_energy_density"><a class="viewcode-back" href="../../meow.html#meow.mode.electric_energy_density">[docs]</a><span class="k">def</span> <span class="nf">electric_energy_density</span><span class="p">(</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;get the electric energy density contained in a `Mode`&quot;&quot;&quot;</span>
+    <span class="n">epsx</span><span class="p">,</span> <span class="n">epsy</span><span class="p">,</span> <span class="n">epsz</span> <span class="o">=</span> <span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">nx</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">ny</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">nz</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="mf">0.5</span>
+        <span class="o">*</span> <span class="n">eps0</span>
+        <span class="o">*</span> <span class="p">(</span>
+            <span class="n">epsx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="n">epsy</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ey</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="n">epsz</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ez</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="electric_energy"><a class="viewcode-back" href="../../meow.html#meow.mode.electric_energy">[docs]</a><span class="k">def</span> <span class="nf">electric_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;get the electric energy contained in a `Mode`&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">electric_energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="magnetic_energy_density"><a class="viewcode-back" href="../../meow.html#meow.mode.magnetic_energy_density">[docs]</a><span class="k">def</span> <span class="nf">magnetic_energy_density</span><span class="p">(</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;get the magnetic energy density contained in a `Mode`&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="mf">0.5</span>
+        <span class="o">*</span> <span class="n">mu0</span>
+        <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hy</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hz</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="magnetic_energy"><a class="viewcode-back" href="../../meow.html#meow.mode.magnetic_energy">[docs]</a><span class="k">def</span> <span class="nf">magnetic_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;get the magnetic energy contained in a `Mode`&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">magnetic_energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="energy_density"><a class="viewcode-back" href="../../meow.html#meow.mode.energy_density">[docs]</a><span class="k">def</span> <span class="nf">energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;get the energy density contained in a `Mode`&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">electric_energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span> <span class="o">+</span> <span class="n">magnetic_energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="energy"><a class="viewcode-back" href="../../meow.html#meow.mode.energy">[docs]</a><span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;get the energy contained in a `Mode`&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="normalize_energy"><a class="viewcode-back" href="../../meow.html#meow.mode.normalize_energy">[docs]</a><span class="k">def</span> <span class="nf">normalize_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;normalize a mode according to the energy it contains&quot;&quot;&quot;</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">electric_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">magnetic_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
+        <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
+        <span class="n">cs</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
+        <span class="n">Ex</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span> <span class="o">/</span> <span class="n">e</span><span class="p">,</span>
+        <span class="n">Ey</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ey</span> <span class="o">/</span> <span class="n">e</span><span class="p">,</span>
+        <span class="n">Ez</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ez</span> <span class="o">/</span> <span class="n">e</span><span class="p">,</span>
+        <span class="n">Hx</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span> <span class="o">/</span> <span class="n">h</span><span class="p">,</span>
+        <span class="n">Hy</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hy</span> <span class="o">/</span> <span class="n">h</span><span class="p">,</span>
+        <span class="n">Hz</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hz</span> <span class="o">/</span> <span class="n">h</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="te_fraction"><a class="viewcode-back" href="../../meow.html#meow.mode.te_fraction">[docs]</a><span class="k">def</span> <span class="nf">te_fraction</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;the TE polarization fraction of the `Mode`&quot;&quot;&quot;</span>
+    <span class="n">epsx</span> <span class="o">=</span> <span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">nx</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">eps0</span> <span class="o">*</span> <span class="n">epsx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">mu0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">e</span> <span class="o">/</span> <span class="p">(</span><span class="n">e</span> <span class="o">+</span> <span class="n">h</span><span class="p">))</span></div>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Floris Laporte<br/>
+  
+      &copy; Copyright 2022, Apache2.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
