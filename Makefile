@@ -7,3 +7,6 @@ dockerpush:
 .PHONY: docs
 docs:
 	cd docs && make html
+
+build:
+	python -m build --sdist --wheel
