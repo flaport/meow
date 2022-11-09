@@ -14,7 +14,8 @@ pip install meow-sim
 
 ## Documentation
 
-Currently, the best way to learn how to use the library is by checking the [examples](examples).
+- [Examples](https://flaport.github.io/meow/examples.html)
+- [API Docs](https://flaport.github.io/meow/meow.html)
 
 ## Credits
 

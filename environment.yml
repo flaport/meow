@@ -56,7 +56,7 @@ dependencies:
 
   # trimesh
   - lxml
-  - mapbox_earcut
+  - mapbox-earcut
   - networkx
   - pyglet
   - rtree
