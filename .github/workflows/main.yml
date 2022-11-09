@@ -46,10 +46,14 @@ jobs:
         with:
           name: examples
           path: ./examples
-      - name: meow dev-install
+      - name: Install meow
         run: pip install -e .
       - name: Build docs
         run: make docs && touch docs/build/html/.nojekyll
+      - name: Patch binder links
+        run: find docs/_build/html -name "*.html" | xargs sed -i 's|urlpath=tree/docs|urlpath=tree|g'
+      - name: Patch colab links
+        run: find docs/_build/html -name "*.html" | xargs sed -i 's|/blob/main/docs/|/blob/main/|g'
       - name: Store artifacts
         uses: actions/upload-artifact@master
         with:

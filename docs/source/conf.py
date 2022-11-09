@@ -64,8 +64,8 @@ html_logo = "_static/img/meow.png"
 html_theme_options = {
     "logo_only": True,
     "path_to_docs": "docs",
-    "repository_branch": "master",
-    "repository_url": "https://github.com/gdsfactory/gdsfactory",
+    "repository_branch": "main",
+    "repository_url": "https://github.com/flaport/meow",
     "use_download_button": True,
     "use_edit_page_button": True,
     "use_issues_button": True,
@@ -74,7 +74,7 @@ html_theme_options = {
     "logo_only": True,
     "launch_buttons": {
         "notebook_interface": "jupyterlab",
-        "binderhub_url": "https://mybinder.org/v2/gh/gdsfactory/gdsfactory/HEAD",
+        "binderhub_url": "https://mybinder.org/v2/gh/flaport/meow/HEAD",
         "colab_url": "https://colab.research.google.com",
     },
 }
