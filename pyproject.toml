@@ -40,6 +40,7 @@ dependencies = [
   "flatten-dict",
   "gdspy",
   "loguru",
+  "mapbox-earcut",
   "matplotlib",
   "numexpr",
   "numpy",
@@ -52,7 +53,7 @@ dependencies = [
   "tidy3d-beta==1.4.1",
   "tqdm",
   "triangle",
-  "trimesh",
+  "trimesh[easy]",
 ]
 
 [tool.setuptools.packages.find]
