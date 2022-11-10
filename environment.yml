@@ -75,7 +75,7 @@ dependencies:
     # required
     - fastcore
     - fastprogress
-    - sax<0.8.0
+    - sax>=0.8.4
     - triangle
     - tidy3d-beta==1.4.1
 

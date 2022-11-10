@@ -130,8 +130,7 @@ def compute_propagation_s_matrix(modes: List[Mode]):
 def compute_propagation_s_matrices(modes: List[List[Mode]]):
     """get all the propagation S-matrices of all the `Modes` belonging to each `CrossSection`"""
     return {
-        f"p_{i}": compute_propagation_s_matrix(modes_)
-        for i, modes_ in enumerate(modes)
+        f"p_{i}": compute_propagation_s_matrix(modes_) for i, modes_ in enumerate(modes)
     }
 
 
@@ -220,9 +219,9 @@ def compute_s_matrix(
         enforce_lossy_unitarity=enforce_lossy_unitarity,
     )
     net = get_netlist(propagations, interfaces)
-    mode_names = tuple(f"{i}" for i in range(num_modes))
+    mode_names = [f"{i}" for i in range(num_modes)]
 
-    _circuit = sax.circuit(**net, backend=sax_backend, modes=mode_names)
+    _circuit, _ = sax.circuit(netlist=net, backend=sax_backend, modes=mode_names)
 
     def eme_model():
         sdict = sax.sdict(_circuit())
