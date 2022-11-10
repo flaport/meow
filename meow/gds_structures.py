@@ -5,6 +5,7 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 import shapely.geometry as sg
+from pydantic import Field
 
 from .base_model import BaseModel
 from .geometries import Prism
@@ -14,21 +15,18 @@ from .structures import Structure
 
 class GdsExtrusionRule(BaseModel):
     """a `GdsExtrusionRule` describes a single extrusion rule.
-    Multiple of such rules can later be associated with a gds layer tuple.
+    Multiple of such rules can later be associated with a gds layer tuple."""
 
-    Attributes:
-        material: the material of the extrusion
-        h_min: the extrusion starting height
-        h_max: the extrusion ending height
-        buffer: an extra buffer (=grow or shrink) operation applied to the polygon
-        mesh_order: the mesh order of the resulting `Structure`
-    """
-
-    material: Material
-    h_min: float
-    h_max: float
-    buffer: float = 0.0
-    mesh_order: int = 5
+    material: Material = Field(description="the material of the extrusion")
+    h_min: float = Field(description="the extrusion starting height")
+    h_max: float = Field(description="the extrusion ending height")
+    buffer: float = Field(
+        default=0.0,
+        description="an extra buffer (=grow or shrink) operation applied to the polygon",
+    )
+    mesh_order: int = Field(
+        default=5.0, description="the mesh order of the resulting `Structure`"
+    )
 
     def __call__(self, poly) -> Structure:
         if self.buffer > 0:

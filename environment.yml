@@ -53,6 +53,7 @@ dependencies:
   - sphinx-book-theme
   - tox
   - twine
+  - myst-nb>=0.17.1
 
   # trimesh
   - lxml

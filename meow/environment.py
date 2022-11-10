@@ -1,21 +1,16 @@
 """ A simulation Environment """
 
-from pydantic import Extra
+from pydantic import Extra, Field
 
 from .base_model import BaseModel
 
 
 class Environment(BaseModel):
     """An environment contains all variables that don't depend on the
-        geometry/structure itself such as most commonly wavelength and temperature.
+    geometry/structure itself such as most commonly wavelength and temperature."""
 
-    Attributes:
-        wl: the wavelength of the environment
-        T: the temperature of the environment
-    """
-
-    wl: float = 1.5
-    T: float = 25.0
+    wl: float = Field(default=1.5, description="the wavelength of the environment")
+    T: float = Field(default=25.0, description="the temperature of the environment")
 
     class Config:
         allow_population_by_field_name = True

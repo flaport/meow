@@ -3,6 +3,7 @@ from typing import Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
+from pydantic import Field
 
 from .base_model import BaseModel
 from .cell import Cell, Cells
@@ -11,23 +12,28 @@ from .environment import Environment
 
 class CrossSection(BaseModel):
     """A `CrossSection` is created from the association of a `Cell` with an `Environment`,
-    which uniquely defines the refractive index everywhere.
+    which uniquely defines the refractive index everywhere."""
 
-    Attributes:
-        cell: the cell for which the cross section was calculated
-        env: the environment for which the cross sectionw was calculated
-        mx: (derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)
-        my: (derived) the index cross section at the Ey grid (half-integer y-coords, integer x-coords)
-        mz: (derived) the index cross section at the Ez grid (integer y-coords, integer x-coords)
-    """
-
-    cell: Cell
-    env: Environment
+    cell: Cell = Field(
+        description="the cell for which the cross section was calculated"
+    )
+    env: Environment = Field(
+        description="the environment for which the cross sectionw was calculated"
+    )
 
     # TODO: convert the following into properties...
-    nx: np.ndarray[Tuple[int, int], np.dtype[np.float_]]
-    ny: np.ndarray[Tuple[int, int], np.dtype[np.float_]]
-    nz: np.ndarray[Tuple[int, int], np.dtype[np.float_]]
+    nx: np.ndarray[Tuple[int, int], np.dtype[np.float_]] = Field(
+        default_factory=lambda: np.zeros((0, 0), np.int_),
+        description="(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)",
+    )
+    ny: np.ndarray[Tuple[int, int], np.dtype[np.float_]] = Field(
+        default_factory=lambda: np.zeros((0, 0), np.int_),
+        description="(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)",
+    )
+    nz: np.ndarray[Tuple[int, int], np.dtype[np.float_]] = Field(
+        default_factory=lambda: np.zeros((0, 0), np.int_),
+        description="(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)",
+    )
 
     def __init__(self, *, cell: Cell, env: Environment, **_):
         cell = Cell.parse_obj(cell)

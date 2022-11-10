@@ -10,6 +10,12 @@ Submodules
 ----------
 
 
+.. automodule:: meow.eme.common
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 .. automodule:: meow.eme.sax
    :members:
    :undoc-members:

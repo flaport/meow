@@ -7,6 +7,7 @@ from typing import List, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import colors
+from pydantic import Field
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
 
@@ -15,28 +16,30 @@ from .cross_section import CrossSection
 
 
 class Mode(BaseModel):
-    """A `Mode` contains the field information for a given `CrossSection`.
+    """A `Mode` contains the field information for a given `CrossSection`."""
 
-    Attributes:
-        neff: the effective index of the mode
-        cs: the index cross section for which the mode was calculated
-        Ex: the Ex-fields of the mode
-        Ey: the Ey-fields of the mode
-        Ez: the Ez-fields of the mode
-        Hx: the Hx-fields of the mode
-        Hy: the Hy-fields of the mode
-        Hz: the Hz-fields of the mode
-
-    """
-
-    neff: complex
-    cs: CrossSection
-    Ex: np.ndarray[Tuple[int, int], np.dtype[np.complex_]]
-    Ey: np.ndarray[Tuple[int, int], np.dtype[np.complex_]]
-    Ez: np.ndarray[Tuple[int, int], np.dtype[np.complex_]]
-    Hx: np.ndarray[Tuple[int, int], np.dtype[np.complex_]]
-    Hy: np.ndarray[Tuple[int, int], np.dtype[np.complex_]]
-    Hz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]]
+    neff: complex = Field(description="the effective index of the mode")
+    cs: CrossSection = Field(
+        description="the index cross section for which the mode was calculated"
+    )
+    Ex: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
+        description="the Ex-fields of the mode"
+    )
+    Ey: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
+        description="the Ey-fields of the mode"
+    )
+    Ez: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
+        description="the Ez-fields of the mode"
+    )
+    Hx: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
+        description="the Hx-fields of the mode"
+    )
+    Hy: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
+        description="the Hy-fields of the mode"
+    )
+    Hz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
+        description="the Hz-fields of the mode"
+    )
 
     @property
     def env(self):
@@ -229,9 +232,7 @@ def magnetic_energy_density(
 ) -> np.ndarray[Tuple[int, int], np.dtype[np.float_]]:
     """get the magnetic energy density contained in a `Mode`"""
     return (
-        0.5
-        * mu0
-        * (np.abs(mode.Hx) ** 2 + np.abs(mode.Hy) ** 2 + np.abs(mode.Hz) ** 2)
+        0.5 * mu0 * (np.abs(mode.Hx) ** 2 + np.abs(mode.Hy) ** 2 + np.abs(mode.Hz) ** 2)
     )
 
 

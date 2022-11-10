@@ -4,8 +4,8 @@ from typing import Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
-from pydantic import parse_obj_as
 from matplotlib.colors import ListedColormap, to_rgba
+from pydantic import Field, parse_obj_as
 
 from .base_model import BaseModel
 from .materials import Materials
@@ -14,29 +14,31 @@ from .structures import Structures, _sort_structures
 
 
 class Cell(BaseModel):
-    """A `Cell` defines a location in a `Structure` associated with a `Mesh`
+    """A `Cell` defines a location in a `Structure` associated with a `Mesh`"""
 
-    Attributes:
-        structures: the structures which will be sliced by the cell
-        mesh: the mesh to slice the structures with
-        z_min: the starting z-coordinate of the cell
-        z_max: the ending z-coordinate of the cell
-        materials: (derived) the materials in the cell
-        mx: (derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)
-        my: (derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)
-        mz: (derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)
-    """
-
-    structures: Structures
-    mesh: Mesh2d
-    z_min: float
-    z_max: float
+    structures: Structures = Field(
+        descrsption="the structures which will be sliced by the cell"
+    )
+    mesh: Mesh2d = Field(description="the mesh to slice the structures with")
+    z_min: float = Field(description="the starting z-coordinate of the cell")
+    z_max: float = Field(description="the ending z-coordinate of the cell")
 
     # TODO: convert the following into properties...
-    materials: Materials
-    mx: np.ndarray[Tuple[int, int], np.dtype[np.int_]]
-    my: np.ndarray[Tuple[int, int], np.dtype[np.int_]]
-    mz: np.ndarray[Tuple[int, int], np.dtype[np.int_]]
+    materials: Materials = Field(
+        default=[], description="(derived) the materials in the cell"
+    )
+    mx: np.ndarray[Tuple[int, int], np.dtype[np.int_]] = Field(
+        default_factory=lambda: np.zeros((0, 0), np.int_),
+        description="(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)",
+    )
+    my: np.ndarray[Tuple[int, int], np.dtype[np.int_]] = Field(
+        default_factory=lambda: np.zeros((0, 0), np.int_),
+        description="(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)",
+    )
+    mz: np.ndarray[Tuple[int, int], np.dtype[np.int_]] = Field(
+        default_factory=lambda: np.zeros((0, 0), np.int_),
+        description="(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)",
+    )
 
     def __init__(
         self, *, structures: Structures, mesh: Mesh2d, z_min: float, z_max: float, **_

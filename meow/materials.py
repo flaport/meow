@@ -21,19 +21,18 @@ MATERIALS: Dict[str, "Material"] = {}
 
 
 class Material(BaseModel):
-    """a `Material` defines the refractive index of a `Structure` within an `Environment`.
+    """a `Material` defines the refractive index of a `Structure` within an `Environment`."""
 
-    Attributes:
-        name: the name of the material
-        wl: the wavelength over which the refractive index is defined.
-        n: the complex refractive index of the material
-        meta: metadata for the material
-    """
-
-    name: str
-    params: Dict[str, np.ndarray[Tuple[int], np.dtype[np.float_]]]
-    n: np.ndarray[Any, np.dtype[np.complex_]]
-    meta: Dict[str, Any] = Field(default_factory=lambda: {})
+    name: str = Field(description="the name of the material")
+    params: Dict[str, np.ndarray[Tuple[int], np.dtype[np.float_]]] = Field(
+        description="the wavelength over which the refractive index is defined."
+    )
+    n: np.ndarray[Any, np.dtype[np.complex_]] = Field(
+        description="the complex refractive index of the material"
+    )
+    meta: Dict[str, Any] = Field(
+        default_factory=lambda: {}, description="metadata for the material"
+    )
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

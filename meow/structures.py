@@ -3,9 +3,9 @@
 from typing import List
 
 import numpy as np
+from pydantic import Field, validator
 from trimesh.scene import Scene
 from trimesh.transformations import rotation_matrix
-from pydantic import validator
 
 from .base_model import BaseModel
 from .geometries import Geometry
@@ -13,18 +13,11 @@ from .materials import Material
 
 
 class Structure(BaseModel):
-    """a `Structure` is an association between a `Geometry` and a `Material`
+    """a `Structure` is an association between a `Geometry` and a `Material`"""
 
-    Attributes:
-        material: the material of the structure
-        geometry: the geometry of the structure
-        mesh_order: the mesh order of the structure
-
-    """
-
-    material: Material
-    geometry: Geometry
-    mesh_order: int = 5
+    material: Material = Field(description="the material of the structure")
+    geometry: Geometry = Field(description="the geometry of the structure")
+    mesh_order: int = Field(default=5, description="the mesh order of the structure")
 
     @validator("material")
     def validate_material(cls, material):

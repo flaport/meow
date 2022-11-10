@@ -6,7 +6,7 @@ from typing import Dict, List, Literal, Tuple, Union, cast
 import numpy as np
 import shapely.geometry as sg
 from matplotlib.colors import to_rgba as _to_rgba_mpl
-from pydantic import validator
+from pydantic import Field, validator
 from trimesh import Trimesh
 from trimesh.creation import extrude_polygon
 from trimesh.scene import Scene
@@ -33,7 +33,7 @@ class Geometry(BaseModel):
     @validator("type", pre=True, always=True)
     def validate_type(cls, value):
         if not value:
-            value = cls.__name__
+            value = getattr(cls, "__name__", "Geometry")
         if value not in GEOMETRIES:
             raise ValueError(
                 f"Invalid Geometry type. Got: {value!r}. Valid types: {GEOMETRIES}."
@@ -68,23 +68,14 @@ Geometries = List[Geometry]
 
 
 class Box(Geometry):
-    """A Box is a simple rectangular cuboid
+    """A Box is a simple rectangular cuboid"""
 
-    Attributes:
-        x_min: the minimum x-value of the box
-        x_max: the maximum x-value of the box
-        y_min: the minimum y-value of the box
-        y_max: the maximum y-value of the box
-        z_min: the minimum z-value of the box
-        z_max: the maximum z-value of the box
-    """
-
-    x_min: float
-    x_max: float
-    y_min: float
-    y_max: float
-    z_min: float
-    z_max: float
+    x_min: float = Field(description="the minimum x-value of the box")
+    x_max: float = Field(description="the maximum x-value of the box")
+    y_min: float = Field(description="the minimum y-value of the box")
+    y_max: float = Field(description="the maximum y-value of the box")
+    z_min: float = Field(description="the minimum z-value of the box")
+    z_max: float = Field(description="the maximum z-value of the box")
 
     def _mask2d_single(self, X, Y, z):
         if (z < self.z_min) or (self.z_max < z):
@@ -138,21 +129,20 @@ AxisDirection = Union[Literal["x"], Literal["y"], Literal["z"]]
 class Prism(Geometry):
     """A prism is a 2D Polygon extruded along a certain axis direction ('x', 'y', or 'z').
 
-    Attributes:
-        poly: the 2D array (Nx2) with polygon vertices
-        h_min: the start height of the extrusion
-        h_max: the end height of the extrusion
-        axis: the axis along which the polygon will be extruded ('x', 'y', or 'z').
-
     Note:
         currently only extrusions along 'y' (perpendicular to the chip)
         are fully supported!
     """
 
-    poly: np.ndarray[Tuple[int, Literal[2]], np.dtype[np.float_]]
-    h_min: float
-    h_max: float
-    axis: AxisDirection = "y"
+    poly: np.ndarray[Tuple[int, Literal[2]], np.dtype[np.float_]] = Field(
+        description="the 2D array (Nx2) with polygon vertices"
+    )
+    h_min: float = Field(description="the start height of the extrusion")
+    h_max: float = Field(description="the end height of the extrusion")
+    axis: AxisDirection = Field(
+        default="y",
+        description="the axis along which the polygon will be extruded ('x', 'y', or 'z').",
+    )
 
     def _mask2d_single(self, X, Y, z):
         poly = sg.Polygon(self.poly)

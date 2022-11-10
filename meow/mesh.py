@@ -3,6 +3,7 @@
 from typing import List, Tuple
 
 import numpy as np
+from pydantic import Field
 
 from .base_model import BaseModel
 
@@ -15,34 +16,33 @@ Meshes = List[Mesh]
 
 
 class Mesh2d(Mesh):
-    """a 2D Mesh or `Mesh2D` describes how a `Structure` is discritized into a `Cell` or `CrossSection`
+    """a 2D Mesh or `Mesh2D` describes how a `Structure` is discritized into a `Cell` or `CrossSection`"""
 
-    Attributes:
-        x: x-coordinates of the mesh (Ez locations, i.e. corners of the 2D cell)
-        y: y-coordinates of the mesh (Ez locations, i.e. corners of the 2D cell)
-        dx: (derived) x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)
-        dy: (derived) y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)
-        x_: (derived) x-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)
-        y_: (derived) y-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)
-    """
-
-    x: np.ndarray[Tuple[int], np.dtype[np.float_]]
-    y: np.ndarray[Tuple[int], np.dtype[np.float_]]
+    x: np.ndarray[Tuple[int], np.dtype[np.float_]] = Field(
+        description="x-coordinates of the mesh (Ez locations, i.e. corners of the 2D cell)"
+    )
+    y: np.ndarray[Tuple[int], np.dtype[np.float_]] = Field(
+        description="y-coordinates of the mesh (Ez locations, i.e. corners of the 2D cell)"
+    )
 
     @property
     def dx(self):
+        """x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
         return self.x[1:] - self.x[:-1]
 
     @property
     def dy(self):
+        """y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
         return self.y[1:] - self.y[:-1]
 
     @property
     def x_(self):
+        """x-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)"""
         return 0.5 * (self.x[1:] + self.x[:-1])
 
     @property
     def y_(self):
+        """y-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)"""
         return 0.5 * (self.y[1:] + self.y[:-1])
 
     @property

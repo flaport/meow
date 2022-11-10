@@ -27,9 +27,7 @@ author = "Floris Laporte"
 release = "0.0.0"
 extensions = [
     "myst_nb",
-    # "myst_parser",
     "matplotlib.sphinxext.plot_directive",
-    # "nbsphinx",
     "sphinx.ext.autodoc",
     "sphinx.ext.autodoc.typehints",
     "sphinx.ext.autosummary",
@@ -39,10 +37,12 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
-    # "sphinx_click",
     "sphinx_copybutton",
-    # "sphinx_markdown_tables",
     "sphinxcontrib.autodoc_pydantic",
+    # "myst_parser",
+    # "nbsphinx",
+    # "sphinx_click",
+    # "sphinx_markdown_tables",
 ]
 source_suffix = {
     ".rst": "restructuredtext",
