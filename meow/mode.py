@@ -42,6 +42,11 @@ class Mode(BaseModel):
     )
 
     @property
+    def te_fraction(self):
+        """the TE polarization fraction of the mode."""
+        return te_fraction(self)
+
+    @property
     def env(self):
         return self.cs.env
 
