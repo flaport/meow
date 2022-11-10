@@ -5,7 +5,7 @@ from typing import Any, Tuple
 import numpy as np
 from pydantic import validator
 from pydantic.main import BaseModel as _BaseModel
-from pydantic.main import ModelMetaclass as _ModelMetaclass
+from pydantic.main import ModelMetaclass
 
 
 class _array(np.ndarray):
@@ -39,7 +39,7 @@ def _serialize_array(arr):
         return np.round(arr, 12).tolist()
 
 
-class ModelMetaclass(_ModelMetaclass):
+class _ModelMetaclass(ModelMetaclass):
     """A metaclass (used in our custom BaseModel) to handle numpy array type hints better.
 
     Generic numpy type hints (will) have the following syntax::
@@ -50,7 +50,7 @@ class ModelMetaclass(_ModelMetaclass):
 
         arr: np.ndarray[Tuple[Literal[1], int], np.dtype[np.float64]] = np.array([[1, 2, 3]])
 
-    When using this ModelMetaclass, the BaseModel will automatically try to cast the arrays according to the given array type-hint.
+    When using this _ModelMetaclass, the BaseModel will automatically try to cast the arrays according to the given array type-hint.
 
     Moreover, the following config will be injected (added to the config class that might already be present)::
 
@@ -171,7 +171,7 @@ class ModelMetaclass(_ModelMetaclass):
         return isinstance(arr, np.ndarray)
 
 
-class BaseModel(_BaseModel, metaclass=ModelMetaclass):
+class BaseModel(_BaseModel, metaclass=_ModelMetaclass):
     """A customized pydantic base model that handles numpy array type hints"""
 
     def __init__(self, **kwargs):

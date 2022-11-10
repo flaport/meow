@@ -16,7 +16,7 @@ for k in list(dst.keys()):
     if k not in src:
         del dst[k]
 for k in src:
-    if k not in dst:
+    if k not in dst and os.path.isfile(src[k]):
         shutil.copy2(os.path.join(EXSRC, k), os.path.join(EXDST, k))
 
 
@@ -29,7 +29,7 @@ extensions = [
     "myst_nb",
     # "myst_parser",
     "matplotlib.sphinxext.plot_directive",
-    "nbsphinx",
+    # "nbsphinx",
     "sphinx.ext.autodoc",
     "sphinx.ext.autodoc.typehints",
     "sphinx.ext.autosummary",
@@ -113,4 +113,6 @@ myst_enable_extensions = [
     "html_image",
 ]
 myst_url_schemes = ("http", "https", "mailto")
+add_module_names = False
+nbsphinx_execute = "never"
 nb_execution_mode = "off"

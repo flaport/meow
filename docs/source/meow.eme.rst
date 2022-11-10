@@ -1,21 +1,16 @@
 meow.eme package
 ================
 
-Submodules
-----------
-
-meow.eme.sax module
--------------------
-
-.. automodule:: meow.eme.sax
+.. automodule:: meow.eme
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
+Submodules
+----------
 
-.. automodule:: meow.eme
+
+.. automodule:: meow.eme.sax
    :members:
    :undoc-members:
    :show-inheritance:
