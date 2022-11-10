@@ -83,7 +83,7 @@ class CrossSections(list):  # List[CrossSection]
     """as list of `CrossSection` objects"""
 
     def __init__(self, cells: Cells, env: Environment):
-        lst = [CrossSection(cell, env=env) for cell in cells]
+        lst = [CrossSection(cell=cell, env=env) for cell in cells]
         super().__init__(lst)
 
     @classmethod

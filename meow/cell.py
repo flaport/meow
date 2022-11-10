@@ -150,7 +150,7 @@ class Cells(list):  # List[Cell]
 
         z = np.cumsum(np.concatenate([np.asarray([z_min], float), Ls]))
         cells = [
-            Cell(structures, mesh, z_min, z_max)
+            Cell(structures=structures, mesh=mesh, z_min=z_min, z_max=z_max)
             for mesh, (z_min, z_max) in zip(meshes, zip(z[:-1], z[1:]))
         ]
 
