@@ -4,6 +4,7 @@ from typing import Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
+from pydantic import parse_obj_as
 from matplotlib.colors import ListedColormap, to_rgba
 
 from .base_model import BaseModel
@@ -30,13 +31,15 @@ class Cell(BaseModel):
     mesh: Mesh2d
     z_min: float
     z_max: float
+
+    # TODO: convert the following into properties...
     materials: Materials
     mx: np.ndarray[Tuple[int, int], np.dtype[np.int_]]
     my: np.ndarray[Tuple[int, int], np.dtype[np.int_]]
     mz: np.ndarray[Tuple[int, int], np.dtype[np.int_]]
 
     def __init__(
-        self, structures: Structures, mesh: Mesh2d, z_min: float, z_max: float
+        self, *, structures: Structures, mesh: Mesh2d, z_min: float, z_max: float, **_
     ):
         """A `Cell` defines a location in a `Structure` associated with a `Mesh`
 
@@ -45,7 +48,11 @@ class Cell(BaseModel):
             mesh: the mesh to slice the structures with
             z_min: the starting z-coordinate of the cell
             z_max: the ending z-coordinate of the cell
+
         """
+        mesh = parse_obj_as(Mesh2d, mesh)
+        structures = parse_obj_as(Structures, structures)
+
         structures = _sort_structures(structures)
         mx, my, mz = [np.zeros(mesh.Xx.shape, dtype=int) for _ in range(3)]
         z = 0.5 * (z_min + z_max)

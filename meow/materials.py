@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from matplotlib.cm import get_cmap
 from numpy.typing import NDArray
-from pydantic import Field, root_validator
+from pydantic import Field, root_validator, validator
 from scipy.constants import c
 from scipy.ndimage import map_coordinates
 
@@ -39,7 +39,7 @@ class Material(BaseModel):
         super().__init__(**kwargs)
         MATERIALS[self.name] = self
 
-    @root_validator()
+    @root_validator(pre=True)
     def validate(cls, values: Dict[str, Any]) -> Dict[str, Any]:
 
         if isinstance(values, Material):
@@ -48,7 +48,14 @@ class Material(BaseModel):
         values["params"] = params = {
             k: np.asarray(v).view(_array) for k, v in values["params"].items()
         }
+
         n = values["n"]
+
+        if isinstance(n, dict):
+            r = np.asarray(n.get("real", 0.0), dtype=np.float_)
+            i = np.asarray(n.get("imag", 0.0), dtype=np.float_)
+            values["n"] = n = (r + i).view(_array)
+
         if n.ndim != len(params):
             raise ValueError(
                 f"Index n dimension does not match number of parameters: "

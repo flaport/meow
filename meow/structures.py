@@ -5,6 +5,7 @@ from typing import List
 import numpy as np
 from trimesh.scene import Scene
 from trimesh.transformations import rotation_matrix
+from pydantic import validator
 
 from .base_model import BaseModel
 from .geometries import Geometry
@@ -24,6 +25,10 @@ class Structure(BaseModel):
     material: Material
     geometry: Geometry
     mesh_order: int = 5
+
+    @validator("material")
+    def validate_material(cls, material):
+        return Material.parse_obj(material)
 
     def _lumadd(self, sim, env, unit=1e-6, xyz="yzx"):
         material_name = self.material._lumadd(sim, env, unit)

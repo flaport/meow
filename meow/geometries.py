@@ -24,33 +24,21 @@ class Geometry(BaseModel):
     def __init_subclass__(cls):
         GEOMETRIES[cls.__name__] = cls
 
+    def __new__(cls, **kwargs):
+        cls = GEOMETRIES.get(kwargs.get("type", cls.__name__), cls)
+        return BaseModel.__new__(
+            cls
+        )  # , **kwargs) # weird pydantic black magic: kwargs are not explicitly propagated
+
     @validator("type", pre=True, always=True)
     def validate_type(cls, value):
-        if (not value) or value == cls.__name__:  # type: ignore
-            return cls.__name__  # type: ignore
-        else:
-            raise TypeError("Please do not set type variable for Geometry manually.")
-
-    @classmethod
-    def from_dict(cls, dic):
-        if cls is Geometry:
-            if "type" not in dic:
-                raise TypeError(
-                    "Cannot parse geometry dict. Please specify the geometry type in the dictionary!"
-                )
-            cls_name = dic["type"]
-            if cls_name not in GEOMETRIES:
-                raise TypeError(
-                    f"Cannot parse geometry dict. Geometry type {cls_name!r} not known!"
-                )
-            cls = GEOMETRIES[cls_name]
-        elif "type" in dic:
-            cls_name = dic["type"]
-            if cls_name != cls.__name__:
-                raise TypeError(
-                    f"Cannot parse geometry dict. Geometry type given by dict {cls_name!r} does not match invoking geometry type {cls.__name__!r}!"
-                )
-        return cls(**{k: v for k, v in dic.items() if k != "type"})
+        if not value:
+            value = cls.__name__
+        if value not in GEOMETRIES:
+            raise ValueError(
+                f"Invalid Geometry type. Got: {value!r}. Valid types: {GEOMETRIES}."
+            )
+        return value
 
     def _visualize(self, scale=None):
         scene = Scene()
@@ -197,10 +185,7 @@ class Prism(Geometry):
             if (z < self.h_min) or (self.h_max < z):
                 return np.zeros_like(X, dtype=bool)
             return np.asarray(
-                [
-                    poly.contains(sg.Point(x, y))
-                    for x, y in zip(X.ravel(), Y.ravel())
-                ],
+                [poly.contains(sg.Point(x, y)) for x, y in zip(X.ravel(), Y.ravel())],
                 dtype=bool,
             ).reshape(X.shape)
 

@@ -85,24 +85,43 @@ class ModelMetaclass(_ModelMetaclass):
 
         # Enforce numpy array annotations
         for attr, annot in dct.get("__annotations__", {}).items():
-            if not cls._is_array_annot(annot):
-                continue
+            if cls._is_array_annot(annot):
 
-            @validator(attr, pre=True, allow_reuse=True, always=True)
-            def validate(cls, x):
-                shape, dtype = cls._parse_array_type_info(annot)
-                x = np.asarray(x, dtype=(None if dtype is Any else dtype))
-                if shape is not Any:
-                    try:
-                        shape = np.broadcast_shapes(shape, x.shape)
-                    except ValueError:
-                        raise ValueError(
-                            f"Invalid shape for attribute 'x': Expected: {shape}. Got: {x.shape}."
-                        )
-                    x = np.broadcast_to(x, shape)
-                return x.view(_array)  # enables a more concise repr
+                @validator(attr, pre=True, allow_reuse=True, always=True)
+                def validate(cls, x):
 
-            dct[f"validate_{attr}"] = validate
+                    if isinstance(x, dict):
+                        r = np.asarray(x.get("real", 0.0), dtype=np.float_)
+                        i = np.asarray(x.get("imag", 0.0), dtype=np.float_)
+                        x = r + i
+
+                    shape, dtype = cls._parse_array_type_info(annot)
+                    x = np.asarray(x, dtype=(None if dtype is Any else dtype))
+                    if shape is not Any:
+                        try:
+                            shape = np.broadcast_shapes(shape, x.shape)
+                        except ValueError:
+                            raise ValueError(
+                                f"Invalid shape for attribute 'x': Expected: {shape}. Got: {x.shape}."
+                            )
+                        x = np.broadcast_to(x, shape)
+                    return x.view(_array)  # enables a more concise repr
+
+                dct[f"validate_{attr}"] = validate
+
+            if annot is complex:
+
+                @validator(attr, pre=True, allow_reuse=True, always=True)
+                def validate(cls, x):
+
+                    if isinstance(x, dict):
+                        r = np.asarray(x.get("real", 0.0), dtype=np.float_)
+                        i = np.asarray(x.get("imag", 0.0), dtype=np.float_)
+                        x = r + i
+
+                    return float(np.real(x)) + 1j * float(np.imag(x))
+
+                dct[f"validate_{attr}"] = validate
 
         return super().__new__(cls, name, bases, dct, **kwargs)
 
@@ -155,6 +174,10 @@ class ModelMetaclass(_ModelMetaclass):
 class BaseModel(_BaseModel, metaclass=ModelMetaclass):
     """A customized pydantic base model that handles numpy array type hints"""
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.__dict__.update(_view_arrays(self.__dict__))
+
     def _repr(self, indent=0, shift=2):
         s = f"{self.__class__.__name__}("
         dic = self.dict()
@@ -182,3 +205,12 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
 
     def __str__(self):
         return self._repr()
+
+
+def _view_arrays(obj):
+    if isinstance(obj, dict):
+        return {k: _view_arrays(v) for k, v in obj.items()}
+    elif isinstance(obj, np.ndarray):
+        return obj.view(_array)
+    else:
+        return obj

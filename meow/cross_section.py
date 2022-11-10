@@ -23,11 +23,15 @@ class CrossSection(BaseModel):
 
     cell: Cell
     env: Environment
+
+    # TODO: convert the following into properties...
     nx: np.ndarray[Tuple[int, int], np.dtype[np.float_]]
     ny: np.ndarray[Tuple[int, int], np.dtype[np.float_]]
     nz: np.ndarray[Tuple[int, int], np.dtype[np.float_]]
 
-    def __init__(self, cell: Cell, env: Environment):
+    def __init__(self, *, cell: Cell, env: Environment, **_):
+        cell = Cell.parse_obj(cell)
+        env = Environment.parse_obj(env)
         nx, ny, nz = [np.ones(cell.mx.shape) for _ in range(3)]
         for i, material in enumerate(cell.materials, start=1):
             nx = np.where(cell.mx == i, material(env), nx)

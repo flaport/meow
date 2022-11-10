@@ -49,6 +49,9 @@ def compute_modes(
             is always 1 (the global z axis).
     """
 
+    if num_modes < 1:
+        raise ValueError("You need to request at least 1 mode.")
+
     ((Ex, Ey, Ez), (Hx, Hy, Hz)), neffs = (
         x.squeeze()
         for x in _compute_modes(
@@ -68,19 +71,34 @@ def compute_modes(
         )
     )
 
-    modes = [
-        Mode(
-            cs=cs,
-            Ex=Ex[..., i],
-            Ey=Ey[..., i],
-            Ez=Ez[..., i],
-            Hx=Hx[..., i],
-            Hy=Hy[..., i],
-            Hz=Hz[..., i],
-            neff=neffs[i],
-        )
-        for i in range(num_modes)
-    ]
+    if num_modes == 1:
+        modes = [
+            Mode(
+                cs=cs,
+                Ex=Ex,
+                Ey=Ey,
+                Ez=Ez,
+                Hx=Hx,
+                Hy=Hy,
+                Hz=Hz,
+                neff=float(neffs.real) + 1j * float(neffs.imag),
+            )
+            for i in range(num_modes)
+        ]
+    else:  # num_modes > 1
+        modes = [
+            Mode(
+                cs=cs,
+                Ex=Ex[..., i],
+                Ey=Ey[..., i],
+                Ez=Ez[..., i],
+                Hx=Hx[..., i],
+                Hy=Hy[..., i],
+                Hz=Hz[..., i],
+                neff=neffs[i],
+            )
+            for i in range(num_modes)
+        ]
 
     modes = [zero_phase(normalize_energy(mode)) for mode in modes]
     modes = sorted(modes, key=lambda m: float(np.real(m.neff)), reverse=True)
