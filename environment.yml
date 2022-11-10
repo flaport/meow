@@ -56,7 +56,6 @@ dependencies:
 
   # trimesh
   - lxml
-  - mapbox-earcut
   - networkx
   - pyglet
   - rtree
@@ -82,6 +81,7 @@ dependencies:
     # trimesh
     - trimesh[easy]
     - pyembree
+    - mapbox-earcut
 
     # jax
     - jax
