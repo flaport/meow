@@ -49,11 +49,12 @@ class Material(BaseModel):
         }
 
         n = values["n"]
-
         if isinstance(n, dict):
             r = np.asarray(n.get("real", 0.0), dtype=np.float_)
             i = np.asarray(n.get("imag", 0.0), dtype=np.float_)
-            values["n"] = n = (r + i).view(_array)
+            values["n"] = n = np.asarray(r + 1j * i, dtype=np.complex_).view(_array)
+        else:
+            n = np.asarray(n, dtype=np.complex_).view(_array)
 
         if n.ndim != len(params):
             raise ValueError(
