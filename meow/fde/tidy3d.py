@@ -14,7 +14,7 @@ from ..mode import Mode, Modes, normalize_energy, zero_phase
 
 
 @validate_arguments
-def compute_modes(
+def compute_modes_tidy3d(
     cs: CrossSection,
     num_modes: PositiveInt = 10,
     angle_theta: float = 0.0,

@@ -8,7 +8,7 @@ from ..mode import Mode, normalize_energy, zero_phase
 
 
 # @validate_arguments
-def compute_modes(
+def compute_modes_lumerical(
     cs: CrossSection,
     sim: "lumapi.MODE",  # type: ignore
     num_modes: PositiveInt = 10,
