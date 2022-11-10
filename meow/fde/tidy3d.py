@@ -7,7 +7,6 @@ import numpy as np
 from pydantic import validate_arguments
 from pydantic.types import NonNegativeInt, PositiveFloat, PositiveInt
 from scipy.constants import c
-
 from tidy3d.plugins.mode.solver import compute_modes as _compute_modes
 
 from ..cross_section import CrossSection
@@ -67,6 +66,8 @@ def compute_modes(
                 target_neff=target_neff or cs.nx.max(),
                 sort_by=sort_by,
                 num_pml=num_pml,
+                filter_pol=None,
+                precision="double",
             ),
         )
     )
