@@ -2,6 +2,7 @@
 .vscode/
 .idea/
 sandbox
+tests/nbs_fail
 
 # nbdev
 *.bak
