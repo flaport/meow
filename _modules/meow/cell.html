@@ -281,7 +281,7 @@ title="Open an issue"
   <h1>Source code for meow.cell</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; an EME Cell &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -290,14 +290,14 @@ title="Open an issue"
 
 <span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 <span class="kn">from</span> <span class="nn">.materials</span> <span class="kn">import</span> <span class="n">Materials</span>
-<span class="kn">from</span> <span class="nn">.mesh</span> <span class="kn">import</span> <span class="n">Mesh2d</span><span class="p">,</span> <span class="n">Meshes2d</span>
-<span class="kn">from</span> <span class="nn">.structures</span> <span class="kn">import</span> <span class="n">Structures</span><span class="p">,</span> <span class="n">_sort_structures</span>
+<span class="kn">from</span> <span class="nn">.mesh</span> <span class="kn">import</span> <span class="n">Mesh2d</span>
+<span class="kn">from</span> <span class="nn">.structures</span> <span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">_sort_structures</span>
 
 
 <div class="viewcode-block" id="Cell"><a class="viewcode-back" href="../../meow.html#meow.cell.Cell">[docs]</a><span class="k">class</span> <span class="nc">Cell</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A `Cell` defines a location in a `Structure` associated with a `Mesh`&quot;&quot;&quot;</span>
 
-    <span class="n">structures</span><span class="p">:</span> <span class="n">Structures</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+    <span class="n">structures</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Structure</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">descrsption</span><span class="o">=</span><span class="s2">&quot;the structures which will be sliced by the cell&quot;</span>
     <span class="p">)</span>
     <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh2d</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the mesh to slice the structures with&quot;</span><span class="p">)</span>
@@ -322,7 +322,13 @@ title="Open an issue"
     <span class="p">)</span>
 
 <div class="viewcode-block" id="Cell.__init__"><a class="viewcode-back" href="../../meow.html#meow.cell.Cell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">structures</span><span class="p">:</span> <span class="n">Structures</span><span class="p">,</span> <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh2d</span><span class="p">,</span> <span class="n">z_min</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">z_max</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">structures</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Structure</span><span class="p">],</span>
+        <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh2d</span><span class="p">,</span>
+        <span class="n">z_min</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">z_max</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">_</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A `Cell` defines a location in a `Structure` associated with a `Mesh`</span>
 
@@ -334,14 +340,14 @@ title="Open an issue"
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mesh</span> <span class="o">=</span> <span class="n">parse_obj_as</span><span class="p">(</span><span class="n">Mesh2d</span><span class="p">,</span> <span class="n">mesh</span><span class="p">)</span>
-        <span class="n">structures</span> <span class="o">=</span> <span class="n">parse_obj_as</span><span class="p">(</span><span class="n">Structures</span><span class="p">,</span> <span class="n">structures</span><span class="p">)</span>
+        <span class="n">structures</span> <span class="o">=</span> <span class="n">parse_obj_as</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">Structure</span><span class="p">],</span> <span class="n">structures</span><span class="p">)</span>
 
         <span class="n">structures</span> <span class="o">=</span> <span class="n">_sort_structures</span><span class="p">(</span><span class="n">structures</span><span class="p">)</span>
         <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">Xx</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
         <span class="n">z</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">z_min</span> <span class="o">+</span> <span class="n">z_max</span><span class="p">)</span>
 
         <span class="n">materials</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># TODO: ideally we should downselect the relevant structures here. Structures not at z-location should ideally be ignored.</span>
+        <span class="c1"># TODO: ideally we should downselect the relevant structures here... structures not at z-location should ideally be ignored.</span>
 
         <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="n">structures</span><span class="p">:</span>
             <span class="n">mask_x</span><span class="p">,</span> <span class="n">mask_y</span><span class="p">,</span> <span class="n">mask_z</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">_mask2d</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
@@ -408,42 +414,33 @@ title="Open an issue"
             <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Cells"><a class="viewcode-back" href="../../meow.html#meow.cell.Cells">[docs]</a><span class="k">class</span> <span class="nc">Cells</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>  <span class="c1"># List[Cell]</span>
-    <span class="sd">&quot;&quot;&quot;a list of `Cell` objects&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="create_cells"><a class="viewcode-back" href="../../meow.html#meow.cell.create_cells">[docs]</a><span class="k">def</span> <span class="nf">create_cells</span><span class="p">(</span>
+    <span class="n">structures</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Structure</span><span class="p">],</span>
+    <span class="n">mesh</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mesh2d</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Mesh2d</span><span class="p">]],</span>
+    <span class="n">Ls</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]],</span>
+    <span class="n">z_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Cell</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;easily create multiple `Cell` objects given a `Mesh` and a collection of cell lengths&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Cells.__init__"><a class="viewcode-back" href="../../meow.html#meow.cell.Cells.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">structures</span><span class="p">:</span> <span class="n">Structures</span><span class="p">,</span>
-        <span class="n">mesh</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Mesh2d</span><span class="p">,</span> <span class="n">Meshes2d</span><span class="p">],</span>
-        <span class="n">Ls</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]],</span>
-        <span class="n">z_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;easily create multiple `Cell` objects given a `Mesh` and a collection of cell lengths&quot;&quot;&quot;</span>
-        <span class="n">Ls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Ls</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">Ls</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ls should be 1D. Got shape: </span><span class="si">{</span><span class="n">Ls</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">Ls</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;length of Ls array should be nonzero. Got: </span><span class="si">{</span><span class="n">Ls</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="n">Ls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Ls</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Ls</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ls should be 1D. Got shape: </span><span class="si">{</span><span class="n">Ls</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Ls</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;length of Ls array should be nonzero. Got: </span><span class="si">{</span><span class="n">Ls</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
-        <span class="n">meshes</span> <span class="o">=</span> <span class="p">[</span><span class="n">mesh</span><span class="p">]</span> <span class="o">*</span> <span class="n">Ls</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">Mesh2d</span><span class="p">)</span> <span class="k">else</span> <span class="n">mesh</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ls</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">meshes</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Number of meshes should correspond to number of lengths (length of Ls). Got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">meshes</span><span class="p">)</span><span class="si">}</span><span class="s2"> != </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">Ls</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="p">)</span>
+    <span class="n">meshes</span> <span class="o">=</span> <span class="p">[</span><span class="n">mesh</span><span class="p">]</span> <span class="o">*</span> <span class="n">Ls</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">Mesh2d</span><span class="p">)</span> <span class="k">else</span> <span class="n">mesh</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ls</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">meshes</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Number of meshes should correspond to number of lengths (length of Ls). Got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">meshes</span><span class="p">)</span><span class="si">}</span><span class="s2"> != </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">Ls</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
 
-        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">z_min</span><span class="p">],</span> <span class="nb">float</span><span class="p">),</span> <span class="n">Ls</span><span class="p">]))</span>
-        <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">Cell</span><span class="p">(</span><span class="n">structures</span><span class="o">=</span><span class="n">structures</span><span class="p">,</span> <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">z_min</span><span class="o">=</span><span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span><span class="o">=</span><span class="n">z_max</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">mesh</span><span class="p">,</span> <span class="p">(</span><span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">meshes</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">z</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
-        <span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">z_min</span><span class="p">],</span> <span class="nb">float</span><span class="p">),</span> <span class="n">Ls</span><span class="p">]))</span>
+    <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Cell</span><span class="p">(</span><span class="n">structures</span><span class="o">=</span><span class="n">structures</span><span class="p">,</span> <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">z_min</span><span class="o">=</span><span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span><span class="o">=</span><span class="n">z_max</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">mesh</span><span class="p">,</span> <span class="p">(</span><span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">meshes</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">z</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+    <span class="p">]</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Cells.from_list"><a class="viewcode-back" href="../../meow.html#meow.cell.Cells.from_list">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_list</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">lst</span><span class="p">):</span>
-        <span class="n">new_lst</span> <span class="o">=</span> <span class="nb">list</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
-        <span class="n">new_lst</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">new_lst</span></div></div>
+    <span class="k">return</span> <span class="n">cells</span></div>
 </pre></div>
 
               </div>

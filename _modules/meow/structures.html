@@ -281,8 +281,6 @@ title="Open an issue"
   <h1>Source code for meow.structures</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; a Structure is a combination of a geometry with a material (and an optional mesh order) &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
-
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">validator</span>
 <span class="kn">from</span> <span class="nn">trimesh.scene</span> <span class="kn">import</span> <span class="n">Scene</span>
@@ -316,9 +314,6 @@ title="Open an issue"
 
     <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trimesh</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
-
-
-<span class="n">Structures</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">Structure</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">_visualize_structures</span><span class="p">(</span><span class="n">structures</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

@@ -293,7 +293,7 @@ title="Open an issue"
     <span class="n">enforce_reciprocity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">enforce_lossy_unitarity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;get the S-matrix of the interface between two `CrossSections`&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;get the S-matrix of the interface between two `CrossSection`s&quot;&quot;&quot;</span>
     <span class="c1"># overlap matrices</span>
     <span class="n">NL</span><span class="p">,</span> <span class="n">NR</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes2</span><span class="p">)</span>
     <span class="n">O_LL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">inner_product</span><span class="p">(</span><span class="n">modes1</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">modes1</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NL</span><span class="p">)])</span>

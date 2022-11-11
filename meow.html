@@ -663,24 +663,9 @@ title="Print to PDF"
 
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="meow.cell.Cells">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cell.html#Cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cell.Cells" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p>
-<p>a list of <cite>Cell</cite> objects</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>structures</strong> (<em>List</em><em>[</em><a class="reference internal" href="#meow.structures.Structure" title="meow.structures.Structure"><em>meow.structures.Structure</em></a><em>]</em>) – </p></li>
-<li><p><strong>mesh</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#meow.mesh.Mesh2d" title="meow.mesh.Mesh2d"><em>meow.mesh.Mesh2d</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#meow.mesh.Mesh2d" title="meow.mesh.Mesh2d"><em>meow.mesh.Mesh2d</em></a><em>]</em><em>]</em>) – </p></li>
-<li><p><strong>Ls</strong> (<em>numpy.ndarray</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>]</em><em>, </em><em>numpy.dtype</em><em>[</em><em>numpy.float64</em><em>]</em><em>]</em>) – </p></li>
-<li><p><strong>z_min</strong> (<em>float</em>) – </p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="meow.cell.Cells.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cell.html#Cells.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cell.Cells.__init__" title="Permalink to this definition">#</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.cell.create_cells">
+<span class="sig-name descname"><span class="pre">create_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cell.html#create_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cell.create_cells" title="Permalink to this definition">#</a></dt>
 <dd><p>easily create multiple <cite>Cell</cite> objects given a <cite>Mesh</cite> and a collection of cell lengths</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -691,14 +676,10 @@ title="Print to PDF"
 <li><p><strong>z_min</strong> (<em>float</em>) – </p></li>
 </ul>
 </dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><em>List</em>[<a class="reference internal" href="#meow.cell.Cell" title="meow.cell.Cell">meow.cell.Cell</a>]</p>
+</dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="meow.cell.Cells.from_list">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lst</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cell.html#Cells.from_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cell.Cells.from_list" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <span class="target" id="module-meow.cross_section"></span><p>A CrossSection</p>
@@ -932,39 +913,6 @@ which uniquely defines the refractive index everywhere.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.structures">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">structures</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.structures" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="meow.cross_section.CrossSections">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CrossSections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cross_section.html#CrossSections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cross_section.CrossSections" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p>
-<p>as list of <cite>CrossSection</cite> objects</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cells</strong> (<a class="reference internal" href="#meow.cell.Cells" title="meow.cell.Cells"><em>meow.cell.Cells</em></a>) – </p></li>
-<li><p><strong>env</strong> (<a class="reference internal" href="#meow.environment.Environment" title="meow.environment.Environment"><em>meow.environment.Environment</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="meow.cross_section.CrossSections.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cross_section.html#CrossSections.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cross_section.CrossSections.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cells</strong> (<a class="reference internal" href="#meow.cell.Cells" title="meow.cell.Cells"><em>meow.cell.Cells</em></a>) – </p></li>
-<li><p><strong>env</strong> (<a class="reference internal" href="#meow.environment.Environment" title="meow.environment.Environment"><em>meow.environment.Environment</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="meow.cross_section.CrossSections.from_list">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lst</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cross_section.html#CrossSections.from_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cross_section.CrossSections.from_list" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
