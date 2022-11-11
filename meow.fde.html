@@ -22,8 +22,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
@@ -38,13 +37,7 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
-    <script>let toggleHintShow = 'Click to show';</script>
-    <script>let toggleHintHide = 'Click to hide';</script>
-    <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="meow.eme package" href="meow.eme.html" />
@@ -99,18 +92,42 @@
     <div class="bd-toc-item active">
         <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Contents
+  Home
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="index.html">
+   meow
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="examples/00_introduction.html">
+   Quick Start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="examples/01_gds_taper.html">
+   GDS Taper
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Api Docs
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="examples.html">
-   Examples
-  </a>
- </li>
  <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="modules.html">
-   meow
+  <a class="reference internal" href="meow.html">
+   meow package
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -118,27 +135,15 @@
    </i>
   </label>
   <ul class="current">
-   <li class="toctree-l2 current active has-children">
-    <a class="reference internal" href="meow.html">
-     meow package
+   <li class="toctree-l2">
+    <a class="reference internal" href="meow.eme.html">
+     meow.eme package
     </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul class="current">
-     <li class="toctree-l3">
-      <a class="reference internal" href="meow.eme.html">
-       meow.eme package
-      </a>
-     </li>
-     <li class="toctree-l3 current active">
-      <a class="current reference internal" href="#">
-       meow.fde package
-      </a>
-     </li>
-    </ul>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     meow.fde package
+    </a>
    </li>
   </ul>
  </li>
@@ -337,23 +342,8 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#submodules">
-   Submodules
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-meow.fde.lumerical">
-   meow.fde.lumerical module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-meow.fde.tidy3d">
-   meow.fde.tidy3d module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-meow.fde">
-   Module contents
+   Submodules
   </a>
  </li>
 </ul>
@@ -376,23 +366,8 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#submodules">
-   Submodules
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-meow.fde.lumerical">
-   meow.fde.lumerical module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-meow.fde.tidy3d">
-   meow.fde.tidy3d module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-meow.fde">
-   Module contents
+   Submodules
   </a>
  </li>
 </ul>
@@ -405,17 +380,15 @@ title="Print to PDF"
                 
               <div>
                 
-  <section id="meow-fde-package">
-<h1>meow.fde package<a class="headerlink" href="#meow-fde-package" title="Permalink to this headline">#</a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">#</a></h2>
-</section>
+  <section id="module-meow.fde">
+<span id="meow-fde-package"></span><h1>meow.fde package<a class="headerlink" href="#module-meow.fde" title="Permalink to this headline">#</a></h1>
+<p>FDE Implementations &amp; Backends</p>
 <section id="module-meow.fde.lumerical">
-<span id="meow-fde-lumerical-module"></span><h2>meow.fde.lumerical module<a class="headerlink" href="#module-meow.fde.lumerical" title="Permalink to this headline">#</a></h2>
+<span id="submodules"></span><h2>Submodules<a class="headerlink" href="#module-meow.fde.lumerical" title="Permalink to this headline">#</a></h2>
 <p>FDE Lumerical Backend</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="meow.fde.lumerical.compute_modes">
-<span class="sig-prename descclassname"><span class="pre">meow.fde.lumerical.</span></span><span class="sig-name descname"><span class="pre">compute_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/fde/lumerical.html#compute_modes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.fde.lumerical.compute_modes" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="meow.fde.lumerical.compute_modes_lumerical">
+<span class="sig-name descname"><span class="pre">compute_modes_lumerical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/fde/lumerical.html#compute_modes_lumerical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.fde.lumerical.compute_modes_lumerical" title="Permalink to this definition">#</a></dt>
 <dd><p>compute <cite>Modes</cite> for a given <cite>CrossSection</cite> (Lumerical backend)</p>
 <p>cs: the <cite>CrossSection</cite> to calculate the modes for
 sim: the lumerical simulation object
@@ -433,13 +406,10 @@ unit: conversion factor from meow to lumerical distances (normaly um -&gt; m, th
 </dl>
 </dd></dl>
 
-</section>
-<section id="module-meow.fde.tidy3d">
-<span id="meow-fde-tidy3d-module"></span><h2>meow.fde.tidy3d module<a class="headerlink" href="#module-meow.fde.tidy3d" title="Permalink to this headline">#</a></h2>
-<p>FDE Tidy3d backend (default backend for MEOW)</p>
+<span class="target" id="module-meow.fde.tidy3d"></span><p>FDE Tidy3d backend (default backend for MEOW)</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="meow.fde.tidy3d.compute_modes">
-<span class="sig-prename descclassname"><span class="pre">meow.fde.tidy3d.</span></span><span class="sig-name descname"><span class="pre">compute_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bend_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bend_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_neff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'largest_neff'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_pml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/fde/tidy3d.html#compute_modes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.fde.tidy3d.compute_modes" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="meow.fde.tidy3d.compute_modes_tidy3d">
+<span class="sig-name descname"><span class="pre">compute_modes_tidy3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bend_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bend_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_neff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'largest_neff'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_pml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/fde/tidy3d.html#compute_modes_tidy3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.fde.tidy3d.compute_modes_tidy3d" title="Permalink to this definition">#</a></dt>
 <dd><p>compute <cite>Modes</cite> for a given <cite>CrossSection</cite> (Tidy3D backend)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -470,10 +440,6 @@ is always 1 (the global z axis).</p></li>
 </dl>
 </dd></dl>
 
-</section>
-<section id="module-meow.fde">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-meow.fde" title="Permalink to this headline">#</a></h2>
-<p>compute modes with FDE</p>
 </section>
 </section>
 

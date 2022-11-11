@@ -22,8 +22,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
@@ -38,13 +37,7 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
-    <script>let toggleHintShow = 'Click to show';</script>
-    <script>let toggleHintHide = 'Click to hide';</script>
-    <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="meow.fde package" href="meow.fde.html" />
@@ -100,18 +93,42 @@
     <div class="bd-toc-item active">
         <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Contents
+  Home
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="index.html">
+   meow
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="examples/00_introduction.html">
+   Quick Start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="examples/01_gds_taper.html">
+   GDS Taper
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Api Docs
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="examples.html">
-   Examples
-  </a>
- </li>
  <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="modules.html">
-   meow
+  <a class="reference internal" href="meow.html">
+   meow package
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -119,27 +136,15 @@
    </i>
   </label>
   <ul class="current">
-   <li class="toctree-l2 current active has-children">
-    <a class="reference internal" href="meow.html">
-     meow package
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     meow.eme package
     </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul class="current">
-     <li class="toctree-l3 current active">
-      <a class="current reference internal" href="#">
-       meow.eme package
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="meow.fde.html">
-       meow.fde package
-      </a>
-     </li>
-    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="meow.fde.html">
+     meow.fde package
+    </a>
    </li>
   </ul>
  </li>
@@ -338,18 +343,8 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#submodules">
+  <a class="reference internal nav-link" href="#module-meow.eme.common">
    Submodules
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-meow.eme.sax">
-   meow.eme.sax module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-meow.eme">
-   Module contents
   </a>
  </li>
 </ul>
@@ -372,18 +367,8 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#submodules">
+  <a class="reference internal nav-link" href="#module-meow.eme.common">
    Submodules
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-meow.eme.sax">
-   meow.eme.sax module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-meow.eme">
-   Module contents
   </a>
  </li>
 </ul>
@@ -396,17 +381,15 @@ title="Print to PDF"
                 
               <div>
                 
-  <section id="meow-eme-package">
-<h1>meow.eme package<a class="headerlink" href="#meow-eme-package" title="Permalink to this headline">#</a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">#</a></h2>
-</section>
-<section id="module-meow.eme.sax">
-<span id="meow-eme-sax-module"></span><h2>meow.eme.sax module<a class="headerlink" href="#module-meow.eme.sax" title="Permalink to this headline">#</a></h2>
+  <section id="module-meow.eme">
+<span id="meow-eme-package"></span><h1>meow.eme package<a class="headerlink" href="#module-meow.eme" title="Permalink to this headline">#</a></h1>
+<p>EME Implementations &amp; Backends</p>
+<section id="module-meow.eme.common">
+<span id="submodules"></span><h2>Submodules<a class="headerlink" href="#module-meow.eme.common" title="Permalink to this headline">#</a></h2>
 <p>SAX backend for EME (default backend)</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="meow.eme.sax.compute_interface_s_matrix">
-<span class="sig-prename descclassname"><span class="pre">meow.eme.sax.</span></span><span class="sig-name descname"><span class="pre">compute_interface_s_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_reciprocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_lossy_unitarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#compute_interface_s_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.compute_interface_s_matrix" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="meow.eme.common.compute_interface_s_matrix">
+<span class="sig-name descname"><span class="pre">compute_interface_s_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_reciprocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_lossy_unitarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_interface_s_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_interface_s_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>get the S-matrix of the interface between two <cite>CrossSections</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -421,8 +404,8 @@ title="Print to PDF"
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="meow.eme.sax.compute_interface_s_matrices">
-<span class="sig-prename descclassname"><span class="pre">meow.eme.sax.</span></span><span class="sig-name descname"><span class="pre">compute_interface_s_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_reciprocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_lossy_unitarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#compute_interface_s_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.compute_interface_s_matrices" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="meow.eme.common.compute_interface_s_matrices">
+<span class="sig-name descname"><span class="pre">compute_interface_s_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_reciprocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_lossy_unitarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_interface_s_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_interface_s_matrices" title="Permalink to this definition">#</a></dt>
 <dd><p>get all the S-matrices of all the interfaces in a collection of <cite>CrossSections</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -436,8 +419,8 @@ title="Print to PDF"
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="meow.eme.sax.compute_propagation_s_matrix">
-<span class="sig-prename descclassname"><span class="pre">meow.eme.sax.</span></span><span class="sig-name descname"><span class="pre">compute_propagation_s_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#compute_propagation_s_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.compute_propagation_s_matrix" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="meow.eme.common.compute_propagation_s_matrix">
+<span class="sig-name descname"><span class="pre">compute_propagation_s_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_propagation_s_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_propagation_s_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>get the propagation S-matrix of each <cite>Mode</cite> belonging to a <cite>CrossSection</cite> in a <cite>Cell</cite> with a certain length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -447,8 +430,8 @@ title="Print to PDF"
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="meow.eme.sax.compute_propagation_s_matrices">
-<span class="sig-prename descclassname"><span class="pre">meow.eme.sax.</span></span><span class="sig-name descname"><span class="pre">compute_propagation_s_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#compute_propagation_s_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.compute_propagation_s_matrices" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="meow.eme.common.compute_propagation_s_matrices">
+<span class="sig-name descname"><span class="pre">compute_propagation_s_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_propagation_s_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_propagation_s_matrices" title="Permalink to this definition">#</a></dt>
 <dd><p>get all the propagation S-matrices of all the <cite>Modes</cite> belonging to each <cite>CrossSection</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -458,14 +441,8 @@ title="Print to PDF"
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="meow.eme.sax.get_netlist">
-<span class="sig-prename descclassname"><span class="pre">meow.eme.sax.</span></span><span class="sig-name descname"><span class="pre">get_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">propagations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interfaces</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#get_netlist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.get_netlist" title="Permalink to this definition">#</a></dt>
-<dd><p>get the netlist of a stack of <cite>Modes</cite></p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="meow.eme.sax.select_ports">
-<span class="sig-prename descclassname"><span class="pre">meow.eme.sax.</span></span><span class="sig-name descname"><span class="pre">select_ports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ports</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#select_ports"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.select_ports" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="meow.eme.common.select_ports">
+<span class="sig-name descname"><span class="pre">select_ports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ports</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#select_ports"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.select_ports" title="Permalink to this definition">#</a></dt>
 <dd><p>Keep subset of an S-matrix</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -481,9 +458,10 @@ title="Print to PDF"
 </dl>
 </dd></dl>
 
+<span class="target" id="module-meow.eme.sax"></span><p>SAX backend for EME (default backend)</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="meow.eme.sax.compute_s_matrix">
-<span class="sig-prename descclassname"><span class="pre">meow.eme.sax.</span></span><span class="sig-name descname"><span class="pre">compute_s_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sax_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_reciprocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_lossy_unitarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#compute_s_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.compute_s_matrix" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="meow.eme.sax.compute_s_matrix_sax">
+<span class="sig-name descname"><span class="pre">compute_s_matrix_sax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sax_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_reciprocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_lossy_unitarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#compute_s_matrix_sax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.compute_s_matrix_sax" title="Permalink to this definition">#</a></dt>
 <dd><p>Calculate the S-matrix for given sets of modes, each set belonging to a <cite>Cell</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -495,10 +473,6 @@ title="Print to PDF"
 </dl>
 </dd></dl>
 
-</section>
-<section id="module-meow.eme">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-meow.eme" title="Permalink to this headline">#</a></h2>
-<p>EME: Eigenmode expansion</p>
 </section>
 </section>
 

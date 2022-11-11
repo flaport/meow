@@ -21,8 +21,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/autodoc_pydantic.css" />
@@ -37,13 +36,7 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
-    <script>let toggleHintShow = 'Click to show';</script>
-    <script>let toggleHintHide = 'Click to hide';</script>
-    <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../../_static/togglebutton.js"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -97,18 +90,42 @@
     <div class="bd-toc-item active">
         <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Contents
+  Home
  </span>
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../../examples.html">
-   Examples
+  <a class="reference internal" href="../../index.html">
+   meow
   </a>
  </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../examples/00_introduction.html">
+   Quick Start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../examples/01_gds_taper.html">
+   GDS Taper
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Api Docs
+ </span>
+</p>
+<ul class="nav bd-sidenav">
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../../modules.html">
-   meow
+  <a class="reference internal" href="../../meow.html">
+   meow package
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -116,27 +133,15 @@
    </i>
   </label>
   <ul>
-   <li class="toctree-l2 has-children">
-    <a class="reference internal" href="../../meow.html">
-     meow package
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../meow.eme.html">
+     meow.eme package
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../../meow.eme.html">
-       meow.eme package
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../../meow.fde.html">
-       meow.fde package
-      </a>
-     </li>
-    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../meow.fde.html">
+     meow.fde package
+    </a>
    </li>
   </ul>
  </li>
@@ -279,6 +284,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">validator</span>
 <span class="kn">from</span> <span class="nn">trimesh.scene</span> <span class="kn">import</span> <span class="n">Scene</span>
 <span class="kn">from</span> <span class="nn">trimesh.transformations</span> <span class="kn">import</span> <span class="n">rotation_matrix</span>
 
@@ -288,18 +294,15 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="Structure"><a class="viewcode-back" href="../../meow.html#meow.structures.Structure">[docs]</a><span class="k">class</span> <span class="nc">Structure</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;a `Structure` is an association between a `Geometry` and a `Material`</span>
+    <span class="sd">&quot;&quot;&quot;a `Structure` is an association between a `Geometry` and a `Material`&quot;&quot;&quot;</span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">        material: the material of the structure</span>
-<span class="sd">        geometry: the geometry of the structure</span>
-<span class="sd">        mesh_order: the mesh order of the structure</span>
+    <span class="n">material</span><span class="p">:</span> <span class="n">Material</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the material of the structure&quot;</span><span class="p">)</span>
+    <span class="n">geometry</span><span class="p">:</span> <span class="n">Geometry</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the geometry of the structure&quot;</span><span class="p">)</span>
+    <span class="n">mesh_order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the mesh order of the structure&quot;</span><span class="p">)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">material</span><span class="p">:</span> <span class="n">Material</span>
-    <span class="n">geometry</span><span class="p">:</span> <span class="n">Geometry</span>
-    <span class="n">mesh_order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s2">&quot;material&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">validate_material</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">material</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Material</span><span class="o">.</span><span class="n">parse_obj</span><span class="p">(</span><span class="n">material</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_lumadd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="s2">&quot;yzx&quot;</span><span class="p">):</span>
         <span class="n">material_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">_lumadd</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>

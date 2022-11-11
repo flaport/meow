@@ -21,8 +21,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/autodoc_pydantic.css" />
@@ -37,13 +36,7 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
-    <script>let toggleHintShow = 'Click to show';</script>
-    <script>let toggleHintHide = 'Click to hide';</script>
-    <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../../_static/togglebutton.js"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -97,18 +90,42 @@
     <div class="bd-toc-item active">
         <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Contents
+  Home
  </span>
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../../examples.html">
-   Examples
+  <a class="reference internal" href="../../index.html">
+   meow
   </a>
  </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../examples/00_introduction.html">
+   Quick Start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../examples/01_gds_taper.html">
+   GDS Taper
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Api Docs
+ </span>
+</p>
+<ul class="nav bd-sidenav">
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../../modules.html">
-   meow
+  <a class="reference internal" href="../../meow.html">
+   meow package
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -116,27 +133,15 @@
    </i>
   </label>
   <ul>
-   <li class="toctree-l2 has-children">
-    <a class="reference internal" href="../../meow.html">
-     meow package
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../meow.eme.html">
+     meow.eme package
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-    <label for="toctree-checkbox-2">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../../meow.eme.html">
-       meow.eme package
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../../meow.fde.html">
-       meow.fde package
-      </a>
-     </li>
-    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../meow.fde.html">
+     meow.fde package
+    </a>
    </li>
   </ul>
  </li>
@@ -282,7 +287,7 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="k">as</span> <span class="nn">sg</span>
 <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">to_rgba</span> <span class="k">as</span> <span class="n">_to_rgba_mpl</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">validator</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">validator</span>
 <span class="kn">from</span> <span class="nn">trimesh</span> <span class="kn">import</span> <span class="n">Trimesh</span>
 <span class="kn">from</span> <span class="nn">trimesh.creation</span> <span class="kn">import</span> <span class="n">extrude_polygon</span>
 <span class="kn">from</span> <span class="nn">trimesh.scene</span> <span class="kn">import</span> <span class="n">Scene</span>
@@ -300,33 +305,21 @@ title="Open an issue"
     <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="n">GEOMETRIES</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
 
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="n">GEOMETRIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span> <span class="bp">cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span>
+            <span class="bp">cls</span>
+        <span class="p">)</span>  <span class="c1"># , **kwargs) # weird pydantic black magic: kwargs are not explicitly propagated</span>
+
     <span class="nd">@validator</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">always</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">validate_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">value</span><span class="p">)</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">==</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span>  <span class="c1"># type: ignore</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please do not set type variable for Geometry manually.&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Geometry.from_dict"><a class="viewcode-back" href="../../meow.html#meow.geometries.Geometry.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dic</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="n">Geometry</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="s2">&quot;Cannot parse geometry dict. Please specify the geometry type in the dictionary!&quot;</span>
-                <span class="p">)</span>
-            <span class="n">cls_name</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">cls_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">GEOMETRIES</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Cannot parse geometry dict. Geometry type </span><span class="si">{</span><span class="n">cls_name</span><span class="si">!r}</span><span class="s2"> not known!&quot;</span>
-                <span class="p">)</span>
-            <span class="bp">cls</span> <span class="o">=</span> <span class="n">GEOMETRIES</span><span class="p">[</span><span class="n">cls_name</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
-            <span class="n">cls_name</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">cls_name</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Cannot parse geometry dict. Geometry type given by dict </span><span class="si">{</span><span class="n">cls_name</span><span class="si">!r}</span><span class="s2"> does not match invoking geometry type </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2">!&quot;</span>
-                <span class="p">)</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dic</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">&quot;type&quot;</span><span class="p">})</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="s2">&quot;Geometry&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">GEOMETRIES</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Invalid Geometry type. Got: </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2">. Valid types: </span><span class="si">{</span><span class="n">GEOMETRIES</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">scene</span> <span class="o">=</span> <span class="n">Scene</span><span class="p">()</span>
@@ -356,23 +349,14 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="Box"><a class="viewcode-back" href="../../meow.html#meow.geometries.Box">[docs]</a><span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">Geometry</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A Box is a simple rectangular cuboid</span>
+    <span class="sd">&quot;&quot;&quot;A Box is a simple rectangular cuboid&quot;&quot;&quot;</span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">        x_min: the minimum x-value of the box</span>
-<span class="sd">        x_max: the maximum x-value of the box</span>
-<span class="sd">        y_min: the minimum y-value of the box</span>
-<span class="sd">        y_max: the maximum y-value of the box</span>
-<span class="sd">        z_min: the minimum z-value of the box</span>
-<span class="sd">        z_max: the maximum z-value of the box</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">x_min</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">x_max</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">y_min</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">y_max</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">z_min</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">z_max</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">x_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the minimum x-value of the box&quot;</span><span class="p">)</span>
+    <span class="n">x_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the maximum x-value of the box&quot;</span><span class="p">)</span>
+    <span class="n">y_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the minimum y-value of the box&quot;</span><span class="p">)</span>
+    <span class="n">y_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the maximum y-value of the box&quot;</span><span class="p">)</span>
+    <span class="n">z_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the minimum z-value of the box&quot;</span><span class="p">)</span>
+    <span class="n">z_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the maximum z-value of the box&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_mask2d_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">z</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_min</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z_max</span> <span class="o">&lt;</span> <span class="n">z</span><span class="p">):</span>
@@ -426,21 +410,20 @@ title="Open an issue"
 <div class="viewcode-block" id="Prism"><a class="viewcode-back" href="../../meow.html#meow.geometries.Prism">[docs]</a><span class="k">class</span> <span class="nc">Prism</span><span class="p">(</span><span class="n">Geometry</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A prism is a 2D Polygon extruded along a certain axis direction (&#39;x&#39;, &#39;y&#39;, or &#39;z&#39;).</span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">        poly: the 2D array (Nx2) with polygon vertices</span>
-<span class="sd">        h_min: the start height of the extrusion</span>
-<span class="sd">        h_max: the end height of the extrusion</span>
-<span class="sd">        axis: the axis along which the polygon will be extruded (&#39;x&#39;, &#39;y&#39;, or &#39;z&#39;).</span>
-
 <span class="sd">    Note:</span>
 <span class="sd">        currently only extrusions along &#39;y&#39; (perpendicular to the chip)</span>
 <span class="sd">        are fully supported!</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">poly</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]</span>
-    <span class="n">h_min</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">h_max</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">axis</span><span class="p">:</span> <span class="n">AxisDirection</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span>
+    <span class="n">poly</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the 2D array (Nx2) with polygon vertices&quot;</span>
+    <span class="p">)</span>
+    <span class="n">h_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the start height of the extrusion&quot;</span><span class="p">)</span>
+    <span class="n">h_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the end height of the extrusion&quot;</span><span class="p">)</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="n">AxisDirection</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the axis along which the polygon will be extruded (&#39;x&#39;, &#39;y&#39;, or &#39;z&#39;).&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_mask2d_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
         <span class="n">poly</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="p">)</span>
@@ -473,10 +456,7 @@ title="Open an issue"
             <span class="k">if</span> <span class="p">(</span><span class="n">z</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_min</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h_max</span> <span class="o">&lt;</span> <span class="n">z</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
-                <span class="p">[</span>
-                    <span class="n">poly</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
-                    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">Y</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
-                <span class="p">],</span>
+                <span class="p">[</span><span class="n">poly</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">Y</span><span class="o">.</span><span class="n">ravel</span><span class="p">())],</span>
                 <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span>
             <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
