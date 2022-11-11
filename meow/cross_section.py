@@ -1,12 +1,12 @@
 """ A CrossSection """
-from typing import Tuple
+from typing import List, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 from pydantic import Field
 
 from .base_model import BaseModel
-from .cell import Cell, Cells
+from .cell import Cell
 from .environment import Environment
 
 
@@ -83,17 +83,3 @@ class CrossSection(BaseModel):
             plt.pcolormesh(X, Y, n)
             plt.axis("scaled")
             plt.grid(True)
-
-
-class CrossSections(list):  # List[CrossSection]
-    """as list of `CrossSection` objects"""
-
-    def __init__(self, cells: Cells, env: Environment):
-        lst = [CrossSection(cell=cell, env=env) for cell in cells]
-        super().__init__(lst)
-
-    @classmethod
-    def from_list(cls, lst):
-        new_lst = list.__new__(cls)
-        new_lst.extend(lst)
-        return new_lst

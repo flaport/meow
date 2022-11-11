@@ -1,7 +1,5 @@
 """ a Structure is a combination of a geometry with a material (and an optional mesh order) """
 
-from typing import List
-
 import numpy as np
 from pydantic import Field, validator
 from trimesh.scene import Scene
@@ -35,9 +33,6 @@ class Structure(BaseModel):
 
     def _visualize(self, scale=None):
         return self._trimesh(scale=scale).show()
-
-
-Structures = List[Structure]
 
 
 def _visualize_structures(structures, scale=None):

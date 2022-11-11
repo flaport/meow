@@ -84,7 +84,7 @@ def compute_modes_tidy3d(
                 Hz=Hz,
                 neff=float(neffs.real) + 1j * float(neffs.imag),
             )
-            for i in range(num_modes)
+            for _ in range(num_modes)
         ]
     else:  # num_modes > 1
         modes = [

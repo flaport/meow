@@ -1,6 +1,6 @@
 """ an EME Cell """
 
-from typing import Tuple, Union
+from typing import List, Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,14 +9,14 @@ from pydantic import Field, parse_obj_as
 
 from .base_model import BaseModel
 from .materials import Materials
-from .mesh import Mesh2d, Meshes2d
-from .structures import Structures, _sort_structures
+from .mesh import Mesh2d
+from .structures import Structure, _sort_structures
 
 
 class Cell(BaseModel):
     """A `Cell` defines a location in a `Structure` associated with a `Mesh`"""
 
-    structures: Structures = Field(
+    structures: List[Structure] = Field(
         descrsption="the structures which will be sliced by the cell"
     )
     mesh: Mesh2d = Field(description="the mesh to slice the structures with")
@@ -41,7 +41,13 @@ class Cell(BaseModel):
     )
 
     def __init__(
-        self, *, structures: Structures, mesh: Mesh2d, z_min: float, z_max: float, **_
+        self,
+        *,
+        structures: List[Structure],
+        mesh: Mesh2d,
+        z_min: float,
+        z_max: float,
+        **_,
     ):
         """A `Cell` defines a location in a `Structure` associated with a `Mesh`
 
@@ -53,14 +59,14 @@ class Cell(BaseModel):
 
         """
         mesh = parse_obj_as(Mesh2d, mesh)
-        structures = parse_obj_as(Structures, structures)
+        structures = parse_obj_as(List[Structure], structures)
 
         structures = _sort_structures(structures)
         mx, my, mz = [np.zeros(mesh.Xx.shape, dtype=int) for _ in range(3)]
         z = 0.5 * (z_min + z_max)
 
         materials = []
-        # TODO: ideally we should downselect the relevant structures here. Structures not at z-location should ideally be ignored.
+        # TODO: ideally we should downselect the relevant structures here... structures not at z-location should ideally be ignored.
 
         for structure in structures:
             mask_x, mask_y, mask_z = structure.geometry._mask2d(mesh, z)
@@ -127,39 +133,30 @@ class Cell(BaseModel):
             plt.grid(True)
 
 
-class Cells(list):  # List[Cell]
-    """a list of `Cell` objects"""
+def create_cells(
+    structures: List[Structure],
+    mesh: Union[Mesh2d, List[Mesh2d]],
+    Ls: np.ndarray[Tuple[int], np.dtype[np.float_]],
+    z_min: float = 0.0,
+) -> List[Cell]:
+    """easily create multiple `Cell` objects given a `Mesh` and a collection of cell lengths"""
 
-    def __init__(
-        self,
-        structures: Structures,
-        mesh: Union[Mesh2d, Meshes2d],
-        Ls: np.ndarray[Tuple[int], np.dtype[np.float_]],
-        z_min: float = 0.0,
-    ):
-        """easily create multiple `Cell` objects given a `Mesh` and a collection of cell lengths"""
-        Ls = np.asarray(Ls, float)
-        if Ls.ndim != 1:
-            raise ValueError(f"Ls should be 1D. Got shape: {Ls.shape}.")
-        if Ls.shape[0] < 0:
-            raise ValueError(f"length of Ls array should be nonzero. Got: {Ls}.")
+    Ls = np.asarray(Ls, float)
+    if Ls.ndim != 1:
+        raise ValueError(f"Ls should be 1D. Got shape: {Ls.shape}.")
+    if Ls.shape[0] < 0:
+        raise ValueError(f"length of Ls array should be nonzero. Got: {Ls}.")
 
-        meshes = [mesh] * Ls.shape[0] if isinstance(mesh, Mesh2d) else mesh
-        if len(Ls) != len(meshes):
-            raise ValueError(
-                f"Number of meshes should correspond to number of lengths (length of Ls). Got {len(meshes)} != {len(Ls)}."
-            )
+    meshes = [mesh] * Ls.shape[0] if isinstance(mesh, Mesh2d) else mesh
+    if len(Ls) != len(meshes):
+        raise ValueError(
+            f"Number of meshes should correspond to number of lengths (length of Ls). Got {len(meshes)} != {len(Ls)}."
+        )
 
-        z = np.cumsum(np.concatenate([np.asarray([z_min], float), Ls]))
-        cells = [
-            Cell(structures=structures, mesh=mesh, z_min=z_min, z_max=z_max)
-            for mesh, (z_min, z_max) in zip(meshes, zip(z[:-1], z[1:]))
-        ]
+    z = np.cumsum(np.concatenate([np.asarray([z_min], float), Ls]))
+    cells = [
+        Cell(structures=structures, mesh=mesh, z_min=z_min, z_max=z_max)
+        for mesh, (z_min, z_max) in zip(meshes, zip(z[:-1], z[1:]))
+    ]
 
-        super().__init__(cells)
-
-    @classmethod
-    def from_list(cls, lst):
-        new_lst = list.__new__(cls)
-        new_lst.extend(lst)
-        return new_lst
+    return cells

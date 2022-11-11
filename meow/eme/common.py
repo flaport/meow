@@ -12,7 +12,7 @@ def compute_interface_s_matrix(
     enforce_reciprocity: bool = True,
     enforce_lossy_unitarity: bool = False,
 ):
-    """get the S-matrix of the interface between two `CrossSections`"""
+    """get the S-matrix of the interface between two `CrossSection`s"""
     # overlap matrices
     NL, NR = len(modes1), len(modes2)
     O_LL = np.array([inner_product(modes1[m], modes1[m]) for m in range(NL)])

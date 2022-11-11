@@ -63,7 +63,7 @@ def compute_s_matrix_sax(
     """Calculate the S-matrix for given sets of modes, each set belonging to a `Cell`
 
     Args:
-        modes: Each collection of modes for each of the `Cells`
+        modes: Each collection of modes for each of the `Cell` objects
         backend: which SAX backend to use to calculate the final S-matrix.
     """
     sax_backend = _validate_sax_backend(sax_backend)

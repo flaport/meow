@@ -1,6 +1,6 @@
 """ a 2D Mesh """
 
-from typing import List, Tuple
+from typing import Tuple
 
 import numpy as np
 from pydantic import Field
@@ -10,9 +10,6 @@ from .base_model import BaseModel
 
 class Mesh(BaseModel):
     """[BaseClass] a `Mesh` describes how a `Structure` is discretized"""
-
-
-Meshes = List[Mesh]
 
 
 class Mesh2d(Mesh):
@@ -84,6 +81,3 @@ class Mesh2d(Mesh):
         except Exception:
             return False
         return x_eq and y_eq
-
-
-Meshes2d = List[Mesh2d]

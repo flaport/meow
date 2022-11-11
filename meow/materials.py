@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from matplotlib.cm import get_cmap
 from numpy.typing import NDArray
-from pydantic import Field, root_validator, validator
+from pydantic import Field, root_validator
 from scipy.constants import c
 from scipy.ndimage import map_coordinates
 
