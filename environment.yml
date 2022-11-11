@@ -53,7 +53,6 @@ dependencies:
   - sphinx-book-theme
   - tox
   - twine
-  - myst-nb>=0.17.1
 
   # trimesh
   - lxml
@@ -91,3 +90,4 @@ dependencies:
 
     # dev
     - autodoc-pydantic
+    - myst-nb>=0.17.1
