@@ -56,19 +56,16 @@ class Material(BaseModel):
         else:
             n = np.asarray(n, dtype=np.complex_).view(_array)
 
-        if n.ndim != len(params):
-            raise ValueError(
-                f"Index n dimension does not match number of parameters: "
-                f"{n.ndim} != {len(params)} [{', '.join(params)}]"
-            )
+        if n.ndim != 1:
+            raise ValueError(f"Index n is not 1D. Got shape: {n.shape}")
         for i, (p, v) in enumerate(params.items()):
             if v.ndim != 1:
                 raise ValueError(f"Parameter {p} is not 1D. Got shape: {v.shape}")
             Lp = v.shape[0]
-            Ln = n.shape[i]
+            Ln = n.shape[0]
             if Lp != Ln:
                 raise ValueError(
-                    f"length of parameter array {p} does not match length of refractive index array at index {i}: "
+                    f"length of parameter array {p} does not match length of refractive index array n. \n"
                     f"{Lp} != {Ln}"
                 )
         values_hash = _hash_values(values)
