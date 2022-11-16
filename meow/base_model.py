@@ -29,6 +29,46 @@ class _array(np.ndarray):
             return f"{cls_str}([{self[0]:.3e}, {self[1]:.3e}, ..., {self[-1]:.3e}])"
 
 
+def _array_cls(annot) -> type:
+    def get_validators(cls) -> Any:
+        yield cls.validate
+
+    def validate(cls, x) -> _array:
+
+        if isinstance(x, dict):
+            r = np.asarray(x.get("real", 0.0), dtype=np.float_)
+            i = np.asarray(x.get("imag", 0.0), dtype=np.float_)
+            x = r + i
+
+        shape, dtype = _parse_array_type_info(cls.annot)
+        x = np.asarray(x, dtype=(None if dtype is Any else dtype))
+        if shape is not Any:
+            try:
+                shape = np.broadcast_shapes(shape, x.shape)
+            except ValueError:
+                raise ValueError(
+                    f"Invalid shape for attribute 'x': Expected: {shape}. Got: {x.shape}."
+                )
+            x = np.broadcast_to(x, shape)
+        return x.view(_array)  # enables a more concise repr
+
+    def modify_schema(cls, schema, field):
+        schema["title"] = field.name.replace("_", " ").title()
+        schema["default"] = "array"
+
+    Array = type(
+        "Array",
+        (np.ndarray,),
+        {
+            "annot": annot,
+            "__get_validators__": classmethod(get_validators),
+            "validate": classmethod(validate),
+            "__modify_schema__": classmethod(modify_schema),
+        },
+    )
+    return Array
+
+
 def _serialize_array(arr):
     if np.iscomplexobj(arr):
         return {
@@ -37,6 +77,43 @@ def _serialize_array(arr):
         }
     else:
         return np.round(arr, 12).tolist()
+
+
+def _parse_array_type_info(annotation) -> Tuple[Any, Any]:
+    try:
+        type_info = annotation.__args__
+    except AttributeError:
+        type_info = tuple()
+    if len(type_info) == 1:
+        (shape,) = type_info
+        dtype = Any
+    elif len(type_info) == 2:
+        shape, dtype = type_info
+    else:
+        shape, dtype = Any, Any
+    try:
+        (dtype,) = dtype.__args__  # type: ignore
+    except Exception:
+        dtype = Any
+
+    try:
+        shape = shape.__args__  # type: ignore
+        shape = tuple(_try_parse_shape_int(i) for i in shape)
+    except Exception:
+        shape = Any
+
+    return shape, dtype
+
+
+def _try_parse_shape_int(value):
+    from typing import _LiteralGenericAlias  # type: ignore
+
+    if isinstance(value, _LiteralGenericAlias):
+        (value,) = value.__args__
+    try:
+        return int(value)
+    except Exception:
+        return 1
 
 
 class _ModelMetaclass(ModelMetaclass):
@@ -84,83 +161,15 @@ class _ModelMetaclass(ModelMetaclass):
             dct["Config"] = type("Config", (dct["Config"],), config)
 
         # Enforce numpy array annotations
-        for attr, annot in dct.get("__annotations__", {}).items():
+        annotations = dct.get("__annotations__", {})
+        for attr, annot in annotations.items():
             if cls._is_array_annot(annot):
-
-                @validator(attr, pre=True, allow_reuse=True, always=True)
-                def validate(cls, x):
-
-                    if isinstance(x, dict):
-                        r = np.asarray(x.get("real", 0.0), dtype=np.float_)
-                        i = np.asarray(x.get("imag", 0.0), dtype=np.float_)
-                        x = r + i
-
-                    shape, dtype = cls._parse_array_type_info(annot)
-                    x = np.asarray(x, dtype=(None if dtype is Any else dtype))
-                    if shape is not Any:
-                        try:
-                            shape = np.broadcast_shapes(shape, x.shape)
-                        except ValueError:
-                            raise ValueError(
-                                f"Invalid shape for attribute 'x': Expected: {shape}. Got: {x.shape}."
-                            )
-                        x = np.broadcast_to(x, shape)
-                    return x.view(_array)  # enables a more concise repr
-
-                dct[f"validate_{attr}"] = validate
-
+                annotations[attr] = _array_cls(annot)
             if annot is complex:
-
-                @validator(attr, pre=True, allow_reuse=True, always=True)
-                def validate(cls, x):
-
-                    if isinstance(x, dict):
-                        r = np.asarray(x.get("real", 0.0), dtype=np.float_)
-                        i = np.asarray(x.get("imag", 0.0), dtype=np.float_)
-                        x = r + i
-
-                    return float(np.real(x)) + 1j * float(np.imag(x))
-
-                dct[f"validate_{attr}"] = validate
-
+                annotations[attr] = _array_cls(
+                    np.ndarray[Tuple[()], np.dtype[np.complex_]]
+                )
         return super().__new__(cls, name, bases, dct, **kwargs)
-
-    @classmethod
-    def _parse_array_type_info(cls, annotation) -> Tuple[Any, Any]:
-        try:
-            type_info = annotation.__args__
-        except AttributeError:
-            type_info = tuple()
-        if len(type_info) == 1:
-            (shape,) = type_info
-            dtype = Any
-        elif len(type_info) == 2:
-            shape, dtype = type_info
-        else:
-            shape, dtype = Any, Any
-        try:
-            (dtype,) = dtype.__args__  # type: ignore
-        except Exception:
-            dtype = Any
-
-        try:
-            shape = shape.__args__  # type: ignore
-            shape = tuple(cls._try_parse_shape_int(i) for i in shape)
-        except Exception:
-            shape = Any
-
-        return shape, dtype
-
-    @staticmethod
-    def _try_parse_shape_int(value):
-        from typing import _LiteralGenericAlias  # type: ignore
-
-        if isinstance(value, _LiteralGenericAlias):
-            (value,) = value.__args__
-        try:
-            return int(value)
-        except Exception:
-            return 1
 
     @staticmethod
     def _is_array_annot(annot):
