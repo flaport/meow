@@ -123,7 +123,7 @@ class Mode(BaseModel):
         plt.ylabel(y)
         plt.grid(True, alpha=0.4)
         if title is None:
-            plt.title(f"{field} [neff={np.real(self.neff):.6f}]")
+            plt.title(f"{field} [neff={float(np.real(self.neff)):.6f}]")
         else:
             plt.title(title)
         plt.xlim(X.min(), X.max())
