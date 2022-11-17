@@ -281,7 +281,7 @@ title="Open an issue"
   <h1>Source code for meow.cell</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; an EME Cell &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -291,7 +291,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 <span class="kn">from</span> <span class="nn">.materials</span> <span class="kn">import</span> <span class="n">Materials</span>
 <span class="kn">from</span> <span class="nn">.mesh</span> <span class="kn">import</span> <span class="n">Mesh2d</span>
-<span class="kn">from</span> <span class="nn">.structures</span> <span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">_sort_structures</span>
+<span class="kn">from</span> <span class="nn">.structures</span> <span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">sort_structures</span>
 
 
 <div class="viewcode-block" id="Cell"><a class="viewcode-back" href="../../meow.html#meow.cell.Cell">[docs]</a><span class="k">class</span> <span class="nc">Cell</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -304,22 +304,25 @@ title="Open an issue"
     <span class="n">z_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the starting z-coordinate of the cell&quot;</span><span class="p">)</span>
     <span class="n">z_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">)</span>
 
-    <span class="c1"># TODO: convert the following into properties...</span>
-    <span class="n">materials</span><span class="p">:</span> <span class="n">Materials</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;(derived) the materials in the cell&quot;</span>
-    <span class="p">)</span>
-    <span class="n">mx</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">),</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">my</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">),</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">mz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">),</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(derived) the materials in the cell&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;materials&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;mx&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">my</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;my&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;mz&quot;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="Cell.__init__"><a class="viewcode-back" href="../../meow.html#meow.cell.Cell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -342,7 +345,7 @@ title="Open an issue"
         <span class="n">mesh</span> <span class="o">=</span> <span class="n">parse_obj_as</span><span class="p">(</span><span class="n">Mesh2d</span><span class="p">,</span> <span class="n">mesh</span><span class="p">)</span>
         <span class="n">structures</span> <span class="o">=</span> <span class="n">parse_obj_as</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">Structure</span><span class="p">],</span> <span class="n">structures</span><span class="p">)</span>
 
-        <span class="n">structures</span> <span class="o">=</span> <span class="n">_sort_structures</span><span class="p">(</span><span class="n">structures</span><span class="p">)</span>
+        <span class="n">structures</span> <span class="o">=</span> <span class="n">sort_structures</span><span class="p">(</span><span class="n">structures</span><span class="p">)</span>
         <span class="n">mx</span><span class="p">,</span> <span class="n">my</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">Xx</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
         <span class="n">z</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">z_min</span> <span class="o">+</span> <span class="n">z_max</span><span class="p">)</span>
 
@@ -369,19 +372,15 @@ title="Open an issue"
             <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span>
             <span class="n">z_min</span><span class="o">=</span><span class="n">z_min</span><span class="p">,</span>
             <span class="n">z_max</span><span class="o">=</span><span class="n">z_max</span><span class="p">,</span>
-            <span class="n">materials</span><span class="o">=</span><span class="n">materials</span><span class="p">,</span>
-            <span class="n">mx</span><span class="o">=</span><span class="n">mx</span><span class="p">,</span>
-            <span class="n">my</span><span class="o">=</span><span class="n">my</span><span class="p">,</span>
-            <span class="n">mz</span><span class="o">=</span><span class="n">mz</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;materials&quot;</span><span class="p">:</span> <span class="n">materials</span><span class="p">,</span>
+                <span class="s2">&quot;mx&quot;</span><span class="p">:</span> <span class="n">mx</span><span class="p">,</span>
+                <span class="s2">&quot;my&quot;</span><span class="p">:</span> <span class="n">my</span><span class="p">,</span>
+                <span class="s2">&quot;mz&quot;</span><span class="p">:</span> <span class="n">mz</span><span class="p">,</span>
+            <span class="p">}</span>
         <span class="p">)</span></div>
-
-    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;materials&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;exclude&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-            <span class="s2">&quot;mx&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;exclude&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-            <span class="s2">&quot;my&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;exclude&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-            <span class="s2">&quot;mz&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;exclude&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-        <span class="p">}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

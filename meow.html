@@ -467,30 +467,6 @@ title="Print to PDF"
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;materials&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Materials&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the materials in the cell&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Material&quot;</span><span class="w"></span>
-<span class="w">         </span><span class="p">}</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;mx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mx&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;my&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;My&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;mz&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mz&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="p">}</span><span class="w"></span>
 <span class="w">   </span><span class="p">},</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
@@ -633,11 +609,7 @@ title="Print to PDF"
 </details></p><dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference internal" href="#meow.cell.Cell.materials" title="meow.cell.Cell.materials"><code class="xref py py-obj docutils literal notranslate"><span class="pre">materials</span> <span class="pre">(List[meow.materials.Material])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.mesh" title="meow.cell.Cell.mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh</span> <span class="pre">(meow.mesh.Mesh2d)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#meow.cell.Cell.mx" title="meow.cell.Cell.mx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mx</span> <span class="pre">(meow.base_model.Array)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#meow.cell.Cell.my" title="meow.cell.Cell.my"><code class="xref py py-obj docutils literal notranslate"><span class="pre">my</span> <span class="pre">(meow.base_model.Array)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#meow.cell.Cell.mz" title="meow.cell.Cell.mz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mz</span> <span class="pre">(meow.base_model.Array)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.structures" title="meow.cell.Cell.structures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structures</span> <span class="pre">(List[meow.structures.Structure])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.z_max" title="meow.cell.Cell.z_max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">z_max</span> <span class="pre">(float)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.z_min" title="meow.cell.Cell.z_min"><code class="xref py py-obj docutils literal notranslate"><span class="pre">z_min</span> <span class="pre">(float)</span></code></a></p></li>
@@ -667,52 +639,28 @@ title="Print to PDF"
 <dd><p>the ending z-coordinate of the cell</p>
 </dd></dl>
 
-<dl class="py attribute pydantic_field">
+<dl class="py property">
 <dt class="sig sig-object py" id="meow.cell.Cell.materials">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">materials</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#meow.materials.Material" title="meow.materials.Material"><span class="pre">meow.materials.Material</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#meow.cell.Cell.materials" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">materials</span></span><a class="headerlink" href="#meow.cell.Cell.materials" title="Permalink to this definition">#</a></dt>
 <dd><p>(derived) the materials in the cell</p>
 </dd></dl>
 
-<dl class="py attribute pydantic_field">
+<dl class="py property">
 <dt class="sig sig-object py" id="meow.cell.Cell.mx">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">meow.base_model.Array</span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.cell.Cell.mx" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mx</span></span><a class="headerlink" href="#meow.cell.Cell.mx" title="Permalink to this definition">#</a></dt>
 <dd><p>(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Constraints</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>title</strong> = Mx</p></li>
-<li><p><strong>default</strong> = array</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="py attribute pydantic_field">
+<dl class="py property">
 <dt class="sig sig-object py" id="meow.cell.Cell.my">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">my</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">meow.base_model.Array</span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.cell.Cell.my" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">my</span></span><a class="headerlink" href="#meow.cell.Cell.my" title="Permalink to this definition">#</a></dt>
 <dd><p>(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Constraints</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>title</strong> = My</p></li>
-<li><p><strong>default</strong> = array</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="py attribute pydantic_field">
+<dl class="py property">
 <dt class="sig sig-object py" id="meow.cell.Cell.mz">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">meow.base_model.Array</span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.cell.Cell.mz" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mz</span></span><a class="headerlink" href="#meow.cell.Cell.mz" title="Permalink to this definition">#</a></dt>
 <dd><p>(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Constraints</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>title</strong> = Mz</p></li>
-<li><p><strong>default</strong> = array</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -792,21 +740,6 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Environment&quot;</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="w"></span>
 <span class="w">         </span><span class="p">]</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;nx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Nx&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;ny&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ny&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p">},</span><span class="w"></span>
-<span class="w">      </span><span class="nt">&quot;nz&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Nz&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="p">}</span><span class="w"></span>
 <span class="w">   </span><span class="p">},</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
@@ -971,30 +904,6 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;materials&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Materials&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the materials in the cell&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                  </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Material&quot;</span><span class="w"></span>
-<span class="w">               </span><span class="p">}</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;mx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mx&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;my&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;My&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;mz&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mz&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="w"></span>
 <span class="w">         </span><span class="p">},</span><span class="w"></span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
@@ -1032,9 +941,6 @@ which uniquely defines the refractive index everywhere.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="#meow.cross_section.CrossSection.cell" title="meow.cross_section.CrossSection.cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell</span> <span class="pre">(meow.cell.Cell)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cross_section.CrossSection.env" title="meow.cross_section.CrossSection.env"><code class="xref py py-obj docutils literal notranslate"><span class="pre">env</span> <span class="pre">(meow.environment.Environment)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#meow.cross_section.CrossSection.nx" title="meow.cross_section.CrossSection.nx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nx</span> <span class="pre">(meow.base_model.Array)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#meow.cross_section.CrossSection.ny" title="meow.cross_section.CrossSection.ny"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ny</span> <span class="pre">(meow.base_model.Array)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#meow.cross_section.CrossSection.nz" title="meow.cross_section.CrossSection.nz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nz</span> <span class="pre">(meow.base_model.Array)</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -1050,46 +956,22 @@ which uniquely defines the refractive index everywhere.</p>
 <dd><p>the environment for which the cross sectionw was calculated</p>
 </dd></dl>
 
-<dl class="py attribute pydantic_field">
+<dl class="py property">
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.nx">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">meow.base_model.Array</span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.cross_section.CrossSection.nx" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nx</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.nx" title="Permalink to this definition">#</a></dt>
 <dd><p>(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Constraints</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>title</strong> = Nx</p></li>
-<li><p><strong>default</strong> = array</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="py attribute pydantic_field">
+<dl class="py property">
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.ny">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ny</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">meow.base_model.Array</span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.cross_section.CrossSection.ny" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ny</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.ny" title="Permalink to this definition">#</a></dt>
 <dd><p>(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Constraints</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>title</strong> = Ny</p></li>
-<li><p><strong>default</strong> = array</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="py attribute pydantic_field">
+<dl class="py property">
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.nz">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">meow.base_model.Array</span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.cross_section.CrossSection.nz" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nz</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.nz" title="Permalink to this definition">#</a></dt>
 <dd><p>(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Constraints</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>title</strong> = Nz</p></li>
-<li><p><strong>default</strong> = array</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -2130,30 +2012,6 @@ are fully supported!</p>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;materials&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Materials&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the materials in the cell&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                  </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Material&quot;</span><span class="w"></span>
-<span class="w">               </span><span class="p">}</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;mx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mx&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;my&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;My&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;mz&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mz&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="w"></span>
 <span class="w">         </span><span class="p">},</span><span class="w"></span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
@@ -2204,21 +2062,6 @@ are fully supported!</p>
 <span class="w">                     </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Environment&quot;</span><span class="w"></span>
 <span class="w">                  </span><span class="p">}</span><span class="w"></span>
 <span class="w">               </span><span class="p">]</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;nx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Nx&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;ny&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ny&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="p">},</span><span class="w"></span>
-<span class="w">            </span><span class="nt">&quot;nz&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Nz&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="w"></span>
 <span class="w">         </span><span class="p">},</span><span class="w"></span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
@@ -2703,6 +2546,17 @@ are fully supported!</p>
 </dd></dl>
 
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.structures.visualize_structures">
+<span class="sig-name descname"><span class="pre">visualize_structures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/structures.html#visualize_structures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.structures.visualize_structures" title="Permalink to this definition">#</a></dt>
+<dd><p>easily visualize a collection (list) of <cite>Structure</cite> objects</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.structures.sort_structures">
+<span class="sig-name descname"><span class="pre">sort_structures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structures</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/structures.html#sort_structures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.structures.sort_structures" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 <span class="target" id="module-meow.visualize"></span><p>Visualizations for common meow-datatypes</p>
 <dl class="py function">
