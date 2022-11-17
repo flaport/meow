@@ -310,6 +310,46 @@ title="Open an issue"
             <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cls_str</span><span class="si">}</span><span class="s2">([</span><span class="si">{</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">, ..., </span><span class="si">{</span><span class="bp">self</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">])&quot;</span>
 
 
+<span class="k">def</span> <span class="nf">_array_cls</span><span class="p">(</span><span class="n">annot</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_validators</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="bp">cls</span><span class="o">.</span><span class="n">validate</span>
+
+    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_array</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;real&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;imag&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="n">i</span>
+
+        <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">_parse_array_type_info</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">annot</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="n">Any</span> <span class="k">else</span> <span class="n">dtype</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Any</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_shapes</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Invalid shape for attribute &#39;x&#39;: Expected: </span><span class="si">{</span><span class="n">shape</span><span class="si">}</span><span class="s2">. Got: </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">_array</span><span class="p">)</span>  <span class="c1"># enables a more concise repr</span>
+
+    <span class="k">def</span> <span class="nf">modify_schema</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+        <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;array&quot;</span>
+
+    <span class="n">Array</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span>
+        <span class="s2">&quot;Array&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,),</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;annot&quot;</span><span class="p">:</span> <span class="n">annot</span><span class="p">,</span>
+            <span class="s2">&quot;__get_validators__&quot;</span><span class="p">:</span> <span class="nb">classmethod</span><span class="p">(</span><span class="n">get_validators</span><span class="p">),</span>
+            <span class="s2">&quot;validate&quot;</span><span class="p">:</span> <span class="nb">classmethod</span><span class="p">(</span><span class="n">validate</span><span class="p">),</span>
+            <span class="s2">&quot;__modify_schema__&quot;</span><span class="p">:</span> <span class="nb">classmethod</span><span class="p">(</span><span class="n">modify_schema</span><span class="p">),</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">Array</span>
+
+
 <span class="k">def</span> <span class="nf">_serialize_array</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">iscomplexobj</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -318,6 +358,43 @@ title="Open an issue"
         <span class="p">}</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_array_type_info</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">type_info</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">__args__</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">type_info</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">type_info</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">shape</span><span class="p">,)</span> <span class="o">=</span> <span class="n">type_info</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">Any</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">type_info</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">type_info</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Any</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">dtype</span><span class="p">,)</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">__args__</span>  <span class="c1"># type: ignore</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">Any</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">__args__</span>  <span class="c1"># type: ignore</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_try_parse_shape_int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">Any</span>
+
+    <span class="k">return</span> <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span>
+
+
+<span class="k">def</span> <span class="nf">_try_parse_shape_int</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">_LiteralGenericAlias</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_LiteralGenericAlias</span><span class="p">):</span>
+        <span class="p">(</span><span class="n">value</span><span class="p">,)</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">__args__</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
 
 
 <span class="k">class</span> <span class="nc">_ModelMetaclass</span><span class="p">(</span><span class="n">ModelMetaclass</span><span class="p">):</span>
@@ -365,83 +442,15 @@ title="Open an issue"
             <span class="n">dct</span><span class="p">[</span><span class="s2">&quot;Config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="s2">&quot;Config&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="s2">&quot;Config&quot;</span><span class="p">],),</span> <span class="n">config</span><span class="p">)</span>
 
         <span class="c1"># Enforce numpy array annotations</span>
-        <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">annot</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__annotations__&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">annotations</span> <span class="o">=</span> <span class="n">dct</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__annotations__&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">annot</span> <span class="ow">in</span> <span class="n">annotations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_array_annot</span><span class="p">(</span><span class="n">annot</span><span class="p">):</span>
-
-                <span class="nd">@validator</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">always</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;real&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
-                        <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;imag&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
-                        <span class="n">x</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="n">i</span>
-
-                    <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_parse_array_type_info</span><span class="p">(</span><span class="n">annot</span><span class="p">)</span>
-                    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="n">Any</span> <span class="k">else</span> <span class="n">dtype</span><span class="p">))</span>
-                    <span class="k">if</span> <span class="n">shape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Any</span><span class="p">:</span>
-                        <span class="k">try</span><span class="p">:</span>
-                            <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_shapes</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-                        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                                <span class="sa">f</span><span class="s2">&quot;Invalid shape for attribute &#39;x&#39;: Expected: </span><span class="si">{</span><span class="n">shape</span><span class="si">}</span><span class="s2">. Got: </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span>
-                            <span class="p">)</span>
-                        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">_array</span><span class="p">)</span>  <span class="c1"># enables a more concise repr</span>
-
-                <span class="n">dct</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;validate_</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">validate</span>
-
+                <span class="n">annotations</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="n">_array_cls</span><span class="p">(</span><span class="n">annot</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">annot</span> <span class="ow">is</span> <span class="nb">complex</span><span class="p">:</span>
-
-                <span class="nd">@validator</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">always</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;real&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
-                        <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;imag&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
-                        <span class="n">x</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="n">i</span>
-
-                    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-
-                <span class="n">dct</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;validate_</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">validate</span>
-
+                <span class="n">annotations</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="n">_array_cls</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[()],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span>
+                <span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">dct</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_parse_array_type_info</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">annotation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">type_info</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">__args__</span>
-        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-            <span class="n">type_info</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">type_info</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">shape</span><span class="p">,)</span> <span class="o">=</span> <span class="n">type_info</span>
-            <span class="n">dtype</span> <span class="o">=</span> <span class="n">Any</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">type_info</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">type_info</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Any</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">dtype</span><span class="p">,)</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">__args__</span>  <span class="c1"># type: ignore</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="n">dtype</span> <span class="o">=</span> <span class="n">Any</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">__args__</span>  <span class="c1"># type: ignore</span>
-            <span class="n">shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_try_parse_shape_int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">shape</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="n">shape</span> <span class="o">=</span> <span class="n">Any</span>
-
-        <span class="k">return</span> <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_try_parse_shape_int</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">_LiteralGenericAlias</span>  <span class="c1"># type: ignore</span>
-
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_LiteralGenericAlias</span><span class="p">):</span>
-            <span class="p">(</span><span class="n">value</span><span class="p">,)</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">__args__</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">1</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_is_array_annot</span><span class="p">(</span><span class="n">annot</span><span class="p">):</span>
