@@ -26,7 +26,8 @@ def _find_notebooks(dir):
 
 
 TEST_NOTEBOOKS = [
-    *sorted(_find_notebooks(NBS_DIR)) * sorted(_find_notebooks(EXAMPLES_DIR))
+    *sorted(_find_notebooks(NBS_DIR)),
+    *sorted(_find_notebooks(EXAMPLES_DIR)),
 ]
 
 

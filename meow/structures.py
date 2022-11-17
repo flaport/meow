@@ -35,16 +35,16 @@ class Structure(BaseModel):
         return self._trimesh(scale=scale).show()
 
 
-def _visualize_structures(structures, scale=None):
+def visualize_structures(structures, scale=None):
     """easily visualize a collection (list) of `Structure` objects"""
     scene = Scene(
-        geometry=[s._trimesh(scale=scale) for s in _sort_structures(structures)]
+        geometry=[s._trimesh(scale=scale) for s in sort_structures(structures)]
     )
     scene.apply_transform(rotation_matrix(np.pi - np.pi / 6, (0, 1, 0)))
     return scene.show()
 
 
-def _sort_structures(structures):
+def sort_structures(structures):
     struct_info = [(s.mesh_order, -i, s) for i, s in enumerate(structures)]
     sorted_struct_info = sorted(struct_info, key=lambda I: (I[0], I[1]), reverse=True)
     return [s for _, _, s in sorted_struct_info]

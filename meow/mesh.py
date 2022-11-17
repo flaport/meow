@@ -35,12 +35,12 @@ class Mesh2d(Mesh):
     @property
     def x_(self):
         """x-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)"""
-        return 0.5 * (self.x[1:] + self.x[:-1])
+        return 0.5 * np.asarray(self.x[1:] + self.x[:-1], dtype=np.float_)
 
     @property
     def y_(self):
         """y-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)"""
-        return 0.5 * (self.y[1:] + self.y[:-1])
+        return 0.5 * np.asarray(self.y[1:] + self.y[:-1], dtype=np.float_)
 
     @property
     def X(self):

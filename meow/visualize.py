@@ -69,7 +69,7 @@ def visualize(obj: Any, **kwargs: Any):
         Check out its help to see which kwargs are accepted.
     """
     from .base_model import BaseModel
-    from .structures import Structure, _visualize_structures
+    from .structures import Structure, visualize_structures
 
     if isinstance(obj, BaseModel):
         return obj._visualize(**kwargs)
@@ -92,7 +92,7 @@ def visualize(obj: Any, **kwargs: Any):
             return obj
 
         if all(isinstance(obj, Structure) for obj in objs):
-            return _visualize_structures(objs, **kwargs)
+            return visualize_structures(objs, **kwargs)
         return objs
 
 

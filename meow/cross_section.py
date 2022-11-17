@@ -21,19 +21,20 @@ class CrossSection(BaseModel):
         description="the environment for which the cross sectionw was calculated"
     )
 
-    # TODO: convert the following into properties...
-    nx: np.ndarray[Tuple[int, int], np.dtype[np.float_]] = Field(
-        default_factory=lambda: np.zeros((0, 0), np.int_),
-        description="(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)",
-    )
-    ny: np.ndarray[Tuple[int, int], np.dtype[np.float_]] = Field(
-        default_factory=lambda: np.zeros((0, 0), np.int_),
-        description="(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)",
-    )
-    nz: np.ndarray[Tuple[int, int], np.dtype[np.float_]] = Field(
-        default_factory=lambda: np.zeros((0, 0), np.int_),
-        description="(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)",
-    )
+    @property
+    def nx(self):
+        """(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)"""
+        return self.__dict__["nx"]
+
+    @property
+    def ny(self):
+        """(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)"""
+        return self.__dict__["ny"]
+
+    @property
+    def nz(self):
+        """(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)"""
+        return self.__dict__["nz"]
 
     def __init__(self, *, cell: Cell, env: Environment, **_):
         cell = Cell.parse_obj(cell)
@@ -46,9 +47,13 @@ class CrossSection(BaseModel):
         super().__init__(
             cell=cell,
             env=env,
-            nx=nx,
-            ny=ny,
-            nz=nz,
+        )
+        self.__dict__.update(
+            {
+                "nx": nx,
+                "ny": ny,
+                "nz": nz,
+            }
         )
 
     class Config:

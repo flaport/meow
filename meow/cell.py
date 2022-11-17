@@ -1,6 +1,6 @@
 """ an EME Cell """
 
-from typing import List, Tuple, Union
+from typing import Dict, List, Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,7 +10,7 @@ from pydantic import Field, parse_obj_as
 from .base_model import BaseModel
 from .materials import Materials
 from .mesh import Mesh2d
-from .structures import Structure, _sort_structures
+from .structures import Structure, sort_structures
 
 
 class Cell(BaseModel):
@@ -23,22 +23,25 @@ class Cell(BaseModel):
     z_min: float = Field(description="the starting z-coordinate of the cell")
     z_max: float = Field(description="the ending z-coordinate of the cell")
 
-    # TODO: convert the following into properties...
-    materials: Materials = Field(
-        default=[], description="(derived) the materials in the cell"
-    )
-    mx: np.ndarray[Tuple[int, int], np.dtype[np.int_]] = Field(
-        default_factory=lambda: np.zeros((0, 0), np.int_),
-        description="(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)",
-    )
-    my: np.ndarray[Tuple[int, int], np.dtype[np.int_]] = Field(
-        default_factory=lambda: np.zeros((0, 0), np.int_),
-        description="(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)",
-    )
-    mz: np.ndarray[Tuple[int, int], np.dtype[np.int_]] = Field(
-        default_factory=lambda: np.zeros((0, 0), np.int_),
-        description="(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)",
-    )
+    @property
+    def materials(self):
+        """(derived) the materials in the cell"""
+        return self.__dict__["materials"]
+
+    @property
+    def mx(self):
+        """(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)"""
+        return self.__dict__["mx"]
+
+    @property
+    def my(self):
+        """(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)"""
+        return self.__dict__["my"]
+
+    @property
+    def mz(self):
+        """(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)"""
+        return self.__dict__["mz"]
 
     def __init__(
         self,
@@ -61,7 +64,7 @@ class Cell(BaseModel):
         mesh = parse_obj_as(Mesh2d, mesh)
         structures = parse_obj_as(List[Structure], structures)
 
-        structures = _sort_structures(structures)
+        structures = sort_structures(structures)
         mx, my, mz = [np.zeros(mesh.Xx.shape, dtype=int) for _ in range(3)]
         z = 0.5 * (z_min + z_max)
 
@@ -88,19 +91,15 @@ class Cell(BaseModel):
             mesh=mesh,
             z_min=z_min,
             z_max=z_max,
-            materials=materials,
-            mx=mx,
-            my=my,
-            mz=mz,
         )
-
-    class Config:
-        fields = {
-            "materials": {"exclude": True},
-            "mx": {"exclude": True},
-            "my": {"exclude": True},
-            "mz": {"exclude": True},
-        }
+        self.__dict__.update(
+            {
+                "materials": materials,
+                "mx": mx,
+                "my": my,
+                "mz": mz,
+            }
+        )
 
     @property
     def z(self):
