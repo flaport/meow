@@ -1,6 +1,7 @@
 """ an EME Cell """
 
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Tuple, Union, Any
+from functools import cached_property
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -22,84 +23,54 @@ class Cell(BaseModel):
     mesh: Mesh2d = Field(description="the mesh to slice the structures with")
     z_min: float = Field(description="the starting z-coordinate of the cell")
     z_max: float = Field(description="the ending z-coordinate of the cell")
-
-    @property
-    def materials(self):
-        """(derived) the materials in the cell"""
-        return self.__dict__["materials"]
+    extra: Dict[str, Any] = Field(
+        default_factory=lambda: {}, description="extra metadata"
+    )
 
     @property
     def mx(self):
         """(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)"""
-        return self.__dict__["mx"]
+        return self.extra["mx"]
 
     @property
     def my(self):
         """(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)"""
-        return self.__dict__["my"]
+        return self.extra["my"]
 
     @property
     def mz(self):
         """(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)"""
-        return self.__dict__["mz"]
+        return self.extra["mz"]
 
-    def __init__(
-        self,
-        *,
-        structures: List[Structure],
-        mesh: Mesh2d,
-        z_min: float,
-        z_max: float,
-        **_,
-    ):
-        """A `Cell` defines a location in a `Structure` associated with a `Mesh`
+    @property
+    def materials(self):
+        """(derived) the materials in the cell"""
+        return self.extra["materials"]
 
-        Args:
-            structures: the structures which will be sliced by the cell
-            mesh: the mesh to slice the structures with
-            z_min: the starting z-coordinate of the cell
-            z_max: the ending z-coordinate of the cell
-
-        """
-        mesh = parse_obj_as(Mesh2d, mesh)
-        structures = parse_obj_as(List[Structure], structures)
-
-        structures = sort_structures(structures)
-        mx, my, mz = [np.zeros(mesh.Xx.shape, dtype=int) for _ in range(3)]
-        z = 0.5 * (z_min + z_max)
-
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        structures = sort_structures(self.structures)
+        mx, my, mz = [np.zeros(self.mesh.Xx.shape, dtype=int) for _ in range(3)]
+        z = 0.5 * (self.z_min + self.z_max)
+        # TODO: ideally we should downselect the relevant structures here...
+        # structures not at z-location should ideally be ignored.
         materials = []
-        # TODO: ideally we should downselect the relevant structures here... structures not at z-location should ideally be ignored.
-
         for structure in structures:
-            mask_x, mask_y, mask_z = structure.geometry._mask2d(mesh, z)
+            mask_x, mask_y, mask_z = structure.geometry._mask2d(self.mesh, z)
             if (not mask_x.any()) or (not mask_y.any()) or (not mask_z.any()):
                 continue
-
             try:
                 material_index = materials.index(structure.material) + 1
             except ValueError:
                 materials.append(structure.material)
                 material_index = len(materials)
-
             mx[mask_x] = material_index
             my[mask_y] = material_index
             mz[mask_z] = material_index
-
-        super().__init__(
-            structures=structures,
-            mesh=mesh,
-            z_min=z_min,
-            z_max=z_max,
-        )
-        self.__dict__.update(
-            {
-                "materials": materials,
-                "mx": mx,
-                "my": my,
-                "mz": mz,
-            }
-        )
+        self.extra["mx"] = mx
+        self.extra["my"] = my
+        self.extra["mz"] = mz
+        self.extra["materials"] = materials
 
     @property
     def z(self):
@@ -130,6 +101,9 @@ class Cell(BaseModel):
             plt.pcolormesh(X, Y, m, cmap=cmap, vmin=0, vmax=len(self.materials))
             plt.axis("scaled")
             plt.grid(True)
+
+    class Config:
+        fields = {"extra": {"exclude": True}}
 
 
 def create_cells(

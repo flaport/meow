@@ -1,5 +1,5 @@
 """ A CrossSection """
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,21 +20,9 @@ class CrossSection(BaseModel):
     env: Environment = Field(
         description="the environment for which the cross sectionw was calculated"
     )
-
-    @property
-    def nx(self):
-        """(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)"""
-        return self.__dict__["nx"]
-
-    @property
-    def ny(self):
-        """(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)"""
-        return self.__dict__["ny"]
-
-    @property
-    def nz(self):
-        """(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)"""
-        return self.__dict__["nz"]
+    extra: Dict[str, Any] = Field(
+        default_factory=lambda: {}, description="extra metadata"
+    )
 
     def __init__(self, *, cell: Cell, env: Environment, **_):
         cell = Cell.parse_obj(cell)
@@ -48,13 +36,25 @@ class CrossSection(BaseModel):
             cell=cell,
             env=env,
         )
-        self.__dict__.update(
-            {
-                "nx": nx,
-                "ny": ny,
-                "nz": nz,
-            }
-        )
+        self.extra = {}
+        self.extra["nx"] = nx
+        self.extra["ny"] = ny
+        self.extra["nz"] = nz
+
+    @property
+    def nx(self):
+        """(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)"""
+        return self.extra["nx"]
+
+    @property
+    def ny(self):
+        """(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)"""
+        return self.extra["ny"]
+
+    @property
+    def nz(self):
+        """(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)"""
+        return self.extra["nz"]
 
     class Config:
         fields = {
@@ -88,3 +88,6 @@ class CrossSection(BaseModel):
             plt.pcolormesh(X, Y, n)
             plt.axis("scaled")
             plt.grid(True)
+
+    class Config:
+        fields = {"extra": {"exclude": True}}
