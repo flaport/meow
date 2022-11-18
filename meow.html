@@ -467,6 +467,11 @@ title="Print to PDF"
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Extra&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra metadata&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="p">}</span><span class="w"></span>
 <span class="w">   </span><span class="p">},</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
@@ -609,6 +614,7 @@ title="Print to PDF"
 </details></p><dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#meow.cell.Cell.extra" title="meow.cell.Cell.extra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extra</span> <span class="pre">(Dict[str,</span> <span class="pre">Any])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.mesh" title="meow.cell.Cell.mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh</span> <span class="pre">(meow.mesh.Mesh2d)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.structures" title="meow.cell.Cell.structures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structures</span> <span class="pre">(List[meow.structures.Structure])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.z_max" title="meow.cell.Cell.z_max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">z_max</span> <span class="pre">(float)</span></code></a></p></li>
@@ -639,10 +645,10 @@ title="Print to PDF"
 <dd><p>the ending z-coordinate of the cell</p>
 </dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="meow.cell.Cell.materials">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">materials</span></span><a class="headerlink" href="#meow.cell.Cell.materials" title="Permalink to this definition">#</a></dt>
-<dd><p>(derived) the materials in the cell</p>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="meow.cell.Cell.extra">
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extra</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.cell.Cell.extra" title="Permalink to this definition">#</a></dt>
+<dd><p>extra metadata</p>
 </dd></dl>
 
 <dl class="py property">
@@ -663,20 +669,17 @@ title="Print to PDF"
 <dd><p>(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="meow.cell.Cell.materials">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">materials</span></span><a class="headerlink" href="#meow.cell.Cell.materials" title="Permalink to this definition">#</a></dt>
+<dd><p>(derived) the materials in the cell</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.cell.Cell.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">structures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_max</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cell.html#Cell.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cell.Cell.__init__" title="Permalink to this definition">#</a></dt>
-<dd><p>A <cite>Cell</cite> defines a location in a <cite>Structure</cite> associated with a <cite>Mesh</cite></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>structures</strong> (<em>List</em><em>[</em><a class="reference internal" href="#meow.structures.Structure" title="meow.structures.Structure"><em>meow.structures.Structure</em></a><em>]</em>) – the structures which will be sliced by the cell</p></li>
-<li><p><strong>mesh</strong> (<a class="reference internal" href="#meow.mesh.Mesh2d" title="meow.mesh.Mesh2d"><em>meow.mesh.Mesh2d</em></a>) – the mesh to slice the structures with</p></li>
-<li><p><strong>z_min</strong> (<em>float</em>) – the starting z-coordinate of the cell</p></li>
-<li><p><strong>z_max</strong> (<em>float</em>) – the ending z-coordinate of the cell</p></li>
-</ul>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cell.html#Cell.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cell.Cell.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -740,6 +743,11 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Environment&quot;</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="w"></span>
 <span class="w">         </span><span class="p">]</span><span class="w"></span>
+<span class="w">      </span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Extra&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra metadata&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="p">}</span><span class="w"></span>
 <span class="w">   </span><span class="p">},</span><span class="w"></span>
 <span class="w">   </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
@@ -904,6 +912,11 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Extra&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra metadata&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="w"></span>
 <span class="w">         </span><span class="p">},</span><span class="w"></span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
@@ -941,6 +954,7 @@ which uniquely defines the refractive index everywhere.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="#meow.cross_section.CrossSection.cell" title="meow.cross_section.CrossSection.cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell</span> <span class="pre">(meow.cell.Cell)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cross_section.CrossSection.env" title="meow.cross_section.CrossSection.env"><code class="xref py py-obj docutils literal notranslate"><span class="pre">env</span> <span class="pre">(meow.environment.Environment)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#meow.cross_section.CrossSection.extra" title="meow.cross_section.CrossSection.extra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extra</span> <span class="pre">(Dict[str,</span> <span class="pre">Any])</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -954,6 +968,27 @@ which uniquely defines the refractive index everywhere.</p>
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.env">
 <em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">env</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#meow.environment.Environment" title="meow.environment.Environment"><span class="pre">meow.environment.Environment</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.cross_section.CrossSection.env" title="Permalink to this definition">#</a></dt>
 <dd><p>the environment for which the cross sectionw was calculated</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="meow.cross_section.CrossSection.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cross_section.html#CrossSection.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cross_section.CrossSection.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<a class="reference internal" href="#meow.cell.Cell" title="meow.cell.Cell"><em>meow.cell.Cell</em></a>) – </p></li>
+<li><p><strong>env</strong> (<a class="reference internal" href="#meow.environment.Environment" title="meow.environment.Environment"><em>meow.environment.Environment</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="meow.cross_section.CrossSection.extra">
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extra</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.cross_section.CrossSection.extra" title="Permalink to this definition">#</a></dt>
+<dd><p>extra metadata</p>
 </dd></dl>
 
 <dl class="py property">
@@ -972,21 +1007,6 @@ which uniquely defines the refractive index everywhere.</p>
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.nz">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nz</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.nz" title="Permalink to this definition">#</a></dt>
 <dd><p>(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="meow.cross_section.CrossSection.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cross_section.html#CrossSection.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cross_section.CrossSection.__init__" title="Permalink to this definition">#</a></dt>
-<dd><p>Create a new model by parsing and validating input data from keyword arguments.</p>
-<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cell</strong> (<a class="reference internal" href="#meow.cell.Cell" title="meow.cell.Cell"><em>meow.cell.Cell</em></a>) – </p></li>
-<li><p><strong>env</strong> (<a class="reference internal" href="#meow.environment.Environment" title="meow.environment.Environment"><em>meow.environment.Environment</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -2012,6 +2032,11 @@ are fully supported!</p>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Extra&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra metadata&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="w"></span>
 <span class="w">         </span><span class="p">},</span><span class="w"></span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
@@ -2062,6 +2087,11 @@ are fully supported!</p>
 <span class="w">                     </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Environment&quot;</span><span class="w"></span>
 <span class="w">                  </span><span class="p">}</span><span class="w"></span>
 <span class="w">               </span><span class="p">]</span><span class="w"></span>
+<span class="w">            </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Extra&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra metadata&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="w"></span>
 <span class="w">            </span><span class="p">}</span><span class="w"></span>
 <span class="w">         </span><span class="p">},</span><span class="w"></span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
