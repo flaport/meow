@@ -1,26 +1,66 @@
 """ FDE Lumerical Backend """
 
+from typing import Optional
+
 import numpy as np
-from pydantic.types import PositiveFloat, PositiveInt
+from pydantic import validate_arguments
+from pydantic.types import PositiveInt
 
 from ..cross_section import CrossSection
 from ..mode import Mode, normalize_energy, zero_phase
+
+_global = {"sim": None}
+
+
+def _assert_default_mesh_setting(condition, param_name):
+    if condition:
+        raise NotImplementedError(
+            f"Setting mesh.{param_name} is currently not supported in the Lumerical Backend. "
+            "Please open an issue of submit a PR on GitHub to fix this: ",
+            "https://github.com/flaport/meow",
+        )
+
+
+def set_sim(
+    sim: "lumapi.MODE",  # type: ignore
+):
+    _global["sim"] = sim
+
+
+def get_sim():
+    sim = _global["sim"]
+    if sim is None:
+        raise ValueError(
+            "Could not start Lumerical simulation. "
+            "Please either pass the `lumapi.MODE` simulation object as an argument to `compute_modes_lumerical` or "
+            "use `set_sim(sim)` to globally set the lumapi.MODE simulation object."
+        )
+    return sim
 
 
 # @validate_arguments
 def compute_modes_lumerical(
     cs: CrossSection,
-    sim: "lumapi.MODE",  # type: ignore
     num_modes: PositiveInt = 10,
-    unit: PositiveFloat = 1e-6,
+    sim: Optional["lumapi.MODE"] = None,  # type: ignore
+    unit: float = 1e-6,
 ):
-    """compute `Modes` for a given `CrossSection` (Lumerical backend)
+    """compute ``Modes` for a given ``FdeSpec` (Lumerical backend)
 
-    cs: the `CrossSection` to calculate the modes for
-    sim: the lumerical simulation object
-    num_modes: Number of modes returned by mode solver.
-    unit: conversion factor from meow to lumerical distances (normaly um -> m, therefore 1e-6)
+    Args:
+        sim: the lumerical simulation object
+        spec: The FDE simulation specification
+        unit: Conversion factor between MEOW unit (probably um) and Lumerical unit (probably m).
     """
+    _assert_default_mesh_setting(cs.cell.mesh.angle_phi == 0, "angle_phi")
+    _assert_default_mesh_setting(cs.cell.mesh.angle_theta == 0, "angle_theta")
+    _assert_default_mesh_setting(cs.cell.mesh.bend_radius > 1e10, "bend_radius")
+
+    if sim is None:
+        sim = get_sim()
+
+    assert sim is not None
+
     sim.switchtolayout()
     sim.deleteall()
     for s in cs.structures:

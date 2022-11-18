@@ -1,5 +1,5 @@
 """ A CrossSection """
-from typing import List, Tuple, Dict, Any
+from typing import Any, Dict, List, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -55,13 +55,6 @@ class CrossSection(BaseModel):
     def nz(self):
         """(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)"""
         return self.extra["nz"]
-
-    class Config:
-        fields = {
-            "nx": {"exclude": True},
-            "ny": {"exclude": True},
-            "nz": {"exclude": True},
-        }
 
     @property
     def mesh(self):
