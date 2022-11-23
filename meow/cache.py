@@ -1,6 +1,6 @@
 from collections import deque
 
-CACHE_SETTINGS = {"size": 1000, "enabled": False}
+CACHE_SETTINGS = {"size": 1000, "enabled": True}
 CACHED_MODELS = {}
 CACHED_ARRAYS = {}
 
