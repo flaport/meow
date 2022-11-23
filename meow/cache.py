@@ -1,16 +1,16 @@
 from collections import deque
 
-CACHE_SETTINGS = {"size": 1000, "enabled": True}
+CACHE_SETTINGS = {"size": 1000, "enabled": False}
 CACHED_MODELS = {}
 CACHED_ARRAYS = {}
 
 
-def enable_cache(self):
+def enable_cache():
     CACHE_SETTINGS["enabled"] = True
     return CACHE_SETTINGS["enabled"]
 
 
-def disable_cache(self):
+def disable_cache():
     empty_cache()
     CACHE_SETTINGS["enabled"] = False
     return CACHE_SETTINGS["enabled"]
