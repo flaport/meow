@@ -52,9 +52,10 @@ class Material(BaseModel):
         if isinstance(n, dict):
             r = np.asarray(n.get("real", 0.0), dtype=np.float_)
             i = np.asarray(n.get("imag", 0.0), dtype=np.float_)
-            values["n"] = n = np.asarray(r + 1j * i, dtype=np.complex_).view(_array)
+            values["n"] = n = np.asarray(r + 1j * i, dtype=np.complex_)
         else:
-            n = np.asarray(n, dtype=np.complex_).view(_array)
+            n = np.asarray(n, dtype=np.complex_)
+        n = n.view(_array)
 
         if n.ndim != 1:
             raise ValueError(f"Index n is not 1D. Got shape: {n.shape}")

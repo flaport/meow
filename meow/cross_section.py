@@ -1,5 +1,5 @@
 """ A CrossSection """
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -36,7 +36,6 @@ class CrossSection(BaseModel):
             cell=cell,
             env=env,
         )
-        self.extra = {}
         self.extra["nx"] = nx
         self.extra["ny"] = ny
         self.extra["nz"] = nz

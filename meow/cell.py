@@ -1,15 +1,13 @@
 """ an EME Cell """
 
-from typing import Dict, List, Tuple, Union, Any
-from functools import cached_property
+from typing import Any, Dict, List, Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import ListedColormap, to_rgba
-from pydantic import Field, parse_obj_as
+from pydantic import Field
 
 from .base_model import BaseModel
-from .materials import Materials
 from .mesh import Mesh2d
 from .structures import Structure, sort_structures
 
@@ -18,7 +16,7 @@ class Cell(BaseModel):
     """A `Cell` defines a location in a `Structure` associated with a `Mesh`"""
 
     structures: List[Structure] = Field(
-        descrsption="the structures which will be sliced by the cell"
+        description="the structures which will be sliced by the cell"
     )
     mesh: Mesh2d = Field(description="the mesh to slice the structures with")
     z_min: float = Field(description="the starting z-coordinate of the cell")

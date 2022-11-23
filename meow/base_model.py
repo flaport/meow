@@ -1,15 +1,27 @@
 """ Provides a custom pydantic BaseModel which handles numpy arrays better """
 
+from hashlib import md5
 from typing import Any, Tuple
 
 import numpy as np
-from pydantic import validator
 from pydantic.main import BaseModel as _BaseModel
 from pydantic.main import ModelMetaclass
 
+from .cache import cache_array, cache_model
+
 
 class _array(np.ndarray):
-    """just an array with a nicer repr"""
+    """just an immutable array with a nicer repr"""
+
+    def __new__(cls, *args, **kwargs):
+        arr = np.ndarray.__new__(cls, *args, **kwargs)
+        arr.setflags(write=False)
+        return arr
+
+    def __hash__(self):
+        arr = np.frombuffer(md5(repr(self).encode()).digest(), dtype=np.uint8)[-8:]
+        idx = np.arange(arr.shape[0], dtype=np.int64)[::-1]
+        return np.asarray(np.sum(arr * 255**idx), dtype=np.int_).item()
 
     def __repr__(self):
         if self.ndim == 0:
@@ -50,7 +62,8 @@ def _array_cls(annot) -> type:
                     f"Invalid shape for attribute 'x': Expected: {shape}. Got: {x.shape}."
                 )
             x = np.broadcast_to(x, shape)
-        return x.view(_array)  # enables a more concise repr
+
+        return x.view(_array)
 
     def modify_schema(cls, schema, field):
         schema["title"] = field.name.replace("_", " ").title()
@@ -142,6 +155,7 @@ class _ModelMetaclass(ModelMetaclass):
     def __new__(cls, name, bases, dct, **kwargs):
         # Inject sensible default Configuration (Config class)
         extra_config = {
+            "allow_mutation": False,
             "arbitrary_types_allowed": True,
             "json_encoders": {
                 np.ndarray: _serialize_array,
@@ -166,9 +180,7 @@ class _ModelMetaclass(ModelMetaclass):
             if cls._is_array_annot(annot):
                 annotations[attr] = _array_cls(annot)
             if annot is complex:
-                annotations[attr] = _array_cls(
-                    np.ndarray[Tuple[()], np.dtype[np.complex_]]
-                )
+                annotations[attr] = _array_cls(np.ndarray[Any, np.dtype[np.complex_]])
         return super().__new__(cls, name, bases, dct, **kwargs)
 
     @staticmethod
@@ -185,7 +197,10 @@ class BaseModel(_BaseModel, metaclass=_ModelMetaclass):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.__dict__.update(_view_arrays(self.__dict__))
+        self.__dict__.update({k: _view_arrays(k, v) for k, v in self.__dict__.items()})
+        model = cache_model(self)
+        if not model is self:
+            object.__setattr__(self, "__dict__", model.__dict__)
 
     def _repr(self, indent=0, shift=2):
         s = f"{self.__class__.__name__}("
@@ -209,6 +224,14 @@ class BaseModel(_BaseModel, metaclass=_ModelMetaclass):
             f"visualization for {self.__class__.__name__!r} not (yet) implemented."
         )
 
+    def __hash__(self):
+        try:
+            arr = np.frombuffer(md5(self.json().encode()).digest(), dtype=np.uint8)[-8:]
+            idx = np.arange(arr.shape[0], dtype=np.int64)[::-1]
+            return np.asarray(np.sum(arr * 255**idx), dtype=np.int_).item()
+        except Exception:
+            return None
+
     def __repr__(self):
         return self._repr()
 
@@ -216,10 +239,20 @@ class BaseModel(_BaseModel, metaclass=_ModelMetaclass):
         return self._repr()
 
 
-def _view_arrays(obj):
+def _view_arrays(key, obj):
     if isinstance(obj, dict):
-        return {k: _view_arrays(v) for k, v in obj.items()}
-    elif isinstance(obj, np.ndarray):
-        return obj.view(_array)
+        return {k: _view_arrays(k, v) for k, v in obj.items()}
+    elif isinstance(obj, np.ndarray) or isinstance(obj, _array):
+        obj = obj.view(_array)
+        if not key in [
+            "Ex",
+            "Ey",
+            "Ez",
+            "Hx",
+            "Hy",
+            "Hz",
+        ]:  # arbitrary: let's not spam the cache with this.
+            obj = cache_array(obj)
+        return obj
     else:
         return obj
