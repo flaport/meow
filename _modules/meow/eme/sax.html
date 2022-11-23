@@ -366,9 +366,7 @@ title="Open an issue"
     <span class="n">_circuit</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">circuit</span><span class="p">(</span><span class="n">netlist</span><span class="o">=</span><span class="n">net</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">sax_backend</span><span class="p">,</span> <span class="n">modes</span><span class="o">=</span><span class="n">mode_names</span><span class="p">)</span>
 
     <span class="c1"># maybe in the future we should return the sax model and not the S-matrix?</span>
-    <span class="n">sdict</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdict</span><span class="p">(</span><span class="n">_circuit</span><span class="p">())</span>
-    <span class="n">sdict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">sdict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">sdict</span><span class="p">)}</span>
-    <span class="k">return</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span><span class="n">sdict</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span><span class="n">_circuit</span><span class="p">())</span></div>
 </pre></div>
 
               </div>
