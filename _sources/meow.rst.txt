@@ -25,6 +25,12 @@ Submodules
    :show-inheritance:
 
 
+.. automodule:: meow.cache
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 .. automodule:: meow.cell
    :members:
    :undoc-members:

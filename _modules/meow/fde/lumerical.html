@@ -281,27 +281,67 @@ title="Open an issue"
   <h1>Source code for meow.fde.lumerical</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; FDE Lumerical Backend &quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pydantic.types</span> <span class="kn">import</span> <span class="n">PositiveFloat</span><span class="p">,</span> <span class="n">PositiveInt</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">validate_arguments</span>
+<span class="kn">from</span> <span class="nn">pydantic.types</span> <span class="kn">import</span> <span class="n">PositiveInt</span>
 
 <span class="kn">from</span> <span class="nn">..cross_section</span> <span class="kn">import</span> <span class="n">CrossSection</span>
 <span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">normalize_energy</span><span class="p">,</span> <span class="n">zero_phase</span>
+
+<span class="n">_global</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sim&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_assert_default_mesh_setting</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">param_name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">condition</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Setting mesh.</span><span class="si">{</span><span class="n">param_name</span><span class="si">}</span><span class="s2"> is currently not supported in the Lumerical Backend. &quot;</span>
+            <span class="s2">&quot;Please open an issue of submit a PR on GitHub to fix this: &quot;</span><span class="p">,</span>
+            <span class="s2">&quot;https://github.com/flaport/meow&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="set_sim"><a class="viewcode-back" href="../../../meow.fde.html#meow.fde.lumerical.set_sim">[docs]</a><span class="k">def</span> <span class="nf">set_sim</span><span class="p">(</span>
+    <span class="n">sim</span><span class="p">:</span> <span class="s2">&quot;lumapi.MODE&quot;</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+<span class="p">):</span>
+    <span class="n">_global</span><span class="p">[</span><span class="s2">&quot;sim&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span></div>
+
+
+<div class="viewcode-block" id="get_sim"><a class="viewcode-back" href="../../../meow.fde.html#meow.fde.lumerical.get_sim">[docs]</a><span class="k">def</span> <span class="nf">get_sim</span><span class="p">():</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">_global</span><span class="p">[</span><span class="s2">&quot;sim&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Could not start Lumerical simulation. &quot;</span>
+            <span class="s2">&quot;Please either pass the `lumapi.MODE` simulation object as an argument to `compute_modes_lumerical` or &quot;</span>
+            <span class="s2">&quot;use `set_sim(sim)` to globally set the lumapi.MODE simulation object.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">sim</span></div>
 
 
 <span class="c1"># @validate_arguments</span>
 <div class="viewcode-block" id="compute_modes_lumerical"><a class="viewcode-back" href="../../../meow.fde.html#meow.fde.lumerical.compute_modes_lumerical">[docs]</a><span class="k">def</span> <span class="nf">compute_modes_lumerical</span><span class="p">(</span>
     <span class="n">cs</span><span class="p">:</span> <span class="n">CrossSection</span><span class="p">,</span>
-    <span class="n">sim</span><span class="p">:</span> <span class="s2">&quot;lumapi.MODE&quot;</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
     <span class="n">num_modes</span><span class="p">:</span> <span class="n">PositiveInt</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="n">unit</span><span class="p">:</span> <span class="n">PositiveFloat</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span>
+    <span class="n">sim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;lumapi.MODE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+    <span class="n">unit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;compute `Modes` for a given `CrossSection` (Lumerical backend)</span>
+    <span class="sd">&quot;&quot;&quot;compute ``Modes` for a given ``FdeSpec` (Lumerical backend)</span>
 
-<span class="sd">    cs: the `CrossSection` to calculate the modes for</span>
-<span class="sd">    sim: the lumerical simulation object</span>
-<span class="sd">    num_modes: Number of modes returned by mode solver.</span>
-<span class="sd">    unit: conversion factor from meow to lumerical distances (normaly um -&gt; m, therefore 1e-6)</span>
+<span class="sd">    Args:</span>
+<span class="sd">        sim: the lumerical simulation object</span>
+<span class="sd">        spec: The FDE simulation specification</span>
+<span class="sd">        unit: Conversion factor between MEOW unit (probably um) and Lumerical unit (probably m).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_assert_default_mesh_setting</span><span class="p">(</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">angle_phi</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;angle_phi&quot;</span><span class="p">)</span>
+    <span class="n">_assert_default_mesh_setting</span><span class="p">(</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">angle_theta</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;angle_theta&quot;</span><span class="p">)</span>
+    <span class="n">_assert_default_mesh_setting</span><span class="p">(</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_radius</span> <span class="o">&gt;</span> <span class="mf">1e10</span><span class="p">,</span> <span class="s2">&quot;bend_radius&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">get_sim</span><span class="p">()</span>
+
+    <span class="k">assert</span> <span class="n">sim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
     <span class="n">sim</span><span class="o">.</span><span class="n">switchtolayout</span><span class="p">()</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">deleteall</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">cs</span><span class="o">.</span><span class="n">structures</span><span class="p">:</span>

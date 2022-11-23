@@ -281,16 +281,14 @@ title="Open an issue"
   <h1>Source code for meow.cell</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; an EME Cell &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span><span class="p">,</span> <span class="n">to_rgba</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">parse_obj_as</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
 
 <span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
-<span class="kn">from</span> <span class="nn">.materials</span> <span class="kn">import</span> <span class="n">Materials</span>
 <span class="kn">from</span> <span class="nn">.mesh</span> <span class="kn">import</span> <span class="n">Mesh2d</span>
 <span class="kn">from</span> <span class="nn">.structures</span> <span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">sort_structures</span>
 
@@ -299,7 +297,7 @@ title="Open an issue"
     <span class="sd">&quot;&quot;&quot;A `Cell` defines a location in a `Structure` associated with a `Mesh`&quot;&quot;&quot;</span>
 
     <span class="n">structures</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Structure</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">descrsption</span><span class="o">=</span><span class="s2">&quot;the structures which will be sliced by the cell&quot;</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the structures which will be sliced by the cell&quot;</span>
     <span class="p">)</span>
     <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh2d</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the mesh to slice the structures with&quot;</span><span class="p">)</span>
     <span class="n">z_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the starting z-coordinate of the cell&quot;</span><span class="p">)</span>

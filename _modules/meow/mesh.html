@@ -281,26 +281,56 @@ title="Open an issue"
   <h1>Source code for meow.mesh</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; a 2D Mesh &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
+<span class="kn">from</span> <span class="nn">pydantic.types</span> <span class="kn">import</span> <span class="n">NonNegativeInt</span>
 
 <span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 
 
 <div class="viewcode-block" id="Mesh"><a class="viewcode-back" href="../../meow.html#meow.mesh.Mesh">[docs]</a><span class="k">class</span> <span class="nc">Mesh</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;[BaseClass] a `Mesh` describes how a `Structure` is discretized&quot;&quot;&quot;</span></div>
+    <span class="sd">&quot;&quot;&quot;[BaseClass] a ``Mesh`` describes how a ``Structure`` is discretized&quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="Mesh2d"><a class="viewcode-back" href="../../meow.html#meow.mesh.Mesh2d">[docs]</a><span class="k">class</span> <span class="nc">Mesh2d</span><span class="p">(</span><span class="n">Mesh</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;a 2D Mesh or `Mesh2D` describes how a `Structure` is discritized into a `Cell` or `CrossSection`&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;a 2D Mesh or ``Mesh2D`` describes how a ``Structure`` is discritized into a ``Cell`` or ``CrossSection``&quot;&quot;&quot;</span>
 
     <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;x-coordinates of the mesh (Ez locations, i.e. corners of the 2D cell)&quot;</span>
     <span class="p">)</span>
     <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;y-coordinates of the mesh (Ez locations, i.e. corners of the 2D cell)&quot;</span>
+    <span class="p">)</span>
+    <span class="n">angle_phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Azimuth angle of the propagation axis in the plane orthogonal to the mesh.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">angle_theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Polar angle of the propagation axis from the injection axis.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">bend_radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;A curvature radius for simulation of waveguide bends. &quot;</span>
+            <span class="s2">&quot;Tidy3D: Can be negative, in which case the mode plane center has a smaller value than &quot;</span>
+            <span class="s2">&quot;the curvature center along the tangential axis perpendicular to the bend axis.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">bend_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Index into the two tangential axes defining the normal to the plane in which the bend lies. &quot;</span>
+            <span class="s2">&quot;This must be provided if ``bend_radius`` is not ``None``. For example, for a ring in the &quot;</span>
+            <span class="s2">&quot;global xy-plane, and a mode plane in either the xz or the yz plane, the ``bend_axis`` is &quot;</span>
+            <span class="s2">&quot;always 1 (the global z axis).&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">num_pml</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NonNegativeInt</span><span class="p">,</span> <span class="n">NonNegativeInt</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Number of standard pml layers to add in the two tangential axes.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -316,12 +346,12 @@ title="Open an issue"
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">x_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;x-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">y_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;y-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">X</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

@@ -282,11 +282,11 @@ title="Open an issue"
 <span></span><span class="sd">&quot;&quot;&quot; FDE Tidy3d backend (default backend for MEOW) &quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">validate_arguments</span>
-<span class="kn">from</span> <span class="nn">pydantic.types</span> <span class="kn">import</span> <span class="n">NonNegativeInt</span><span class="p">,</span> <span class="n">PositiveFloat</span><span class="p">,</span> <span class="n">PositiveInt</span>
+<span class="kn">from</span> <span class="nn">pydantic.types</span> <span class="kn">import</span> <span class="n">PositiveFloat</span><span class="p">,</span> <span class="n">PositiveInt</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span>
 <span class="kn">from</span> <span class="nn">tidy3d.plugins.mode.solver</span> <span class="kn">import</span> <span class="n">compute_modes</span> <span class="k">as</span> <span class="n">_compute_modes</span>
 
@@ -298,39 +298,21 @@ title="Open an issue"
 <span class="k">def</span> <span class="nf">compute_modes_tidy3d</span><span class="p">(</span>
     <span class="n">cs</span><span class="p">:</span> <span class="n">CrossSection</span><span class="p">,</span>
     <span class="n">num_modes</span><span class="p">:</span> <span class="n">PositiveInt</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="n">angle_theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">angle_phi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">bend_radius</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">bend_axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">target_neff</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PositiveFloat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">sort_by</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;largest_neff&quot;</span><span class="p">,</span> <span class="s2">&quot;te_fraction&quot;</span><span class="p">,</span> <span class="s2">&quot;tm_fraction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;largest_neff&quot;</span><span class="p">,</span>
-    <span class="n">num_pml</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NonNegativeInt</span><span class="p">,</span> <span class="n">NonNegativeInt</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Modes</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;compute `Modes` for a given `CrossSection` (Tidy3D backend)</span>
+    <span class="sd">&quot;&quot;&quot;compute ``Modes`` for a given ``FdeSpec`` (Tidy3D backend)</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        cs: the `CrossSection` to calculate the modes for</span>
+<span class="sd">        cs: The ``CrossSection`` to calculate the modes for</span>
 <span class="sd">        num_modes: Number of modes returned by mode solver.</span>
-<span class="sd">        target_neff: Guess for effective index of the mode.</span>
-<span class="sd">        num_pml: Number of standard pml layers to add in the two tangential axes.</span>
-<span class="sd">        sort_by: The solver will always compute the ``num_modes`` modes closest to the ``target_neff``,</span>
-<span class="sd">            but they can be reordered by the largest ``te_fraction``, defined as the integral of the</span>
-<span class="sd">            intensity of the E-field component parallel to the first plane axis normalized to the total</span>
-<span class="sd">            in-plane E-field intensity. Similarly, ``tm_fraction`` uses the E field component parallel</span>
-<span class="sd">            to the second plane axis.</span>
-<span class="sd">        angle_theta: Polar angle of the propagation axis from the injection axis.</span>
-<span class="sd">        angle_phi: Azimuth angle of the propagation axis in the plane orthogonal to the injection axis.</span>
-<span class="sd">        bend_radius: A curvature radius for simulation of waveguide bends. Can be negative, in which case</span>
-<span class="sd">            the mode plane center has a smaller value than the curvature center along the tangential axis</span>
-<span class="sd">            perpendicular to the bend axis.</span>
-<span class="sd">        bend_axis: Index into the two tangential axes defining the normal to the plane in which the bend</span>
-<span class="sd">            lies. This must be provided if ``bend_radius`` is not ``None``. For example, for a ring in</span>
-<span class="sd">            the global xy-plane, and a mode plane in either the xz or the yz plane, the ``bend_axis``</span>
-<span class="sd">            is always 1 (the global z axis).</span>
+<span class="sd">        target_neff: Guess for initial effective index of the mode.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">num_modes</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You need to request at least 1 mode.&quot;</span><span class="p">)</span>
+
+    <span class="n">bend_radius</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_radius</span> <span class="o">&gt;</span> <span class="mf">1e10</span> <span class="k">else</span> <span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_radius</span>
+    <span class="n">bend_axis</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">bend_radius</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_axis</span>
 
     <span class="p">((</span><span class="n">Ex</span><span class="p">,</span> <span class="n">Ey</span><span class="p">,</span> <span class="n">Ez</span><span class="p">),</span> <span class="p">(</span><span class="n">Hx</span><span class="p">,</span> <span class="n">Hy</span><span class="p">,</span> <span class="n">Hz</span><span class="p">)),</span> <span class="n">neffs</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
@@ -340,13 +322,13 @@ title="Open an issue"
             <span class="n">freq</span><span class="o">=</span><span class="n">c</span> <span class="o">/</span> <span class="p">(</span><span class="n">cs</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">wl</span> <span class="o">*</span> <span class="mf">1e-6</span><span class="p">),</span>
             <span class="n">mode_spec</span><span class="o">=</span><span class="n">SimpleNamespace</span><span class="p">(</span>
                 <span class="n">num_modes</span><span class="o">=</span><span class="n">num_modes</span><span class="p">,</span>
-                <span class="n">angle_theta</span><span class="o">=</span><span class="n">angle_theta</span><span class="p">,</span>
-                <span class="n">angle_phi</span><span class="o">=</span><span class="n">angle_phi</span><span class="p">,</span>
+                <span class="n">angle_theta</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">angle_theta</span><span class="p">,</span>
+                <span class="n">angle_phi</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">angle_phi</span><span class="p">,</span>
                 <span class="n">bend_radius</span><span class="o">=</span><span class="n">bend_radius</span><span class="p">,</span>
                 <span class="n">bend_axis</span><span class="o">=</span><span class="n">bend_axis</span><span class="p">,</span>
                 <span class="n">target_neff</span><span class="o">=</span><span class="n">target_neff</span> <span class="ow">or</span> <span class="n">cs</span><span class="o">.</span><span class="n">nx</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
-                <span class="n">sort_by</span><span class="o">=</span><span class="n">sort_by</span><span class="p">,</span>
-                <span class="n">num_pml</span><span class="o">=</span><span class="n">num_pml</span><span class="p">,</span>
+                <span class="n">num_pml</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">num_pml</span><span class="p">,</span>
+                <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;largest_neff&quot;</span><span class="p">,</span>
                 <span class="n">filter_pol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">,</span>
             <span class="p">),</span>
