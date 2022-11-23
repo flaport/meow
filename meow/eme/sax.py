@@ -85,6 +85,4 @@ def compute_s_matrix_sax(
     _circuit, _ = sax.circuit(netlist=net, backend=sax_backend, modes=mode_names)
 
     # maybe in the future we should return the sax model and not the S-matrix?
-    sdict = sax.sdict(_circuit())
-    sdict = {k: sdict[k] for k in sorted(sdict)}
-    return sax.sdense(sdict)
+    return sax.sdense(_circuit())
