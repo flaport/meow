@@ -50,7 +50,7 @@ def _array_cls(annot) -> type:
         if isinstance(x, dict):
             r = np.asarray(x.get("real", 0.0), dtype=np.float_)
             i = np.asarray(x.get("imag", 0.0), dtype=np.float_)
-            x = r + i
+            x = r + 1j * i
 
         shape, dtype = _parse_array_type_info(cls.annot)
         x = np.asarray(x, dtype=(None if dtype is Any else dtype))
