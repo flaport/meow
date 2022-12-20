@@ -19,9 +19,10 @@ class _array(np.ndarray):
         return arr
 
     def __hash__(self):
-        arr = np.frombuffer(md5(repr(self).encode()).digest(), dtype=np.uint8)[-8:]
-        idx = np.arange(arr.shape[0], dtype=np.int64)[::-1]
-        return np.asarray(np.sum(arr * 255**idx), dtype=np.int_).item()
+        return (
+            int.from_bytes(md5(self.tobytes()).digest(), byteorder="big")
+            % 1000000000000
+        )
 
     def __repr__(self):
         if self.ndim == 0:
