@@ -76,7 +76,7 @@ dependencies:
     - fastprogress
     - sax>=0.8.4
     - triangle
-    - tidy3d-beta>=1.7.1
+    - tidy3d-beta>=1.8.2
 
     # trimesh
     - trimesh[easy]
