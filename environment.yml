@@ -66,6 +66,7 @@ dependencies:
 
   # extra
   - gdsfactory
+  - jaxlib
   #- mpb
   #- nomkl
   #- pymeep=*=mpi_mpich_*
@@ -85,8 +86,7 @@ dependencies:
 
     # jax
     - jax
-    - jaxlib
-    - klujax
+    # - klujax -> install problems
 
     # dev
     - autodoc-pydantic
