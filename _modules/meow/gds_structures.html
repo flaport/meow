@@ -325,13 +325,13 @@ title="Open an issue"
 
 
 <div class="viewcode-block" id="extrude_gds"><a class="viewcode-back" href="../../meow.html#meow.gds_structures.extrude_gds">[docs]</a><span class="k">def</span> <span class="nf">extrude_gds</span><span class="p">(</span>
-    <span class="n">cell</span><span class="p">:</span> <span class="s2">&quot;gdspy.Cell&quot;</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+    <span class="n">cell</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
     <span class="n">extrusions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">GdsExtrusionRule</span><span class="p">]],</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;extrude a gds cell given a dictionary of extruson rules</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        cell: a gdspy.Cell to extrude</span>
+<span class="sd">        cell: a gdspy or gdstk Cell to extrude</span>
 <span class="sd">        extrusions: the extrusion rules to use (if not given, the example extrusions will be used.)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">structs</span> <span class="o">=</span> <span class="p">[]</span>

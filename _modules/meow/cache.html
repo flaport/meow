@@ -300,7 +300,10 @@ title="Open an issue"
 <div class="viewcode-block" id="empty_cache"><a class="viewcode-back" href="../../meow.html#meow.cache.empty_cache">[docs]</a><span class="k">def</span> <span class="nf">empty_cache</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">cache</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CACHED_MODELS</span><span class="p">,</span> <span class="n">CACHED_ARRAYS</span><span class="p">]:</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">cache</span><span class="p">):</span>
-            <span class="k">del</span> <span class="n">cache</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">cache</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>  <span class="c1"># sometimes in threaded apps key might already be deleted</span></div>
 
 
 <div class="viewcode-block" id="cache_model"><a class="viewcode-back" href="../../meow.html#meow.cache.cache_model">[docs]</a><span class="k">def</span> <span class="nf">cache_model</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
@@ -322,7 +325,10 @@ title="Open an issue"
     <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">cache</span><span class="p">)</span>
     <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">CACHE_SETTINGS</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">]:</span>
         <span class="n">key</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
-        <span class="k">del</span> <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># sometimes in threaded apps key might already be deleted</span>
     <span class="k">return</span> <span class="n">obj</span>
 </pre></div>
 
