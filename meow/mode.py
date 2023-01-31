@@ -2,12 +2,12 @@
 
 import pickle
 from itertools import product
-from typing import List, Tuple
+from typing import List, Tuple, Any
 
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import colors
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
 
@@ -41,10 +41,45 @@ class Mode(BaseModel):
         description="the Hz-fields of the mode"
     )
 
+    _Px: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
+    _Py: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
+    _Pz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
+
+    def __init__(self, **data: Any):
+        super().__init__(**data)
+        self._Px = None
+        self._Py = None
+        self._Pz = None
+
     @property
     def te_fraction(self):
         """the TE polarization fraction of the mode."""
         return te_fraction(self)
+
+    def _calc_poynting(self):
+        """calculate and cache the poynting vector"""
+        vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
+        vecH = np.stack([self.Hx, self.Hy, self.Hz], axis=-1)
+        vecP = np.cross(vecE, vecH)
+        self._Px, self._Py, self._Pz = np.rollaxis(vecP, -1)
+
+    @property
+    def Px(self):
+        if self._Px is None:
+            self._calc_poynting()
+        return self._Px
+
+    @property
+    def Py(self):
+        if self._Py is None:
+            self._calc_poynting()
+        return self._Py
+
+    @property
+    def Pz(self):
+        if self._Pz is None:
+            self._calc_poynting()
+        return self._Pz
 
     @property
     def env(self):
@@ -91,7 +126,7 @@ class Mode(BaseModel):
             return
 
         field = fields[0]
-        valid_fields = ["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]
+        valid_fields = ["Ex", "Ey", "Ez", "Hx", "Hy", "Hz", "Px", "Py", "Pz"]
         if field not in valid_fields:
             raise ValueError(
                 f"Invalid field {field!r}. Valid fields: {', '.join(valid_fields)}."
