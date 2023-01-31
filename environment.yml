@@ -3,7 +3,6 @@ channels:
   - conda-forge
 dependencies:
   # required
-  - gdspy
   - loguru
   - matplotlib
   - numexpr
@@ -33,6 +32,7 @@ dependencies:
   - docutils
   - flake8
   - ipykernel
+  - ipyevents
   - ipympl
   - isort
   - jupyter-book
@@ -65,7 +65,7 @@ dependencies:
   - xxhash
 
   # extra
-  - gdsfactory
+  - gdsfactory>=6.27.0
   #- mpb
   #- nomkl
   #- pymeep=*=mpi_mpich_*
@@ -91,3 +91,6 @@ dependencies:
     # dev
     - autodoc-pydantic
     - myst-nb>=0.17.1
+
+    # extra
+    - klayout>=0.28.3
