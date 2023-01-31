@@ -19,7 +19,10 @@ def disable_cache():
 def empty_cache():
     for cache in [CACHED_MODELS, CACHED_ARRAYS]:
         for k in list(cache):
-            del cache[k]
+            try:
+                del cache[k]
+            except KeyError:
+                pass  # sometimes in threaded apps key might already be deleted
 
 
 def cache_model(model):
@@ -41,5 +44,8 @@ def _cache_obj(cache, obj):
     queue = deque(cache)
     while len(queue) > CACHE_SETTINGS["size"]:
         key = queue.popleft()
-        del cache[key]
+        try:
+            del cache[key]
+        except KeyError:
+            pass  # sometimes in threaded apps key might already be deleted
     return obj

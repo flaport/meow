@@ -44,13 +44,13 @@ class GdsExtrusionRule(BaseModel):
 
 
 def extrude_gds(
-    cell: "gdspy.Cell",  # type: ignore
+    cell,  # type: ignore
     extrusions: Dict[Tuple[int, int], List[GdsExtrusionRule]],
 ):
     """extrude a gds cell given a dictionary of extruson rules
 
     Args:
-        cell: a gdspy.Cell to extrude
+        cell: a gdspy or gdstk Cell to extrude
         extrusions: the extrusion rules to use (if not given, the example extrusions will be used.)
     """
     structs = []

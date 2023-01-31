@@ -119,10 +119,10 @@ SIMPLE_MODE_DATA = {
 
 
 def test_deserialization():
-    simple_mode = SimpleMode.parse_obj(simple_mode_data)
+    simple_mode = SimpleMode.parse_obj(SIMPLE_MODE_DATA)
     assert np.round(np.real(simple_mode.neff), 6) == np.round(
-        simple_mode_data["neff"]["real"], 6
+        SIMPLE_MODE_DATA["neff"]["real"], 6
     )
     assert np.round(np.imag(simple_mode.neff), 6) == np.round(
-        simple_mode_data["neff"]["imag"], 6
+        SIMPLE_MODE_DATA["neff"]["imag"], 6
     )
