@@ -10,6 +10,8 @@ from matplotlib import colors
 from pydantic import Field, PrivateAttr
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
+from scipy.linalg import norm
+from .integrate import integrate_2d
 
 from .base_model import BaseModel
 from .cross_section import CrossSection
@@ -44,12 +46,14 @@ class Mode(BaseModel):
     _Px: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
     _Py: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
     _Pz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
+    _A: np.float_ = PrivateAttr()
 
     def __init__(self, **data: Any):
         super().__init__(**data)
         self._Px = None
         self._Py = None
         self._Pz = None
+        self._A = None
 
     @property
     def te_fraction(self):
@@ -62,6 +66,14 @@ class Mode(BaseModel):
         vecH = np.stack([self.Hx, self.Hy, self.Hz], axis=-1)
         vecP = np.cross(vecE, vecH)
         self._Px, self._Py, self._Pz = np.rollaxis(vecP, -1)
+
+    def _calc_area(self):
+        vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
+        E_sq = norm(vecE, axis=-1, ord=2)
+        E_qu = E_sq**2
+        x = self.cs.mesh.x_
+        y = self.cs.mesh.y_
+        self._A = integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu)
 
     @property
     def Px(self):
@@ -80,6 +92,13 @@ class Mode(BaseModel):
         if self._Pz is None:
             self._calc_poynting()
         return self._Pz
+
+    @property
+    def A(self):
+        """mode area"""
+        if self._A is None:
+            self._calc_area()
+        return self._A
 
     @property
     def env(self):
