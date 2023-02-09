@@ -1629,6 +1629,19 @@ are fully supported!</p>
 
 </dd></dl>
 
+<span class="target" id="module-meow.integrate"></span><dl class="py function">
+<dt class="sig sig-object py" id="meow.integrate.integrate_interpolate_2d">
+<span class="sig-name descname"><span class="pre">integrate_interpolate_2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/integrate.html#integrate_interpolate_2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.integrate.integrate_interpolate_2d" title="Permalink to this definition">#</a></dt>
+<dd><p>First the data on the given grid is interpolated and then integrated using <cite>scipy.dblquad</cite>.
+This procedure is best suited if one wants to integrate over a (small) region of interest that can be placed at off-grid positions</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.integrate.integrate_2d">
+<span class="sig-name descname"><span class="pre">integrate_2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/integrate.html#integrate_2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.integrate.integrate_2d" title="Permalink to this definition">#</a></dt>
+<dd><p>much simpler integration over the full grid</p>
+</dd></dl>
+
 <span class="target" id="module-meow.materials"></span><p>Materials</p>
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="meow.materials.Material">
@@ -2510,6 +2523,12 @@ are fully supported!</p>
 <dt class="sig sig-object py" id="meow.mode.Mode.Pz">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Pz</span></span><a class="headerlink" href="#meow.mode.Mode.Pz" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="meow.mode.Mode.A">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">A</span></span><a class="headerlink" href="#meow.mode.Mode.A" title="Permalink to this definition">#</a></dt>
+<dd><p>mode area</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mode.Mode.env">

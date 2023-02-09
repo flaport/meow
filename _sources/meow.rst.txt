@@ -61,6 +61,12 @@ Submodules
    :show-inheritance:
 
 
+.. automodule:: meow.integrate
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 .. automodule:: meow.materials
    :members:
    :undoc-members:
