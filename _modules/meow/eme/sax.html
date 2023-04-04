@@ -284,7 +284,12 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">sax</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sax.backends</span> <span class="kn">import</span> <span class="n">circuit_backends</span>
+<span class="kn">from</span> <span class="nn">sax.netlist</span> <span class="kn">import</span> <span class="n">Netlist</span>
+<span class="kn">from</span> <span class="nn">sax.circuit</span> <span class="kn">import</span> <span class="n">_make_singlemode_or_multimode</span>
 
+<span class="kn">from</span> <span class="nn">..base_model</span> <span class="kn">import</span> <span class="n">_array</span>
 <span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span>
 <span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">compute_interface_s_matrices</span><span class="p">,</span> <span class="n">compute_propagation_s_matrices</span>
 <span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">select_ports</span> <span class="k">as</span> <span class="n">select_ports</span>
@@ -354,19 +359,36 @@ title="Open an issue"
     <span class="n">get_interface_s_matrices</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">get_interface_s_matrices_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="n">num_modes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">mode_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_modes</span><span class="p">)]</span>
+
     <span class="n">propagations</span> <span class="o">=</span> <span class="n">compute_propagation_s_matrices</span><span class="p">(</span><span class="n">modes</span><span class="p">)</span>
     <span class="n">interfaces</span> <span class="o">=</span> <span class="n">get_interface_s_matrices</span><span class="p">(</span>
         <span class="n">modes</span><span class="p">,</span>
         <span class="n">enforce_reciprocity</span><span class="o">=</span><span class="n">enforce_reciprocity</span><span class="p">,</span>
         <span class="n">enforce_lossy_unitarity</span><span class="o">=</span><span class="n">enforce_lossy_unitarity</span><span class="p">,</span>
     <span class="p">)</span>
+
+    <span class="c1"># TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.</span>
     <span class="n">net</span> <span class="o">=</span> <span class="n">_get_netlist</span><span class="p">(</span><span class="n">propagations</span><span class="p">,</span> <span class="n">interfaces</span><span class="p">)</span>
-    <span class="n">mode_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_modes</span><span class="p">)]</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span>
+    <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]}</span>
+    <span class="n">net</span> <span class="o">=</span> <span class="n">Netlist</span><span class="p">(</span><span class="o">**</span><span class="n">net</span><span class="p">)</span>
+    <span class="n">instances</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span><span class="n">models</span><span class="p">[</span><span class="n">k</span><span class="p">]())</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">net</span><span class="o">.</span><span class="n">instances</span>
+    <span class="p">}</span>  <span class="c1"># TODO: check why different result without sax.sdense</span>
+    <span class="n">connections</span><span class="p">,</span> <span class="n">ports</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_make_singlemode_or_multimode</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">mode_names</span><span class="p">,</span> <span class="n">models</span><span class="p">)</span>
 
-    <span class="n">_circuit</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">circuit</span><span class="p">(</span><span class="n">netlist</span><span class="o">=</span><span class="n">net</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">sax_backend</span><span class="p">,</span> <span class="n">modes</span><span class="o">=</span><span class="n">mode_names</span><span class="p">)</span>
+    <span class="n">evaluate_circuit</span> <span class="o">=</span> <span class="n">circuit_backends</span><span class="p">[</span><span class="n">sax_backend</span><span class="p">]</span>
+    <span class="n">S</span><span class="p">,</span> <span class="n">pm</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span>
+        <span class="n">evaluate_circuit</span><span class="p">(</span>
+            <span class="n">instances</span><span class="o">=</span><span class="n">instances</span><span class="p">,</span>
+            <span class="n">connections</span><span class="o">=</span><span class="n">connections</span><span class="p">,</span>
+            <span class="n">ports</span><span class="o">=</span><span class="n">ports</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">_array</span><span class="p">)</span>
 
-    <span class="c1"># maybe in the future we should return the sax model and not the S-matrix?</span>
-    <span class="k">return</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span><span class="n">_circuit</span><span class="p">())</span></div>
+    <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">pm</span></div>
 </pre></div>
 
               </div>
