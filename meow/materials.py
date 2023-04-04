@@ -40,7 +40,6 @@ class Material(BaseModel):
 
     @root_validator(pre=True)
     def validate(cls, values: Dict[str, Any]) -> Dict[str, Any]:
-
         if isinstance(values, Material):
             return values  # no idea why this should be neccessary, but without it we get weird errors...
 

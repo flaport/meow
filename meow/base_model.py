@@ -47,7 +47,6 @@ def _array_cls(annot) -> type:
         yield cls.validate
 
     def validate(cls, x) -> _array:
-
         if isinstance(x, dict):
             r = np.asarray(x.get("real", 0.0), dtype=np.float_)
             i = np.asarray(x.get("imag", 0.0), dtype=np.float_)

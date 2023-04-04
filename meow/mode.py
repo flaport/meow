@@ -103,7 +103,6 @@ class Mode(BaseModel):
         num_levels=8,
         operation=lambda x: np.abs(x) ** 2,
     ):
-
         if fields is None or len(fields) == 0:
             fields = ["Ex"]
 

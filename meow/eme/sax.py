@@ -3,7 +3,12 @@ from functools import partial
 from typing import List
 
 import sax
+import numpy as np
+from sax.backends import circuit_backends
+from sax.netlist import Netlist
+from sax.circuit import _make_singlemode_or_multimode
 
+from ..base_model import _array
 from ..mode import Mode
 from .common import compute_interface_s_matrices, compute_propagation_s_matrices
 from .common import select_ports as select_ports
@@ -73,16 +78,33 @@ def compute_s_matrix_sax(
     get_interface_s_matrices = partial(get_interface_s_matrices_, **kwargs)
 
     num_modes = len(modes[0])
+    mode_names = [f"{i}" for i in range(num_modes)]
+
     propagations = compute_propagation_s_matrices(modes)
     interfaces = get_interface_s_matrices(
         modes,
         enforce_reciprocity=enforce_reciprocity,
         enforce_lossy_unitarity=enforce_lossy_unitarity,
     )
+
+    # TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.
     net = _get_netlist(propagations, interfaces)
-    mode_names = [f"{i}" for i in range(num_modes)]
+    models = net["instances"]
+    net["instances"] = {k: k for k in net["instances"]}
+    net = Netlist(**net)
+    instances = {
+        k: sax.sdense(models[k]()) for k in net.instances
+    }  # TODO: check why different result without sax.sdense
+    connections, ports, _ = _make_singlemode_or_multimode(net, mode_names, models)
 
-    _circuit, _ = sax.circuit(netlist=net, backend=sax_backend, modes=mode_names)
+    evaluate_circuit = circuit_backends[sax_backend]
+    S, pm = sax.sdense(
+        evaluate_circuit(
+            instances=instances,
+            connections=connections,
+            ports=ports,
+        )
+    )
+    S = np.asarray(S).view(_array)
 
-    # maybe in the future we should return the sax model and not the S-matrix?
-    return sax.sdense(_circuit())
+    return S, pm
