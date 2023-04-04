@@ -38,14 +38,14 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist/meow-sim-0.1.4.tar.gz
-            dist/meow_sim-0.1.4-py3-none-any.whl
+            dist/meow-sim-0.1.5.tar.gz
+            dist/meow_sim-0.1.5-py3-none-any.whl
       - name: Publish to PyPI
         run: |
           pip install --user twine \
           && twine upload \
-            dist/meow-sim-0.1.4.tar.gz \
-            dist/meow_sim-0.1.4-py3-none-any.whl \
+            dist/meow-sim-0.1.5.tar.gz \
+            dist/meow_sim-0.1.5-py3-none-any.whl \
           --username __token__ \
           --password ${{ secrets.PYPI_TOKEN }}
 
