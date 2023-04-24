@@ -353,6 +353,30 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#installation">
      Installation
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#minimal-installation">
+       Minimal installation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#full-installation">
+       Full installation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#selecting-features">
+       Selecting features
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#available-features">
+         Available features
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
    </li>
    <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#documentation">
@@ -401,6 +425,30 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#installation">
      Installation
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#minimal-installation">
+       Minimal installation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#full-installation">
+       Full installation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#selecting-features">
+       Selecting features
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h4 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#available-features">
+         Available features
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
    </li>
    <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#documentation">
@@ -440,9 +488,38 @@ title="Print to PDF"
 <p>A simple electromagnetic <a class="reference external" href="https://en.wikipedia.org/wiki/Eigenmode_expansion">EigenMode Expansion (EME)</a> tool for Python.</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h2>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install meow-sim
+<section id="minimal-installation">
+<h3>Minimal installation<a class="headerlink" href="#minimal-installation" title="Permalink to this headline">#</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install meow-sim<span class="o">[</span>min<span class="o">]</span>
 </pre></div>
 </div>
+</section>
+<section id="full-installation">
+<h3>Full installation<a class="headerlink" href="#full-installation" title="Permalink to this headline">#</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install meow-sim<span class="o">[</span>full<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="selecting-features">
+<h3>Selecting features<a class="headerlink" href="#selecting-features" title="Permalink to this headline">#</a></h3>
+<p>You can select which features to enable during installation as follows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install meow-sim<span class="o">[</span>feature1,feature2,...<span class="o">]</span>
+</pre></div>
+</div>
+<section id="available-features">
+<h4>Available features<a class="headerlink" href="#available-features" title="Permalink to this headline">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: minimal installation (equivalent to not specifying any features)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jax</span></code>: use JAX in stead of numpy to calculate the S-matrices</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">klu</span></code>: use <code class="docutils literal notranslate"><span class="pre">klujax</span></code> to speed up S-matric calculations (implies <code class="docutils literal notranslate"><span class="pre">jax</span></code>). Note: you need
+the SuiteSparse headers on your computer for this to work.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gds</span></code>: enable GDS creation with GDSFactory (see GDS Taper example).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipy</span></code>: install useful jupyter/ipython packages.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dev</span></code>: install dev dependencies</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">full</span></code>: enable all the above features.</p></li>
+</ul>
+</section>
+</section>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">#</a></h2>
