@@ -8,9 +8,32 @@ A simple electromagnetic [EigenMode Expansion (EME)](https://en.wikipedia.org/wi
 
 ## Installation
 
+### Minimal installation
 ```sh
-pip install meow-sim
+pip install meow-sim[min]
 ```
+
+### Full installation
+```sh
+pip install meow-sim[full]
+```
+
+### Selecting features
+You can select which features to enable during installation as follows:
+```sh
+pip install meow-sim[feature1,feature2,...]
+```
+
+#### Available features
+* `min`: minimal installation (equivalent to not specifying any features)
+* `jax`: use JAX in stead of numpy to calculate the S-matrices
+* `klu`: use `klujax` to speed up S-matric calculations (implies `jax`). Note: you need
+the SuiteSparse headers on your computer for this to work.
+* `gds`: enable GDS creation with GDSFactory (see GDS Taper example).
+* `ipy`: install useful jupyter/ipython packages.
+* `dev`: install dev dependencies
+* `full`: enable all the above features.
+
 
 ## Documentation
 

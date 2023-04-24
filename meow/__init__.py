@@ -3,29 +3,42 @@
 __author__ = "Floris Laporte"
 __version__ = "0.1.5"
 
-# Silence Excessive Logging...
-
-from loguru import logger
-
-logger.disable("gdsfactory")
-from numexpr.utils import log
-
-log.setLevel("CRITICAL")
-
-
-# disable rich pretty printing enabled by tidy3d (if I want it, I'll enable it myself...)
-from rich import pretty
-
-old_install = pretty.install
-pretty.install = lambda *_, **__: None
-import tidy3d
-
-pretty.install = old_install
-
 import warnings
 
-warnings.filterwarnings(action="ignore", module="sax")
-import sax
+# Silence Excessive Logging...
+
+try:
+    from loguru import logger
+
+    logger.disable("gdsfactory")
+except ImportError:
+    pass
+
+try:
+    from numexpr.utils import log
+
+    log.setLevel("CRITICAL")
+except ImportError:
+    pass
+
+try:
+    from rich import pretty
+
+    old_install = pretty.install
+    pretty.install = lambda *_, **__: None
+    import tidy3d
+
+    pretty.install = old_install
+except ImportError:
+    pass
+
+
+try:
+    import sax
+
+    warnings.filterwarnings(action="ignore", module="sax")
+except ImportError:
+    pass
 
 # from . import cell as cell
 from . import base_model as base_model

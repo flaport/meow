@@ -1,13 +1,13 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["build", "pip", "setuptools", "wheel"]
+requires = ["build", "pip", "setuptools", "wheel", "pybind11"]
 
 [project]
 name = "meow-sim"
 version = "0.1.5"
 authors = [
-  { name = "Rockley Photonics" },
-  { name = "Floris Laporte", email = "floris.laporte@rockleyphotonics.com" },
+{ name = "Rockley Photonics" },
+{ name = "Floris Laporte", email = "floris.laporte@rockleyphotonics.com" },
 ]
 description = "Modeling of Eigenmodes and Overlaps in Waveguide Structures"
 requires-python = ">=3.8"
@@ -36,24 +36,24 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Physics",
 ]
 dependencies = [
-  "fastprogress",
-  "flatten-dict",
-  "loguru",
-  "mapbox-earcut",
   "matplotlib",
-  "numexpr",
-  "numpy",
-  "orjson",
+  "numpy>=1.24",
   "pydantic",
-  "rich",
   "sax>=0.8.4",
   "scipy",
   "shapely",
-  "tidy3d>2",
-  "tqdm",
-  "triangle",
+  "tidy3d>=2.1",
   "trimesh[easy]",
 ]
+
+[project.optional-dependencies]
+min = ["meow-sim"]
+jax = ["jax", "jaxlib"]
+klu = ["klujax>0.1.2"]
+ipy = ["ipykernel", "ipywidgets", "ipympl", "nbstripout", "tqdm"]
+gds = ["gdsfactory>6.27.0", "klayout>0.28.2"]
+dev = ["bump2version", "nbstripout", "pre-commit", "black", "sphinx", "autodoc-pydantic", "myst-nb>0.17.1"]
+full = ["meow-sim[klu,jax,ipy,gds]"]
 
 [tool.setuptools.packages.find]
 where = ["."]
