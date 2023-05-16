@@ -52,9 +52,9 @@ def compute_modes_lumerical(
         spec: The FDE simulation specification
         unit: Conversion factor between MEOW unit (probably um) and Lumerical unit (probably m).
     """
-    _assert_default_mesh_setting(cs.cell.mesh.angle_phi == 0, "angle_phi")
-    _assert_default_mesh_setting(cs.cell.mesh.angle_theta == 0, "angle_theta")
-    _assert_default_mesh_setting(cs.cell.mesh.bend_radius > 1e10, "bend_radius")
+    _assert_default_mesh_setting(cs.cell.mesh.angle_phi != 0, "angle_phi")
+    _assert_default_mesh_setting(cs.cell.mesh.angle_theta != 0, "angle_theta")
+    _assert_default_mesh_setting(cs.cell.mesh.bend_radius < 1e10, "bend_radius")
 
     if sim is None:
         sim = get_sim()
