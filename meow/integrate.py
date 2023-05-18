@@ -1,11 +1,12 @@
-from scipy.interpolate import RegularGridInterpolator
 from scipy.integrate import dblquad, simpson
+from scipy.interpolate import RegularGridInterpolator
 
 
 def integrate_interpolate_2d(x, y, data, extent=None):
     """
     First the data on the given grid is interpolated and then integrated using `scipy.dblquad`.
-    This procedure is best suited if one wants to integrate over a (small) region of interest that can be placed at off-grid positions"""
+    This procedure is best suited if one wants to integrate over a (small) region of interest that can be placed at off-grid positions
+    """
     interp = RegularGridInterpolator((x, y), data)
     if extent is None:
         extent = [[min(x), max(x)], [min(y), max(y)]]

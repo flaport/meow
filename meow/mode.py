@@ -2,19 +2,17 @@
 
 import pickle
 from itertools import product
-from typing import List, Tuple, Any
+from typing import Any, List, Tuple
 
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import colors
 from pydantic import Field, PrivateAttr
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
 from scipy.linalg import norm
-from .integrate import integrate_2d
 
 from .base_model import BaseModel
 from .cross_section import CrossSection
+from .integrate import integrate_2d
 
 
 class Mode(BaseModel):
@@ -122,6 +120,9 @@ class Mode(BaseModel):
         num_levels=8,
         operation=lambda x: np.abs(x) ** 2,
     ):
+        import matplotlib.pyplot as plt
+        from matplotlib import colors
+
         if fields is None or len(fields) == 0:
             fields = ["Ex"]
 

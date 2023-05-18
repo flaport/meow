@@ -2,9 +2,7 @@
 
 from typing import Any, Dict, List, Tuple, Union
 
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.colors import ListedColormap, to_rgba
 from pydantic import Field
 
 from .base_model import BaseModel
@@ -79,6 +77,9 @@ class Cell(BaseModel):
         return np.abs(self.z_max - self.z_min)
 
     def _visualize(self, c="z", axs=None):
+        import matplotlib.pyplot as plt
+        from matplotlib.colors import ListedColormap, to_rgba
+
         colors = [(0, 0, 0, 0)] + [
             to_rgba(m.meta.get("color", (0, 0, 0, 0))) for m in self.materials
         ]

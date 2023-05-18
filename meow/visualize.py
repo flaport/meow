@@ -2,8 +2,12 @@
 
 from typing import Any
 
-import matplotlib.pyplot as plt
 import numpy as np
+
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    plt = None
 
 try:
     import gdsfactory as gf
@@ -17,6 +21,8 @@ except ImportError:
 
 
 def _visualize_s_matrix(S, fmt=".3f", title=None):
+    import matplotlib.pyplot as plt
+
     Z = np.abs(S)
     y, x = np.arange(Z.shape[0])[::-1], np.arange(Z.shape[1])
     Y, X = np.meshgrid(y, x)
@@ -81,6 +87,7 @@ def visualize(obj: Any, **kwargs: Any):
         and obj.ndim == 2
         and obj.shape[0] > 1
         and obj.shape[1] > 1
+        and plt is not None
     ):
         _visualize_s_matrix(obj, **kwargs)
     elif gf is not None and isinstance(obj, gf.Component):

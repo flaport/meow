@@ -7,7 +7,6 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
-from matplotlib.cm import get_cmap
 from numpy.typing import NDArray
 from pydantic import Field, root_validator
 from scipy.constants import c
@@ -120,6 +119,8 @@ class Material(BaseModel):
         return np.squeeze(np.real(n))  # TODO: allow complex multi-dimensional n
 
     def _lumadd(self, sim, env, unit):
+        from matplotlib.cm import get_cmap
+
         n = self(env)
         wl = np.asarray(env.wl * unit, dtype=complex).ravel()
         eps = np.asarray(n, dtype=complex).ravel() ** 2

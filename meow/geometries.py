@@ -5,12 +5,7 @@ from typing import Dict, List, Literal, Tuple, Union, cast
 
 import numpy as np
 import shapely.geometry as sg
-from matplotlib.colors import to_rgba as _to_rgba_mpl
 from pydantic import Field, validator
-from trimesh import Trimesh
-from trimesh.creation import extrude_polygon
-from trimesh.scene import Scene
-from trimesh.transformations import rotation_matrix
 
 from .base_model import BaseModel
 from .mesh import Mesh2d
@@ -26,9 +21,7 @@ class Geometry(BaseModel):
 
     def __new__(cls, **kwargs):
         cls = GEOMETRIES.get(kwargs.get("type", cls.__name__), cls)
-        return BaseModel.__new__(
-            cls
-        )  # , **kwargs) # weird pydantic black magic: kwargs are not explicitly propagated
+        return BaseModel.__new__(cls)  # type: ignore
 
     @validator("type", pre=True, always=True)
     def validate_type(cls, value):
@@ -41,6 +34,9 @@ class Geometry(BaseModel):
         return value
 
     def _visualize(self, scale=None):
+        from trimesh.scene import Scene
+        from trimesh.transformations import rotation_matrix
+
         scene = Scene()
         scene.add_geometry(self._trimesh(scale=scale))
         scene.apply_transform(rotation_matrix(-np.pi / 6, (0, 1, 0)))
@@ -107,6 +103,9 @@ class Box(Geometry):
         )
 
     def _trimesh(self, color=None, scale=None):
+        from trimesh import Trimesh
+        from trimesh.creation import extrude_polygon
+
         sx, sy, sz = scale or (1, 1, 1)
         poly = sg.Polygon(
             [
@@ -216,6 +215,8 @@ class Prism(Geometry):
             )
 
     def _trimesh(self, color=None, scale=None):
+        from trimesh.creation import extrude_polygon
+
         poly = sg.Polygon(self.poly)
         prism = extrude_polygon(poly, self.h_max - self.h_min)
         prism = prism.apply_translation((0, 0, self.h_min))
@@ -251,6 +252,8 @@ class Prism(Geometry):
 
 
 def _to_rgba(c):
+    from matplotlib.colors import to_rgba as _to_rgba_mpl
+
     r, g, b, a = _to_rgba_mpl(c)
     a = min(max(a, 0.1), 0.9)
     return float(r), float(g), float(b), float(a)

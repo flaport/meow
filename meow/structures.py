@@ -2,8 +2,6 @@
 
 import numpy as np
 from pydantic import Field, validator
-from trimesh.scene import Scene
-from trimesh.transformations import rotation_matrix
 
 from .base_model import BaseModel
 from .geometries import Geometry
@@ -37,6 +35,9 @@ class Structure(BaseModel):
 
 def visualize_structures(structures, scale=None):
     """easily visualize a collection (list) of `Structure` objects"""
+    from trimesh.scene import Scene
+    from trimesh.transformations import rotation_matrix
+
     scene = Scene(
         geometry=[s._trimesh(scale=scale) for s in sort_structures(structures)]
     )

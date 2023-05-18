@@ -1,7 +1,6 @@
 """ A CrossSection """
 from typing import Any, Dict
 
-import matplotlib.pyplot as plt
 import numpy as np
 from pydantic import Field
 
@@ -64,6 +63,8 @@ class CrossSection(BaseModel):
         return self.cell.structures
 
     def _visualize(self, c="z", axs=None):
+        import matplotlib.pyplot as plt
+
         if axs is None:
             _, axs = plt.subplots(1, len(c), figsize=(3 * len(c), 3))
         c_list = list(c)

@@ -2,11 +2,11 @@
 from functools import partial
 from typing import List
 
-import sax
 import numpy as np
+import sax
 from sax.backends import circuit_backends
-from sax.netlist import Netlist
 from sax.circuit import _make_singlemode_or_multimode
+from sax.netlist import Netlist
 
 from ..base_model import _array
 from ..mode import Mode

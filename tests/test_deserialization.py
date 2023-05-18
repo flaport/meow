@@ -1,9 +1,10 @@
 from functools import lru_cache, wraps
 from typing import List
 
-import meow as mw
 import numpy as np
 from pydantic import Field, parse_raw_as
+
+import meow as mw
 
 
 class SimpleMode(mw.BaseModel):

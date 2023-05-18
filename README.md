@@ -26,6 +26,7 @@ pip install meow-sim[feature1,feature2,...]
 
 #### Available features
 * `min`: minimal installation (equivalent to not specifying any features)
+* `vis`: explicitly installs matplotlib and trimesh.
 * `jax`: use JAX in stead of numpy to calculate the S-matrices
 * `klu`: use `klujax` to speed up S-matric calculations (implies `jax`). Note: you need
 the SuiteSparse headers on your computer for this to work.
