@@ -112,7 +112,7 @@ def compute_propagation_s_matrix(modes: List[Mode]):
     """get the propagation S-matrix of each `Mode` belonging to a `CrossSection` in a `Cell` with a certain length."""
     s_dict = {
         (f"left@{i}", f"right@{i}"): np.exp(
-            2j * np.pi * np.abs(mode.neff) / mode.env.wl * mode.cell.length
+            2j * np.pi * mode.neff / mode.env.wl * mode.cell.length
         )
         for i, mode in enumerate(modes)
     }
