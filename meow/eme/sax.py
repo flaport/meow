@@ -71,20 +71,21 @@ def compute_s_matrix_sax(
         modes: Each collection of modes for each of the `Cell` objects
         backend: which SAX backend to use to calculate the final S-matrix.
     """
-    sax_backend = _validate_sax_backend(sax_backend)
-    get_interface_s_matrices_ = kwargs.pop(
-        "get_interface_s_matrices", compute_interface_s_matrices
-    )
-    get_interface_s_matrices = partial(get_interface_s_matrices_, **kwargs)
-
     num_modes = len(modes[0])
     mode_names = [f"{i}" for i in range(num_modes)]
-
-    propagations = compute_propagation_s_matrices(modes)
-    interfaces = get_interface_s_matrices(
+    sax_backend = _validate_sax_backend(sax_backend)
+    _compute_propagation_s_matrices = kwargs.pop(
+        "compute_propagation_s_matrices", compute_propagation_s_matrices
+    )
+    _compute_interface_s_matrices = kwargs.pop(
+        "compute_interface_s_matrices", compute_interface_s_matrices
+    )
+    propagations = _compute_propagation_s_matrices(modes)
+    interfaces = _compute_interface_s_matrices(
         modes,
         enforce_reciprocity=enforce_reciprocity,
         enforce_lossy_unitarity=enforce_lossy_unitarity,
+        **kwargs,
     )
 
     # TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.
