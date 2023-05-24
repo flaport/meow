@@ -44,6 +44,7 @@ dependencies = [
   "shapely",
   "tidy3d>=2.1",
   "trimesh[easy]",
+  "packaging", 
 ]
 
 [project.optional-dependencies]
