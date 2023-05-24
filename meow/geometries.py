@@ -150,25 +150,47 @@ class Prism(Geometry):
             y_min, _ = self.poly.min(0)
             y_max, _ = self.poly.max(0)
             line = sg.LineString([(y_min, z), (y_max, z)])
-            intersection = np.asarray(poly.intersection(line).coords)
-            if not intersection.shape[0]:
-                return np.zeros_like(X, dtype=bool)
-            (y_min, _), (y_max, _) = intersection
-            y_min, y_max = min(y_min, y_max), max(y_min, y_max)
-            x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-            return (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+            intersections = np.asarray(poly.intersection(line).coords)
+
+            if not isinstance(intersections, sg.MultiLineString):
+                intersection_array = np.asarray(intersections.coords)
+                if not intersection_array.shape[0]:
+                    return np.zeros_like(Y, dtype=bool)
+                intersections = sg.MultiLineString([intersections])
+
+            mask = np.zeros_like(Y, dtype=bool)
+            for intersection in intersections.geoms:
+                intersection = np.asarray(intersection.coords)
+                if not intersection.shape[0]:
+                    return np.zeros_like(X, dtype=bool)
+                (y_min, _), (y_max, _) = intersection
+                y_min, y_max = min(y_min, y_max), max(y_min, y_max)
+                x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
+                return (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+
         elif self.axis == "y":
             # x, y, z -> z, x, y
             _, x_min = self.poly.min(0)
             _, x_max = self.poly.max(0)
             line = sg.LineString([(z, x_min), (z, x_max)])
-            intersection = np.asarray(poly.intersection(line).coords)
-            if not intersection.shape[0]:
-                return np.zeros_like(X, dtype=bool)
-            (_, x_min), (_, x_max) = intersection
-            x_min, x_max = min(x_min, x_max), max(x_min, x_max)
-            y_min, y_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-            return (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+            intersections = poly.intersection(line)
+
+            if not isinstance(intersections, sg.MultiLineString):
+                intersection_array = np.asarray(intersections.coords)
+                if not intersection_array.shape[0]:
+                    return np.zeros_like(Y, dtype=bool)
+                intersections = sg.MultiLineString([intersections])
+
+            mask = np.zeros_like(Y, dtype=bool)
+            for intersection in intersections.geoms:
+                intersection = np.asarray(intersection.coords)
+                if not intersection.shape[0]:
+                    continue
+                (_, x_min), (_, x_max) = intersection
+                x_min, x_max = min(x_min, x_max), max(x_min, x_max)
+                y_min, y_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
+                mask |= (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+            return mask
         else:
             # x, y, z -> x, y, z
             if (z < self.h_min) or (self.h_max < z):
