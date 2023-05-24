@@ -5,10 +5,10 @@
    "id": "dd643a5d-d081-48d7-a8ed-2c4b80faa122",
    "metadata": {
     "papermill": {
-     "duration": 0.003883,
-     "end_time": "2023-05-24T05:40:14.996472",
+     "duration": 0.002938,
+     "end_time": "2023-05-24T22:47:58.187696",
      "exception": false,
-     "start_time": "2023-05-24T05:40:14.992589",
+     "start_time": "2023-05-24T22:47:58.184758",
      "status": "completed"
     },
     "tags": []
@@ -25,16 +25,16 @@
    "id": "4859f69dd76d8b17",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-05-24T05:40:15.004160Z",
-     "iopub.status.busy": "2023-05-24T05:40:15.003669Z",
-     "iopub.status.idle": "2023-05-24T05:40:17.873705Z",
-     "shell.execute_reply": "2023-05-24T05:40:17.873012Z"
+     "iopub.execute_input": "2023-05-24T22:47:58.194418Z",
+     "iopub.status.busy": "2023-05-24T22:47:58.193769Z",
+     "iopub.status.idle": "2023-05-24T22:48:00.855888Z",
+     "shell.execute_reply": "2023-05-24T22:48:00.855258Z"
     },
     "papermill": {
-     "duration": 2.876419,
-     "end_time": "2023-05-24T05:40:17.876022",
+     "duration": 2.667167,
+     "end_time": "2023-05-24T22:48:00.857572",
      "exception": false,
-     "start_time": "2023-05-24T05:40:14.999603",
+     "start_time": "2023-05-24T22:47:58.190405",
      "status": "completed"
     },
     "tags": [
@@ -45,11 +45,11 @@
     {
      "data": {
       "text/html": [
-       "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\"><span style=\"color: #7fbfbf; text-decoration-color: #7fbfbf\">[05:40:16] </span><span style=\"color: #000080; text-decoration-color: #000080\">INFO    </span> Using client version: <span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">1.7</span>.<span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">1</span>                                                      <a href=\"file:///opt/conda/lib/python3.10/site-packages/tidy3d/__init__.py\" target=\"_blank\"><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">__init__.py</span></a><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">:</span><a href=\"file:///opt/conda/lib/python3.10/site-packages/tidy3d/__init__.py#95\" target=\"_blank\"><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">95</span></a>\n",
+       "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\"><span style=\"color: #7fbfbf; text-decoration-color: #7fbfbf\">[22:47:59] </span><span style=\"color: #000080; text-decoration-color: #000080\">INFO    </span> Using client version: <span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">1.7</span>.<span style=\"color: #008080; text-decoration-color: #008080; font-weight: bold\">1</span>                                                      <a href=\"file:///opt/conda/lib/python3.10/site-packages/tidy3d/__init__.py\" target=\"_blank\"><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">__init__.py</span></a><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">:</span><a href=\"file:///opt/conda/lib/python3.10/site-packages/tidy3d/__init__.py#95\" target=\"_blank\"><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">95</span></a>\n",
        "</pre>\n"
       ],
       "text/plain": [
-       "\u001b[2;36m[05:40:16]\u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Using client version: \u001b[1;36m1.7\u001b[0m.\u001b[1;36m1\u001b[0m                                                      \u001b]8;id=541974;file:///opt/conda/lib/python3.10/site-packages/tidy3d/__init__.py\u001b\\\u001b[2m__init__.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=637262;file:///opt/conda/lib/python3.10/site-packages/tidy3d/__init__.py#95\u001b\\\u001b[2m95\u001b[0m\u001b]8;;\u001b\\\n"
+       "\u001b[2;36m[22:47:59]\u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Using client version: \u001b[1;36m1.7\u001b[0m.\u001b[1;36m1\u001b[0m                                                      \u001b]8;id=592041;file:///opt/conda/lib/python3.10/site-packages/tidy3d/__init__.py\u001b\\\u001b[2m__init__.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=856839;file:///opt/conda/lib/python3.10/site-packages/tidy3d/__init__.py#95\u001b\\\u001b[2m95\u001b[0m\u001b]8;;\u001b\\\n"
       ]
      },
      "metadata": {},
@@ -68,10 +68,10 @@
    "id": "2d28a1cd-a5db-4e58-b141-c6a20a0a5657",
    "metadata": {
     "papermill": {
-     "duration": 0.002787,
-     "end_time": "2023-05-24T05:40:17.881704",
+     "duration": 0.003112,
+     "end_time": "2023-05-24T22:48:00.863571",
      "exception": false,
-     "start_time": "2023-05-24T05:40:17.878917",
+     "start_time": "2023-05-24T22:48:00.860459",
      "status": "completed"
     },
     "tags": []
@@ -89,10 +89,10 @@
    "id": "e563a59a-6494-431b-b124-6c1804a6c7cb",
    "metadata": {
     "papermill": {
-     "duration": 0.002439,
-     "end_time": "2023-05-24T05:40:17.886634",
+     "duration": 0.002406,
+     "end_time": "2023-05-24T22:48:00.868464",
      "exception": false,
-     "start_time": "2023-05-24T05:40:17.884195",
+     "start_time": "2023-05-24T22:48:00.866058",
      "status": "completed"
     },
     "tags": []
@@ -106,10 +106,10 @@
    "id": "18f7b08a-7303-4454-a31c-1fea3d7c42af",
    "metadata": {
     "papermill": {
-     "duration": 0.002464,
-     "end_time": "2023-05-24T05:40:17.891514",
+     "duration": 0.002435,
+     "end_time": "2023-05-24T22:48:00.873360",
      "exception": false,
-     "start_time": "2023-05-24T05:40:17.889050",
+     "start_time": "2023-05-24T22:48:00.870925",
      "status": "completed"
     },
     "tags": []
@@ -129,16 +129,16 @@
    "id": "873fae6e-3435-4a89-8f3f-06a33a8755ed",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-05-24T05:40:17.898304Z",
-     "iopub.status.busy": "2023-05-24T05:40:17.897583Z",
-     "iopub.status.idle": "2023-05-24T05:40:18.139828Z",
-     "shell.execute_reply": "2023-05-24T05:40:18.139260Z"
+     "iopub.execute_input": "2023-05-24T22:48:00.879710Z",
+     "iopub.status.busy": "2023-05-24T22:48:00.879139Z",
+     "iopub.status.idle": "2023-05-24T22:48:01.064855Z",
+     "shell.execute_reply": "2023-05-24T22:48:01.064284Z"
     },
     "papermill": {
-     "duration": 0.255681,
-     "end_time": "2023-05-24T05:40:18.149586",
+     "duration": 0.199025,
+     "end_time": "2023-05-24T22:48:01.074843",
      "exception": false,
-     "start_time": "2023-05-24T05:40:17.893905",
+     "start_time": "2023-05-24T22:48:00.875818",
      "status": "completed"
     },
     "tags": []
@@ -1388,7 +1388,7 @@
        "Math.pow(distanceToCamera,2)+\n",
        "Math.pow(distanceToCamera,2));camera.position.set(len,len,len);controls.update();camera.lookAt(boundingSphere.center);controls.target.set(boundingSphere.center.x,boundingSphere.center.y,boundingSphere.center.z);camera.updateProjectionMatrix();}\n",
        "function centerControls(obj,camera,controls){const boundingBox=new THREE.Box3().setFromObject(obj);const boundingSphere=new THREE.Sphere();boundingBox.getBoundingSphere((target=boundingSphere));controls.update();controls.target.set(boundingSphere.center.x,boundingSphere.center.y,boundingSphere.center.z);}\n",
-       "function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);tracklight=new THREE.DirectionalLight(0xffffff,1.75);scene.add(tracklight);base64_data=&quot;Z2xURgIAAAB4CQAAzAcAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjEsImNvdW50Ijo4LCJtYXgiOlsxLjAsMC4wLDEwLjBdLCJtaW4iOlstMS4wLC0xLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjIsImNvdW50Ijo4LCJtYXgiOlsyMzAsMjMwLDIzMCwyMzBdLCJtaW4iOlsyMzAsMjMwLDIzMCwyMzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MywiY291bnQiOjgsIm1heCI6WzAuMjI0OTk5OTk0MDM5NTM1NTIsMC4yMTk5OTk5OTg4MDc5MDcxLDEwLjBdLCJtaW4iOlstMC4yMjQ5OTk5OTQwMzk1MzU1MiwwLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjQsImNvdW50Ijo4LCJtYXgiOlsyMzAsMCwwLDIzMF0sIm1pbiI6WzIzMCwwLDAsMjMwXX1dLCJtZXNoZXMiOlt7Im5hbWUiOiJnZW9tZXRyeV8wIiwiZXh0cmFzIjp7InByb2Nlc3NlZCI6dHJ1ZX0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEsIkNPTE9SXzAiOjJ9LCJpbmRpY2VzIjowLCJtb2RlIjo0fV19LHsibmFtZSI6Imdlb21ldHJ5XzEiLCJleHRyYXMiOnsicHJvY2Vzc2VkIjp0cnVlfSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MywiQ09MT1JfMCI6NH0sImluZGljZXMiOjAsIm1vZGUiOjR9XX1dLCJjYW1lcmFzIjpbeyJuYW1lIjoiY2FtZXJhXzAwMzFDNCIsInR5cGUiOiJwZXJzcGVjdGl2ZSIsInBlcnNwZWN0aXZlIjp7ImFzcGVjdFJhdGlvIjoxLjMzMzMzMzMzMzMzMzMzMzMsInlmb3YiOjAuNzg1Mzk4MTYzMzk3NDQ4Mywiem5lYXIiOjAuMDF9fV0sIm5vZGVzIjpbeyJuYW1lIjoid29ybGQiLCJjaGlsZHJlbiI6WzEsMiwzXX0seyJuYW1lIjoiZ2VvbWV0cnlfMCIsIm1lc2giOjAsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiZ2VvbWV0cnlfMSIsIm1lc2giOjEsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiY2FtZXJhXzAwMzFDNCIsImNhbWVyYSI6MCwibWF0cml4IjpbMS4wLDAuMCwtMC4wLDAuMCwwLjAsMS4wLDAuMCwwLjAsMC4wLDAuMCwxLjAsMC4wLDIuNDk5OTk5OTk5OTk5OTk5NiwtMC4zOSw2LjMzMDEyNzAxODkyMjE5NSwxLjBdfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjQwMH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoxNDR9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoxNDQsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MjQwLCJieXRlTGVuZ3RoIjozMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI3MiwiYnl0ZUxlbmd0aCI6OTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjozNjgsImJ5dGVMZW5ndGgiOjMyfV19ICAgkAEAAEJJTgACAAAAAwAAAAAAAAAAAAAAAQAAAAIAAAAEAAAABwAAAAYAAAAGAAAABQAAAAQAAAAEAAAABQAAAAAAAAAAAAAABQAAAAEAAAAFAAAABgAAAAEAAAABAAAABgAAAAIAAAAHAAAABAAAAAMAAAADAAAABAAAAAAAAAAGAAAABwAAAAIAAAACAAAABwAAAAMAAAAAAIC/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAvwAAAAAAAIC/AACAvwAAAAAAAIC/AAAAAAAAIEEAAIA/AAAAAAAAIEEAAIA/AACAvwAAIEEAAIC/AACAvwAAIEHm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5mZmZr6uR2E+AAAAAGZmZj6uR2E+AAAAAGZmZj4AAAAAAAAAAGZmZr4AAAAAAAAAAGZmZr6uR2E+AAAgQWZmZj6uR2E+AAAgQWZmZj4AAAAAAAAgQWZmZr4AAAAAAAAgQeYAAObmAADm5gAA5uYAAObmAADm5gAA5uYAAObmAADm&quot;;;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(window.devicePixelRatio);renderer.setSize(window.innerWidth,window.innerHeight);document.body.appendChild(renderer.domElement);loader=new THREE.GLTFLoader();loader.load(&quot;data:text/plain;base64,&quot;+base64_data,function(gltf){scene.add(gltf.scene);camera=gltf.cameras[0];controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=1.0;controls.zoomSpeed=1.2;controls.panSpeed=0.8;controls.noZoom=false;controls.noPan=false;controls.staticMoving=true;controls.dynamicDampingFactor=0.3;controls.keys=[65,83,68];controls.addEventListener(&quot;change&quot;,render);centerControls(scene,camera,controls);render();window.addEventListener(&quot;resize&quot;,onWindowResize,false);animate();onWindowResize();});}\n",
+       "function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);tracklight=new THREE.DirectionalLight(0xffffff,1.75);scene.add(tracklight);base64_data=&quot;Z2xURgIAAAB4CQAAzAcAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjEsImNvdW50Ijo4LCJtYXgiOlsxLjAsMC4wLDEwLjBdLCJtaW4iOlstMS4wLC0xLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjIsImNvdW50Ijo4LCJtYXgiOlsyMzAsMjMwLDIzMCwyMzBdLCJtaW4iOlsyMzAsMjMwLDIzMCwyMzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MywiY291bnQiOjgsIm1heCI6WzAuMjI0OTk5OTk0MDM5NTM1NTIsMC4yMTk5OTk5OTg4MDc5MDcxLDEwLjBdLCJtaW4iOlstMC4yMjQ5OTk5OTQwMzk1MzU1MiwwLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjQsImNvdW50Ijo4LCJtYXgiOlsyMzAsMCwwLDIzMF0sIm1pbiI6WzIzMCwwLDAsMjMwXX1dLCJtZXNoZXMiOlt7Im5hbWUiOiJnZW9tZXRyeV8wIiwiZXh0cmFzIjp7InByb2Nlc3NlZCI6dHJ1ZX0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEsIkNPTE9SXzAiOjJ9LCJpbmRpY2VzIjowLCJtb2RlIjo0fV19LHsibmFtZSI6Imdlb21ldHJ5XzEiLCJleHRyYXMiOnsicHJvY2Vzc2VkIjp0cnVlfSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MywiQ09MT1JfMCI6NH0sImluZGljZXMiOjAsIm1vZGUiOjR9XX1dLCJjYW1lcmFzIjpbeyJuYW1lIjoiY2FtZXJhX0RDMjlFOSIsInR5cGUiOiJwZXJzcGVjdGl2ZSIsInBlcnNwZWN0aXZlIjp7ImFzcGVjdFJhdGlvIjoxLjMzMzMzMzMzMzMzMzMzMzMsInlmb3YiOjAuNzg1Mzk4MTYzMzk3NDQ4Mywiem5lYXIiOjAuMDF9fV0sIm5vZGVzIjpbeyJuYW1lIjoid29ybGQiLCJjaGlsZHJlbiI6WzEsMiwzXX0seyJuYW1lIjoiZ2VvbWV0cnlfMCIsIm1lc2giOjAsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiZ2VvbWV0cnlfMSIsIm1lc2giOjEsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiY2FtZXJhX0RDMjlFOSIsImNhbWVyYSI6MCwibWF0cml4IjpbMS4wLDAuMCwtMC4wLDAuMCwwLjAsMS4wLDAuMCwwLjAsMC4wLDAuMCwxLjAsMC4wLDIuNDk5OTk5OTk5OTk5OTk5NiwtMC4zOSw2LjMzMDEyNzAxODkyMjE5NSwxLjBdfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjQwMH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoxNDR9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoxNDQsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MjQwLCJieXRlTGVuZ3RoIjozMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI3MiwiYnl0ZUxlbmd0aCI6OTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjozNjgsImJ5dGVMZW5ndGgiOjMyfV19ICAgkAEAAEJJTgACAAAAAwAAAAAAAAAAAAAAAQAAAAIAAAAEAAAABwAAAAYAAAAGAAAABQAAAAQAAAAEAAAABQAAAAAAAAAAAAAABQAAAAEAAAAFAAAABgAAAAEAAAABAAAABgAAAAIAAAAHAAAABAAAAAMAAAADAAAABAAAAAAAAAAGAAAABwAAAAIAAAACAAAABwAAAAMAAAAAAIC/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAvwAAAAAAAIC/AACAvwAAAAAAAIC/AAAAAAAAIEEAAIA/AAAAAAAAIEEAAIA/AACAvwAAIEEAAIC/AACAvwAAIEHm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5mZmZr6uR2E+AAAAAGZmZj6uR2E+AAAAAGZmZj4AAAAAAAAAAGZmZr4AAAAAAAAAAGZmZr6uR2E+AAAgQWZmZj6uR2E+AAAgQWZmZj4AAAAAAAAgQWZmZr4AAAAAAAAgQeYAAObmAADm5gAA5uYAAObmAADm5gAA5uYAAObmAADm&quot;;;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(window.devicePixelRatio);renderer.setSize(window.innerWidth,window.innerHeight);document.body.appendChild(renderer.domElement);loader=new THREE.GLTFLoader();loader.load(&quot;data:text/plain;base64,&quot;+base64_data,function(gltf){scene.add(gltf.scene);camera=gltf.cameras[0];controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=1.0;controls.zoomSpeed=1.2;controls.panSpeed=0.8;controls.noZoom=false;controls.noPan=false;controls.staticMoving=true;controls.dynamicDampingFactor=0.3;controls.keys=[65,83,68];controls.addEventListener(&quot;change&quot;,render);centerControls(scene,camera,controls);render();window.addEventListener(&quot;resize&quot;,onWindowResize,false);animate();onWindowResize();});}\n",
        "function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);controls.handleResize();render();}\n",
        "function animate(){requestAnimationFrame(animate);controls.update();}\n",
        "function render(){tracklight.position.copy(camera.position);renderer.render(scene,camera);}\n",
@@ -1440,10 +1440,10 @@
    "id": "ec547819-c3c3-42ac-9cb4-33c183680bf2",
    "metadata": {
     "papermill": {
-     "duration": 0.014556,
-     "end_time": "2023-05-24T05:40:18.180073",
+     "duration": 0.012395,
+     "end_time": "2023-05-24T22:48:01.100808",
      "exception": false,
-     "start_time": "2023-05-24T05:40:18.165517",
+     "start_time": "2023-05-24T22:48:01.088413",
      "status": "completed"
     },
     "tags": []
@@ -1459,10 +1459,10 @@
    "id": "5e7eee72-2ab4-498f-bd0b-3b80feba483e",
    "metadata": {
     "papermill": {
-     "duration": 0.015174,
-     "end_time": "2023-05-24T05:40:18.209808",
+     "duration": 0.012627,
+     "end_time": "2023-05-24T22:48:01.126125",
      "exception": false,
-     "start_time": "2023-05-24T05:40:18.194634",
+     "start_time": "2023-05-24T22:48:01.113498",
      "status": "completed"
     },
     "tags": []
@@ -1479,16 +1479,16 @@
    "id": "50df56f0-ce78-41f5-a854-8d1cfa486392",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-05-24T05:40:18.240301Z",
-     "iopub.status.busy": "2023-05-24T05:40:18.239588Z",
-     "iopub.status.idle": "2023-05-24T05:40:18.257873Z",
-     "shell.execute_reply": "2023-05-24T05:40:18.257328Z"
+     "iopub.execute_input": "2023-05-24T22:48:01.152482Z",
+     "iopub.status.busy": "2023-05-24T22:48:01.152026Z",
+     "iopub.status.idle": "2023-05-24T22:48:01.168649Z",
+     "shell.execute_reply": "2023-05-24T22:48:01.168112Z"
     },
     "papermill": {
-     "duration": 0.035259,
-     "end_time": "2023-05-24T05:40:18.259279",
+     "duration": 0.031282,
+     "end_time": "2023-05-24T22:48:01.169918",
      "exception": false,
-     "start_time": "2023-05-24T05:40:18.224020",
+     "start_time": "2023-05-24T22:48:01.138636",
      "status": "completed"
     },
     "tags": []
@@ -1515,10 +1515,10 @@
    "id": "53b6f32e-e2ae-491d-bfee-3db2616e6063",
    "metadata": {
     "papermill": {
-     "duration": 0.014487,
-     "end_time": "2023-05-24T05:40:18.288417",
+     "duration": 0.012616,
+     "end_time": "2023-05-24T22:48:01.195183",
      "exception": false,
-     "start_time": "2023-05-24T05:40:18.273930",
+     "start_time": "2023-05-24T22:48:01.182567",
      "status": "completed"
     },
     "tags": []
@@ -1533,16 +1533,16 @@
    "id": "51f21eed-1004-4b27-b471-d5d3b3232359",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-05-24T05:40:18.319239Z",
-     "iopub.status.busy": "2023-05-24T05:40:18.318658Z",
-     "iopub.status.idle": "2023-05-24T05:40:18.465235Z",
-     "shell.execute_reply": "2023-05-24T05:40:18.464683Z"
+     "iopub.execute_input": "2023-05-24T22:48:01.223140Z",
+     "iopub.status.busy": "2023-05-24T22:48:01.222542Z",
+     "iopub.status.idle": "2023-05-24T22:48:01.360027Z",
+     "shell.execute_reply": "2023-05-24T22:48:01.359539Z"
     },
     "papermill": {
-     "duration": 0.164409,
-     "end_time": "2023-05-24T05:40:18.466624",
+     "duration": 0.153305,
+     "end_time": "2023-05-24T22:48:01.361229",
      "exception": false,
-     "start_time": "2023-05-24T05:40:18.302215",
+     "start_time": "2023-05-24T22:48:01.207924",
      "status": "completed"
     },
     "tags": []
@@ -1568,10 +1568,10 @@
    "id": "ee4e586c-bc2d-427f-a95e-83cc7b0af5e2",
    "metadata": {
     "papermill": {
-     "duration": 0.015453,
-     "end_time": "2023-05-24T05:40:18.497796",
+     "duration": 0.013099,
+     "end_time": "2023-05-24T22:48:01.387837",
      "exception": false,
-     "start_time": "2023-05-24T05:40:18.482343",
+     "start_time": "2023-05-24T22:48:01.374738",
      "status": "completed"
     },
     "tags": []
@@ -1589,16 +1589,16 @@
    "id": "a88e01ae-06c4-43d9-8c2e-dfe2ee4e0d91",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-05-24T05:40:18.529910Z",
-     "iopub.status.busy": "2023-05-24T05:40:18.529191Z",
-     "iopub.status.idle": "2023-05-24T05:40:18.739706Z",
-     "shell.execute_reply": "2023-05-24T05:40:18.739179Z"
+     "iopub.execute_input": "2023-05-24T22:48:01.415463Z",
+     "iopub.status.busy": "2023-05-24T22:48:01.414875Z",
+     "iopub.status.idle": "2023-05-24T22:48:01.612007Z",
+     "shell.execute_reply": "2023-05-24T22:48:01.611510Z"
     },
     "papermill": {
-     "duration": 0.228319,
-     "end_time": "2023-05-24T05:40:18.741072",
+     "duration": 0.212468,
+     "end_time": "2023-05-24T22:48:01.613373",
      "exception": false,
-     "start_time": "2023-05-24T05:40:18.512753",
+     "start_time": "2023-05-24T22:48:01.400905",
      "status": "completed"
     },
     "tags": []
@@ -1626,10 +1626,10 @@
    "id": "08c90cb2-e6f5-4251-8e05-c927be29fd29",
    "metadata": {
     "papermill": {
-     "duration": 0.015414,
-     "end_time": "2023-05-24T05:40:18.771962",
+     "duration": 0.014011,
+     "end_time": "2023-05-24T22:48:01.641256",
      "exception": false,
-     "start_time": "2023-05-24T05:40:18.756548",
+     "start_time": "2023-05-24T22:48:01.627245",
      "status": "completed"
     },
     "tags": []
@@ -1645,16 +1645,16 @@
    "id": "8cb0f8d6-021b-4eb8-af56-9fe2e5d35f65",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-05-24T05:40:18.803115Z",
-     "iopub.status.busy": "2023-05-24T05:40:18.802533Z",
-     "iopub.status.idle": "2023-05-24T05:40:25.243901Z",
-     "shell.execute_reply": "2023-05-24T05:40:25.243177Z"
+     "iopub.execute_input": "2023-05-24T22:48:01.670348Z",
+     "iopub.status.busy": "2023-05-24T22:48:01.669733Z",
+     "iopub.status.idle": "2023-05-24T22:48:07.470551Z",
+     "shell.execute_reply": "2023-05-24T22:48:07.469973Z"
     },
     "papermill": {
-     "duration": 6.458994,
-     "end_time": "2023-05-24T05:40:25.245669",
+     "duration": 5.816973,
+     "end_time": "2023-05-24T22:48:07.471929",
      "exception": false,
-     "start_time": "2023-05-24T05:40:18.786675",
+     "start_time": "2023-05-24T22:48:01.654956",
      "status": "completed"
     },
     "tags": []
@@ -1689,10 +1689,10 @@
    "id": "a08e7375-3fe5-4f86-a7bc-260add35dac4",
    "metadata": {
     "papermill": {
-     "duration": 0.016042,
-     "end_time": "2023-05-24T05:40:25.277436",
+     "duration": 0.014371,
+     "end_time": "2023-05-24T22:48:07.501080",
      "exception": false,
-     "start_time": "2023-05-24T05:40:25.261394",
+     "start_time": "2023-05-24T22:48:07.486709",
      "status": "completed"
     },
     "tags": []
@@ -1708,10 +1708,10 @@
    "id": "7abc9801-fc8b-43ef-b7ba-4328957d4370",
    "metadata": {
     "papermill": {
-     "duration": 0.016279,
-     "end_time": "2023-05-24T05:40:25.309967",
+     "duration": 0.014481,
+     "end_time": "2023-05-24T22:48:07.529987",
      "exception": false,
-     "start_time": "2023-05-24T05:40:25.293688",
+     "start_time": "2023-05-24T22:48:07.515506",
      "status": "completed"
     },
     "tags": []
@@ -1728,16 +1728,16 @@
    "id": "8600e5a7-5e34-4b5c-abf5-737cd01734dc",
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-05-24T05:40:25.344603Z",
-     "iopub.status.busy": "2023-05-24T05:40:25.343891Z",
-     "iopub.status.idle": "2023-05-24T05:40:26.431599Z",
-     "shell.execute_reply": "2023-05-24T05:40:26.430952Z"
+     "iopub.execute_input": "2023-05-24T22:48:07.560310Z",
+     "iopub.status.busy": "2023-05-24T22:48:07.559664Z",
+     "iopub.status.idle": "2023-05-24T22:48:08.550058Z",
+     "shell.execute_reply": "2023-05-24T22:48:08.549470Z"
     },
     "papermill": {
-     "duration": 1.106854,
-     "end_time": "2023-05-24T05:40:26.433018",
+     "duration": 1.007354,
+     "end_time": "2023-05-24T22:48:08.551465",
      "exception": false,
-     "start_time": "2023-05-24T05:40:25.326164",
+     "start_time": "2023-05-24T22:48:07.544111",
      "status": "completed"
     },
     "tags": []
@@ -1746,12 +1746,12 @@
     {
      "data": {
       "text/html": [
-       "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\"><span style=\"color: #7fbfbf; text-decoration-color: #7fbfbf\">[05:40:25] </span><span style=\"color: #000080; text-decoration-color: #000080\">INFO    </span> Unable to initialize backend <span style=\"color: #008000; text-decoration-color: #008000\">'tpu_driver'</span>: NOT_FOUND: Unable to find driver   <a href=\"file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\" target=\"_blank\"><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">xla_bridge.py</span></a><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">:</span><a href=\"file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\" target=\"_blank\"><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">353</span></a>\n",
+       "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\"><span style=\"color: #7fbfbf; text-decoration-color: #7fbfbf\">[22:48:07] </span><span style=\"color: #000080; text-decoration-color: #000080\">INFO    </span> Unable to initialize backend <span style=\"color: #008000; text-decoration-color: #008000\">'tpu_driver'</span>: NOT_FOUND: Unable to find driver   <a href=\"file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\" target=\"_blank\"><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">xla_bridge.py</span></a><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">:</span><a href=\"file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\" target=\"_blank\"><span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">353</span></a>\n",
        "<span style=\"color: #7fbfbf; text-decoration-color: #7fbfbf\">           </span>         in registry given worker:                                                     <span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">                 </span>\n",
        "</pre>\n"
       ],
       "text/plain": [
-       "\u001b[2;36m[05:40:25]\u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Unable to initialize backend \u001b[32m'tpu_driver'\u001b[0m: NOT_FOUND: Unable to find driver   \u001b]8;id=998934;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=321407;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\u001b\\\u001b[2m353\u001b[0m\u001b]8;;\u001b\\\n",
+       "\u001b[2;36m[22:48:07]\u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Unable to initialize backend \u001b[32m'tpu_driver'\u001b[0m: NOT_FOUND: Unable to find driver   \u001b]8;id=348016;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=169051;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\u001b\\\u001b[2m353\u001b[0m\u001b]8;;\u001b\\\n",
        "\u001b[2;36m           \u001b[0m         in registry given worker:                                                     \u001b[2m                 \u001b[0m\n"
       ]
      },
@@ -1766,7 +1766,7 @@
        "</pre>\n"
       ],
       "text/plain": [
-       "\u001b[2;36m          \u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Unable to initialize backend \u001b[32m'cuda'\u001b[0m: module \u001b[32m'jaxlib.xla_extension'\u001b[0m has no     \u001b]8;id=123303;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=361914;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\u001b\\\u001b[2m353\u001b[0m\u001b]8;;\u001b\\\n",
+       "\u001b[2;36m          \u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Unable to initialize backend \u001b[32m'cuda'\u001b[0m: module \u001b[32m'jaxlib.xla_extension'\u001b[0m has no     \u001b]8;id=28983;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=102274;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\u001b\\\u001b[2m353\u001b[0m\u001b]8;;\u001b\\\n",
        "\u001b[2;36m           \u001b[0m         attribute \u001b[32m'GpuAllocatorConfig'\u001b[0m                                                \u001b[2m                 \u001b[0m\n"
       ]
      },
@@ -1781,7 +1781,7 @@
        "</pre>\n"
       ],
       "text/plain": [
-       "\u001b[2;36m          \u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Unable to initialize backend \u001b[32m'rocm'\u001b[0m: module \u001b[32m'jaxlib.xla_extension'\u001b[0m has no     \u001b]8;id=703337;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=183446;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\u001b\\\u001b[2m353\u001b[0m\u001b]8;;\u001b\\\n",
+       "\u001b[2;36m          \u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Unable to initialize backend \u001b[32m'rocm'\u001b[0m: module \u001b[32m'jaxlib.xla_extension'\u001b[0m has no     \u001b]8;id=740865;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=850478;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\u001b\\\u001b[2m353\u001b[0m\u001b]8;;\u001b\\\n",
        "\u001b[2;36m           \u001b[0m         attribute \u001b[32m'GpuAllocatorConfig'\u001b[0m                                                \u001b[2m                 \u001b[0m\n"
       ]
      },
@@ -1796,7 +1796,7 @@
        "</pre>\n"
       ],
       "text/plain": [
-       "\u001b[2;36m          \u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Unable to initialize backend \u001b[32m'tpu'\u001b[0m: INVALID_ARGUMENT: TpuPlatform is not      \u001b]8;id=253480;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=944015;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\u001b\\\u001b[2m353\u001b[0m\u001b]8;;\u001b\\\n",
+       "\u001b[2;36m          \u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Unable to initialize backend \u001b[32m'tpu'\u001b[0m: INVALID_ARGUMENT: TpuPlatform is not      \u001b]8;id=677484;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=877852;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\u001b\\\u001b[2m353\u001b[0m\u001b]8;;\u001b\\\n",
        "\u001b[2;36m           \u001b[0m         available.                                                                    \u001b[2m                 \u001b[0m\n"
       ]
      },
@@ -1813,7 +1813,7 @@
        "</pre>\n"
       ],
       "text/plain": [
-       "\u001b[2;36m          \u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Unable to initialize backend \u001b[32m'plugin'\u001b[0m: xla_extension has no attributes named  \u001b]8;id=684703;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=191986;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\u001b\\\u001b[2m353\u001b[0m\u001b]8;;\u001b\\\n",
+       "\u001b[2;36m          \u001b[0m\u001b[2;36m \u001b[0m\u001b[34mINFO    \u001b[0m Unable to initialize backend \u001b[32m'plugin'\u001b[0m: xla_extension has no attributes named  \u001b]8;id=601974;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=243957;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#353\u001b\\\u001b[2m353\u001b[0m\u001b]8;;\u001b\\\n",
        "\u001b[2;36m           \u001b[0m         get_plugin_device_client. Compile TensorFlow with                             \u001b[2m                 \u001b[0m\n",
        "\u001b[2;36m           \u001b[0m         \u001b[35m/\u001b[0m\u001b[35m/tensorflow/compiler/xla/\u001b[0m\u001b[95mpython\u001b[0m:enable_plugin_device set to true \u001b[1m(\u001b[0mdefaults   \u001b[2m                 \u001b[0m\n",
        "\u001b[2;36m           \u001b[0m         to false\u001b[1m)\u001b[0m to enable this.                                                     \u001b[2m                 \u001b[0m\n"
@@ -1830,7 +1830,7 @@
        "</pre>\n"
       ],
       "text/plain": [
-       "\u001b[2;36m          \u001b[0m\u001b[2;36m \u001b[0m\u001b[31mWARNING \u001b[0m No GPU/TPU found, falling back to CPU. \u001b[1m(\u001b[0mSet \u001b[33mTF_CPP_MIN_LOG_LEVEL\u001b[0m=\u001b[1;36m0\u001b[0m and rerun  \u001b]8;id=110933;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=46582;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#360\u001b\\\u001b[2m360\u001b[0m\u001b]8;;\u001b\\\n",
+       "\u001b[2;36m          \u001b[0m\u001b[2;36m \u001b[0m\u001b[31mWARNING \u001b[0m No GPU/TPU found, falling back to CPU. \u001b[1m(\u001b[0mSet \u001b[33mTF_CPP_MIN_LOG_LEVEL\u001b[0m=\u001b[1;36m0\u001b[0m and rerun  \u001b]8;id=460978;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py\u001b\\\u001b[2mxla_bridge.py\u001b[0m\u001b]8;;\u001b\\\u001b[2m:\u001b[0m\u001b]8;id=459174;file:///opt/conda/lib/python3.10/site-packages/jax/_src/lib/xla_bridge.py#360\u001b\\\u001b[2m360\u001b[0m\u001b]8;;\u001b\\\n",
        "\u001b[2;36m           \u001b[0m         for more info.\u001b[1m)\u001b[0m                                                               \u001b[2m                 \u001b[0m\n"
       ]
      },
@@ -1867,10 +1867,10 @@
    "id": "afff8c93-5a21-46bf-b5e6-8b5530b75523",
    "metadata": {
     "papermill": {
-     "duration": 0.017704,
-     "end_time": "2023-05-24T05:40:26.468348",
+     "duration": 0.016061,
+     "end_time": "2023-05-24T22:48:08.583685",
      "exception": false,
-     "start_time": "2023-05-24T05:40:26.450644",
+     "start_time": "2023-05-24T22:48:08.567624",
      "status": "completed"
     },
     "tags": []
@@ -1900,14 +1900,14 @@
   },
   "papermill": {
    "default_parameters": {},
-   "duration": 13.895247,
-   "end_time": "2023-05-24T05:40:27.506796",
+   "duration": 12.484801,
+   "end_time": "2023-05-24T22:48:09.317029",
    "environment_variables": {},
    "exception": null,
    "input_path": "examples/00_introduction.ipynb",
    "output_path": "examples/00_introduction.ipynb",
    "parameters": {},
-   "start_time": "2023-05-24T05:40:13.611549",
+   "start_time": "2023-05-24T22:47:56.832228",
    "version": "2.3.4"
   },
   "vscode": {
