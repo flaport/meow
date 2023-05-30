@@ -3,6 +3,7 @@
 import pickle
 from itertools import product
 from typing import Any, List, Tuple
+import numbers
 
 import numpy as np
 from pydantic import Field, PrivateAttr
@@ -192,6 +193,49 @@ class Mode(BaseModel):
     def load(cls, filename):
         with open(filename, "rb") as file:
             return pickle.load(file)
+
+    def __add__(self, other):
+        if not isinstance(other, Mode):
+            raise TypeError(f"unsupported operand type(s) for +: 'Mode' and '{type(other).__name__}'")
+        new_mode = Mode(
+            neff=np.mean([self.neff, other.neff]),
+            cs=self.cs,
+            Ex=self.Ex + other.Ex,
+            Ey=self.Ey + other.Ey,
+            Ez=self.Ez + other.Ez,
+            Hx=self.Hx + other.Hx,
+            Hy=self.Hy + other.Hy,
+            Hz=self.Hz + other.Hz,
+        )
+        return new_mode
+    
+    def __mul__(self, other):
+        if not isinstance(other, numbers.Number):
+            raise TypeError(f"unsupported operand type(s) for *: 'Mode' and '{type(other).__name__}'")
+        new_mode = Mode(
+            neff=self.neff,
+            cs=self.cs,
+            Ex=self.Ex * other,
+            Ey=self.Ey * other,
+            Ez=self.Ez * other,
+            Hx=self.Hx * other,
+            Hy=self.Hy * other,
+            Hz=self.Hz * other,
+        )
+        return new_mode
+
+    __rmul__ = __mul__
+
+    def __truediv__(self, other):
+        if not isinstance(other, numbers.Number):
+            raise TypeError(f"unsupported operand type(s) for /: 'Mode' and '{type(other).__name__}'")
+        return self*(1/other)
+    
+    def __sub__(self, other):
+        if not isinstance(other, Mode):
+            raise TypeError(f"unsupported operand type(s) for -: 'Mode' and '{type(other).__name__}'")
+        return self + other*(-1)
+    
 
 
 Modes = List[Mode]
