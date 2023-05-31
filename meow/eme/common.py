@@ -41,8 +41,8 @@ def compute_interface_s_matrix(
     # transmission L->R
     LHS = O_LR + O_RL.T
     RHS = np.diag(2 * O_LL)
-    T_LR = np.linalg.solve(LHS, RHS)
-    U, t, V = np.linalg.svd(T_LR)
+    T_LR, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
+    U, t, V = np.linalg.svd(T_LR, full_matrices=False)
 
     # HACK: we don't expect gain --> invert singular values that lead to gain
     # see: https://github.com/BYUCamachoLab/emepy/issues/12
@@ -53,8 +53,8 @@ def compute_interface_s_matrix(
     # transmission R->L
     LHS = O_RL + O_LR.T
     RHS = np.diag(2 * O_RR)
-    T_RL = np.linalg.solve(LHS, RHS)
-    U, t, V = np.linalg.svd(T_RL)
+    T_RL, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
+    U, t, V = np.linalg.svd(T_RL, full_matrices=False)
 
     # HACK: we don't expect gain --> invert singular values that lead to gain
     t = np.where(t > 1, 1 / t, t)
