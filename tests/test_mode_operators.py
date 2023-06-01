@@ -3,12 +3,12 @@ from meow import Mode
 
 MODE_DATA = {
     "neff": {"real": 3.526228477887, "imag": -0.03995016558},
-    "Ex": [1,1],
-    "Ey": [2,2],
-    "Ez": [3,3],
-    "Hx": [1,1],
-    "Hy": [2,2],
-    "Hz": [3,3],
+    "Ex": [1, 1],
+    "Ey": [2, 2],
+    "Ez": [3, 3],
+    "Hx": [1, 1],
+    "Hy": [2, 2],
+    "Hz": [3, 3],
     "cs": {
         "cell": {
             "structures": [
@@ -100,26 +100,33 @@ MODE_DATA = {
 mode1 = Mode.parse_obj(MODE_DATA)
 mode2 = Mode.parse_obj(MODE_DATA)
 
+
 def test_multiply_modes():
     """multiplying two modes objects is not supported and should raise a TypeError"""
     try:
-        mode1*mode2
+        mode1 * mode2
         assert False
     except TypeError:
         pass
 
+
 def test_multiply_scalar():
-    assert (mode1*3).Ex[0,0] == 3
+    assert (mode1 * 3).Ex[0, 0] == 3
+
 
 def test_add_modes():
-    assert (mode1+mode2).Ex[0,0] == 2
+    assert (mode1 + mode2).Ex[0, 0] == 2
+
 
 def test_substract_modes():
-    assert (mode1-mode2).Ex[0,0] == 0
+    assert (mode1 - mode2).Ex[0, 0] == 0
+
 
 def test_divide_scalar():
-    assert (mode1/2).Ex[0,0] == 1/2
+    assert (mode1 / 2).Ex[0, 0] == 1 / 2
+
 
 if __name__ == "__main__":
     import pytest
+
     pytest.main([__file__])

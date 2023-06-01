@@ -15,6 +15,7 @@ from ..mode import Mode, Modes, normalize_energy, zero_phase
 
 from packaging import version
 
+
 @validate_arguments
 def compute_modes_tidy3d(
     cs: CrossSection,
@@ -34,13 +35,14 @@ def compute_modes_tidy3d(
 
     bend_radius = None if cs.cell.mesh.bend_radius > 1e10 else cs.cell.mesh.bend_radius
     bend_axis = None if bend_radius is None else cs.cell.mesh.bend_axis
-    od = np.zeros_like(cs.nx) #off diagonal entry
+    od = np.zeros_like(cs.nx)  # off diagonal entry
     new_tidy3d = version.parse(tidy3d.__version__) >= version.parse("2.2.0")
     ((Ex, Ey, Ez), (Hx, Hy, Hz)), neffs = (
         x.squeeze()
         for x in _compute_modes(
-            eps_cross=[cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2] 
-                if new_tidy3d else [cs.nx**2, cs.ny**2, cs.nz**2], 
+            eps_cross=[cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2]
+            if new_tidy3d
+            else [cs.nx**2, cs.ny**2, cs.nz**2],
             coords=[cs.mesh.x, cs.mesh.y],
             freq=c / (cs.env.wl * 1e-6),
             mode_spec=SimpleNamespace(

@@ -7,6 +7,7 @@ import sax
 from sax.backends import circuit_backends
 from sax.circuit import _make_singlemode_or_multimode
 from sax.netlist import Netlist
+from sax.utils import get_ports
 
 from ..base_model import _array
 from ..mode import Mode
@@ -23,28 +24,42 @@ def _get_netlist(propagations, interfaces):
     """get the netlist of a stack of `Modes`"""
 
     instances = {
-        **{k: _load_constant_model(S) for k, S in propagations.items()},
-        **{k: _load_constant_model(S) for k, S in interfaces.items()},
+        **{k: S for k, S in propagations.items()},
+        **{k: S for k, S in interfaces.items()},
     }
 
+    interface_keys = list(interfaces)
+    propagation_keys = list(propagations)
     connections = {}
     for i in range(len(interfaces)):
-        connections[f"p_{i},right"] = f"i_{i}_{i+1},left"
-        connections[f"i_{i}_{i+1},right"] = f"p_{i+1},left"
+        for port_mode in get_ports(interfaces[f"i_{i}_{i+1}"]):
+            other_port_mode = _other_port(port_mode)
+            if "left" in port_mode:
+                connections[f"p_{i},{other_port_mode}"] = f"i_{i}_{i+1},{port_mode}"
+            elif "right" in port_mode:
+                connections[f"i_{i}_{i+1},{port_mode}"] = f"p_{i+1},{other_port_mode}"
 
-    ports = {
-        f"left": f"p_0,left",
-        f"right": f"p_{len(propagations)-1},right",
-    }
+    ports = {}
+    for port_mode in get_ports(propagations[propagation_keys[0]]):
+        if "right" in port_mode:
+            continue
+        ports[port_mode] = f"{propagation_keys[0]},{port_mode}"
+    for port_mode in get_ports(propagations[propagation_keys[-1]]):
+        if "left" in port_mode:
+            continue
+        ports[port_mode] = f"{propagation_keys[-1]},{port_mode}"
 
-    return {"instances": instances, "connections": connections, "ports": ports}
+    net = {"instances": instances, "connections": connections, "ports": ports}
+    return net
 
 
-def _load_constant_model(value):
-    def model():
-        return value
-
-    return model
+def _other_port(port_mode):
+    if "left" in port_mode:
+        return port_mode.replace("left", "right")
+    elif "right" in port_mode:
+        return port_mode.replace("right", "left")
+    else:
+        return port_mode
 
 
 def _validate_sax_backend(sax_backend):
@@ -71,8 +86,6 @@ def compute_s_matrix_sax(
         modes: Each collection of modes for each of the `Cell` objects
         backend: which SAX backend to use to calculate the final S-matrix.
     """
-    num_modes = len(modes[0])
-    mode_names = [f"{i}" for i in range(num_modes)]
     sax_backend = _validate_sax_backend(sax_backend)
     _compute_propagation_s_matrices = kwargs.pop(
         "compute_propagation_s_matrices", compute_propagation_s_matrices
@@ -90,22 +103,13 @@ def compute_s_matrix_sax(
 
     # TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.
     net = _get_netlist(propagations, interfaces)
-    models = net["instances"]
-    net["instances"] = {k: k for k in net["instances"]}
-    net = Netlist(**net)
-    instances = {
-        k: sax.sdense(models[k]()) for k in net.instances
-    }  # TODO: check why different result without sax.sdense
-    connections, ports, _ = _make_singlemode_or_multimode(net, mode_names, models)
-
     evaluate_circuit = circuit_backends[sax_backend]
     S, pm = sax.sdense(
         evaluate_circuit(
-            instances=instances,
-            connections=connections,
-            ports=ports,
+            instances=net["instances"],
+            connections=net["connections"],
+            ports=net["ports"],
         )
     )
     S = np.asarray(S).view(_array)
-
     return S, pm

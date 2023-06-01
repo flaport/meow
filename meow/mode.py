@@ -196,7 +196,9 @@ class Mode(BaseModel):
 
     def __add__(self, other):
         if not isinstance(other, Mode):
-            raise TypeError(f"unsupported operand type(s) for +: 'Mode' and '{type(other).__name__}'")
+            raise TypeError(
+                f"unsupported operand type(s) for +: 'Mode' and '{type(other).__name__}'"
+            )
         new_mode = Mode(
             neff=np.mean([self.neff, other.neff]),
             cs=self.cs,
@@ -208,10 +210,12 @@ class Mode(BaseModel):
             Hz=self.Hz + other.Hz,
         )
         return new_mode
-    
+
     def __mul__(self, other):
         if not isinstance(other, numbers.Number):
-            raise TypeError(f"unsupported operand type(s) for *: 'Mode' and '{type(other).__name__}'")
+            raise TypeError(
+                f"unsupported operand type(s) for *: 'Mode' and '{type(other).__name__}'"
+            )
         new_mode = Mode(
             neff=self.neff,
             cs=self.cs,
@@ -228,14 +232,17 @@ class Mode(BaseModel):
 
     def __truediv__(self, other):
         if not isinstance(other, numbers.Number):
-            raise TypeError(f"unsupported operand type(s) for /: 'Mode' and '{type(other).__name__}'")
-        return self*(1/other)
-    
+            raise TypeError(
+                f"unsupported operand type(s) for /: 'Mode' and '{type(other).__name__}'"
+            )
+        return self * (1 / other)
+
     def __sub__(self, other):
         if not isinstance(other, Mode):
-            raise TypeError(f"unsupported operand type(s) for -: 'Mode' and '{type(other).__name__}'")
-        return self + other*(-1)
-    
+            raise TypeError(
+                f"unsupported operand type(s) for -: 'Mode' and '{type(other).__name__}'"
+            )
+        return self + other * (-1)
 
 
 Modes = List[Mode]
