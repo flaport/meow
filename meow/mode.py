@@ -275,7 +275,7 @@ def _sum_around(field, m, n, r=2):
     M, N = field.shape
     for i, j in idx_tups:
         m_ = min(m + i, M - 1) if i >= 0 else max(m + i, 0)
-        n_ = min(n + j, N - 1) if i >= 0 else max(n + j, 0)
+        n_ = min(n + j, N - 1) if j >= 0 else max(n + j, 0)
         total = total + field[m_, n_]
     return total
 
