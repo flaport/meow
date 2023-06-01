@@ -284,6 +284,7 @@ title="Open an issue"
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">PrivateAttr</span>
@@ -472,7 +473,57 @@ title="Open an issue"
 <div class="viewcode-block" id="Mode.load"><a class="viewcode-back" href="../../meow.html#meow.mode.Mode.load">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></div></div>
+            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Mode</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;unsupported operand type(s) for +: &#39;Mode&#39; and &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
+        <span class="n">new_mode</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">(</span>
+            <span class="n">neff</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">neff</span><span class="p">]),</span>
+            <span class="n">cs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
+            <span class="n">Ex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ex</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">Ex</span><span class="p">,</span>
+            <span class="n">Ey</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ey</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">Ey</span><span class="p">,</span>
+            <span class="n">Ez</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ez</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">Ez</span><span class="p">,</span>
+            <span class="n">Hx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Hx</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">Hx</span><span class="p">,</span>
+            <span class="n">Hy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Hy</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">Hy</span><span class="p">,</span>
+            <span class="n">Hz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Hz</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">Hz</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_mode</span>
+
+    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;unsupported operand type(s) for *: &#39;Mode&#39; and &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
+        <span class="n">new_mode</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">(</span>
+            <span class="n">neff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
+            <span class="n">cs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
+            <span class="n">Ex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ex</span> <span class="o">*</span> <span class="n">other</span><span class="p">,</span>
+            <span class="n">Ey</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ey</span> <span class="o">*</span> <span class="n">other</span><span class="p">,</span>
+            <span class="n">Ez</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ez</span> <span class="o">*</span> <span class="n">other</span><span class="p">,</span>
+            <span class="n">Hx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Hx</span> <span class="o">*</span> <span class="n">other</span><span class="p">,</span>
+            <span class="n">Hy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Hy</span> <span class="o">*</span> <span class="n">other</span><span class="p">,</span>
+            <span class="n">Hz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Hz</span> <span class="o">*</span> <span class="n">other</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_mode</span>
+
+    <span class="fm">__rmul__</span> <span class="o">=</span> <span class="fm">__mul__</span>
+
+    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;unsupported operand type(s) for /: &#39;Mode&#39; and &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Mode</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;unsupported operand type(s) for -: &#39;Mode&#39; and &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="n">other</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
 
 
 <span class="n">Modes</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">]</span>

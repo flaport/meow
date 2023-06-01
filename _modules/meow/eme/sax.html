@@ -288,6 +288,7 @@ title="Open an issue"
 <span class="kn">from</span> <span class="nn">sax.backends</span> <span class="kn">import</span> <span class="n">circuit_backends</span>
 <span class="kn">from</span> <span class="nn">sax.circuit</span> <span class="kn">import</span> <span class="n">_make_singlemode_or_multimode</span>
 <span class="kn">from</span> <span class="nn">sax.netlist</span> <span class="kn">import</span> <span class="n">Netlist</span>
+<span class="kn">from</span> <span class="nn">sax.utils</span> <span class="kn">import</span> <span class="n">get_ports</span>
 
 <span class="kn">from</span> <span class="nn">..base_model</span> <span class="kn">import</span> <span class="n">_array</span>
 <span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span>
@@ -304,28 +305,42 @@ title="Open an issue"
     <span class="sd">&quot;&quot;&quot;get the netlist of a stack of `Modes`&quot;&quot;&quot;</span>
 
     <span class="n">instances</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">_load_constant_model</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">propagations</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
-        <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">_load_constant_model</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+        <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">S</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">propagations</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+        <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">S</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
     <span class="p">}</span>
 
+    <span class="n">interface_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">interfaces</span><span class="p">)</span>
+    <span class="n">propagation_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">propagations</span><span class="p">)</span>
     <span class="n">connections</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">interfaces</span><span class="p">)):</span>
-        <span class="n">connections</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;p_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">,right&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;i_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">,left&quot;</span>
-        <span class="n">connections</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;i_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">,right&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;p_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">,left&quot;</span>
+        <span class="k">for</span> <span class="n">port_mode</span> <span class="ow">in</span> <span class="n">get_ports</span><span class="p">(</span><span class="n">interfaces</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;i_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]):</span>
+            <span class="n">other_port_mode</span> <span class="o">=</span> <span class="n">_other_port</span><span class="p">(</span><span class="n">port_mode</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;left&quot;</span> <span class="ow">in</span> <span class="n">port_mode</span><span class="p">:</span>
+                <span class="n">connections</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;p_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">other_port_mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;i_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">port_mode</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">elif</span> <span class="s2">&quot;right&quot;</span> <span class="ow">in</span> <span class="n">port_mode</span><span class="p">:</span>
+                <span class="n">connections</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;i_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">port_mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;p_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">other_port_mode</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="n">ports</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="sa">f</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;p_0,left&quot;</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;p_</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">propagations</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s2">,right&quot;</span><span class="p">,</span>
-    <span class="p">}</span>
+    <span class="n">ports</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">port_mode</span> <span class="ow">in</span> <span class="n">get_ports</span><span class="p">(</span><span class="n">propagations</span><span class="p">[</span><span class="n">propagation_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]):</span>
+        <span class="k">if</span> <span class="s2">&quot;right&quot;</span> <span class="ow">in</span> <span class="n">port_mode</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">ports</span><span class="p">[</span><span class="n">port_mode</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">propagation_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">port_mode</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">for</span> <span class="n">port_mode</span> <span class="ow">in</span> <span class="n">get_ports</span><span class="p">(</span><span class="n">propagations</span><span class="p">[</span><span class="n">propagation_keys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]):</span>
+        <span class="k">if</span> <span class="s2">&quot;left&quot;</span> <span class="ow">in</span> <span class="n">port_mode</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">ports</span><span class="p">[</span><span class="n">port_mode</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">propagation_keys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">port_mode</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;instances&quot;</span><span class="p">:</span> <span class="n">instances</span><span class="p">,</span> <span class="s2">&quot;connections&quot;</span><span class="p">:</span> <span class="n">connections</span><span class="p">,</span> <span class="s2">&quot;ports&quot;</span><span class="p">:</span> <span class="n">ports</span><span class="p">}</span>
+    <span class="n">net</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;instances&quot;</span><span class="p">:</span> <span class="n">instances</span><span class="p">,</span> <span class="s2">&quot;connections&quot;</span><span class="p">:</span> <span class="n">connections</span><span class="p">,</span> <span class="s2">&quot;ports&quot;</span><span class="p">:</span> <span class="n">ports</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">net</span>
 
 
-<span class="k">def</span> <span class="nf">_load_constant_model</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">model</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">value</span>
-
-    <span class="k">return</span> <span class="n">model</span>
+<span class="k">def</span> <span class="nf">_other_port</span><span class="p">(</span><span class="n">port_mode</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;left&quot;</span> <span class="ow">in</span> <span class="n">port_mode</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">port_mode</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s2">&quot;right&quot;</span> <span class="ow">in</span> <span class="n">port_mode</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">port_mode</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">port_mode</span>
 
 
 <span class="k">def</span> <span class="nf">_validate_sax_backend</span><span class="p">(</span><span class="n">sax_backend</span><span class="p">):</span>
@@ -352,8 +367,6 @@ title="Open an issue"
 <span class="sd">        modes: Each collection of modes for each of the `Cell` objects</span>
 <span class="sd">        backend: which SAX backend to use to calculate the final S-matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">num_modes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">mode_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_modes</span><span class="p">)]</span>
     <span class="n">sax_backend</span> <span class="o">=</span> <span class="n">_validate_sax_backend</span><span class="p">(</span><span class="n">sax_backend</span><span class="p">)</span>
     <span class="n">_compute_propagation_s_matrices</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
         <span class="s2">&quot;compute_propagation_s_matrices&quot;</span><span class="p">,</span> <span class="n">compute_propagation_s_matrices</span>
@@ -371,24 +384,15 @@ title="Open an issue"
 
     <span class="c1"># TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.</span>
     <span class="n">net</span> <span class="o">=</span> <span class="n">_get_netlist</span><span class="p">(</span><span class="n">propagations</span><span class="p">,</span> <span class="n">interfaces</span><span class="p">)</span>
-    <span class="n">models</span> <span class="o">=</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span>
-    <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]}</span>
-    <span class="n">net</span> <span class="o">=</span> <span class="n">Netlist</span><span class="p">(</span><span class="o">**</span><span class="n">net</span><span class="p">)</span>
-    <span class="n">instances</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">k</span><span class="p">:</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span><span class="n">models</span><span class="p">[</span><span class="n">k</span><span class="p">]())</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">net</span><span class="o">.</span><span class="n">instances</span>
-    <span class="p">}</span>  <span class="c1"># TODO: check why different result without sax.sdense</span>
-    <span class="n">connections</span><span class="p">,</span> <span class="n">ports</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_make_singlemode_or_multimode</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">mode_names</span><span class="p">,</span> <span class="n">models</span><span class="p">)</span>
-
     <span class="n">evaluate_circuit</span> <span class="o">=</span> <span class="n">circuit_backends</span><span class="p">[</span><span class="n">sax_backend</span><span class="p">]</span>
     <span class="n">S</span><span class="p">,</span> <span class="n">pm</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span>
         <span class="n">evaluate_circuit</span><span class="p">(</span>
-            <span class="n">instances</span><span class="o">=</span><span class="n">instances</span><span class="p">,</span>
-            <span class="n">connections</span><span class="o">=</span><span class="n">connections</span><span class="p">,</span>
-            <span class="n">ports</span><span class="o">=</span><span class="n">ports</span><span class="p">,</span>
+            <span class="n">instances</span><span class="o">=</span><span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">],</span>
+            <span class="n">connections</span><span class="o">=</span><span class="n">net</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">],</span>
+            <span class="n">ports</span><span class="o">=</span><span class="n">net</span><span class="p">[</span><span class="s2">&quot;ports&quot;</span><span class="p">],</span>
         <span class="p">)</span>
     <span class="p">)</span>
     <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">_array</span><span class="p">)</span>
-
     <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">pm</span></div>
 </pre></div>
 
