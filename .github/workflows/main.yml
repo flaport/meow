@@ -16,12 +16,14 @@ jobs:
   run:
     runs-on: ubuntu-latest
     container:
-      image: flaport/meow
+      image: condaforge/mambaforge
       volumes:
         - ${{ github.workspace }}:/github/workspace
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Install meow
+        run: pip install .[full]
       - name: Run notebooks
         run: find examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | xargs -I {} papermill -k python3 {} {}
       - name: Expose 'examples' as artifact
@@ -35,12 +37,14 @@ jobs:
     needs:
       - run
     container:
-      image: flaport/meow
+      image: condaforge/mambaforge
       volumes:
         - ${{ github.workspace }}:/github/workspace
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Install meow
+        run: pip install .[full]
       - name: Download 'examples' artifact
         uses: actions/download-artifact@master
         with:
