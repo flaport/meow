@@ -13,6 +13,8 @@ self
 
 examples/00_introduction.ipynb
 examples/01_gds_taper.ipynb
+examples/02_taper_length_sweep.ipynb
+examples/03_unequal_number_of_modes.ipynb
 ```
 
 ```{toctree}
