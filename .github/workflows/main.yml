@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Run notebooks
-        run: find examples -name "*.ipynb" | grep -v ipynb_checkpoints | xargs -I {} papermill -k python3 {} {}
+        run: find examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | xargs -I {} papermill -k python3 {} {}
       - name: Expose 'examples' as artifact
         uses: actions/upload-artifact@master
         with:

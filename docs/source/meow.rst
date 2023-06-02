@@ -25,6 +25,12 @@ Submodules
    :show-inheritance:
 
 
+.. automodule:: meow.cache
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 .. automodule:: meow.cell
    :members:
    :undoc-members:
@@ -50,6 +56,12 @@ Submodules
 
 
 .. automodule:: meow.geometries
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: meow.integrate
    :members:
    :undoc-members:
    :show-inheritance:
