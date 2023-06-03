@@ -16,14 +16,18 @@ jobs:
   run:
     runs-on: ubuntu-latest
     container:
-      image: flaport/meow
+      image: condaforge/mambaforge
       volumes:
         - ${{ github.workspace }}:/github/workspace
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Install dependencies
+        run: mamba install make papermill parallel
+      - name: Install meow
+        run: pip install .[full,dev]
       - name: Run notebooks
-        run: find examples -name "*.ipynb" | grep -v ipynb_checkpoints | xargs -I {} papermill -k python3 {} {}
+        run: find examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | xargs parallel papermill {} {} -k python3 ':::'
       - name: Expose 'examples' as artifact
         uses: actions/upload-artifact@master
         with:
@@ -35,19 +39,21 @@ jobs:
     needs:
       - run
     container:
-      image: flaport/meow
+      image: condaforge/mambaforge
       volumes:
         - ${{ github.workspace }}:/github/workspace
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Install dependencies
+        run: mamba install make
       - name: Download 'examples' artifact
         uses: actions/download-artifact@master
         with:
           name: examples
           path: ./examples
       - name: Install meow
-        run: pip install -e .
+        run: pip install .[full,dev]
       - name: Build docs
         run: make docs && touch docs/build/html/.nojekyll
       - name: Patch binder links
