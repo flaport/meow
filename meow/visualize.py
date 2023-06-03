@@ -46,10 +46,14 @@ def _visualize_s_matrix(S, fmt=".3f", title=None):
     plt.ylim(coords_[-1] - 0.5, coords_[0] + 0.5)
     plt.grid(True)
 
-    for x, y, z in zip(X.ravel(), Y.ravel(), Z[::-1].T.ravel()):
-        if z > 0.0005:
+    for x, y, z in zip(X.ravel(), Y.ravel(), S[::-1].T.ravel()):
+        if np.abs(z) > 0.0005:
             text = eval(f"f'{{z:{fmt}}}'")  # 😅
-            plt.text(x, y, text, ha="center", va="center")
+            text = text.replace("+", "\n+")
+            text = text.replace("-", "\n-")
+            if text[0] == "\n":
+                text = text[1:]
+            plt.text(x, y, text, ha="center", va="center", fontsize=8)
 
     if title is not None:
         plt.title(title)
@@ -88,7 +92,12 @@ def visualize(obj: Any, **kwargs: Any):
         and obj.shape[0] > 1
         and obj.shape[1] > 1
         and plt is not None
-    ):
+    ):  
+        if kwargs.get("angle", False):
+            obj_ = np.angle(obj)
+            obj_[np.abs(obj)< 0.0005] = 0
+            obj = obj_
+            del kwargs["angle"]
         _visualize_s_matrix(obj, **kwargs)
     elif gf is not None and isinstance(obj, gf.Component):
         _visualize_gdsfactory(obj, **kwargs)

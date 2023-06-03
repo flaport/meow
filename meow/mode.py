@@ -275,7 +275,7 @@ def _sum_around(field, m, n, r=2):
     M, N = field.shape
     for i, j in idx_tups:
         m_ = min(m + i, M - 1) if i >= 0 else max(m + i, 0)
-        n_ = min(n + j, N - 1) if i >= 0 else max(n + j, 0)
+        n_ = min(n + j, N - 1) if j >= 0 else max(n + j, 0)
         total = total + field[m_, n_]
     return total
 
@@ -297,7 +297,8 @@ def invert_mode(mode: Mode) -> Mode:
 def inner_product(mode1: Mode, mode2: Mode) -> float:
     """the inner product of a `Mode` with another `Mode` is uniquely defined."""
     mesh = mode1.mesh
-    cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
+    #cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
+    cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx #attention: removed conjugation
     return 0.25 * np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
 
 
