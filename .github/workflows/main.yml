@@ -8,6 +8,7 @@ on:
     paths-ignore:
       - ".github/**"
       - "!.github/workflows/main.yml"
+      - "!.github/workflows/publish.yml"
       - "docs/**"
       - "*.md"
       - ".git*"
