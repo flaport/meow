@@ -20,7 +20,7 @@ except ImportError:
     DeviceArray = None
 
 
-def _visualize_s_matrix(S, fmt=".3f", title=None):
+def _visualize_s_matrix(S, fmt=".3f", title=None, show=True):
     import matplotlib.pyplot as plt
 
     Z = np.abs(S)
@@ -54,13 +54,50 @@ def _visualize_s_matrix(S, fmt=".3f", title=None):
     if title is not None:
         plt.title(title)
 
-    plt.show()
+    if show:
+        plt.show()
+
+
+def _visualize_s_pm_matrix(Spm, fmt=".3f", title=None, show=True):
+    import matplotlib.pyplot as plt
+
+    S, pm = Spm
+    _visualize_s_matrix(S, fmt=fmt, title=title, show=False)
+    num_left = len([p for p in pm if "left" in p])
+    Z = np.abs(S)
+    y, x = np.arange(Z.shape[0])[::-1], np.arange(Z.shape[1])
+
+    plt.axvline(x[num_left] - 0.5, color="red")
+    plt.axhline(x[num_left] - 0.5, color="red")
+
+    if show:
+        plt.show()
 
 
 def _visualize_gdsfactory(comp):
     import gdsfactory as gf
 
     gf.plot(comp)  # type: ignore
+
+
+def _is_s_matrix(obj: Any):
+    return (
+        (
+            isinstance(obj, np.ndarray)
+            or (DeviceArray is not None and isinstance(obj, DeviceArray))
+        )
+        and obj.ndim == 2
+        and obj.shape[0] > 1
+        and obj.shape[1] > 1
+    )
+
+
+def _is_two_tuple(obj):
+    try:
+        x, y = obj
+        return True
+    except Exception:
+        return False
 
 
 def visualize(obj: Any, **kwargs: Any):
@@ -79,17 +116,15 @@ def visualize(obj: Any, **kwargs: Any):
 
     if isinstance(obj, BaseModel):
         return obj._visualize(**kwargs)
+    elif _is_s_matrix(obj) and plt is not None:
+        _visualize_s_matrix(obj, **kwargs)
     elif (
-        (
-            isinstance(obj, np.ndarray)
-            or (DeviceArray is not None and isinstance(obj, DeviceArray))
-        )
-        and obj.ndim == 2
-        and obj.shape[0] > 1
-        and obj.shape[1] > 1
+        _is_two_tuple(obj)
+        and _is_s_matrix(obj[0])
+        and isinstance(obj[1], dict)
         and plt is not None
     ):
-        _visualize_s_matrix(obj, **kwargs)
+        _visualize_s_pm_matrix(obj, **kwargs)
     elif gf is not None and isinstance(obj, gf.Component):
         _visualize_gdsfactory(obj, **kwargs)
     else:
