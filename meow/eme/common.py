@@ -4,12 +4,13 @@ from typing import Any, Dict, List
 import numpy as np
 
 from ..mode import Mode, inner_product
+from ..visualize import vis
 
 
 def compute_interface_s_matrix(
     modes1: List[Mode],
     modes2: List[Mode],
-    enforce_reciprocity: bool = True,
+    enforce_reciprocity: bool = False,
     enforce_lossy_unitarity: bool = False,
 ):
     """get the S-matrix of the interface between two `CrossSection`s"""
@@ -27,10 +28,11 @@ def compute_interface_s_matrix(
     # extra phase correction.
 
     # ignoring the phase seems to corresponds best with lumerical.
-    O_LL = np.abs(O_LL)
-    O_RR = np.abs(O_RR)
+    #O_LL = np.abs(O_LL)
+    #O_RR = np.abs(O_RR)
 
     # alternative phase correction (probably worth testing this out)
+    # Question: is this not just a conjugation?
     # O_LL = O_LL*np.exp(-1j*np.angle(O_LL))
     # O_RR = O_RR*np.exp(-1j*np.angle(O_RR))
 
@@ -41,6 +43,13 @@ def compute_interface_s_matrix(
     # transmission L->R
     LHS = O_LR + O_RL.T
     RHS = np.diag(2 * O_LL)
+
+    # print(f"LHS: {LHS}")
+    # vis(LHS)
+
+    # print(f"RHS: {RHS}")
+    # vis(RHS)
+
     T_LR, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
     U, t, V = np.linalg.svd(T_LR, full_matrices=False)
 
@@ -79,9 +88,10 @@ def compute_interface_s_matrix(
         U, s, V = np.linalg.svd(S)
         S = np.diag(s) @ U @ V
 
-    # ensure reciprocity:
+    # ensure reciprocity: HACK?
     if enforce_reciprocity:
-        S = 0.5 * (S + S.T)
+        S = 0.5 * (S + S.T.conj())
+        
 
     # create port map
     in_ports = [f"left@{i}" for i in range(len(modes1))]
