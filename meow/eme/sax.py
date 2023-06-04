@@ -76,7 +76,7 @@ def _validate_sax_backend(sax_backend):
 def compute_s_matrix_sax(
     modes: List[List[Mode]],
     sax_backend=None,
-    enforce_reciprocity=True,
+    enforce_reciprocity=False,
     enforce_lossy_unitarity=False,
     **kwargs,
 ):

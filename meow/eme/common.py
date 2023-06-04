@@ -28,11 +28,11 @@ def compute_interface_s_matrix(
     # extra phase correction.
 
     # ignoring the phase seems to corresponds best with lumerical.
-    #O_LL = np.abs(O_LL)
-    #O_RR = np.abs(O_RR)
+    # O_LL = np.abs(O_LL)
+    # O_RR = np.abs(O_RR)
 
     # alternative phase correction (probably worth testing this out)
-    # Question: is this not just a conjugation?
+    # Question: is this not just an abs ;) ?
     # O_LL = O_LL*np.exp(-1j*np.angle(O_LL))
     # O_RR = O_RR*np.exp(-1j*np.angle(O_RR))
 
@@ -90,8 +90,7 @@ def compute_interface_s_matrix(
 
     # ensure reciprocity: HACK?
     if enforce_reciprocity:
-        S = 0.5 * (S + S.T.conj())
-        
+        S = 0.5 * (S + S.T)
 
     # create port map
     in_ports = [f"left@{i}" for i in range(len(modes1))]
@@ -103,7 +102,7 @@ def compute_interface_s_matrix(
 
 def compute_interface_s_matrices(
     modes: List[List[Mode]],
-    enforce_reciprocity: bool = True,
+    enforce_reciprocity: bool = False,
     enforce_lossy_unitarity: bool = False,
 ):
     """get all the S-matrices of all the interfaces in a collection of `CrossSections`"""

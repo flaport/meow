@@ -92,10 +92,10 @@ def visualize(obj: Any, **kwargs: Any):
         and obj.shape[0] > 1
         and obj.shape[1] > 1
         and plt is not None
-    ):  
+    ):
         if kwargs.get("angle", False):
             obj_ = np.angle(obj)
-            obj_[np.abs(obj)< 0.0005] = 0
+            obj_[np.abs(obj) < 0.0005] = 0
             obj = obj_
             del kwargs["angle"]
         _visualize_s_matrix(obj, **kwargs)
