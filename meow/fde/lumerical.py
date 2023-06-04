@@ -5,7 +5,7 @@ from typing import Optional
 import numpy as np
 from pydantic import validate_arguments
 from pydantic.types import PositiveInt
-from lumapi import LumApiError
+from lumapi import LumApiError, MODE
 
 from ..cross_section import CrossSection
 from ..mode import Mode, normalize_energy, zero_phase
@@ -28,7 +28,10 @@ def set_sim(
     _global["sim"] = sim
 
 
-def get_sim():
+def get_sim(**kwargs) -> MODE:
+    sim = kwargs.get("sim", None)
+    if sim is not None:
+        return sim
     sim = _global["sim"]
     if sim is None:
         raise ValueError(
@@ -37,6 +40,14 @@ def get_sim():
             "use `set_sim(sim)` to globally set the lumapi.MODE simulation object."
         )
     return sim
+
+
+def create_lumerical_geometries(sim, structures, env, unit):
+    sim = get_sim(sim=sim)
+    sim.switchtolayout()
+    sim.deleteall()
+    for s in structures:
+        s._lumadd(sim, env, unit, "yzx")
 
 
 # @validate_arguments
@@ -53,24 +64,17 @@ def compute_modes_lumerical(
         spec: The FDE simulation specification
         unit: Conversion factor between MEOW unit (probably um) and Lumerical unit (probably m).
     """
+    sim = get_sim(sim=sim)
     _assert_default_mesh_setting(cs.cell.mesh.angle_phi != 0, "angle_phi")
     _assert_default_mesh_setting(cs.cell.mesh.angle_theta != 0, "angle_theta")
     _assert_default_mesh_setting(cs.cell.mesh.bend_radius < 1e10, "bend_radius")
 
-    if sim is None:
-        sim = get_sim()
-
     assert sim is not None
-
-    sim.switchtolayout()
-    sim.deleteall()
-    for s in cs.structures:
-        s._lumadd(sim, cs.env, unit, "yzx")
-
+    create_lumerical_geometries(sim, cs.cell.structures, cs.env, unit)
     sim.select("FDE")
     sim.delete()
     pml_settings = {}
-    num_pml_x, num_pml_y = 0, 0
+    num_pml_y, num_pml_z = 0, 0
     if cs.cell.mesh.num_pml[0] > 0:
         pml_settings.update(
             {
