@@ -1,6 +1,5 @@
 from meow import Mode
 
-
 MODE_DATA = {
     "neff": {"real": 3.526228477887, "imag": -0.03995016558},
     "Ex": [1, 1],
@@ -127,6 +126,6 @@ def test_divide_scalar():
 
 
 if __name__ == "__main__":
-    import pytest
+    import pytest  # fmt: skip
 
     pytest.main([__file__])

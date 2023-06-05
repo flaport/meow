@@ -4,16 +4,15 @@ from types import SimpleNamespace
 from typing import Literal
 
 import numpy as np
+import tidy3d
+from packaging import version
 from pydantic import validate_arguments
 from pydantic.types import PositiveFloat, PositiveInt
 from scipy.constants import c
 from tidy3d.plugins.mode.solver import compute_modes as _compute_modes
-import tidy3d
+
 from ..cross_section import CrossSection
 from ..mode import Mode, Modes, normalize_energy, zero_phase
-
-
-from packaging import version
 
 
 @validate_arguments

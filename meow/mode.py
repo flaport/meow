@@ -121,8 +121,8 @@ class Mode(BaseModel):
         num_levels=8,
         operation=lambda x: np.abs(x) ** 2,
     ):
-        import matplotlib.pyplot as plt
-        from matplotlib import colors
+        import matplotlib.pyplot as plt  # fmt: skip
+        from matplotlib import colors  # fmt: skip
 
         if fields is None or len(fields) == 0:
             fields = ["Ex"]

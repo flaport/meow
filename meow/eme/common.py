@@ -1,9 +1,12 @@
 """ SAX backend for EME (default backend) """
+
 from typing import Any, Dict, List
 
 import numpy as np
 
-from ..mode import Mode, inner_product as inner_product_normal, inner_product_conj
+from ..mode import Mode
+from ..mode import inner_product as inner_product_normal
+from ..mode import inner_product_conj
 
 DEFAULT_CONJUGATE_TRANSPOSE = True
 DEFAULT_ENFORCE_RECIPROCITY = False

@@ -77,8 +77,8 @@ class Cell(BaseModel):
         return np.abs(self.z_max - self.z_min)
 
     def _visualize(self, c="z", axs=None):
-        import matplotlib.pyplot as plt
-        from matplotlib.colors import ListedColormap, to_rgba
+        import matplotlib.pyplot as plt  # fmt: skip
+        from matplotlib.colors import ListedColormap, to_rgba  # fmt: skip
 
         colors = [(0, 0, 0, 0)] + [
             to_rgba(m.meta.get("color", (0, 0, 0, 0))) for m in self.materials

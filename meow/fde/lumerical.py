@@ -3,10 +3,10 @@
 import numpy as np
 from pydantic.types import PositiveInt
 
-from ..structures import Structure
-from ..environment import Environment
 from ..cross_section import CrossSection
+from ..environment import Environment
 from ..mode import Mode, normalize_energy, zero_phase
+from ..structures import Structure
 
 _global = {"sim": None}
 

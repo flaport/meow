@@ -1,26 +1,26 @@
 """ SAX backend for EME (default backend) """
-from functools import partial
+
 from typing import List
 
 import numpy as np
 import sax
 from sax.backends import circuit_backends
-from sax.circuit import _make_singlemode_or_multimode
-from sax.netlist import Netlist
 from sax.utils import get_ports
 
 from ..base_model import _array
 from ..mode import Mode
-from .common import compute_interface_s_matrices, compute_propagation_s_matrices
 from .common import (
-    select_ports as select_ports,
     DEFAULT_CONJUGATE_TRANSPOSE,
-    DEFAULT_ENFORCE_RECIPROCITY,
     DEFAULT_ENFORCE_LOSSY_UNITARITY,
+    DEFAULT_ENFORCE_RECIPROCITY,
+    compute_interface_s_matrices,
+    compute_propagation_s_matrices,
 )
 
 try:
     import klujax
+
+
 except ImportError:
     klujax = None
 

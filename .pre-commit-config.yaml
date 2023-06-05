@@ -7,10 +7,9 @@ repos:
     language: python
     pass_filenames: true
     types: [jupyter]
-
-  - id: black
-    name: black
-    entry: black
+  - id: format
+    name: format (autoimport + isort + black)
+    entry: python .format.py
     language: python
     pass_filenames: true
     types: [python]

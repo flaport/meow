@@ -119,7 +119,7 @@ def _parse_array_type_info(annotation) -> Tuple[Any, Any]:
 
 
 def _try_parse_shape_int(value):
-    from typing import _LiteralGenericAlias  # type: ignore
+    from typing import _LiteralGenericAlias  # fmt: skip # type: ignore
 
     if isinstance(value, _LiteralGenericAlias):
         (value,) = value.__args__

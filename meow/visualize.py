@@ -7,22 +7,24 @@ import numpy as np
 
 try:
     import matplotlib.pyplot as plt
+
+
 except ImportError:
     plt = None
 
 try:
-    import gdsfactory as gf
+    import gdsfactory as gf  # fmt: skip
 except ImportError:
     gf = None
 
 try:
-    from jaxlib.xla_extension import DeviceArray  # type: ignore
+    from jaxlib.xla_extension import DeviceArray  # fmt: skip # type: ignore
 except ImportError:
     DeviceArray = None
 
 
 def _visualize_s_matrix(S, fmt=".3f", title=None, show=True):
-    import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt  # fmt: skip
 
     Z = np.abs(S)
     y, x = np.arange(Z.shape[0])[::-1], np.arange(Z.shape[1])
@@ -60,7 +62,7 @@ def _visualize_s_matrix(S, fmt=".3f", title=None, show=True):
 
 
 def _visualize_s_pm_matrix(Spm, fmt=".3f", title=None, show=True):
-    import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt  # fmt: skip
 
     S, pm = Spm
     _visualize_s_matrix(S, fmt=fmt, title=title, show=False)
@@ -76,7 +78,7 @@ def _visualize_s_pm_matrix(Spm, fmt=".3f", title=None, show=True):
 
 
 def _visualize_gdsfactory(comp):
-    import gdsfactory as gf
+    import gdsfactory as gf  # fmt: skip
 
     gf.plot(comp)  # type: ignore
 
@@ -102,9 +104,9 @@ def _is_two_tuple(obj):
 
 
 def _visualize_modes(modes):
-    from mpl_toolkits.axes_grid1 import make_axes_locatable
-    import matplotlib.pyplot as plt
-    from matplotlib.colors import LinearSegmentedColormap
+    import matplotlib.pyplot as plt  # fmt: skip
+    from matplotlib.colors import LinearSegmentedColormap  # fmt: skip
+    from mpl_toolkits.axes_grid1 import make_axes_locatable  # fmt: skip
 
     num_modes = len(modes)
     cs = modes[0].cs
@@ -166,9 +168,9 @@ def visualize(obj: Any, **kwargs: Any):
         Most meow objects have a `._visualize` method.
         Check out its help to see which kwargs are accepted.
     """
-    from .mode import Mode
-    from .base_model import BaseModel
-    from .structures import Structure, visualize_structures
+    from .base_model import BaseModel  # fmt: skip
+    from .mode import Mode  # fmt: skip
+    from .structures import Structure, visualize_structures  # fmt: skip
 
     # if isinstance(obj, Mode):
     #    return _visualize_mode(obj)

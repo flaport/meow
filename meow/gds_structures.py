@@ -1,5 +1,4 @@
 """ GDS Extrusions """
-# TODO: Maybe it makes more sense to use native GDSFactory tooling for this
 
 from typing import Dict, List, Tuple
 
@@ -11,6 +10,8 @@ from .base_model import BaseModel
 from .geometries import Prism
 from .materials import Material
 from .structures import Structure
+
+# TODO: Maybe it makes more sense to use native GDSFactory tooling for this
 
 
 class GdsExtrusionRule(BaseModel):
@@ -33,7 +34,7 @@ class GdsExtrusionRule(BaseModel):
             try:
                 poly = np.asarray(sg.Polygon(poly).buffer(self.buffer).boundary.coords)
             except NotImplementedError:
-                import gdspy
+                import gdspy  # fmt: skip
 
                 polygonset = gdspy.offset(gdspy.Polygon(poly), 0.25)
                 assert polygonset is not None
