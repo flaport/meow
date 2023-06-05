@@ -5,7 +5,6 @@ from typing import Optional
 import numpy as np
 from pydantic import validate_arguments
 from pydantic.types import PositiveInt
-from lumapi import LumApiError, MODE
 
 from ..cross_section import CrossSection
 from ..mode import Mode, normalize_energy, zero_phase
@@ -64,6 +63,8 @@ def compute_modes_lumerical(
         spec: The FDE simulation specification
         unit: Conversion factor between MEOW unit (probably um) and Lumerical unit (probably m).
     """
+    from lumapi import LumApiError, MODE  # fmt: skip
+
     sim = get_sim(sim=sim)
     _assert_default_mesh_setting(cs.cell.mesh.angle_phi != 0, "angle_phi")
     _assert_default_mesh_setting(cs.cell.mesh.angle_theta != 0, "angle_theta")
