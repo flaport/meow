@@ -7,6 +7,7 @@ from sax.backends import circuit_backends
 
 evaluate_circuit = circuit_backends["klu"]
 import jax.numpy as np
+import numpy as onp
 import matplotlib.pyplot as plt
 
 
@@ -101,22 +102,25 @@ def plot_fields(modes, forwards, backwards, y, z, lim=1):
     mode_set = modes[0]
     mesh_y = mode_set[0].cell.mesh.y
     mesh_x = mode_set[0].cell.mesh.x
+    mesh_x = mesh_x[:-1] + np.diff(mesh_x) / 2
     i_y = np.argmin(np.abs(mesh_y - y))
 
+    lim = None
+    E_tot = onp.zeros((len(z), len(mesh_x)), dtype=complex)
     for mode_set, forward, backward in zip(modes, forwards, backwards):
-        Ex = 0
+        Ex = 0 + 0j
         cell = mode_set[0].cell
         i_min = np.argmax(z >= cell.z_min)
         i_max = np.argmax(z > cell.z_max)
         if i_max == 0:
             z_ = z[i_min:]
         else:
-            z_ = z[i_min : i_max + 1]
+            z_ = z[i_min:i_max]
 
-        z_local = z_[:-1] + np.diff(z_) / 2 - cell.z_min
+        z_local = z_ - cell.z_min  # [:-1] + np.diff(z_) / 2
         for mode, f, b in zip(mode_set, forward, backward):
             E_slice = mode.Ex[:, i_y]
-            # plt.plot(E_slice)
+
             Ex += np.outer(
                 f * E_slice.T, np.exp(2j * np.pi * mode.neff / mode.env.wl * z_local)
             )
@@ -125,10 +129,16 @@ def plot_fields(modes, forwards, backwards, y, z, lim=1):
                 b * E_slice.T, np.exp(-2j * np.pi * mode.neff / mode.env.wl * z_local)
             )
 
-        X, Y = np.meshgrid(z_, mesh_x)
-        plt.pcolormesh(X, Y, Ex.real)  # , vmin = -lim, vmax = lim)
-    plt.xlabel("z in um")
-    plt.ylabel("x in um")
+        if i_max == 0:
+            E_tot[i_min:] = Ex.T
+        else:
+            E_tot[i_min:i_max] = Ex.T
+
+        # X, Y = np.meshgrid(z_, mesh_x)
+        # plt.pcolormesh(X, Y, np.abs(Ex), vmin = -lim, vmax = lim)
+    # plt.xlabel("z in um")
+    # plt.ylabel("x in um")
+    return E_tot, mesh_x
 
 
 def propagate_modes(modes, ex_l, ex_r, y, z):
@@ -148,5 +158,4 @@ def propagate_modes(modes, ex_l, ex_r, y, z):
     r2ls = r2l_matrices(pairs)
 
     forwards, backwards = propagate(l2rs, r2ls, ex_l, ex_r)
-    plot_fields(modes, forwards, backwards, y, z)
-    return forwards, backwards
+    return plot_fields(modes, forwards, backwards, y, z)
