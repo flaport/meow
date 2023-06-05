@@ -1,7 +1,7 @@
 """ FDE Tidy3d backend (default backend for MEOW) """
 
 from types import SimpleNamespace
-from typing import Optional
+from typing import Literal
 
 import numpy as np
 from pydantic import validate_arguments
@@ -20,7 +20,8 @@ from packaging import version
 def compute_modes_tidy3d(
     cs: CrossSection,
     num_modes: PositiveInt = 10,
-    target_neff: Optional[PositiveFloat] = None,
+    target_neff: PositiveFloat | None = None,
+    precision: Literal["single", "double"] = "single",
 ) -> Modes:
     """compute ``Modes`` for a given ``FdeSpec`` (Tidy3D backend)
 
@@ -33,8 +34,6 @@ def compute_modes_tidy3d(
     if num_modes < 1:
         raise ValueError("You need to request at least 1 mode.")
 
-    bend_radius = None if cs.cell.mesh.bend_radius > 1e10 else cs.cell.mesh.bend_radius
-    bend_axis = None if bend_radius is None else cs.cell.mesh.bend_axis
     od = np.zeros_like(cs.nx)  # off diagonal entry
     new_tidy3d = version.parse(tidy3d.__version__) >= version.parse("2.2.0")
     ((Ex, Ey, Ez), (Hx, Hy, Hz)), neffs = (
@@ -49,13 +48,13 @@ def compute_modes_tidy3d(
                 num_modes=num_modes,
                 angle_theta=cs.cell.mesh.angle_theta,
                 angle_phi=cs.cell.mesh.angle_phi,
-                bend_radius=bend_radius,
-                bend_axis=bend_axis,
-                target_neff=target_neff or cs.nx.max(),
+                bend_radius=cs.cell.mesh.bend_radius,
+                bend_axis=cs.cell.mesh.bend_axis,
+                target_neff=target_neff,
                 num_pml=cs.cell.mesh.num_pml,
                 sort_by="largest_neff",
                 filter_pol=None,
-                precision="double",
+                precision=precision,
             ),
         )
     )

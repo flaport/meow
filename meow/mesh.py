@@ -30,16 +30,16 @@ class Mesh2d(Mesh):
         default=0.0,
         description="Polar angle of the propagation axis from the injection axis.",
     )
-    bend_radius: float = Field(
-        default=np.inf,
+    bend_radius: float | None = Field(
+        default=None,
         description=(
             "A curvature radius for simulation of waveguide bends. "
             "Tidy3D: Can be negative, in which case the mode plane center has a smaller value than "
             "the curvature center along the tangential axis perpendicular to the bend axis."
         ),
     )
-    bend_axis: Literal[0, 1] = Field(
-        default=1,
+    bend_axis: Literal[0, 1] | None = Field(
+        default=None,
         description=(
             "Index into the two tangential axes defining the normal to the plane in which the bend lies. "
             "This must be provided if ``bend_radius`` is not ``None``. For example, for a ring in the "

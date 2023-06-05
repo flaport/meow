@@ -1,29 +1,14 @@
 """ FDE Lumerical Backend """
 
-from typing import Optional
-
 import numpy as np
 from pydantic.types import PositiveInt
 
+from ..structures import Structure
+from ..environment import Environment
 from ..cross_section import CrossSection
 from ..mode import Mode, normalize_energy, zero_phase
 
 _global = {"sim": None}
-
-
-def _assert_default_mesh_setting(condition, param_name):
-    if condition:
-        raise NotImplementedError(
-            f"Setting mesh.{param_name} is currently not supported in the Lumerical Backend. "
-            "Please open an issue of submit a PR on GitHub to fix this: ",
-            "https://github.com/flaport/meow",
-        )
-
-
-def set_sim(
-    sim: "lumapi.MODE",  # type: ignore
-):
-    _global["sim"] = sim
 
 
 def get_sim(**kwargs):
@@ -40,7 +25,9 @@ def get_sim(**kwargs):
     return sim
 
 
-def create_lumerical_geometries(sim, structures, env, unit):
+def create_lumerical_geometries(
+    sim, structures: list[Structure], env: Environment, unit: float
+):
     sim = get_sim(sim=sim)
     sim.switchtolayout()
     sim.deleteall()
@@ -52,7 +39,7 @@ def create_lumerical_geometries(sim, structures, env, unit):
 def compute_modes_lumerical(
     cs: CrossSection,
     num_modes: PositiveInt = 10,
-    sim: Optional["lumapi.MODE"] = None,  # type: ignore
+    sim=None,
     unit: float = 1e-6,
 ):
     """compute ``Modes` for a given ``FdeSpec` (Lumerical backend)
@@ -62,12 +49,12 @@ def compute_modes_lumerical(
         spec: The FDE simulation specification
         unit: Conversion factor between MEOW unit (probably um) and Lumerical unit (probably m).
     """
-    from lumapi import LumApiError, MODE  # fmt: skip # type: ignore
+    from lumapi import LumApiError  # fmt: skip # type: ignore
 
     sim = get_sim(sim=sim)
-    _assert_default_mesh_setting(cs.cell.mesh.angle_phi != 0, "angle_phi")
-    _assert_default_mesh_setting(cs.cell.mesh.angle_theta != 0, "angle_theta")
-    _assert_default_mesh_setting(cs.cell.mesh.bend_radius < 1e10, "bend_radius")
+    _assert_default_mesh_setting(cs.cell.mesh.angle_phi == 0, "angle_phi")
+    _assert_default_mesh_setting(cs.cell.mesh.angle_theta == 0, "angle_theta")
+    _assert_default_mesh_setting(cs.cell.mesh.bend_radius is None, "bend_radius")
 
     assert sim is not None
     create_lumerical_geometries(sim, cs.cell.structures, cs.env, unit)
@@ -135,3 +122,16 @@ def compute_modes_lumerical(
         modes.append(mode)
 
     return sorted(modes, key=lambda m: np.real(m.neff), reverse=True)
+
+
+def _assert_default_mesh_setting(condition, param_name):
+    if not condition:
+        raise NotImplementedError(
+            f"Setting mesh.{param_name} is currently not supported in the Lumerical Backend. "
+            "Please open an issue of submit a PR on GitHub to fix this: ",
+            "https://github.com/flaport/meow",
+        )
+
+
+def set_sim(sim):
+    _global["sim"] = sim
