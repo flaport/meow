@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.geometries &#8212; meow 0.3.9 documentation</title>
+    <title>meow.geometries &#8212; meow 0.3.10 documentation</title>
   
   
   
@@ -301,6 +301,7 @@ document.write(`
   <h1>Source code for meow.geometries</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; Geometries &quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">secrets</span> <span class="kn">import</span> <span class="n">token_hex</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
 
@@ -451,7 +452,11 @@ document.write(`
             <span class="n">y_min</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">y_max</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">line</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">LineString</span><span class="p">([(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="p">(</span><span class="n">y_max</span><span class="p">,</span> <span class="n">z</span><span class="p">)])</span>
-            <span class="n">intersections</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+                    <span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">RuntimeWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s2">&quot;shapely&quot;</span>
+                <span class="p">)</span>
+                <span class="n">intersections</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intersections</span><span class="p">,</span> <span class="n">sg</span><span class="o">.</span><span class="n">MultiLineString</span><span class="p">):</span>
                 <span class="n">intersection_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">intersections</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
@@ -474,7 +479,11 @@ document.write(`
             <span class="n">_</span><span class="p">,</span> <span class="n">x_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">line</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">LineString</span><span class="p">([(</span><span class="n">z</span><span class="p">,</span> <span class="n">x_min</span><span class="p">),</span> <span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)])</span>
-            <span class="n">intersections</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+                    <span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">RuntimeWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s2">&quot;shapely&quot;</span>
+                <span class="p">)</span>
+                <span class="n">intersections</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intersections</span><span class="p">,</span> <span class="n">sg</span><span class="o">.</span><span class="n">MultiLineString</span><span class="p">):</span>
                 <span class="n">intersection_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">intersections</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
