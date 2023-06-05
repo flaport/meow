@@ -30,7 +30,14 @@ class GdsExtrusionRule(BaseModel):
 
     def __call__(self, poly) -> Structure:
         if self.buffer > 0:
-            poly = np.asarray(sg.Polygon(poly).buffer(self.buffer).boundary.coords)
+            try:
+                poly = np.asarray(sg.Polygon(poly).buffer(self.buffer).boundary.coords)
+            except NotImplementedError:
+                import gdspy
+
+                polygonset = gdspy.offset(gdspy.Polygon(poly), 0.25)
+                assert polygonset is not None
+                poly = polygonset.polygons[0]
         return Structure(
             material=self.material,
             geometry=Prism(
