@@ -5,13 +5,17 @@ import numpy as np
 
 from ..mode import Mode, inner_product as inner_product_normal, inner_product_conj
 
+DEFAULT_CONJUGATE_TRANSPOSE = True
+DEFAULT_ENFORCE_RECIPROCITY = False
+DEFAULT_ENFORCE_LOSSY_UNITARITY = False
+
 
 def compute_interface_s_matrix(
     modes1: List[Mode],
     modes2: List[Mode],
-    conjugate_transpose: bool = True,
-    enforce_reciprocity: bool = False,
-    enforce_lossy_unitarity: bool = False,
+    conjugate_transpose: bool = DEFAULT_CONJUGATE_TRANSPOSE,
+    enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
+    enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
 ):
     """get the S-matrix of the interface between two `CrossSection`s"""
     # overlap matrices
@@ -90,14 +94,16 @@ def compute_interface_s_matrix(
 
 def compute_interface_s_matrices(
     modes: List[List[Mode]],
-    enforce_reciprocity: bool = True,
-    enforce_lossy_unitarity: bool = False,
+    conjugate_transpose: bool = DEFAULT_CONJUGATE_TRANSPOSE,
+    enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
+    enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
 ):
     """get all the S-matrices of all the interfaces in a collection of `CrossSections`"""
     return {
         f"i_{i}_{i + 1}": compute_interface_s_matrix(
             modes1=modes1,
             modes2=modes2,
+            conjugate_transpose=conjugate_transpose,
             enforce_reciprocity=enforce_reciprocity,
             enforce_lossy_unitarity=enforce_lossy_unitarity,
         )
