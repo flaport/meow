@@ -1,5 +1,6 @@
 """ Visualizations for common meow-datatypes """
 
+import warnings
 from typing import Any
 
 import numpy as np
@@ -145,7 +146,9 @@ def _visualize_modes(modes):
             value[value < 1e-2] = np.nan
             # value[0, 0] = 0.0
             # value[-1, -1] = mx[field]
-            plt.contour(X, Y, value, cmap="inferno")
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", category=UserWarning)
+                plt.contour(X, Y, value, cmap="inferno")
             divider = make_axes_locatable(ax[i, j])
             cax = divider.append_axes("right", size="5%", pad=0.05)
             plt.colorbar(cax=cax)

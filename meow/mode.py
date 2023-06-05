@@ -1,6 +1,7 @@
 """ An EigenMode """
 
 import pickle
+import warnings
 from itertools import product
 from typing import Any, List, Tuple
 
@@ -167,7 +168,9 @@ class Mode(BaseModel):
         X = getattr(self.mesh, f"X{c}")
         Y = getattr(self.mesh, f"Y{c}")
         mode = operation(getattr(self, field))
-        plt.contour(X, Y, mode, cmap=mode_cmap, levels=np.linspace(mode.min(), mode.max(), num_levels))  # fmt: skip
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=UserWarning)
+            plt.contour(X, Y, mode, cmap=mode_cmap, levels=np.linspace(mode.min(), mode.max(), num_levels))  # fmt: skip
         plt.colorbar(label="mode")
 
         n = np.real(getattr(self.cs, f"n{c}"))
