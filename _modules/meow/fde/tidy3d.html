@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.fde.tidy3d &#8212; meow 0.3.11 documentation</title>
+    <title>meow.fde.tidy3d &#8212; meow 0.4.0 documentation</title>
   
   
   
@@ -302,26 +302,26 @@ document.write(`
 <span></span><span class="sd">&quot;&quot;&quot; FDE Tidy3d backend (default backend for MEOW) &quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tidy3d</span>
+<span class="kn">from</span> <span class="nn">packaging</span> <span class="kn">import</span> <span class="n">version</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">validate_arguments</span>
 <span class="kn">from</span> <span class="nn">pydantic.types</span> <span class="kn">import</span> <span class="n">PositiveFloat</span><span class="p">,</span> <span class="n">PositiveInt</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span>
 <span class="kn">from</span> <span class="nn">tidy3d.plugins.mode.solver</span> <span class="kn">import</span> <span class="n">compute_modes</span> <span class="k">as</span> <span class="n">_compute_modes</span>
-<span class="kn">import</span> <span class="nn">tidy3d</span>
+
 <span class="kn">from</span> <span class="nn">..cross_section</span> <span class="kn">import</span> <span class="n">CrossSection</span>
 <span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">Modes</span><span class="p">,</span> <span class="n">normalize_energy</span><span class="p">,</span> <span class="n">zero_phase</span>
-
-
-<span class="kn">from</span> <span class="nn">packaging</span> <span class="kn">import</span> <span class="n">version</span>
 
 
 <div class="viewcode-block" id="compute_modes_tidy3d"><a class="viewcode-back" href="../../../meow.fde.html#meow.fde.tidy3d.compute_modes_tidy3d">[docs]</a><span class="nd">@validate_arguments</span>
 <span class="k">def</span> <span class="nf">compute_modes_tidy3d</span><span class="p">(</span>
     <span class="n">cs</span><span class="p">:</span> <span class="n">CrossSection</span><span class="p">,</span>
     <span class="n">num_modes</span><span class="p">:</span> <span class="n">PositiveInt</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="n">target_neff</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PositiveFloat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">target_neff</span><span class="p">:</span> <span class="n">PositiveFloat</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">precision</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;single&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;single&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Modes</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;compute ``Modes`` for a given ``FdeSpec`` (Tidy3D backend)</span>
 
@@ -334,8 +334,6 @@ document.write(`
     <span class="k">if</span> <span class="n">num_modes</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You need to request at least 1 mode.&quot;</span><span class="p">)</span>
 
-    <span class="n">bend_radius</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_radius</span> <span class="o">&gt;</span> <span class="mf">1e10</span> <span class="k">else</span> <span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_radius</span>
-    <span class="n">bend_axis</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">bend_radius</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_axis</span>
     <span class="n">od</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">cs</span><span class="o">.</span><span class="n">nx</span><span class="p">)</span>  <span class="c1"># off diagonal entry</span>
     <span class="n">new_tidy3d</span> <span class="o">=</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">tidy3d</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">version</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;2.2.0&quot;</span><span class="p">)</span>
     <span class="p">((</span><span class="n">Ex</span><span class="p">,</span> <span class="n">Ey</span><span class="p">,</span> <span class="n">Ez</span><span class="p">),</span> <span class="p">(</span><span class="n">Hx</span><span class="p">,</span> <span class="n">Hy</span><span class="p">,</span> <span class="n">Hz</span><span class="p">)),</span> <span class="n">neffs</span> <span class="o">=</span> <span class="p">(</span>
@@ -350,13 +348,13 @@ document.write(`
                 <span class="n">num_modes</span><span class="o">=</span><span class="n">num_modes</span><span class="p">,</span>
                 <span class="n">angle_theta</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">angle_theta</span><span class="p">,</span>
                 <span class="n">angle_phi</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">angle_phi</span><span class="p">,</span>
-                <span class="n">bend_radius</span><span class="o">=</span><span class="n">bend_radius</span><span class="p">,</span>
-                <span class="n">bend_axis</span><span class="o">=</span><span class="n">bend_axis</span><span class="p">,</span>
-                <span class="n">target_neff</span><span class="o">=</span><span class="n">target_neff</span> <span class="ow">or</span> <span class="n">cs</span><span class="o">.</span><span class="n">nx</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+                <span class="n">bend_radius</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_radius</span><span class="p">,</span>
+                <span class="n">bend_axis</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_axis</span><span class="p">,</span>
+                <span class="n">target_neff</span><span class="o">=</span><span class="n">target_neff</span><span class="p">,</span>
                 <span class="n">num_pml</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">num_pml</span><span class="p">,</span>
                 <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;largest_neff&quot;</span><span class="p">,</span>
                 <span class="n">filter_pol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">,</span>
+                <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
     <span class="p">)</span>

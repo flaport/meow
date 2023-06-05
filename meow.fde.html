@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>meow.fde package &#8212; meow 0.3.11 documentation</title>
+    <title>meow.fde package &#8212; meow 0.4.0 documentation</title>
   
   
   
@@ -382,16 +382,6 @@ document.write(`
 <span id="submodules"></span><h2>Submodules<a class="headerlink" href="#module-meow.fde.lumerical" title="Permalink to this heading">#</a></h2>
 <p>FDE Lumerical Backend</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="meow.fde.lumerical.set_sim">
-<span class="sig-name descname"><span class="pre">set_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/fde/lumerical.html#set_sim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.fde.lumerical.set_sim" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>sim</strong> (<em>lumapi.MODE</em>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="meow.fde.lumerical.get_sim">
 <span class="sig-name descname"><span class="pre">get_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/fde/lumerical.html#get_sim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.fde.lumerical.get_sim" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
@@ -399,7 +389,16 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.fde.lumerical.create_lumerical_geometries">
 <span class="sig-name descname"><span class="pre">create_lumerical_geometries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">structures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/fde/lumerical.html#create_lumerical_geometries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.fde.lumerical.create_lumerical_geometries" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>structures</strong> (<em>list</em><em>[</em><a class="reference internal" href="meow.html#meow.structures.Structure" title="meow.structures.Structure"><em>meow.structures.Structure</em></a><em>]</em>) – </p></li>
+<li><p><strong>env</strong> (<a class="reference internal" href="meow.html#meow.environment.Environment" title="meow.environment.Environment"><em>Environment</em></a>) – </p></li>
+<li><p><strong>unit</strong> (<em>float</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.fde.lumerical.compute_modes_lumerical">
@@ -408,7 +407,7 @@ document.write(`
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>sim</strong> (<em>Optional</em><em>[</em><em>lumapi.MODE</em><em>]</em>) – the lumerical simulation object</p></li>
+<li><p><strong>sim</strong> – the lumerical simulation object</p></li>
 <li><p><strong>spec</strong> – The FDE simulation specification</p></li>
 <li><p><strong>unit</strong> (<em>float</em>) – Conversion factor between MEOW unit (probably um) and Lumerical unit (probably m).</p></li>
 <li><p><strong>cs</strong> (<a class="reference internal" href="meow.html#meow.cross_section.CrossSection" title="meow.cross_section.CrossSection"><em>CrossSection</em></a>) – </p></li>
@@ -418,17 +417,23 @@ document.write(`
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.fde.lumerical.set_sim">
+<span class="sig-name descname"><span class="pre">set_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/fde/lumerical.html#set_sim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.fde.lumerical.set_sim" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 <span class="target" id="module-meow.fde.tidy3d"></span><p>FDE Tidy3d backend (default backend for MEOW)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.fde.tidy3d.compute_modes_tidy3d">
-<span class="sig-name descname"><span class="pre">compute_modes_tidy3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_neff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/fde/tidy3d.html#compute_modes_tidy3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.fde.tidy3d.compute_modes_tidy3d" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_modes_tidy3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_neff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'single'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/fde/tidy3d.html#compute_modes_tidy3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.fde.tidy3d.compute_modes_tidy3d" title="Permalink to this definition">#</a></dt>
 <dd><p>compute <code class="docutils literal notranslate"><span class="pre">Modes</span></code> for a given <code class="docutils literal notranslate"><span class="pre">FdeSpec</span></code> (Tidy3D backend)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cs</strong> (<a class="reference internal" href="meow.html#meow.cross_section.CrossSection" title="meow.cross_section.CrossSection"><em>CrossSection</em></a>) – The <code class="docutils literal notranslate"><span class="pre">CrossSection</span></code> to calculate the modes for</p></li>
 <li><p><strong>num_modes</strong> (<em>PositiveInt</em>) – Number of modes returned by mode solver.</p></li>
-<li><p><strong>target_neff</strong> (<em>Optional</em><em>[</em><em>PositiveFloat</em><em>]</em>) – Guess for initial effective index of the mode.</p></li>
+<li><p><strong>target_neff</strong> (<em>pydantic.types.PositiveFloat</em><em> | </em><em>None</em>) – Guess for initial effective index of the mode.</p></li>
+<li><p><strong>precision</strong> (<em>Literal</em><em>[</em><em>'single'</em><em>, </em><em>'double'</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>

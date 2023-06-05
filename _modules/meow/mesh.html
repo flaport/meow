@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.mesh &#8212; meow 0.3.11 documentation</title>
+    <title>meow.mesh &#8212; meow 0.4.0 documentation</title>
   
   
   
@@ -331,16 +331,16 @@ document.write(`
         <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Polar angle of the propagation axis from the injection axis.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">bend_radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+    <span class="n">bend_radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="p">(</span>
             <span class="s2">&quot;A curvature radius for simulation of waveguide bends. &quot;</span>
             <span class="s2">&quot;Tidy3D: Can be negative, in which case the mode plane center has a smaller value than &quot;</span>
             <span class="s2">&quot;the curvature center along the tangential axis perpendicular to the bend axis.&quot;</span>
         <span class="p">),</span>
     <span class="p">)</span>
-    <span class="n">bend_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">bend_axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="p">(</span>
             <span class="s2">&quot;Index into the two tangential axes defining the normal to the plane in which the bend lies. &quot;</span>
             <span class="s2">&quot;This must be provided if ``bend_radius`` is not ``None``. For example, for a ring in the &quot;</span>

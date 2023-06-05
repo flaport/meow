@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.visualize &#8212; meow 0.3.11 documentation</title>
+    <title>meow.visualize &#8212; meow 0.4.0 documentation</title>
   
   
   
@@ -308,22 +308,24 @@ document.write(`
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">plt</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">gdsfactory</span> <span class="k">as</span> <span class="nn">gf</span>
+    <span class="kn">import</span> <span class="nn">gdsfactory</span> <span class="k">as</span> <span class="nn">gf</span>  <span class="c1"># fmt: skip</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">gf</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">jaxlib.xla_extension</span> <span class="kn">import</span> <span class="n">DeviceArray</span>  <span class="c1"># type: ignore</span>
+    <span class="kn">from</span> <span class="nn">jaxlib.xla_extension</span> <span class="kn">import</span> <span class="n">DeviceArray</span>  <span class="c1"># fmt: skip # type: ignore</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">DeviceArray</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <span class="k">def</span> <span class="nf">_visualize_s_matrix</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;.3f&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># fmt: skip</span>
 
     <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
     <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -361,7 +363,7 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_visualize_s_pm_matrix</span><span class="p">(</span><span class="n">Spm</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;.3f&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># fmt: skip</span>
 
     <span class="n">S</span><span class="p">,</span> <span class="n">pm</span> <span class="o">=</span> <span class="n">Spm</span>
     <span class="n">_visualize_s_matrix</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -377,7 +379,7 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_visualize_gdsfactory</span><span class="p">(</span><span class="n">comp</span><span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">gdsfactory</span> <span class="k">as</span> <span class="nn">gf</span>
+    <span class="kn">import</span> <span class="nn">gdsfactory</span> <span class="k">as</span> <span class="nn">gf</span>  <span class="c1"># fmt: skip</span>
 
     <span class="n">gf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
@@ -403,9 +405,9 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_visualize_modes</span><span class="p">(</span><span class="n">modes</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-    <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LinearSegmentedColormap</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># fmt: skip</span>
+    <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LinearSegmentedColormap</span>  <span class="c1"># fmt: skip</span>
+    <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>  <span class="c1"># fmt: skip</span>
 
     <span class="n">num_modes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes</span><span class="p">)</span>
     <span class="n">cs</span> <span class="o">=</span> <span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cs</span>
@@ -467,9 +469,9 @@ document.write(`
 <span class="sd">        Most meow objects have a `._visualize` method.</span>
 <span class="sd">        Check out its help to see which kwargs are accepted.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">.mode</span> <span class="kn">import</span> <span class="n">Mode</span>
-    <span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
-    <span class="kn">from</span> <span class="nn">.structures</span> <span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">visualize_structures</span>
+    <span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>  <span class="c1"># fmt: skip</span>
+    <span class="kn">from</span> <span class="nn">.mode</span> <span class="kn">import</span> <span class="n">Mode</span>  <span class="c1"># fmt: skip</span>
+    <span class="kn">from</span> <span class="nn">.structures</span> <span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">visualize_structures</span>  <span class="c1"># fmt: skip</span>
 
     <span class="c1"># if isinstance(obj, Mode):</span>
     <span class="c1">#    return _visualize_mode(obj)</span>
