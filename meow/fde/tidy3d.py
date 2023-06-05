@@ -20,7 +20,7 @@ def compute_modes_tidy3d(
     cs: CrossSection,
     num_modes: PositiveInt = 10,
     target_neff: PositiveFloat | None = None,
-    precision: Literal["single", "double"] = "single",
+    precision: Literal["single", "double"] = "double",
 ) -> Modes:
     """compute ``Modes`` for a given ``FdeSpec`` (Tidy3D backend)
 
