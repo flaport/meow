@@ -25,8 +25,8 @@ def integrate_interpolate_2d(x, y, data, extent=None):
     )[0]
 
 
-def integrate_2d(x, y, data):
+def integrate_2d(x, y, data) -> float:
     """much simpler integration over the full grid"""
     int1 = simpson(data, y)
     int2 = simpson(int1, x)
-    return int2
+    return float(int2)

@@ -150,7 +150,7 @@ class Prism(Geometry):
             y_min, _ = self.poly.min(0)
             y_max, _ = self.poly.max(0)
             line = sg.LineString([(y_min, z), (y_max, z)])
-            intersections = np.asarray(poly.intersection(line).coords)
+            intersections = poly.intersection(line)
 
             if not isinstance(intersections, sg.MultiLineString):
                 intersection_array = np.asarray(intersections.coords)

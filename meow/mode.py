@@ -3,7 +3,6 @@
 import pickle
 from itertools import product
 from typing import Any, List, Tuple
-import numbers
 
 import numpy as np
 from pydantic import Field, PrivateAttr
@@ -49,10 +48,10 @@ class Mode(BaseModel):
 
     def __init__(self, **data: Any):
         super().__init__(**data)
-        self._Px = None
-        self._Py = None
-        self._Pz = None
-        self._A = None
+        self._Px = None  # type: ignore
+        self._Py = None  # type: ignore
+        self._Pz = None  # type: ignore
+        self._A = None  # type: ignore
 
     @property
     def te_fraction(self):
@@ -72,7 +71,7 @@ class Mode(BaseModel):
         E_qu = E_sq**2
         x = self.cs.mesh.x_
         y = self.cs.mesh.y_
-        self._A = integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu)
+        self._A = np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
 
     @property
     def Px(self):

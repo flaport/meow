@@ -15,7 +15,7 @@ except ImportError:
     gf = None
 
 try:
-    from jaxlib.xla_extension import DeviceArray
+    from jaxlib.xla_extension import DeviceArray  # type: ignore
 except ImportError:
     DeviceArray = None
 

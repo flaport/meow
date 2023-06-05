@@ -3,7 +3,6 @@
 from typing import Optional
 
 import numpy as np
-from pydantic import validate_arguments
 from pydantic.types import PositiveInt
 
 from ..cross_section import CrossSection
@@ -27,7 +26,7 @@ def set_sim(
     _global["sim"] = sim
 
 
-def get_sim(**kwargs) -> MODE:
+def get_sim(**kwargs):
     sim = kwargs.get("sim", None)
     if sim is not None:
         return sim
@@ -63,7 +62,7 @@ def compute_modes_lumerical(
         spec: The FDE simulation specification
         unit: Conversion factor between MEOW unit (probably um) and Lumerical unit (probably m).
     """
-    from lumapi import LumApiError, MODE  # fmt: skip
+    from lumapi import LumApiError, MODE  # fmt: skip # type: ignore
 
     sim = get_sim(sim=sim)
     _assert_default_mesh_setting(cs.cell.mesh.angle_phi != 0, "angle_phi")
