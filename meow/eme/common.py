@@ -17,53 +17,51 @@ def compute_interface_s_matrix(
     NL, NR = len(modes1), len(modes2)
     O_LL = np.array([inner_product(modes1[m], modes1[m]) for m in range(NL)])
     O_RR = np.array([inner_product(modes2[n], modes2[n]) for n in range(NR)])
-    O_LR = np.array(
-        [[inner_product(modes1[m], modes2[n]) for n in range(NR)] for m in range(NL)]
-    )
-    O_RL = np.array(
-        [[inner_product(modes2[m], modes1[n]) for n in range(NL)] for m in range(NR)]
-    )
+    O_LR = np.array([[inner_product(modes1[m], modes2[n]) for n in range(NR)] for m in range(NL)])  # fmt: skip
+    O_RL = np.array([[inner_product(modes2[m], modes1[n]) for n in range(NL)] for m in range(NR)])  # fmt: skip
+    # print(O_LL.shape)
+    # print(O_RR.shape)
+    # print(O_LR.shape)
+    # print(O_RL.shape)
 
     # extra phase correction.
 
     # ignoring the phase seems to corresponds best with lumerical.
-    O_LL = np.abs(O_LL)
-    O_RR = np.abs(O_RR)
+    # O_LL = np.abs(O_LL)
+    # O_RR = np.abs(O_RR)
 
     # alternative phase correction (probably worth testing this out)
     # O_LL = O_LL*np.exp(-1j*np.angle(O_LL))
     # O_RR = O_RR*np.exp(-1j*np.angle(O_RR))
 
     # yet another alternative phase correction (probably worth testing this out too)
-    # O_LR = O_LR@np.diag(np.exp(-1j*np.angle(np.diag(O_LR))))
-    # O_RL = O_RL@np.diag(np.exp(-1j*np.angle(np.diag(O_RL))))
+    # O_LR = O_LR*np.diag(np.exp(-1j*np.angle(np.diag(O_LR))))
+    # O_RL = O_RL*np.diag(np.exp(-1j*np.angle(np.diag(O_RL))))
 
     # transmission L->R
-    LHS = O_LR + O_RL.T
+    LHS = O_LR + O_RL.T.conj()
     RHS = np.diag(2 * O_LL)
     T_LR, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
-    U, t, V = np.linalg.svd(T_LR, full_matrices=False)
 
     # HACK: we don't expect gain --> invert singular values that lead to gain
     # see: https://github.com/BYUCamachoLab/emepy/issues/12
+    U, t, V = np.linalg.svd(T_LR, full_matrices=False)
     t = np.where(t > 1, 1 / t, t)
-
     T_LR = U @ np.diag(t) @ V
 
     # transmission R->L
-    LHS = O_RL + O_LR.T
+    LHS = O_RL + O_LR.T.conj()
     RHS = np.diag(2 * O_RR)
     T_RL, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
-    U, t, V = np.linalg.svd(T_RL, full_matrices=False)
 
     # HACK: we don't expect gain --> invert singular values that lead to gain
+    U, t, V = np.linalg.svd(T_RL, full_matrices=False)
     t = np.where(t > 1, 1 / t, t)
-
     T_RL = U @ np.diag(t) @ V
 
     # reflection
-    R_LR = np.diag(1 / (2 * O_LL)) @ (O_RL.T - O_LR) @ T_LR  # type: ignore
-    R_RL = np.diag(1 / (2 * O_RR)) @ (O_LR.T - O_RL) @ T_RL  # type: ignore
+    R_LR = np.diag(1 / (2 * O_LL)) @ (O_RL.T.conj() - O_LR) @ T_LR  # type: ignore
+    R_RL = np.diag(1 / (2 * O_RR)) @ (O_LR.T.conj() - O_RL) @ T_RL  # type: ignore
 
     # s-matrix
     S = np.concatenate(
@@ -75,12 +73,12 @@ def compute_interface_s_matrix(
     )
 
     # enforce S@S.H is diagonal
-    if enforce_lossy_unitarity:  # HACK!
+    if False and enforce_lossy_unitarity:  # HACK!
         U, s, V = np.linalg.svd(S)
         S = np.diag(s) @ U @ V
 
     # ensure reciprocity:
-    if enforce_reciprocity:
+    if False and enforce_reciprocity:
         S = 0.5 * (S + S.T)
 
     # create port map

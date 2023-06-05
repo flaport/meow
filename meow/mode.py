@@ -212,7 +212,7 @@ class Mode(BaseModel):
         return new_mode
 
     def __mul__(self, other):
-        if not isinstance(other, numbers.Number):
+        if not isinstance(other, (float, complex)):
             raise TypeError(
                 f"unsupported operand type(s) for *: 'Mode' and '{type(other).__name__}'"
             )
@@ -231,7 +231,7 @@ class Mode(BaseModel):
     __rmul__ = __mul__
 
     def __truediv__(self, other):
-        if not isinstance(other, numbers.Number):
+        if not isinstance(other, (float, complex)):
             raise TypeError(
                 f"unsupported operand type(s) for /: 'Mode' and '{type(other).__name__}'"
             )
@@ -250,22 +250,13 @@ Modes = List[Mode]
 
 def zero_phase(mode: Mode) -> Mode:
     """normalize (zero out) the phase of a `Mode`"""
-    e = np.abs(energy_density(mode))
-    m, n = np.array(np.where(e == e.max()))[:, 0]
-    phase = np.exp(-1j * np.angle(np.array(mode.Hx))[m][n])
-    new_mode = Mode(
-        neff=mode.neff,
-        cs=mode.cs,
-        Ex=mode.Ex * phase,
-        Ey=mode.Ey * phase,
-        Ez=mode.Ez * phase,
-        Hx=mode.Hx * phase,
-        Hy=mode.Hy * phase,
-        Hz=mode.Hz * phase,
-    )
-    if _sum_around(np.real(new_mode.Hx), m, n) < 0:
-        new_mode = invert_mode(new_mode)
-    return new_mode
+    return mode * np.exp(1j * np.random.rand() * 2 * np.pi)
+
+
+def _centroid_idxs(arr2d: np.ndarray) -> tuple[int, int]:
+    centroid_x = np.average(np.arange(arr2d.shape[1]), weights=arr2d.sum(axis=0))
+    centroid_y = np.average(np.arange(arr2d.shape[0]), weights=arr2d.sum(axis=1))
+    return round(float(centroid_x)), round(float(centroid_y))
 
 
 def _sum_around(field, m, n, r=2):
@@ -298,7 +289,8 @@ def inner_product(mode1: Mode, mode2: Mode) -> float:
     """the inner product of a `Mode` with another `Mode` is uniquely defined."""
     mesh = mode1.mesh
     cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
-    return 0.25 * np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
+    # cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx
+    return np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
 
 
 def normalize_product(mode: Mode) -> Mode:
