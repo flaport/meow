@@ -1,5 +1,6 @@
 """ Geometries """
 
+import warnings
 from secrets import token_hex
 from typing import Dict, List, Literal, Tuple, Union, cast
 
@@ -150,7 +151,11 @@ class Prism(Geometry):
             y_min, _ = self.poly.min(0)
             y_max, _ = self.poly.max(0)
             line = sg.LineString([(y_min, z), (y_max, z)])
-            intersections = poly.intersection(line)
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    "ignore", category=RuntimeWarning, module="shapely"
+                )
+                intersections = poly.intersection(line)
 
             if not isinstance(intersections, sg.MultiLineString):
                 intersection_array = np.asarray(intersections.coords)
@@ -173,7 +178,11 @@ class Prism(Geometry):
             _, x_min = self.poly.min(0)
             _, x_max = self.poly.max(0)
             line = sg.LineString([(z, x_min), (z, x_max)])
-            intersections = poly.intersection(line)
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    "ignore", category=RuntimeWarning, module="shapely"
+                )
+                intersections = poly.intersection(line)
 
             if not isinstance(intersections, sg.MultiLineString):
                 intersection_array = np.asarray(intersections.coords)
