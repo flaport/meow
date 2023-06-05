@@ -100,6 +100,58 @@ def _is_two_tuple(obj):
         return False
 
 
+def _visualize_modes(modes):
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import LinearSegmentedColormap
+
+    num_modes = len(modes)
+    cs = modes[0].cs
+    X, Y, n = cs.mesh.Xz, cs.mesh.Yz, cs.nz
+    x_min, x_max = cs.mesh.x.min(), cs.mesh.x.max()
+    y_min, y_max = cs.mesh.y.min(), cs.mesh.y.max()
+    delta_x = x_max - x_min
+    delta_y = y_max - y_min
+    aspect = delta_y / delta_x
+    W0 = 6.4
+    W, H = W0 + 1, W0 * aspect + 2
+    n_cmap = LinearSegmentedColormap.from_list(name="c_cmap", colors=["#ffffff", "#c1d9ed"])  # fmt: skip
+    fig, ax = plt.subplots(
+        num_modes,
+        2,
+        figsize=(2 * W, num_modes * H),
+        sharex=True,
+        sharey=True,
+        squeeze=False,
+    )
+    # mx = {
+    #    "Ex": max([np.max(np.abs(m.Ex)**2) for m in modes]),
+    #    "Hx": max([np.max(np.abs(m.Hx)**2) for m in modes]),
+    # }
+    for i, m in enumerate(modes):
+        for j, field in enumerate(["Ex", "Hx"]):
+            plt.sca(ax[i, j])
+            if i == num_modes - 1:
+                plt.xlabel("x")
+            if j == 0:
+                plt.ylabel("y")
+            plt.axis("equal")
+            value = np.abs(getattr(m, field)) ** 2
+            plt.title(
+                f"M{i}: {field}: n={m.neff.real:.2f}+{m.neff.imag:.1e}j, {100*m.te_fraction:.1f}%TE",
+                fontsize=9,
+            )
+            plt.pcolormesh(X, Y, n, cmap=n_cmap)
+            value[value < 1e-2] = np.nan
+            # value[0, 0] = 0.0
+            # value[-1, -1] = mx[field]
+            plt.contour(X, Y, value, cmap="inferno")
+            divider = make_axes_locatable(ax[i, j])
+            cax = divider.append_axes("right", size="5%", pad=0.05)
+            plt.colorbar(cax=cax)
+    fig.subplots_adjust(hspace=0, wspace=2 / (2 * W))
+
+
 def visualize(obj: Any, **kwargs: Any):
     """visualize any meow object
 
@@ -111,10 +163,15 @@ def visualize(obj: Any, **kwargs: Any):
         Most meow objects have a `._visualize` method.
         Check out its help to see which kwargs are accepted.
     """
+    from .mode import Mode
     from .base_model import BaseModel
     from .structures import Structure, visualize_structures
 
-    if isinstance(obj, BaseModel):
+    # if isinstance(obj, Mode):
+    #    return _visualize_mode(obj)
+    if isinstance(obj, list) and all(isinstance(o, Mode) for o in obj):
+        return _visualize_modes(obj)
+    elif isinstance(obj, BaseModel):
         return obj._visualize(**kwargs)
     elif _is_s_matrix(obj) and plt is not None:
         _visualize_s_matrix(obj, **kwargs)
