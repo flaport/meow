@@ -3,28 +3,27 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from ..mode import Mode, inner_product
+from ..mode import Mode, inner_product as inner_product_normal, inner_product_conj
 
 
 def compute_interface_s_matrix(
     modes1: List[Mode],
     modes2: List[Mode],
-    enforce_reciprocity: bool = True,
+    conjugate_transpose: bool = True,
+    enforce_reciprocity: bool = False,
     enforce_lossy_unitarity: bool = False,
 ):
     """get the S-matrix of the interface between two `CrossSection`s"""
     # overlap matrices
+    inner_product = inner_product_conj if conjugate_transpose else inner_product_normal
+    transp = (lambda x: x.T.conj()) if conjugate_transpose else (lambda x: x.T)
     NL, NR = len(modes1), len(modes2)
     O_LL = np.array([inner_product(modes1[m], modes1[m]) for m in range(NL)])
     O_RR = np.array([inner_product(modes2[n], modes2[n]) for n in range(NR)])
     O_LR = np.array([[inner_product(modes1[m], modes2[n]) for n in range(NR)] for m in range(NL)])  # fmt: skip
     O_RL = np.array([[inner_product(modes2[m], modes1[n]) for n in range(NL)] for m in range(NR)])  # fmt: skip
-    # print(O_LL.shape)
-    # print(O_RR.shape)
-    # print(O_LR.shape)
-    # print(O_RL.shape)
 
-    # extra phase correction.
+    # extra phase correction (disabled?).
 
     # ignoring the phase seems to corresponds best with lumerical.
     # O_LL = np.abs(O_LL)
@@ -39,7 +38,7 @@ def compute_interface_s_matrix(
     # O_RL = O_RL*np.diag(np.exp(-1j*np.angle(np.diag(O_RL))))
 
     # transmission L->R
-    LHS = O_LR + O_RL.T.conj()
+    LHS = O_LR + transp(O_RL)
     RHS = np.diag(2 * O_LL)
     T_LR, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
 
@@ -50,7 +49,7 @@ def compute_interface_s_matrix(
     T_LR = U @ np.diag(t) @ V
 
     # transmission R->L
-    LHS = O_RL + O_LR.T.conj()
+    LHS = O_RL + transp(O_LR)
     RHS = np.diag(2 * O_RR)
     T_RL, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
 
@@ -60,8 +59,8 @@ def compute_interface_s_matrix(
     T_RL = U @ np.diag(t) @ V
 
     # reflection
-    R_LR = np.diag(1 / (2 * O_LL)) @ (O_RL.T.conj() - O_LR) @ T_LR  # type: ignore
-    R_RL = np.diag(1 / (2 * O_RR)) @ (O_LR.T.conj() - O_RL) @ T_RL  # type: ignore
+    R_LR = np.diag(1 / (2 * O_LL)) @ (transp(O_RL) - O_LR) @ T_LR  # type: ignore
+    R_RL = np.diag(1 / (2 * O_RR)) @ (transp(O_LR) - O_RL) @ T_RL  # type: ignore
 
     # s-matrix
     S = np.concatenate(
@@ -73,12 +72,12 @@ def compute_interface_s_matrix(
     )
 
     # enforce S@S.H is diagonal
-    if False and enforce_lossy_unitarity:  # HACK!
+    if enforce_lossy_unitarity:  # HACK!
         U, s, V = np.linalg.svd(S)
         S = np.diag(s) @ U @ V
 
     # ensure reciprocity:
-    if False and enforce_reciprocity:
+    if enforce_reciprocity:
         S = 0.5 * (S + S.T)
 
     # create port map

@@ -288,8 +288,14 @@ def invert_mode(mode: Mode) -> Mode:
 def inner_product(mode1: Mode, mode2: Mode) -> float:
     """the inner product of a `Mode` with another `Mode` is uniquely defined."""
     mesh = mode1.mesh
+    cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx
+    return np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
+
+
+def inner_product_conj(mode1: Mode, mode2: Mode) -> float:
+    """the inner product of a `Mode` with another `Mode` is uniquely defined."""
+    mesh = mode1.mesh
     cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
-    # cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx
     return np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
 
 
