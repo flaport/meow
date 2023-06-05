@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>meow package &#8212; meow 0.3.5 documentation</title>
+    <title>meow package &#8212; meow 0.3.8 documentation</title>
   
   
   
@@ -1626,6 +1626,11 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <dt class="sig sig-object py" id="meow.integrate.integrate_2d">
 <span class="sig-name descname"><span class="pre">integrate_2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/integrate.html#integrate_2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.integrate.integrate_2d" title="Permalink to this definition">#</a></dt>
 <dd><p>much simpler integration over the full grid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <span class="target" id="module-meow.materials"></span><p>Materials</p>
@@ -2574,6 +2579,23 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.mode.inner_product">
 <span class="sig-name descname"><span class="pre">inner_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/mode.html#inner_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.mode.inner_product" title="Permalink to this definition">#</a></dt>
+<dd><p>the inner product of a <cite>Mode</cite> with another <cite>Mode</cite> is uniquely defined.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode1</strong> (<a class="reference internal" href="#meow.mode.Mode" title="meow.mode.Mode"><em>Mode</em></a>) – </p></li>
+<li><p><strong>mode2</strong> (<a class="reference internal" href="#meow.mode.Mode" title="meow.mode.Mode"><em>Mode</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.mode.inner_product_conj">
+<span class="sig-name descname"><span class="pre">inner_product_conj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/mode.html#inner_product_conj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.mode.inner_product_conj" title="Permalink to this definition">#</a></dt>
 <dd><p>the inner product of a <cite>Mode</cite> with another <cite>Mode</cite> is uniquely defined.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
