@@ -23,7 +23,8 @@ def compute_interface_s_matrix(
     """get the S-matrix of the interface between two `CrossSection`s"""
     # overlap matrices
     inner_product = inner_product_conj if conjugate_transpose else inner_product_normal
-    transp = (lambda x: x.T.conj()) if conjugate_transpose else (lambda x: x.T)
+    conjugate = np.conj if conjugate_transpose else lambda a: a
+
     NL, NR = len(modes1), len(modes2)
     O_LL = np.array([inner_product(modes1[m], modes1[m]) for m in range(NL)])
     O_RR = np.array([inner_product(modes2[n], modes2[n]) for n in range(NR)])
@@ -33,8 +34,8 @@ def compute_interface_s_matrix(
     # extra phase correction (disabled?).
 
     # ignoring the phase seems to corresponds best with lumerical.
-    # O_LL = np.abs(O_LL)
-    # O_RR = np.abs(O_RR)
+    O_LL = np.real(O_LL)
+    O_RR = np.real(O_RR)
 
     # alternative phase correction (probably worth testing this out)
     # Question: is this not just a conjugation?
@@ -46,7 +47,7 @@ def compute_interface_s_matrix(
     # O_RL = O_RL*np.diag(np.exp(-1j*np.angle(np.diag(O_RL))))
 
     # transmission L->R
-    LHS = O_LR + transp(O_RL)
+    LHS = conjugate(O_LR) + O_RL.T
     RHS = np.diag(2 * O_LL)
 
     # print(f"LHS: {LHS}")
@@ -64,7 +65,7 @@ def compute_interface_s_matrix(
     T_LR = U @ np.diag(t) @ V
 
     # transmission R->L
-    LHS = O_RL + transp(O_LR)
+    LHS = conjugate(O_RL) + O_LR.T
     RHS = np.diag(2 * O_RR)
     T_RL, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
 
@@ -74,8 +75,8 @@ def compute_interface_s_matrix(
     T_RL = U @ np.diag(t) @ V
 
     # reflection
-    R_LR = np.diag(1 / (2 * O_LL)) @ (transp(O_RL) - O_LR) @ T_LR  # type: ignore
-    R_RL = np.diag(1 / (2 * O_RR)) @ (transp(O_LR) - O_RL) @ T_RL  # type: ignore
+    R_LR = np.diag(1 / (2 * O_LL)) @ (O_RL.T - conjugate(O_LR)) @ T_LR  # type: ignore
+    R_RL = np.diag(1 / (2 * O_RR)) @ (O_LR.T - conjugate(O_RL)) @ T_RL  # type: ignore
 
     # s-matrix
     S = np.concatenate(

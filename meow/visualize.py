@@ -23,7 +23,7 @@ except ImportError:
     DeviceArray = None
 
 
-def _visualize_s_matrix(S, fmt=".3f", title=None, show=True):
+def _visualize_s_matrix(S, fmt=".3f", title=None, show=True, phase=False):
     import matplotlib.pyplot as plt  # fmt: skip
 
     Z = np.abs(S)
@@ -51,6 +51,8 @@ def _visualize_s_matrix(S, fmt=".3f", title=None, show=True):
 
     for x, y, z in zip(X.ravel(), Y.ravel(), S[::-1].T.ravel()):
         if np.abs(z) > 0.0005:
+            if phase:
+                z = np.angle(z) * 180 / np.pi
             text = eval(f"f'{{z:{fmt}}}'")  # 😅
             text = text.replace("+", "\n+")
             text = text.replace("-", "\n-")
@@ -178,6 +180,7 @@ def visualize(obj: Any, **kwargs: Any):
 
     # if isinstance(obj, Mode):
     #    return _visualize_mode(obj)
+
     if isinstance(obj, list) and all(isinstance(o, Mode) for o in obj):
         return _visualize_modes(obj)
     elif isinstance(obj, BaseModel):
@@ -190,11 +193,6 @@ def visualize(obj: Any, **kwargs: Any):
         and isinstance(obj[1], dict)
         and plt is not None
     ):
-        if kwargs.get("angle", False):
-            obj_ = np.angle(obj)
-            obj_[np.abs(obj) < 0.0005] = 0
-            obj = obj_
-            del kwargs["angle"]
         _visualize_s_matrix(obj, **kwargs)
     elif gf is not None and isinstance(obj, gf.Component):
         _visualize_gdsfactory(obj, **kwargs)
