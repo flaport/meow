@@ -33,9 +33,11 @@ def compute_interface_s_matrix(
 
     # extra phase correction (disabled?).
 
+    if conjugate_transpose:
+        O_LL = np.real(O_LL)
+        O_RR = np.real(O_RR)
+
     # ignoring the phase seems to corresponds best with lumerical.
-    O_LL = np.real(O_LL)
-    O_RR = np.real(O_RR)
 
     # alternative phase correction (probably worth testing this out)
     # Question: is this not just a conjugation?
