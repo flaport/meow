@@ -35,26 +35,32 @@ def compute_modes_tidy3d(
 
     od = np.zeros_like(cs.nx)  # off diagonal entry
     new_tidy3d = version.parse(tidy3d.__version__) >= version.parse("2.2.0")
+    if new_tidy3d:
+        eps_cross = [cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2]
+    else:
+        eps_cross = [cs.nx**2, cs.ny**2, cs.nz**2]
+
+    mode_spec = SimpleNamespace(  # tidy3d.ModeSpec alternative (prevents type checking)
+        num_modes=num_modes,
+        target_neff=target_neff,
+        num_pml=cs.cell.mesh.num_pml,
+        filter_pol=None,
+        angle_theta=cs.cell.mesh.angle_theta,
+        angle_phi=cs.cell.mesh.angle_phi,
+        bend_radius=cs.cell.mesh.bend_radius,
+        precision=precision,
+        bend_axis=cs.cell.mesh.bend_axis,
+        track_freq="central",
+        group_index_step=False,
+    )
+
     ((Ex, Ey, Ez), (Hx, Hy, Hz)), neffs = (
         x.squeeze()
         for x in _compute_modes(
-            eps_cross=[cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2]
-            if new_tidy3d
-            else [cs.nx**2, cs.ny**2, cs.nz**2],
+            eps_cross=eps_cross,
             coords=[cs.mesh.x, cs.mesh.y],
             freq=c / (cs.env.wl * 1e-6),
-            mode_spec=SimpleNamespace(
-                num_modes=num_modes,
-                angle_theta=cs.cell.mesh.angle_theta,
-                angle_phi=cs.cell.mesh.angle_phi,
-                bend_radius=cs.cell.mesh.bend_radius,
-                bend_axis=cs.cell.mesh.bend_axis,
-                target_neff=target_neff,
-                num_pml=cs.cell.mesh.num_pml,
-                sort_by="largest_neff",
-                filter_pol=None,
-                precision=precision,
-            ),
+            mode_spec=mode_spec,
         )
     )
 
