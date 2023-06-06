@@ -1,21 +1,26 @@
 """ SAX backend for EME (default backend) """
-from functools import partial
+
 from typing import List
 
 import numpy as np
 import sax
 from sax.backends import circuit_backends
-from sax.circuit import _make_singlemode_or_multimode
-from sax.netlist import Netlist
 from sax.utils import get_ports
 
 from ..base_model import _array
 from ..mode import Mode
-from .common import compute_interface_s_matrices, compute_propagation_s_matrices
-from .common import select_ports as select_ports
+from .common import (
+    DEFAULT_CONJUGATE_TRANSPOSE,
+    DEFAULT_ENFORCE_LOSSY_UNITARITY,
+    DEFAULT_ENFORCE_RECIPROCITY,
+    compute_interface_s_matrices,
+    compute_propagation_s_matrices,
+)
 
 try:
     import klujax
+
+
 except ImportError:
     klujax = None
 
@@ -75,9 +80,10 @@ def _validate_sax_backend(sax_backend):
 
 def compute_s_matrix_sax(
     modes: List[List[Mode]],
-    sax_backend=None,
-    enforce_reciprocity=True,
-    enforce_lossy_unitarity=False,
+    sax_backend: str | None = None,
+    conjugate_transpose: bool = DEFAULT_CONJUGATE_TRANSPOSE,
+    enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
+    enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
     **kwargs,
 ):
     """Calculate the S-matrix for given sets of modes, each set belonging to a `Cell`
@@ -96,6 +102,7 @@ def compute_s_matrix_sax(
     propagations = _compute_propagation_s_matrices(modes)
     interfaces = _compute_interface_s_matrices(
         modes,
+        conjugate_transpose=conjugate_transpose,
         enforce_reciprocity=enforce_reciprocity,
         enforce_lossy_unitarity=enforce_lossy_unitarity,
         **kwargs,

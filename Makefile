@@ -4,6 +4,9 @@ build:
 docker:
 	docker build . -t flaport/meow:latest
 
+nbrun:
+	find . -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | xargs parallel -j `nproc --all` papermill {} {} -k python3 :::
+
 dockerpush:
 	docker push flaport/meow:latest
 

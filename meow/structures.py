@@ -35,8 +35,8 @@ class Structure(BaseModel):
 
 def visualize_structures(structures, scale=None):
     """easily visualize a collection (list) of `Structure` objects"""
-    from trimesh.scene import Scene
-    from trimesh.transformations import rotation_matrix
+    from trimesh.scene import Scene  # fmt: skip
+    from trimesh.transformations import rotation_matrix  # fmt: skip
 
     scene = Scene(
         geometry=[s._trimesh(scale=scale) for s in sort_structures(structures)]

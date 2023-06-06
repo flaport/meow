@@ -119,7 +119,7 @@ class Material(BaseModel):
         return np.squeeze(np.real(n))  # TODO: allow complex multi-dimensional n
 
     def _lumadd(self, sim, env, unit):
-        from matplotlib.cm import get_cmap
+        from matplotlib.cm import get_cmap  # fmt: skip
 
         n = self(env)
         wl = np.asarray(env.wl * unit, dtype=complex).ravel()
