@@ -14,6 +14,7 @@ from scipy.linalg import norm
 from .base_model import BaseModel
 from .cross_section import CrossSection
 from .integrate import integrate_2d
+from .visualize import _figsize_visualize_mode
 
 
 class Mode(BaseModel):
@@ -120,16 +121,23 @@ class Mode(BaseModel):
         mode_cmap=None,
         num_levels=8,
         operation=lambda x: np.abs(x) ** 2,
+        show=True,
     ):
         import matplotlib.pyplot as plt  # fmt: skip
         from matplotlib import colors  # fmt: skip
+        from mpl_toolkits.axes_grid1 import make_axes_locatable  # fmt: skip
+        W, H = _figsize_visualize_mode(self.cs, 6.4)
 
-        if fields is None or len(fields) == 0:
+        if not fields:
             fields = ["Ex"]
 
         if len(fields) > 1:
+            if len(fields) > 2:
+                max_width = 15
+                current_width = len(fields) * W
+                W, H = _figsize_visualize_mode(self.cs, 6.4 * max_width / current_width)
             if ax is None:
-                _, ax = plt.subplots(len(fields), 1, figsize=(5, len(fields) * 3))
+                _, ax = plt.subplots(1, len(fields), figsize=(len(fields) * W, H))
             if len(ax) < len(fields):
                 raise ValueError(
                     f"Not enough axes supplied for the number of fields "
@@ -137,12 +145,17 @@ class Mode(BaseModel):
                 )
             for field, ax_ in zip(fields, ax):
                 self._visualize(
-                    field,
+                    title=title,
+                    fields=[field],
                     ax=ax_,
                     n_cmap=n_cmap,
                     mode_cmap=mode_cmap,
                     num_levels=num_levels,
+                    operation=operation,
+                    show=False,
                 )
+            if show:
+                plt.show()
             return
 
         field = fields[0]
@@ -154,7 +167,6 @@ class Mode(BaseModel):
 
         if ax is None:
             ax = plt.gca()
-            plt.axis("scaled")
         plt.sca(ax)
 
         x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
@@ -170,12 +182,15 @@ class Mode(BaseModel):
         mode = operation(getattr(self, field))
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=UserWarning)
-            plt.contour(X, Y, mode, cmap=mode_cmap, levels=np.linspace(mode.min(), mode.max(), num_levels))  # fmt: skip
-        plt.colorbar(label="mode")
+            levels = np.linspace(mode.min(), mode.max(), num_levels + 1)[1:]
+            plt.contour(X, Y, mode, cmap=mode_cmap, levels=levels)  # fmt: skip
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        plt.colorbar(cax=cax)
+        plt.sca(ax)
 
         n = np.real(getattr(self.cs, f"n{c}"))
         plt.pcolormesh(X, Y, n, cmap=n_cmap)
-        plt.colorbar(label="n")
         plt.xlabel(x)
         plt.ylabel(y)
         plt.grid(True, alpha=0.4)
@@ -185,7 +200,9 @@ class Mode(BaseModel):
             plt.title(title)
         plt.xlim(X.min(), X.max())
         plt.ylim(Y.min(), Y.max())
-        plt.show()
+        plt.axis("scaled")
+        if show:
+            plt.show()
 
     def save(self, filename):
         with open(filename, "wb") as file:

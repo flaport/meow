@@ -1,12 +1,11 @@
 """ Visualizations for common meow-datatypes """
 
-import warnings
 from typing import Any
 
 import numpy as np
 
 try:
-    import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt  # fmt: skip
 
 
 except ImportError:
@@ -23,14 +22,22 @@ except ImportError:
     DeviceArray = None
 
 
-def _visualize_s_matrix(S, fmt=".3f", title=None, show=True, phase=False):
+def _visualize_s_matrix(S, fmt=None, title=None, show=True, phase=False, ax=None):
     import matplotlib.pyplot as plt  # fmt: skip
+    if phase:
+        fmt = ".0f"
+    else:
+        fmt = ".3f"
 
     Z = np.abs(S)
     y, x = np.arange(Z.shape[0])[::-1], np.arange(Z.shape[1])
     Y, X = np.meshgrid(y, x)
 
-    plt.figure(figsize=(2 * x.shape[0] / 3, 2 * y.shape[0] / 3))
+    if ax:
+        plt.sca(ax)
+    else:
+        plt.figure(figsize=(2 * x.shape[0] / 3, 2 * y.shape[0] / 3))
+
     plt.pcolormesh(X, Y, Z[::-1].T, cmap="Greys", vmin=0.0, vmax=2.0 * Z.max())
 
     coords_ = np.concatenate(
@@ -67,20 +74,98 @@ def _visualize_s_matrix(S, fmt=".3f", title=None, show=True, phase=False):
         plt.show()
 
 
-def _visualize_s_pm_matrix(Spm, fmt=".3f", title=None, show=True):
+def _visualize_s_pm_matrix(Spm, fmt=None, title=None, show=True, ax=None):
     import matplotlib.pyplot as plt  # fmt: skip
 
     S, pm = Spm
-    _visualize_s_matrix(S, fmt=fmt, title=title, show=False)
+    _visualize_s_matrix(S, fmt=fmt, title=title, show=False, ax=ax)
     num_left = len([p for p in pm if "left" in p])
     Z = np.abs(S)
-    y, x = np.arange(Z.shape[0])[::-1], np.arange(Z.shape[1])
+    _, x = np.arange(Z.shape[0])[::-1], np.arange(Z.shape[1])
 
     plt.axvline(x[num_left] - 0.5, color="red")
     plt.axhline(x[num_left] - 0.5, color="red")
 
     if show:
         plt.show()
+
+
+def _visualize_overlap_density(
+    two_modes,
+    conjugated=True,
+    x_symmetry=False,
+    y_symmetry=False,
+    ax=None,
+    n_cmap=None,
+    mode_cmap=None,
+    num_levels=8,
+    show=True,
+):
+    import matplotlib.pyplot as plt  # fmt: skip
+
+    from .mode import Mode  # fmt: skip
+
+    mode1, mode2 = two_modes
+    if conjugated:
+        cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
+    else:
+        cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx
+    if x_symmetry:
+        cross = 0.5 * (cross + cross[::-1])
+    if y_symmetry:
+        cross = 0.5 * (cross + cross[:, ::-1])
+    zeros = np.zeros_like(cross)
+    overlap = Mode(
+        neff=mode1.neff,
+        cs=mode1.cs,
+        Ex=cross,
+        Ey=zeros,
+        Ez=zeros,
+        Hx=zeros,
+        Hy=zeros,
+        Hz=zeros,
+    )
+    if ax is None:
+        W, H = _figsize_visualize_mode(mode1.cs, 5)
+        _, ax = plt.subplots(1, 3, figsize=(3 * W, H))
+
+    field = "Ex" if mode1.te_fraction > 0.5 else "Hx"
+    mode1._visualize(
+        title=f"mode 1: {field}",
+        fields=[field],
+        ax=ax[0],
+        n_cmap=n_cmap,
+        mode_cmap=mode_cmap,
+        num_levels=num_levels,
+        show=False,
+    )
+
+    field = "Ex" if mode2.te_fraction > 0.5 else "Hx"
+    mode2._visualize(
+        title=f"mode 2: {field}",
+        fields=[field],
+        ax=ax[1],
+        n_cmap=n_cmap,
+        mode_cmap=mode_cmap,
+        num_levels=num_levels,
+        show=False,
+    )
+
+    title = "overlap density" + ("" if conjugated else " (no conjugations)")
+    p = overlap._visualize(
+        title=title,
+        fields=["Ex"],
+        ax=ax[2],
+        n_cmap=n_cmap,
+        mode_cmap=mode_cmap,
+        num_levels=num_levels,
+        show=False,
+    )
+
+    if show:
+        plt.show()
+
+    return p
 
 
 def _visualize_gdsfactory(comp):
@@ -109,7 +194,25 @@ def _is_two_tuple(obj):
         return False
 
 
-def _visualize_modes(modes):
+def _figsize_visualize_mode(cs, W0):
+    x_min, x_max = cs.mesh.x.min(), cs.mesh.x.max()
+    y_min, y_max = cs.mesh.y.min(), cs.mesh.y.max()
+    delta_x = x_max - x_min
+    delta_y = y_max - y_min
+    aspect = delta_y / delta_x
+    W0 = 6.4
+    W, H = W0 + 1, W0 * aspect + 1
+    return W, H
+
+
+def _visualize_modes(
+    modes,
+    n_cmap=None,
+    mode_cmap=None,
+    num_levels=8,
+    operation=lambda x: np.abs(x) ** 2,
+    show=True,
+):
     import matplotlib.pyplot as plt  # fmt: skip
     from matplotlib.colors import LinearSegmentedColormap  # fmt: skip
     from mpl_toolkits.axes_grid1 import make_axes_locatable  # fmt: skip
@@ -117,14 +220,11 @@ def _visualize_modes(modes):
     num_modes = len(modes)
     cs = modes[0].cs
     X, Y, n = cs.mesh.Xz, cs.mesh.Yz, cs.nz
-    x_min, x_max = cs.mesh.x.min(), cs.mesh.x.max()
-    y_min, y_max = cs.mesh.y.min(), cs.mesh.y.max()
-    delta_x = x_max - x_min
-    delta_y = y_max - y_min
-    aspect = delta_y / delta_x
-    W0 = 6.4
-    W, H = W0 + 1, W0 * aspect + 2
-    n_cmap = LinearSegmentedColormap.from_list(name="c_cmap", colors=["#ffffff", "#c1d9ed"])  # fmt: skip
+    W, H = _figsize_visualize_mode(cs, 6.4)
+
+    n_cmap = LinearSegmentedColormap.from_list(
+        name="c_cmap", colors=["#ffffff", "#c1d9ed"]
+    )
     fig, ax = plt.subplots(
         num_modes,
         2,
@@ -133,34 +233,20 @@ def _visualize_modes(modes):
         sharey=True,
         squeeze=False,
     )
-    # mx = {
-    #    "Ex": max([np.max(np.abs(m.Ex)**2) for m in modes]),
-    #    "Hx": max([np.max(np.abs(m.Hx)**2) for m in modes]),
-    # }
     for i, m in enumerate(modes):
-        for j, field in enumerate(["Ex", "Hx"]):
-            plt.sca(ax[i, j])
-            if i == num_modes - 1:
-                plt.xlabel("x")
-            if j == 0:
-                plt.ylabel("y")
-            plt.axis("equal")
-            value = np.abs(getattr(m, field)) ** 2
-            plt.title(
-                f"M{i}: {field}: n={m.neff.real:.2f}+{m.neff.imag:.1e}j, {100*m.te_fraction:.1f}%TE",
-                fontsize=9,
-            )
-            plt.pcolormesh(X, Y, n, cmap=n_cmap)
-            value[value < 1e-2] = np.nan
-            # value[0, 0] = 0.0
-            # value[-1, -1] = mx[field]
-            with warnings.catch_warnings():
-                warnings.filterwarnings("ignore", category=UserWarning)
-                plt.contour(X, Y, value, cmap="inferno")
-            divider = make_axes_locatable(ax[i, j])
-            cax = divider.append_axes("right", size="5%", pad=0.05)
-            plt.colorbar(cax=cax)
+        m._visualize(
+            title=None,
+            fields=["Ex", "Hx"],
+            ax=ax[i],
+            n_cmap=n_cmap,
+            mode_cmap=mode_cmap,
+            num_levels=num_levels,
+            operation=operation,
+            show=False,
+        )
     fig.subplots_adjust(hspace=0, wspace=2 / (2 * W))
+    if show:
+        plt.show()
 
 
 def visualize(obj: Any, **kwargs: Any):
@@ -180,20 +266,19 @@ def visualize(obj: Any, **kwargs: Any):
 
     # if isinstance(obj, Mode):
     #    return _visualize_mode(obj)
+    if plt is None:
+        return obj
 
     if isinstance(obj, list) and all(isinstance(o, Mode) for o in obj):
         return _visualize_modes(obj)
     elif isinstance(obj, BaseModel):
         return obj._visualize(**kwargs)
-    elif _is_s_matrix(obj) and plt is not None:
+    elif _is_two_tuple(obj) and all(isinstance(o, Mode) for o in obj):
+        return _visualize_overlap_density(obj, **kwargs)
+    elif _is_s_matrix(obj):
         _visualize_s_matrix(obj, **kwargs)
-    elif (
-        _is_two_tuple(obj)
-        and _is_s_matrix(obj[0])
-        and isinstance(obj[1], dict)
-        and plt is not None
-    ):
-        _visualize_s_matrix(obj, **kwargs)
+    elif _is_two_tuple(obj) and _is_s_matrix(obj[0]) and isinstance(obj[1], dict):
+        _visualize_s_pm_matrix(obj, **kwargs)
     elif gf is not None and isinstance(obj, gf.Component):
         _visualize_gdsfactory(obj, **kwargs)
     else:
