@@ -89,14 +89,14 @@ def compute_interface_s_matrix(
         0,
     )
 
-    # enforce S@S.H is diagonal
-    if enforce_lossy_unitarity:  # HACK!
+    # enforce S@S.H is diagonal: HACK!
+    if enforce_lossy_unitarity:
         U, s, V = np.linalg.svd(S)
         S = np.diag(s) @ U @ V
 
     # ensure reciprocity: HACK?
     if enforce_reciprocity:
-        S = 0.5 * (S + S.T.conj())
+        S = 0.5 * (S + S.T)
 
     # create port map
     in_ports = [f"left@{i}" for i in range(len(modes1))]
