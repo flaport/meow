@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Install dependencies
-        run: mamba install make papermill parallel
+        run: mamba install make papermill parallel ipyevents
       - name: Install meow
         run: pip install .[full,dev]
       - name: Run notebooks
