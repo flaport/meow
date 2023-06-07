@@ -41,6 +41,11 @@ the SuiteSparse headers on your computer for this to work.
 - [Examples](https://flaport.github.io/meow/examples.html)
 - [API Docs](https://flaport.github.io/meow/meow.html)
 
+## Contributors
+
+- [@flaport](https://gitub.com/flaport): creator of MEOW
+- [@jan-david-black](https://github.com/jan-david-black): fixing mode overlaps and more
+
 ## Credits
 
 - [DALL-E](https://labs.openai.com): _“a drawing of a kitten with laser eyes walking towards me”_ (logo)
