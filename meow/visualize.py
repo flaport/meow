@@ -193,7 +193,7 @@ def visualize(obj: Any, **kwargs: Any):
         and isinstance(obj[1], dict)
         and plt is not None
     ):
-        _visualize_s_matrix(obj, **kwargs)
+        _visualize_s_pm_matrix(obj, **kwargs)
     elif gf is not None and isinstance(obj, gf.Component):
         _visualize_gdsfactory(obj, **kwargs)
     else:
