@@ -214,17 +214,12 @@ def _visualize_modes(
     show=True,
 ):
     import matplotlib.pyplot as plt  # fmt: skip
-    from matplotlib.colors import LinearSegmentedColormap  # fmt: skip
-    from mpl_toolkits.axes_grid1 import make_axes_locatable  # fmt: skip
 
     num_modes = len(modes)
     cs = modes[0].cs
     X, Y, n = cs.mesh.Xz, cs.mesh.Yz, cs.nz
     W, H = _figsize_visualize_mode(cs, 6.4)
 
-    n_cmap = LinearSegmentedColormap.from_list(
-        name="c_cmap", colors=["#ffffff", "#c1d9ed"]
-    )
     fig, ax = plt.subplots(
         num_modes,
         2,
@@ -236,6 +231,7 @@ def _visualize_modes(
     for i, m in enumerate(modes):
         m._visualize(
             title=None,
+            title_prefix=f"m{i}: ",
             fields=["Ex", "Hx"],
             ax=ax[i],
             n_cmap=n_cmap,

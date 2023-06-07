@@ -115,6 +115,7 @@ class Mode(BaseModel):
     def _visualize(
         self,
         title=None,
+        title_prefix="",
         fields=None,
         ax=None,
         n_cmap=None,
@@ -146,6 +147,7 @@ class Mode(BaseModel):
             for field, ax_ in zip(fields, ax):
                 self._visualize(
                     title=title,
+                    title_prefix=title_prefix,
                     fields=[field],
                     ax=ax_,
                     n_cmap=n_cmap,
@@ -195,9 +197,9 @@ class Mode(BaseModel):
         plt.ylabel(y)
         plt.grid(True, alpha=0.4)
         if title is None:
-            plt.title(f"{field} [neff={float(np.real(self.neff)):.6f}]")
+            plt.title(f"{title_prefix}{field} [neff={float(np.real(self.neff)):.6f}]")
         else:
-            plt.title(title)
+            plt.title(f"{title_prefix}{title}")
         plt.xlim(X.min(), X.max())
         plt.ylim(Y.min(), Y.max())
         plt.axis("scaled")
