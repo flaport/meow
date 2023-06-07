@@ -315,6 +315,14 @@ def inner_product_conj(mode1: Mode, mode2: Mode) -> float:
     cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
     return np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
 
+def plot_overlap_density(mode1: Mode, mode2: Mode):
+    """plots the integrand of the conjugated inner product"""
+    cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
+    zeros = np.zeros_like(cross)
+    Mode(
+        neff=mode1.neff, cs=mode1.cs, Ex=cross,
+        Ey=zeros, Ez=zeros, Hx=zeros, Hy=zeros, Hz=zeros
+    )._visualize()
 
 def normalize_product(mode: Mode) -> Mode:
     """normalize a `Mode` according to the `inner_product` with itself"""
