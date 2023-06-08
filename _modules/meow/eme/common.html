@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.eme.common &#8212; meow 0.4.2 documentation</title>
+    <title>meow.eme.common &#8212; meow 0.5.2 documentation</title>
   
   
   
@@ -324,7 +324,8 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the S-matrix of the interface between two `CrossSection`s&quot;&quot;&quot;</span>
     <span class="c1"># overlap matrices</span>
     <span class="n">inner_product</span> <span class="o">=</span> <span class="n">inner_product_conj</span> <span class="k">if</span> <span class="n">conjugate_transpose</span> <span class="k">else</span> <span class="n">inner_product_normal</span>
-    <span class="n">transp</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span> <span class="k">if</span> <span class="n">conjugate_transpose</span> <span class="k">else</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">conjugate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span> <span class="k">if</span> <span class="n">conjugate_transpose</span> <span class="k">else</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span>
+
     <span class="n">NL</span><span class="p">,</span> <span class="n">NR</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes2</span><span class="p">)</span>
     <span class="n">O_LL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">inner_product</span><span class="p">(</span><span class="n">modes1</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">modes1</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NL</span><span class="p">)])</span>
     <span class="n">O_RR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">inner_product</span><span class="p">(</span><span class="n">modes2</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">modes2</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NR</span><span class="p">)])</span>
@@ -333,11 +334,14 @@ document.write(`
 
     <span class="c1"># extra phase correction (disabled?).</span>
 
+    <span class="k">if</span> <span class="n">conjugate_transpose</span><span class="p">:</span>
+        <span class="n">O_LL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">O_LL</span><span class="p">)</span>
+        <span class="n">O_RR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">O_RR</span><span class="p">)</span>
+
     <span class="c1"># ignoring the phase seems to corresponds best with lumerical.</span>
-    <span class="c1"># O_LL = np.abs(O_LL)</span>
-    <span class="c1"># O_RR = np.abs(O_RR)</span>
 
     <span class="c1"># alternative phase correction (probably worth testing this out)</span>
+    <span class="c1"># Question: is this not just a conjugation?</span>
     <span class="c1"># O_LL = O_LL*np.exp(-1j*np.angle(O_LL))</span>
     <span class="c1"># O_RR = O_RR*np.exp(-1j*np.angle(O_RR))</span>
 
@@ -346,8 +350,15 @@ document.write(`
     <span class="c1"># O_RL = O_RL*np.diag(np.exp(-1j*np.angle(np.diag(O_RL))))</span>
 
     <span class="c1"># transmission L-&gt;R</span>
-    <span class="n">LHS</span> <span class="o">=</span> <span class="n">O_LR</span> <span class="o">+</span> <span class="n">transp</span><span class="p">(</span><span class="n">O_RL</span><span class="p">)</span>
+    <span class="n">LHS</span> <span class="o">=</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">O_LR</span><span class="p">)</span> <span class="o">+</span> <span class="n">O_RL</span><span class="o">.</span><span class="n">T</span>
     <span class="n">RHS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">O_LL</span><span class="p">)</span>
+
+    <span class="c1"># print(f&quot;LHS: {LHS}&quot;)</span>
+    <span class="c1"># vis(LHS)</span>
+
+    <span class="c1"># print(f&quot;RHS: {RHS}&quot;)</span>
+    <span class="c1"># vis(RHS)</span>
+
     <span class="n">T_LR</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">LHS</span><span class="p">,</span> <span class="n">RHS</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># HACK: we don&#39;t expect gain --&gt; invert singular values that lead to gain</span>
@@ -357,7 +368,7 @@ document.write(`
     <span class="n">T_LR</span> <span class="o">=</span> <span class="n">U</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">@</span> <span class="n">V</span>
 
     <span class="c1"># transmission R-&gt;L</span>
-    <span class="n">LHS</span> <span class="o">=</span> <span class="n">O_RL</span> <span class="o">+</span> <span class="n">transp</span><span class="p">(</span><span class="n">O_LR</span><span class="p">)</span>
+    <span class="n">LHS</span> <span class="o">=</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">O_RL</span><span class="p">)</span> <span class="o">+</span> <span class="n">O_LR</span><span class="o">.</span><span class="n">T</span>
     <span class="n">RHS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">O_RR</span><span class="p">)</span>
     <span class="n">T_RL</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">LHS</span><span class="p">,</span> <span class="n">RHS</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
@@ -367,8 +378,8 @@ document.write(`
     <span class="n">T_RL</span> <span class="o">=</span> <span class="n">U</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">@</span> <span class="n">V</span>
 
     <span class="c1"># reflection</span>
-    <span class="n">R_LR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">O_LL</span><span class="p">))</span> <span class="o">@</span> <span class="p">(</span><span class="n">transp</span><span class="p">(</span><span class="n">O_RL</span><span class="p">)</span> <span class="o">-</span> <span class="n">O_LR</span><span class="p">)</span> <span class="o">@</span> <span class="n">T_LR</span>  <span class="c1"># type: ignore</span>
-    <span class="n">R_RL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">O_RR</span><span class="p">))</span> <span class="o">@</span> <span class="p">(</span><span class="n">transp</span><span class="p">(</span><span class="n">O_LR</span><span class="p">)</span> <span class="o">-</span> <span class="n">O_RL</span><span class="p">)</span> <span class="o">@</span> <span class="n">T_RL</span>  <span class="c1"># type: ignore</span>
+    <span class="n">R_LR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">O_LL</span><span class="p">))</span> <span class="o">@</span> <span class="p">(</span><span class="n">O_RL</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">O_LR</span><span class="p">))</span> <span class="o">@</span> <span class="n">T_LR</span>  <span class="c1"># type: ignore</span>
+    <span class="n">R_RL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">O_RR</span><span class="p">))</span> <span class="o">@</span> <span class="p">(</span><span class="n">O_LR</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">O_RL</span><span class="p">))</span> <span class="o">@</span> <span class="n">T_RL</span>  <span class="c1"># type: ignore</span>
 
     <span class="c1"># s-matrix</span>
     <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
@@ -379,12 +390,12 @@ document.write(`
         <span class="mi">0</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># enforce S@S.H is diagonal</span>
-    <span class="k">if</span> <span class="n">enforce_lossy_unitarity</span><span class="p">:</span>  <span class="c1"># HACK!</span>
+    <span class="c1"># enforce S@S.H is diagonal: HACK!</span>
+    <span class="k">if</span> <span class="n">enforce_lossy_unitarity</span><span class="p">:</span>
         <span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
         <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">@</span> <span class="n">U</span> <span class="o">@</span> <span class="n">V</span>
 
-    <span class="c1"># ensure reciprocity:</span>
+    <span class="c1"># ensure reciprocity: HACK?</span>
     <span class="k">if</span> <span class="n">enforce_reciprocity</span><span class="p">:</span>
         <span class="n">S</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">S</span> <span class="o">+</span> <span class="n">S</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
