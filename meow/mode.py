@@ -350,6 +350,28 @@ def normalize_product(mode: Mode) -> Mode:
     )
 
 
+def orthogonalize_modes(modes: list[Mode], conjugated_inner_product=True) -> list[Mode]:
+    """orthogonalize modes using gram-schmidt procedur
+
+    Guided modes are always orthogonal, but sometimes the mode solver
+    finds non-orthogonal spurious modes. In that case we orthogonalize
+    them using a Gram-Schmidt procedure.
+    """
+
+    new_modes = []
+    for mode in modes:
+        for new_mode in new_modes:
+            mode = mode + (-1.0) * _gs_proj(new_mode, mode, conjugated_inner_product)
+        new_modes.append(mode)
+    return new_modes
+
+
+def _gs_proj(mode1, mode2, conjugated_inner_product=True):
+    dot = inner_product_conj if conjugated_inner_product else inner_product
+    coef = complex(dot(mode2, mode1) / dot(mode1, mode1))
+    return coef * mode1
+
+
 def electric_energy_density(
     mode: Mode,
 ) -> np.ndarray[Tuple[int, int], np.dtype[np.float_]]:

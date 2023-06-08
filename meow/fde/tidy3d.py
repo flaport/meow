@@ -12,7 +12,7 @@ from scipy.constants import c
 from tidy3d.plugins.mode.solver import compute_modes as _compute_modes
 
 from ..cross_section import CrossSection
-from ..mode import Mode, Modes, normalize_energy, zero_phase
+from ..mode import Mode, Modes, normalize_energy, orthogonalize_modes, zero_phase
 
 
 @validate_arguments
@@ -21,6 +21,7 @@ def compute_modes_tidy3d(
     num_modes: PositiveInt = 10,
     target_neff: PositiveFloat | None = None,
     precision: Literal["single", "double"] = "double",
+    orthogonalization_method: Literal["none", "conjugated", "unconjugated"] = "none",
 ) -> Modes:
     """compute ``Modes`` for a given ``FdeSpec`` (Tidy3D backend)
 
@@ -95,5 +96,10 @@ def compute_modes_tidy3d(
 
     modes = [zero_phase(normalize_energy(mode)) for mode in modes]
     modes = sorted(modes, key=lambda m: float(np.real(m.neff)), reverse=True)
+
+    if orthogonalization_method == "conjugated":
+        modes = orthogonalize_modes(modes, conjugated_inner_product=True)
+    elif orthogonalization_method == "unconjugated":
+        modes = orthogonalize_modes(modes, conjugated_inner_product=False)
 
     return modes
