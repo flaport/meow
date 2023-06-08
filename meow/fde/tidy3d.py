@@ -12,7 +12,7 @@ from scipy.constants import c
 from tidy3d.plugins.mode.solver import compute_modes as _compute_modes
 
 from ..cross_section import CrossSection
-from ..mode import Mode, Modes, normalize_energy, zero_phase
+from ..mode import Mode, Modes
 
 
 @validate_arguments
@@ -93,7 +93,7 @@ def compute_modes_tidy3d(
             for i in range(num_modes)
         ]
 
-    modes = [zero_phase(normalize_energy(mode)) for mode in modes]
-    modes = sorted(modes, key=lambda m: float(np.real(m.neff)), reverse=True)
+    # modes = [zero_phase(normalize_energy(mode)) for mode in modes]
+    # modes = sorted(modes, key=lambda m: float(np.real(m.neff)), reverse=True)
 
     return modes
