@@ -74,11 +74,11 @@ def _visualize_s_matrix(S, fmt=None, title=None, show=True, phase=False, ax=None
         plt.show()
 
 
-def _visualize_s_pm_matrix(Spm, fmt=None, title=None, show=True, ax=None):
+def _visualize_s_pm_matrix(Spm, fmt=None, title=None, show=True, phase=False, ax=None):
     import matplotlib.pyplot as plt  # fmt: skip
 
     S, pm = Spm
-    _visualize_s_matrix(S, fmt=fmt, title=title, show=False, ax=ax)
+    _visualize_s_matrix(S, fmt=fmt, title=title, show=False, phase=phase, ax=ax)
     num_left = len([p for p in pm if "left" in p])
     Z = np.abs(S)
     _, x = np.arange(Z.shape[0])[::-1], np.arange(Z.shape[1])
