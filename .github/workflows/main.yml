@@ -24,7 +24,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Install dependencies
-        run: mamba install make papermill parallel ipyevents
+        run: |
+          mamba install make papermill parallel ipyevents ipytree
+          pip install gdsfactory[full,tidy3d,kfactory]
       - name: Install meow
         run: pip install .[full,dev]
       - name: Run notebooks
