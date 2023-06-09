@@ -610,7 +610,8 @@ document.write(`
 
     <span class="k">for</span> <span class="n">check_func</span><span class="p">,</span> <span class="n">vis_func</span> <span class="ow">in</span> <span class="n">VISUALIZATION_MAPPING</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">check_func</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">vis_func</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="n">vis_func</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
 
 
 <span class="n">vis</span> <span class="o">=</span> <span class="n">visualize</span>  <span class="c1"># shorthand for visualize</span>

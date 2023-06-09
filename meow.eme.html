@@ -417,22 +417,28 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.common.compute_propagation_s_matrix">
-<span class="sig-name descname"><span class="pre">compute_propagation_s_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_propagation_s_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_propagation_s_matrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_propagation_s_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_cell_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_propagation_s_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_propagation_s_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>get the propagation S-matrix of each <cite>Mode</cite> belonging to a <cite>CrossSection</cite> in a <cite>Cell</cite> with a certain length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>modes</strong> (<em>List</em><em>[</em><a class="reference internal" href="meow.html#meow.mode.Mode" title="meow.mode.Mode"><em>Mode</em></a><em>]</em>) – </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>modes</strong> (<em>List</em><em>[</em><a class="reference internal" href="meow.html#meow.mode.Mode" title="meow.mode.Mode"><em>Mode</em></a><em>]</em>) – </p></li>
+<li><p><strong>override_cell_length</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.common.compute_propagation_s_matrices">
-<span class="sig-name descname"><span class="pre">compute_propagation_s_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_propagation_s_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_propagation_s_matrices" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_propagation_s_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_cell_lengths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_propagation_s_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_propagation_s_matrices" title="Permalink to this definition">#</a></dt>
 <dd><p>get all the propagation S-matrices of all the <cite>Modes</cite> belonging to each <cite>CrossSection</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>modes</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="meow.html#meow.mode.Mode" title="meow.mode.Mode"><em>Mode</em></a><em>]</em><em>]</em>) – </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>modes</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="meow.html#meow.mode.Mode" title="meow.mode.Mode"><em>Mode</em></a><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>override_cell_lengths</strong> (<em>Optional</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -458,7 +464,7 @@ document.write(`
 <span class="target" id="module-meow.eme.sax"></span><p>SAX backend for EME (default backend)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.sax.compute_s_matrix_sax">
-<span class="sig-name descname"><span class="pre">compute_s_matrix_sax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sax_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conjugate_transpose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_reciprocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_lossy_unitarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#compute_s_matrix_sax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.compute_s_matrix_sax" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_s_matrix_sax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sax_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conjugate_transpose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_reciprocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_lossy_unitarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_cell_lengths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#compute_s_matrix_sax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.compute_s_matrix_sax" title="Permalink to this definition">#</a></dt>
 <dd><p>Calculate the S-matrix for given sets of modes, each set belonging to a <cite>Cell</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -469,6 +475,7 @@ document.write(`
 <li><p><strong>conjugate_transpose</strong> (<em>bool</em>) – </p></li>
 <li><p><strong>enforce_reciprocity</strong> (<em>bool</em>) – </p></li>
 <li><p><strong>enforce_lossy_unitarity</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>override_cell_lengths</strong> (<em>Optional</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 </dl>
