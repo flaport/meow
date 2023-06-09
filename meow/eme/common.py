@@ -125,11 +125,17 @@ def compute_interface_s_matrices(
     }
 
 
-def compute_propagation_s_matrix(modes: List[Mode]):
+def compute_propagation_s_matrix(
+    modes: List[Mode], override_cell_length: float | None = None
+):
     """get the propagation S-matrix of each `Mode` belonging to a `CrossSection` in a `Cell` with a certain length."""
+    cell_length = modes[0].cell.length
+    if override_cell_length is not None:
+        cell_length = override_cell_length
+
     s_dict = {
         (f"left@{i}", f"right@{i}"): np.exp(
-            2j * np.pi * mode.neff / mode.env.wl * mode.cell.length
+            2j * np.pi * mode.neff / mode.env.wl * cell_length
         )
         for i, mode in enumerate(modes)
     }
@@ -137,10 +143,21 @@ def compute_propagation_s_matrix(modes: List[Mode]):
     return s_dict
 
 
-def compute_propagation_s_matrices(modes: List[List[Mode]]):
+def compute_propagation_s_matrices(
+    modes: List[List[Mode]], override_cell_lengths: list[float] | None = None
+):
     """get all the propagation S-matrices of all the `Modes` belonging to each `CrossSection`"""
+    if override_cell_lengths:
+        if not len(override_cell_lengths) == len(modes):
+            raise ValueError(
+                f"len(override_cell_lengths) != len(modes): {len(override_cell_lengths)} != {len(modes)}"
+            )
+        cell_lengths = override_cell_lengths
+    else:
+        cell_lengths = [None for _ in modes]
     return {
-        f"p_{i}": compute_propagation_s_matrix(modes_) for i, modes_ in enumerate(modes)
+        f"p_{i}": compute_propagation_s_matrix(modes_, override_cell_length=cell_length)
+        for i, (modes_, cell_length) in enumerate(zip(modes, cell_lengths))
     }
 
 

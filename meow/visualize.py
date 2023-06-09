@@ -310,6 +310,7 @@ def visualize(obj: Any, **kwargs: Any):
     for check_func, vis_func in VISUALIZATION_MAPPING.items():
         if check_func(obj):
             return vis_func(obj, **kwargs)
+    print(obj)
 
 
 vis = visualize  # shorthand for visualize

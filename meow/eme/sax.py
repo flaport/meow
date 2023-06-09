@@ -84,6 +84,7 @@ def compute_s_matrix_sax(
     conjugate_transpose: bool = DEFAULT_CONJUGATE_TRANSPOSE,
     enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
     enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
+    override_cell_lengths: list[float] | None = None,
     **kwargs,
 ):
     """Calculate the S-matrix for given sets of modes, each set belonging to a `Cell`
@@ -99,7 +100,9 @@ def compute_s_matrix_sax(
     _compute_interface_s_matrices = kwargs.pop(
         "compute_interface_s_matrices", compute_interface_s_matrices
     )
-    propagations = _compute_propagation_s_matrices(modes)
+    propagations = _compute_propagation_s_matrices(
+        modes, override_cell_lengths=override_cell_lengths
+    )
     interfaces = _compute_interface_s_matrices(
         modes,
         conjugate_transpose=conjugate_transpose,
