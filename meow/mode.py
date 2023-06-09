@@ -412,6 +412,21 @@ def normalize_energy(mode: Mode) -> Mode:
     )
 
 
+def is_pml_mode(mode, threshold_factor=0.2):
+    numx, numy = mode.cell.mesh.num_pml
+    ed = energy_density(mode)
+    m, n = ed.shape
+    lft = ed[:numx, :]
+    rgt = ed[m - numx :, :]
+    top = ed[numx : m - numx, n:numy]
+    btm = ed[numx : m - numx, n - numy :]
+    rest = ed[numx : m - numx, numy : n - numy]
+    pml_sum = lft.sum() + rgt.sum() + top.sum() + btm.sum()
+    rest_sum = rest.sum()
+    is_pml = pml_sum > threshold_factor * rest_sum
+    return is_pml
+
+
 def te_fraction(mode: Mode) -> float:
     """the TE polarization fraction of the `Mode`"""
     epsx = mode.cs.nx**2
