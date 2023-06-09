@@ -1,8 +1,11 @@
 """ Visualizations for common meow-datatypes """
 
-from typing import Any
+from collections.abc import Iterable
+from typing import Any, Callable
 
 import numpy as np
+
+from meow.structures import visualize_structures
 
 try:
     import matplotlib.pyplot as plt  # fmt: skip
@@ -168,27 +171,17 @@ def _visualize_overlap_density(
     return p
 
 
-def _visualize_gdsfactory(comp):
+def _visualize_gf_component(comp):
     import gdsfactory as gf  # fmt: skip
 
     gf.plot(comp)  # type: ignore
 
 
-def _is_s_matrix(obj: Any):
-    return (
-        (
-            isinstance(obj, np.ndarray)
-            or (DeviceArray is not None and isinstance(obj, DeviceArray))
-        )
-        and obj.ndim == 2
-        and obj.shape[0] > 1
-        and obj.shape[1] > 1
-    )
-
-
 def _is_two_tuple(obj):
+    if not isinstance(obj, tuple):
+        return False
     try:
-        x, y = obj
+        x, y = obj  # type: ignore
         return True
     except Exception:
         return False
@@ -217,7 +210,6 @@ def _visualize_modes(
 
     num_modes = len(modes)
     cs = modes[0].cs
-    X, Y, n = cs.mesh.Xz, cs.mesh.Yz, cs.nz
     W, H = _figsize_visualize_mode(cs, 6.4)
 
     fig, ax = plt.subplots(
@@ -245,6 +237,61 @@ def _visualize_modes(
         plt.show()
 
 
+def _visualize_base_model(obj, **kwargs):
+    return obj._visualize(**kwargs)
+
+
+def _is_mode_list(obj: Any) -> bool:
+    from .mode import Mode  # fmt: skip
+    return isinstance(obj, Iterable) and all(isinstance(o, Mode) for o in obj)
+
+
+def _is_structure_list(obj: Any) -> bool:
+    from .structures import Structure  # fmt: skip
+    return isinstance(obj, Iterable) and all(isinstance(o, Structure) for o in obj)
+
+
+def _is_base_model(obj: Any) -> bool:
+    from .base_model import BaseModel  # fmt: skip
+    return isinstance(obj, BaseModel)
+
+
+def _is_mode_overlap(obj: Any) -> bool:
+    from .mode import Mode  # fmt: skip
+    return _is_two_tuple(obj) and all(isinstance(o, Mode) for o in obj)
+
+
+def _is_s_matrix(obj: Any):
+    return (
+        (
+            isinstance(obj, np.ndarray)
+            or (DeviceArray is not None and isinstance(obj, DeviceArray))
+        )
+        and obj.ndim == 2
+        and obj.shape[0] > 1
+        and obj.shape[1] > 1
+    )
+
+
+def _is_s_pm_matrix(obj):
+    return _is_two_tuple(obj) and _is_s_matrix(obj[0]) and isinstance(obj[1], dict)
+
+
+def _is_gf_component(obj):
+    return gf is not None and isinstance(obj, gf.Component)
+
+
+VISUALIZATION_MAPPING: dict[Callable, Callable] = {
+    _is_base_model: _visualize_base_model,
+    _is_mode_list: _visualize_modes,
+    _is_structure_list: visualize_structures,
+    _is_mode_overlap: _visualize_overlap_density,
+    _is_s_matrix: _visualize_s_matrix,
+    _is_s_pm_matrix: _visualize_s_pm_matrix,
+    _is_gf_component: _visualize_gf_component,
+}
+
+
 def visualize(obj: Any, **kwargs: Any):
     """visualize any meow object
 
@@ -256,36 +303,13 @@ def visualize(obj: Any, **kwargs: Any):
         Most meow objects have a `._visualize` method.
         Check out its help to see which kwargs are accepted.
     """
-    from .base_model import BaseModel  # fmt: skip
-    from .mode import Mode  # fmt: skip
-    from .structures import Structure, visualize_structures  # fmt: skip
-
-    # if isinstance(obj, Mode):
-    #    return _visualize_mode(obj)
     if plt is None:
-        return obj
+        print(obj)
+        return
 
-    if isinstance(obj, list) and all(isinstance(o, Mode) for o in obj):
-        return _visualize_modes(obj)
-    elif isinstance(obj, BaseModel):
-        return obj._visualize(**kwargs)
-    elif _is_two_tuple(obj) and all(isinstance(o, Mode) for o in obj):
-        return _visualize_overlap_density(obj, **kwargs)
-    elif _is_s_matrix(obj):
-        _visualize_s_matrix(obj, **kwargs)
-    elif _is_two_tuple(obj) and _is_s_matrix(obj[0]) and isinstance(obj[1], dict):
-        _visualize_s_pm_matrix(obj, **kwargs)
-    elif gf is not None and isinstance(obj, gf.Component):
-        _visualize_gdsfactory(obj, **kwargs)
-    else:
-        try:
-            (*objs,) = obj  # type: ignore
-        except TypeError:
-            return obj
-
-        if all(isinstance(obj, Structure) for obj in objs):
-            return visualize_structures(objs, **kwargs)
-        return objs
+    for check_func, vis_func in VISUALIZATION_MAPPING.items():
+        if check_func(obj):
+            return vis_func(obj, **kwargs)
 
 
 vis = visualize  # shorthand for visualize
