@@ -233,7 +233,7 @@ class Mode(BaseModel):
         return new_mode
 
     def __mul__(self, other):
-        if not isinstance(other, (float, complex)):
+        if not isinstance(other, (float, complex, int)):
             raise TypeError(
                 f"unsupported operand type(s) for *: 'Mode' and '{type(other).__name__}'"
             )
@@ -252,7 +252,7 @@ class Mode(BaseModel):
     __rmul__ = __mul__
 
     def __truediv__(self, other):
-        if not isinstance(other, (float, complex)):
+        if not isinstance(other, (float, complex, int)):
             raise TypeError(
                 f"unsupported operand type(s) for /: 'Mode' and '{type(other).__name__}'"
             )
