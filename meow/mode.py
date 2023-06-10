@@ -1,9 +1,9 @@
 """ An EigenMode """
 
 import pickle
+import warnings
 from itertools import product
 from typing import Any, List, Tuple
-import numbers
 
 import numpy as np
 from pydantic import Field, PrivateAttr
@@ -14,6 +14,7 @@ from scipy.linalg import norm
 from .base_model import BaseModel
 from .cross_section import CrossSection
 from .integrate import integrate_2d
+from .visualize import _figsize_visualize_mode
 
 
 class Mode(BaseModel):
@@ -49,10 +50,10 @@ class Mode(BaseModel):
 
     def __init__(self, **data: Any):
         super().__init__(**data)
-        self._Px = None
-        self._Py = None
-        self._Pz = None
-        self._A = None
+        self._Px = None  # type: ignore
+        self._Py = None  # type: ignore
+        self._Pz = None  # type: ignore
+        self._A = None  # type: ignore
 
     @property
     def te_fraction(self):
@@ -72,7 +73,7 @@ class Mode(BaseModel):
         E_qu = E_sq**2
         x = self.cs.mesh.x_
         y = self.cs.mesh.y_
-        self._A = integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu)
+        self._A = np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
 
     @property
     def Px(self):
@@ -114,22 +115,30 @@ class Mode(BaseModel):
     def _visualize(
         self,
         title=None,
+        title_prefix="",
         fields=None,
         ax=None,
         n_cmap=None,
         mode_cmap=None,
         num_levels=8,
         operation=lambda x: np.abs(x) ** 2,
+        show=True,
     ):
-        import matplotlib.pyplot as plt
-        from matplotlib import colors
+        import matplotlib.pyplot as plt  # fmt: skip
+        from matplotlib import colors  # fmt: skip
+        from mpl_toolkits.axes_grid1 import make_axes_locatable  # fmt: skip
+        W, H = _figsize_visualize_mode(self.cs, 6.4)
 
-        if fields is None or len(fields) == 0:
+        if not fields:
             fields = ["Ex"]
 
         if len(fields) > 1:
+            if len(fields) > 2:
+                max_width = 15
+                current_width = len(fields) * W
+                W, H = _figsize_visualize_mode(self.cs, 6.4 * max_width / current_width)
             if ax is None:
-                _, ax = plt.subplots(len(fields), 1, figsize=(5, len(fields) * 3))
+                _, ax = plt.subplots(1, len(fields), figsize=(len(fields) * W, H))
             if len(ax) < len(fields):
                 raise ValueError(
                     f"Not enough axes supplied for the number of fields "
@@ -137,12 +146,18 @@ class Mode(BaseModel):
                 )
             for field, ax_ in zip(fields, ax):
                 self._visualize(
-                    field,
+                    title=title,
+                    title_prefix=title_prefix,
+                    fields=[field],
                     ax=ax_,
                     n_cmap=n_cmap,
                     mode_cmap=mode_cmap,
                     num_levels=num_levels,
+                    operation=operation,
+                    show=False,
                 )
+            if show:
+                plt.show()
             return
 
         field = fields[0]
@@ -154,7 +169,6 @@ class Mode(BaseModel):
 
         if ax is None:
             ax = plt.gca()
-            plt.axis("scaled")
         plt.sca(ax)
 
         x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
@@ -168,22 +182,29 @@ class Mode(BaseModel):
         X = getattr(self.mesh, f"X{c}")
         Y = getattr(self.mesh, f"Y{c}")
         mode = operation(getattr(self, field))
-        plt.contour(X, Y, mode, cmap=mode_cmap, levels=np.linspace(mode.min(), mode.max(), num_levels))  # fmt: skip
-        plt.colorbar(label="mode")
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=UserWarning)
+            levels = np.linspace(mode.min(), mode.max(), num_levels + 1)[1:]
+            plt.contour(X, Y, mode, cmap=mode_cmap, levels=levels)  # fmt: skip
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        plt.colorbar(cax=cax)
+        plt.sca(ax)
 
         n = np.real(getattr(self.cs, f"n{c}"))
         plt.pcolormesh(X, Y, n, cmap=n_cmap)
-        plt.colorbar(label="n")
         plt.xlabel(x)
         plt.ylabel(y)
         plt.grid(True, alpha=0.4)
         if title is None:
-            plt.title(f"{field} [neff={float(np.real(self.neff)):.6f}]")
+            plt.title(f"{title_prefix}{field} [neff={float(np.real(self.neff)):.6f}]")
         else:
-            plt.title(title)
+            plt.title(f"{title_prefix}{title}")
         plt.xlim(X.min(), X.max())
         plt.ylim(Y.min(), Y.max())
-        plt.show()
+        plt.axis("scaled")
+        if show:
+            plt.show()
 
     def save(self, filename):
         with open(filename, "wb") as file:
@@ -212,7 +233,7 @@ class Mode(BaseModel):
         return new_mode
 
     def __mul__(self, other):
-        if not isinstance(other, numbers.Number):
+        if not isinstance(other, (float, complex)):
             raise TypeError(
                 f"unsupported operand type(s) for *: 'Mode' and '{type(other).__name__}'"
             )
@@ -231,7 +252,7 @@ class Mode(BaseModel):
     __rmul__ = __mul__
 
     def __truediv__(self, other):
-        if not isinstance(other, numbers.Number):
+        if not isinstance(other, (float, complex)):
             raise TypeError(
                 f"unsupported operand type(s) for /: 'Mode' and '{type(other).__name__}'"
             )
@@ -268,6 +289,12 @@ def zero_phase(mode: Mode) -> Mode:
     return new_mode
 
 
+# def _centroid_idxs(arr2d: np.ndarray) -> tuple[int, int]:
+#    centroid_x = np.average(np.arange(arr2d.shape[1]), weights=arr2d.sum(axis=0))
+#    centroid_y = np.average(np.arange(arr2d.shape[0]), weights=arr2d.sum(axis=1))
+#    return round(float(centroid_x)), round(float(centroid_y))
+
+
 def _sum_around(field, m, n, r=2):
     total = 0
     idxs = range(-r, r + 1)
@@ -297,9 +324,15 @@ def invert_mode(mode: Mode) -> Mode:
 def inner_product(mode1: Mode, mode2: Mode) -> float:
     """the inner product of a `Mode` with another `Mode` is uniquely defined."""
     mesh = mode1.mesh
-    # cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
-    cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx  # attention: removed conjugation
-    return 0.25 * np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
+    cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx
+    return np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
+
+
+def inner_product_conj(mode1: Mode, mode2: Mode) -> float:
+    """the inner product of a `Mode` with another `Mode` is uniquely defined."""
+    mesh = mode1.mesh
+    cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
+    return np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
 
 
 def normalize_product(mode: Mode) -> Mode:
@@ -377,6 +410,21 @@ def normalize_energy(mode: Mode) -> Mode:
         Hy=mode.Hy / h,
         Hz=mode.Hz / h,
     )
+
+
+def is_pml_mode(mode, threshold_factor=0.2):
+    numx, numy = mode.cell.mesh.num_pml
+    ed = energy_density(mode)
+    m, n = ed.shape
+    lft = ed[:numx, :]
+    rgt = ed[m - numx :, :]
+    top = ed[numx : m - numx, n:numy]
+    btm = ed[numx : m - numx, n - numy :]
+    rest = ed[numx : m - numx, numy : n - numy]
+    pml_sum = lft.sum() + rgt.sum() + top.sum() + btm.sum()
+    rest_sum = rest.sum()
+    is_pml = pml_sum > threshold_factor * rest_sum
+    return is_pml
 
 
 def te_fraction(mode: Mode) -> float:

@@ -1,4 +1,5 @@
 """ A CrossSection """
+
 from typing import Any, Dict
 
 import numpy as np
@@ -63,7 +64,7 @@ class CrossSection(BaseModel):
         return self.cell.structures
 
     def _visualize(self, c="z", axs=None):
-        import matplotlib.pyplot as plt
+        import matplotlib.pyplot as plt  # fmt: skip
 
         if axs is None:
             _, axs = plt.subplots(1, len(c), figsize=(3 * len(c), 3))

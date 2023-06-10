@@ -89,7 +89,7 @@ def _serialize_array(arr):
             "imag": _serialize_array(np.imag(arr)),
         }
     else:
-        return np.round(arr, 12).tolist()
+        return np.round(arr, 16).tolist()
 
 
 def _parse_array_type_info(annotation) -> Tuple[Any, Any]:
@@ -119,7 +119,7 @@ def _parse_array_type_info(annotation) -> Tuple[Any, Any]:
 
 
 def _try_parse_shape_int(value):
-    from typing import _LiteralGenericAlias  # type: ignore
+    from typing import _LiteralGenericAlias  # fmt: skip # type: ignore
 
     if isinstance(value, _LiteralGenericAlias):
         (value,) = value.__args__
@@ -147,7 +147,7 @@ class _ModelMetaclass(ModelMetaclass):
         Config:
             arbitrary_types_allowed = True
             json_encoders = {
-                np.ndarray: lambda arr: np.round(arr, 12).tolist()
+                np.ndarray: lambda arr: np.round(arr, 16).tolist()
             }
 
     """

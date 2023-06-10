@@ -1,35 +1,43 @@
 """ SAX backend for EME (default backend) """
+
 from typing import Any, Dict, List
 
 import numpy as np
 
-from ..mode import Mode, inner_product
-from ..visualize import vis
+from ..mode import Mode
+from ..mode import inner_product as inner_product_normal
+from ..mode import inner_product_conj
+
+DEFAULT_CONJUGATE_TRANSPOSE = True
+DEFAULT_ENFORCE_RECIPROCITY = False
+DEFAULT_ENFORCE_LOSSY_UNITARITY = False
 
 
 def compute_interface_s_matrix(
     modes1: List[Mode],
     modes2: List[Mode],
-    enforce_reciprocity: bool = False,
-    enforce_lossy_unitarity: bool = False,
+    conjugate_transpose: bool = DEFAULT_CONJUGATE_TRANSPOSE,
+    enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
+    enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
 ):
     """get the S-matrix of the interface between two `CrossSection`s"""
     # overlap matrices
+    inner_product = inner_product_conj if conjugate_transpose else inner_product_normal
+    conjugate = np.conj if conjugate_transpose else lambda a: a
+
     NL, NR = len(modes1), len(modes2)
     O_LL = np.array([inner_product(modes1[m], modes1[m]) for m in range(NL)])
     O_RR = np.array([inner_product(modes2[n], modes2[n]) for n in range(NR)])
-    O_LR = np.array(
-        [[inner_product(modes1[m], modes2[n]) for n in range(NR)] for m in range(NL)]
-    )
-    O_RL = np.array(
-        [[inner_product(modes2[m], modes1[n]) for n in range(NL)] for m in range(NR)]
-    )
+    O_LR = np.array([[inner_product(modes1[m], modes2[n]) for n in range(NR)] for m in range(NL)])  # fmt: skip
+    O_RL = np.array([[inner_product(modes2[m], modes1[n]) for n in range(NL)] for m in range(NR)])  # fmt: skip
 
-    # extra phase correction.
+    # extra phase correction (disabled?).
+
+    if conjugate_transpose:
+        O_LL = np.real(O_LL)
+        O_RR = np.real(O_RR)
 
     # ignoring the phase seems to corresponds best with lumerical.
-    # O_LL = np.abs(O_LL)
-    # O_RR = np.abs(O_RR)
 
     # alternative phase correction (probably worth testing this out)
     # Question: is this not just an abs ;) ?
@@ -37,11 +45,11 @@ def compute_interface_s_matrix(
     # O_RR = O_RR*np.exp(-1j*np.angle(O_RR))
 
     # yet another alternative phase correction (probably worth testing this out too)
-    # O_LR = O_LR@np.diag(np.exp(-1j*np.angle(np.diag(O_LR))))
-    # O_RL = O_RL@np.diag(np.exp(-1j*np.angle(np.diag(O_RL))))
+    # O_LR = O_LR*np.diag(np.exp(-1j*np.angle(np.diag(O_LR))))
+    # O_RL = O_RL*np.diag(np.exp(-1j*np.angle(np.diag(O_RL))))
 
     # transmission L->R
-    LHS = O_LR + O_RL.T
+    LHS = conjugate(O_LR) + O_RL.T
     RHS = np.diag(2 * O_LL)
 
     # print(f"LHS: {LHS}")
@@ -51,28 +59,26 @@ def compute_interface_s_matrix(
     # vis(RHS)
 
     T_LR, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
-    U, t, V = np.linalg.svd(T_LR, full_matrices=False)
 
     # HACK: we don't expect gain --> invert singular values that lead to gain
     # see: https://github.com/BYUCamachoLab/emepy/issues/12
+    U, t, V = np.linalg.svd(T_LR, full_matrices=False)
     t = np.where(t > 1, 1 / t, t)
-
     T_LR = U @ np.diag(t) @ V
 
     # transmission R->L
-    LHS = O_RL + O_LR.T
+    LHS = conjugate(O_RL) + O_LR.T
     RHS = np.diag(2 * O_RR)
     T_RL, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
-    U, t, V = np.linalg.svd(T_RL, full_matrices=False)
 
     # HACK: we don't expect gain --> invert singular values that lead to gain
+    U, t, V = np.linalg.svd(T_RL, full_matrices=False)
     t = np.where(t > 1, 1 / t, t)
-
     T_RL = U @ np.diag(t) @ V
 
     # reflection
-    R_LR = np.diag(1 / (2 * O_LL)) @ (O_RL.T - O_LR) @ T_LR  # type: ignore
-    R_RL = np.diag(1 / (2 * O_RR)) @ (O_LR.T - O_RL) @ T_RL  # type: ignore
+    R_LR = np.diag(1 / (2 * O_LL)) @ (O_RL.T - conjugate(O_LR)) @ T_LR  # type: ignore
+    R_RL = np.diag(1 / (2 * O_RR)) @ (O_LR.T - conjugate(O_RL)) @ T_RL  # type: ignore
 
     # s-matrix
     S = np.concatenate(
@@ -83,8 +89,8 @@ def compute_interface_s_matrix(
         0,
     )
 
-    # enforce S@S.H is diagonal
-    if enforce_lossy_unitarity:  # HACK!
+    # enforce S@S.H is diagonal: HACK!
+    if enforce_lossy_unitarity:
         U, s, V = np.linalg.svd(S)
         S = np.diag(s) @ U @ V
 
@@ -102,14 +108,16 @@ def compute_interface_s_matrix(
 
 def compute_interface_s_matrices(
     modes: List[List[Mode]],
-    enforce_reciprocity: bool = False,
-    enforce_lossy_unitarity: bool = False,
+    conjugate_transpose: bool = DEFAULT_CONJUGATE_TRANSPOSE,
+    enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
+    enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
 ):
     """get all the S-matrices of all the interfaces in a collection of `CrossSections`"""
     return {
         f"i_{i}_{i + 1}": compute_interface_s_matrix(
             modes1=modes1,
             modes2=modes2,
+            conjugate_transpose=conjugate_transpose,
             enforce_reciprocity=enforce_reciprocity,
             enforce_lossy_unitarity=enforce_lossy_unitarity,
         )
@@ -117,11 +125,17 @@ def compute_interface_s_matrices(
     }
 
 
-def compute_propagation_s_matrix(modes: List[Mode]):
+def compute_propagation_s_matrix(
+    modes: List[Mode], override_cell_length: float | None = None
+):
     """get the propagation S-matrix of each `Mode` belonging to a `CrossSection` in a `Cell` with a certain length."""
+    cell_length = modes[0].cell.length
+    if override_cell_length is not None:
+        cell_length = override_cell_length
+
     s_dict = {
         (f"left@{i}", f"right@{i}"): np.exp(
-            2j * np.pi * mode.neff / mode.env.wl * mode.cell.length
+            2j * np.pi * mode.neff / mode.env.wl * cell_length
         )
         for i, mode in enumerate(modes)
     }
@@ -129,10 +143,21 @@ def compute_propagation_s_matrix(modes: List[Mode]):
     return s_dict
 
 
-def compute_propagation_s_matrices(modes: List[List[Mode]]):
+def compute_propagation_s_matrices(
+    modes: List[List[Mode]], override_cell_lengths: list[float] | None = None
+):
     """get all the propagation S-matrices of all the `Modes` belonging to each `CrossSection`"""
+    if override_cell_lengths:
+        if not len(override_cell_lengths) == len(modes):
+            raise ValueError(
+                f"len(override_cell_lengths) != len(modes): {len(override_cell_lengths)} != {len(modes)}"
+            )
+        cell_lengths = override_cell_lengths
+    else:
+        cell_lengths = [None for _ in modes]
     return {
-        f"p_{i}": compute_propagation_s_matrix(modes_) for i, modes_ in enumerate(modes)
+        f"p_{i}": compute_propagation_s_matrix(modes_, override_cell_length=cell_length)
+        for i, (modes_, cell_length) in enumerate(zip(modes, cell_lengths))
     }
 
 

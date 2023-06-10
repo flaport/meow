@@ -1,5 +1,6 @@
 """ Geometries """
 
+import warnings
 from secrets import token_hex
 from typing import Dict, List, Literal, Tuple, Union, cast
 
@@ -34,8 +35,8 @@ class Geometry(BaseModel):
         return value
 
     def _visualize(self, scale=None):
-        from trimesh.scene import Scene
-        from trimesh.transformations import rotation_matrix
+        from trimesh.scene import Scene  # fmt: skip
+        from trimesh.transformations import rotation_matrix  # fmt: skip
 
         scene = Scene()
         scene.add_geometry(self._trimesh(scale=scale))
@@ -103,8 +104,8 @@ class Box(Geometry):
         )
 
     def _trimesh(self, color=None, scale=None):
-        from trimesh import Trimesh
-        from trimesh.creation import extrude_polygon
+        from trimesh import Trimesh  # fmt: skip
+        from trimesh.creation import extrude_polygon  # fmt: skip
 
         sx, sy, sz = scale or (1, 1, 1)
         poly = sg.Polygon(
@@ -150,7 +151,11 @@ class Prism(Geometry):
             y_min, _ = self.poly.min(0)
             y_max, _ = self.poly.max(0)
             line = sg.LineString([(y_min, z), (y_max, z)])
-            intersections = np.asarray(poly.intersection(line).coords)
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    "ignore", category=RuntimeWarning, module="shapely"
+                )
+                intersections = poly.intersection(line)
 
             if not isinstance(intersections, sg.MultiLineString):
                 intersection_array = np.asarray(intersections.coords)
@@ -173,7 +178,11 @@ class Prism(Geometry):
             _, x_min = self.poly.min(0)
             _, x_max = self.poly.max(0)
             line = sg.LineString([(z, x_min), (z, x_max)])
-            intersections = poly.intersection(line)
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    "ignore", category=RuntimeWarning, module="shapely"
+                )
+                intersections = poly.intersection(line)
 
             if not isinstance(intersections, sg.MultiLineString):
                 intersection_array = np.asarray(intersections.coords)
@@ -237,7 +246,7 @@ class Prism(Geometry):
             )
 
     def _trimesh(self, color=None, scale=None):
-        from trimesh.creation import extrude_polygon
+        from trimesh.creation import extrude_polygon  # fmt: skip
 
         poly = sg.Polygon(self.poly)
         prism = extrude_polygon(poly, self.h_max - self.h_min)
@@ -254,7 +263,7 @@ class Prism(Geometry):
         return prism
 
     def _center(self):
-        import shapely.geometry as sg
+        import shapely.geometry as sg  # fmt: skip
 
         a, b = np.array(sg.Polygon(self.poly).centroid.xy).ravel()
         c = 0.5 * (self.h_min + self.h_max)
@@ -274,8 +283,7 @@ class Prism(Geometry):
 
 
 def _to_rgba(c):
-    from matplotlib.colors import to_rgba as _to_rgba_mpl
-
+    from matplotlib.colors import to_rgba as _to_rgba_mpl  # fmt: skip
     r, g, b, a = _to_rgba_mpl(c)
     a = min(max(a, 0.1), 0.9)
     return float(r), float(g), float(b), float(a)
