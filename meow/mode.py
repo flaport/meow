@@ -412,7 +412,9 @@ def normalize_energy(mode: Mode) -> Mode:
     )
 
 
-def is_pml_mode(mode, threshold_factor=0.2):
+def is_pml_mode(mode, threshold=0.2):
+    """True is the mode has more than `threshold` part
+    of its energy density in the pml region"""
     numx, numy = mode.cell.mesh.num_pml
     ed = energy_density(mode)
     m, n = ed.shape
@@ -423,7 +425,9 @@ def is_pml_mode(mode, threshold_factor=0.2):
     rest = ed[numx : m - numx, numy : n - numy]
     pml_sum = lft.sum() + rgt.sum() + top.sum() + btm.sum()
     rest_sum = rest.sum()
-    is_pml = pml_sum > threshold_factor * rest_sum
+    # probably propper integration considering
+    # the size of the mesh cells would be better here
+    is_pml = pml_sum > threshold * (rest_sum + pml_sum)
     return is_pml
 
 

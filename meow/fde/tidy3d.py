@@ -12,7 +12,7 @@ from scipy.constants import c
 from tidy3d.plugins.mode.solver import compute_modes as _compute_modes
 
 from ..cross_section import CrossSection
-from ..mode import Mode, Modes, normalize_energy, zero_phase
+from ..mode import Mode, Modes, is_pml_mode, normalize_energy, zero_phase
 
 
 @validate_arguments
@@ -21,6 +21,7 @@ def compute_modes_tidy3d(
     num_modes: PositiveInt = 10,
     target_neff: PositiveFloat | None = None,
     precision: Literal["single", "double"] = "double",
+    filter_pml_modes: float = 1,
 ) -> Modes:
     """compute ``Modes`` for a given ``FdeSpec`` (Tidy3D backend)
 
@@ -28,6 +29,8 @@ def compute_modes_tidy3d(
         cs: The ``CrossSection`` to calculate the modes for
         num_modes: Number of modes returned by mode solver.
         target_neff: Guess for initial effective index of the mode.
+        filter_pml_modes: The threshold passed to `is_pml_mode` to filter out pml modes.
+            if `1` no modes will be filtered out
     """
 
     if num_modes < 1:
@@ -95,5 +98,7 @@ def compute_modes_tidy3d(
 
     modes = [zero_phase(normalize_energy(mode)) for mode in modes]
     modes = sorted(modes, key=lambda m: float(np.real(m.neff)), reverse=True)
+    if filter_pml_modes < 1:
+        modes = [m for m in modes if not is_pml_mode(m, filter_pml_modes)]
 
     return modes
