@@ -205,12 +205,13 @@ def _visualize_modes(
     num_levels=8,
     operation=lambda x: np.abs(x) ** 2,
     show=True,
+    plot_width=6.4,
 ):
     import matplotlib.pyplot as plt  # fmt: skip
 
     num_modes = len(modes)
     cs = modes[0].cs
-    W, H = _figsize_visualize_mode(cs, 6.4)
+    W, H = _figsize_visualize_mode(cs, plot_width)
 
     fig, ax = plt.subplots(
         num_modes,
