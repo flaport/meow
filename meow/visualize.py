@@ -193,7 +193,6 @@ def _figsize_visualize_mode(cs, W0):
     delta_x = x_max - x_min
     delta_y = y_max - y_min
     aspect = delta_y / delta_x
-    W0 = 6.4
     W, H = W0 + 1, W0 * aspect + 1
     return W, H
 
@@ -206,6 +205,8 @@ def _visualize_modes(
     operation=lambda x: np.abs(x) ** 2,
     show=True,
     plot_width=6.4,
+    fields=("Ex", "Hx"),
+    ax=None,
 ):
     import matplotlib.pyplot as plt  # fmt: skip
 
@@ -213,19 +214,22 @@ def _visualize_modes(
     cs = modes[0].cs
     W, H = _figsize_visualize_mode(cs, plot_width)
 
-    fig, ax = plt.subplots(
-        num_modes,
-        2,
-        figsize=(2 * W, num_modes * H),
-        sharex=True,
-        sharey=True,
-        squeeze=False,
-    )
+    if ax is None:
+        fig, ax = plt.subplots(
+            num_modes,
+            2,
+            figsize=(2 * W, num_modes * H),
+            sharex=True,
+            sharey=True,
+            squeeze=False,
+        )
+    else:
+        fig = None
     for i, m in enumerate(modes):
         m._visualize(
             title=None,
             title_prefix=f"m{i}: ",
-            fields=["Ex", "Hx"],
+            fields=list(fields),
             ax=ax[i],
             n_cmap=n_cmap,
             mode_cmap=mode_cmap,
@@ -233,7 +237,8 @@ def _visualize_modes(
             operation=operation,
             show=False,
         )
-    fig.subplots_adjust(hspace=0, wspace=2 / (2 * W))
+    if fig is not None:
+        fig.subplots_adjust(hspace=0, wspace=2 / (2 * W))
     if show:
         plt.show()
 
