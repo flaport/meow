@@ -154,6 +154,13 @@ class Mode(BaseModel):
             ax = plt.gca()
         plt.sca(ax)
 
+        if n_cmap is None:
+            # little bit lighter colored than the one in cs._visualize:
+            n_cmap = colors.LinearSegmentedColormap.from_list(
+                name="c_cmap", colors=["#ffffff", "#c1d9ed"]
+            )
+        self.cs._visualize(ax=ax, n_cmap=n_cmap, cbar=False, show=False)
+
         x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
         c = field[-1]
         if mode_cmap is None:
@@ -165,17 +172,22 @@ class Mode(BaseModel):
             warnings.filterwarnings("ignore", category=UserWarning)
             levels = np.linspace(mode.min(), mode.max(), num_levels + 1)[1:]
             plt.contour(X, Y, mode, cmap=mode_cmap, levels=levels)  # fmt: skip
+            # plt.pcolormesh(X, Y, mode, cmap=mode_cmap, alpha=0.5) #, levels=levels)  # fmt: skip
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
         plt.colorbar(cax=cax)
         plt.sca(ax)
 
-        if n_cmap is None:
-            # little bit lighter colored than the one in cs._visualize:
-            n_cmap = colors.LinearSegmentedColormap.from_list(
-                name="c_cmap", colors=["#ffffff", "#c1d9ed"]
-            )
-        self.cs._visualize(ax=ax, n_cmap=n_cmap, cbar=False, show=False)
+        plt.xlabel(x)
+        plt.ylabel(y)
+        plt.grid(True, alpha=0.4)
+        if title is None:
+            plt.title(f"{title_prefix}{field} [neff={float(np.real(self.neff)):.6f}]")
+        else:
+            plt.title(f"{title_prefix}{title}")
+        plt.xlim(X.min(), X.max())
+        plt.ylim(Y.min(), Y.max())
+        plt.axis("scaled")
         if show:
             plt.show()
 

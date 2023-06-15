@@ -6,7 +6,7 @@ import numpy as np
 from pydantic import Field
 from pydantic.types import NonNegativeInt
 
-from .base_model import BaseModel, cached_property
+from .base_model import BaseModel, _array, cached_property
 
 
 class Mesh(BaseModel):
@@ -55,71 +55,75 @@ class Mesh2d(Mesh):
     @cached_property
     def dx(self):
         """x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
-        return self.x[1:] - self.x[:-1]
+        return (self.x[1:] - self.x[:-1]).view(_array)
 
     @cached_property
     def dy(self):
         """y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
-        return self.y[1:] - self.y[:-1]
+        return (self.y[1:] - self.y[:-1]).view(_array)
 
     @cached_property
     def x_(self):
         """x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
-        return 0.5 * (self.x[1:] + self.x[:-1])
+        return 0.5 * (self.x[1:] + self.x[:-1]).view(_array)
 
     @cached_property
     def y_(self):
         """y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
-        return 0.5 * (self.y[1:] + self.y[:-1])
+        return 0.5 * (self.y[1:] + self.y[:-1]).view(_array)
 
     @cached_property
     def x_full(self):
-        return np.stack(
-            [self.x[:-1] + self.dx / 4, self.x[:-1] + 3 * self.dx / 4], 1
-        ).ravel()
+        return (
+            np.stack([self.x[:-1] + self.dx / 4, self.x[:-1] + 3 * self.dx / 4], 1)
+            .ravel()
+            .view(_array)
+        )
 
     @cached_property
     def y_full(self):
-        return np.stack(
-            [self.y[:-1] + self.dy / 4, self.y[:-1] + 3 * self.dy / 4], 1
-        ).ravel()
+        return (
+            np.stack([self.y[:-1] + self.dy / 4, self.y[:-1] + 3 * self.dy / 4], 1)
+            .ravel()
+            .view(_array)
+        )
 
     @cached_property
     def XY_full(self):
         Y_full, X_full = np.meshgrid(self.y_full, self.x_full)
-        return X_full, Y_full
+        return X_full.view(_array), Y_full.view(_array)
 
     @property
     def X_full(self):
-        return self.XY_full[0]
+        return self.XY_full[0].view(_array)
 
     @property
     def Y_full(self):
-        return self.XY_full[1]
+        return self.XY_full[1].view(_array)
 
     @property
     def Xx(self):
-        return self.X_full[1::2, ::2]
+        return self.X_full[1::2, ::2].view(_array)
 
     @property
     def Yx(self):
-        return self.Y_full[1::2, ::2]
+        return self.Y_full[1::2, ::2].view(_array)
 
     @property
     def Xy(self):
-        return self.X_full[::2, 1::2]
+        return self.X_full[::2, 1::2].view(_array)
 
     @property
     def Yy(self):
-        return self.Y_full[::2, 1::2]
+        return self.Y_full[::2, 1::2].view(_array)
 
     @property
     def Xz(self):
-        return self.X_full[::2, ::2]
+        return self.X_full[::2, ::2].view(_array)
 
     @property
     def Yz(self):
-        return self.Y_full[::2, ::2]
+        return self.Y_full[::2, ::2].view(_array)
 
     def __eq__(self, other):
         eq = True
