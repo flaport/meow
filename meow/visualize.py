@@ -188,8 +188,8 @@ def _is_two_tuple(obj):
 
 
 def _figsize_visualize_mode(cs, W0):
-    x_min, x_max = cs.mesh.x.min(), cs.mesh.x.max()
-    y_min, y_max = cs.mesh.y.min(), cs.mesh.y.max()
+    x_min, x_max = cs.cell.mesh.x.min(), cs.cell.mesh.x.max()
+    y_min, y_max = cs.cell.mesh.y.min(), cs.cell.mesh.y.max()
     delta_x = x_max - x_min
     delta_y = y_max - y_min
     aspect = delta_y / delta_x

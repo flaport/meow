@@ -6,7 +6,7 @@ import numpy as np
 from pydantic import Field
 from pydantic.types import NonNegativeInt
 
-from .base_model import BaseModel
+from .base_model import BaseModel, cached_property
 
 
 class Mesh(BaseModel):
@@ -52,62 +52,80 @@ class Mesh2d(Mesh):
         description="Number of standard pml layers to add in the two tangential axes.",
     )
 
-    @property
+    @cached_property
     def dx(self):
         """x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
         return self.x[1:] - self.x[:-1]
 
-    @property
+    @cached_property
     def dy(self):
         """y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
         return self.y[1:] - self.y[:-1]
 
-    @property
+    @cached_property
     def x_(self):
-        """x-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)"""
+        """x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
         return 0.5 * (self.x[1:] + self.x[:-1])
 
-    @property
+    @cached_property
     def y_(self):
-        """y-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)"""
+        """y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
         return 0.5 * (self.y[1:] + self.y[:-1])
 
-    @property
-    def X(self):
-        return np.meshgrid(self.y_, self.x_)[1]
+    @cached_property
+    def x_full(self):
+        return np.stack(
+            [self.x[:-1] + self.dx / 4, self.x[:-1] + 3 * self.dx / 4], 1
+        ).ravel()
+
+    @cached_property
+    def y_full(self):
+        return np.stack(
+            [self.y[:-1] + self.dy / 4, self.y[:-1] + 3 * self.dy / 4], 1
+        ).ravel()
+
+    @cached_property
+    def XY_full(self):
+        Y_full, X_full = np.meshgrid(self.y_full, self.x_full)
+        return X_full, Y_full
 
     @property
-    def Y(self):
-        return np.meshgrid(self.y_, self.x_)[0]
+    def X_full(self):
+        return self.XY_full[0]
+
+    @property
+    def Y_full(self):
+        return self.XY_full[1]
 
     @property
     def Xx(self):
-        return np.meshgrid(self.y[:-1], self.x_)[1]
+        return self.X_full[1::2, ::2]
 
     @property
     def Yx(self):
-        return np.meshgrid(self.y[:-1], self.x_)[0]
+        return self.Y_full[1::2, ::2]
 
     @property
     def Xy(self):
-        return np.meshgrid(self.y_, self.x[:-1])[1]
+        return self.X_full[::2, 1::2]
 
     @property
     def Yy(self):
-        return np.meshgrid(self.y_, self.x[:-1])[0]
+        return self.Y_full[::2, 1::2]
 
     @property
     def Xz(self):
-        return np.meshgrid(self.y[:-1], self.x[:-1])[1]
+        return self.X_full[::2, ::2]
 
     @property
     def Yz(self):
-        return np.meshgrid(self.y[:-1], self.x[:-1])[0]
+        return self.Y_full[::2, ::2]
 
     def __eq__(self, other):
-        try:
-            x_eq = ((self.x - other.x) < 1e-6).all()
-            y_eq = ((self.y - other.y) < 1e-6).all()
-        except Exception:
-            return False
-        return x_eq and y_eq
+        eq = True
+        for k, v in self.dict().items():
+            if isinstance(v, np.ndarray):
+                eq &= ((v - getattr(other, k)) < 1e-6).all()
+            else:
+                eq &= v == getattr(other, k)
+        return eq

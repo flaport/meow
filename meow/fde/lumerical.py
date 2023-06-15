@@ -82,21 +82,21 @@ def compute_modes_lumerical(
         background_index=1.0,
         solver_type="2D X normal",
         x=float(cs.cell.z * unit),
-        y_min=float(cs.mesh.x.min() * unit),
-        y_max=float(cs.mesh.x.max() * unit),
-        z_min=float(cs.mesh.y.min() * unit),
-        z_max=float(cs.mesh.y.max() * unit),
+        y_min=float(cs.cell.mesh.x.min() * unit),
+        y_max=float(cs.cell.mesh.x.max() * unit),
+        z_min=float(cs.cell.mesh.y.min() * unit),
+        z_max=float(cs.cell.mesh.y.max() * unit),
         define_y_mesh_by="number of mesh cells",
         define_z_mesh_by="number of mesh cells",
-        mesh_cells_y=cs.mesh.x_.shape[0],
-        mesh_cells_z=cs.mesh.y_.shape[0],
+        mesh_cells_y=cs.cell.mesh.x_.shape[0],
+        mesh_cells_z=cs.cell.mesh.y_.shape[0],
         **pml_settings,
     )
     # set mesh size again, because PML messes with it:
     if cs.cell.mesh.num_pml[0] > 0:
-        sim.setnamed("FDE", "mesh cells y", cs.mesh.x_.shape[0] - num_pml_y)
+        sim.setnamed("FDE", "mesh cells y", cs.cell.mesh.x_.shape[0] - num_pml_y)
     if cs.cell.mesh.num_pml[1] > 0:
-        sim.setnamed("FDE", "mesh cells z", cs.mesh.y_.shape[0] - num_pml_z)
+        sim.setnamed("FDE", "mesh cells z", cs.cell.mesh.y_.shape[0] - num_pml_z)
     sim.setanalysis("number of trial modes", int(num_modes))
     sim.setanalysis("search", "near n")
     sim.setanalysis("use max index", True)

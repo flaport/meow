@@ -20,52 +20,6 @@ class Cell(BaseModel):
     z_min: float = Field(description="the starting z-coordinate of the cell")
     z_max: float = Field(description="the ending z-coordinate of the cell")
 
-    @cached_property
-    def _computed(self):
-        structures = sort_structures(self.structures)
-        mx, my, mz = [np.zeros(self.mesh.Xx.shape, dtype=int) for _ in range(3)]
-        # TODO: ideally we should downselect the relevant structures here...
-        # structures not at z-location should ideally be ignored.
-        materials = []
-        for structure in structures:
-            mask_x, mask_y, mask_z = structure.geometry._mask2d(self.mesh, self.z)
-            if (not mask_x.any()) or (not mask_y.any()) or (not mask_z.any()):
-                continue
-            try:
-                material_index = materials.index(structure.material) + 1
-            except ValueError:
-                materials.append(structure.material)
-                material_index = len(materials)
-            mx[mask_x] = material_index
-            my[mask_y] = material_index
-            mz[mask_z] = material_index
-        return {
-            "mx": mx,
-            "my": my,
-            "mz": mz,
-            "materials": materials,
-        }
-
-    @property
-    def mx(self):
-        """(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)"""
-        return self._computed["mx"]
-
-    @property
-    def my(self):
-        """(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)"""
-        return self._computed["my"]
-
-    @property
-    def mz(self):
-        """(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)"""
-        return self._computed["mz"]
-
-    @property
-    def materials(self):
-        """(derived) the materials in the cell"""
-        return self._computed["materials"]
-
     @property
     def z(self):
         return 0.5 * (self.z_min + self.z_max)
@@ -74,30 +28,61 @@ class Cell(BaseModel):
     def length(self):
         return np.abs(self.z_max - self.z_min)
 
-    def _visualize(self, c="z", axs=None):
+    @cached_property
+    def materials(self):
+        materials = {}
+        for i, structure in enumerate(sort_structures(self.structures), start=1):
+            if not structure.material in materials:
+                materials[structure.material] = i
+        return materials
+
+    @cached_property
+    def m_full(self):
+        m_full = np.zeros_like(self.mesh.X_full, dtype=np.int_)
+        for structure in sort_structures(self.structures):
+            mask = structure.geometry._mask2d(
+                self.mesh.X_full, self.mesh.Y_full, self.z
+            )
+            m_full[mask] = self.materials[structure.material]
+        return m_full
+
+    def _visualize(self, ax=None, cbar=True, show=True):
         import matplotlib.pyplot as plt  # fmt: skip
         from matplotlib.colors import ListedColormap, to_rgba  # fmt: skip
+        from mpl_toolkits.axes_grid1 import make_axes_locatable  # fmt: skip
 
         colors = [(0, 0, 0, 0)] + [
             to_rgba(m.meta.get("color", (0, 0, 0, 0))) for m in self.materials
         ]
         cmap = ListedColormap(colors=colors)  # type: ignore
-        if axs is None:
-            _, axs = plt.subplots(1, len(c), figsize=(3 * len(c), 3))
-        c_list = list(c)
-        if any(c not in "xyz" for c in c_list):
-            raise ValueError(f"Invalid component. Got: {c}. Should be 'x', 'y' or 'z'.")
-        axs = np.array(axs, dtype=object).ravel()
-        for ax, c in zip(axs, c_list):
-            X = getattr(self.mesh, f"X{c}")
-            Y = getattr(self.mesh, f"Y{c}")
-            m = getattr(self, f"m{c}")
+        if ax is not None:
             plt.sca(ax)
-            if len(c_list) > 1:
-                plt.title(f"m{c}")
-            plt.pcolormesh(X, Y, m, cmap=cmap, vmin=0, vmax=len(self.materials))
-            plt.axis("scaled")
-            plt.grid(True)
+        else:
+            ax = plt.gca()
+        plt.pcolormesh(
+            self.mesh.X_full,
+            self.mesh.Y_full,
+            self.m_full,
+            cmap=cmap,
+            vmin=0,
+            vmax=len(self.materials) + 1,
+        )
+        plt.axis("scaled")
+        plt.grid(True)
+        if cbar:
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes("right", size="5%", pad=0.05)
+            _cbar = plt.colorbar(
+                ticks=np.concatenate(
+                    [np.unique(self.m_full) + 0.5, [len(self.materials) + 1.5]]
+                ),
+                cax=cax,
+            )
+            labels = [""] + [m.name for m in self.materials] + [""]
+            _cbar.ax.set_yticklabels(labels, rotation=90, va="center")
+            plt.sca(ax)
+        if show:
+            plt.show()
 
 
 def create_cells(

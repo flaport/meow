@@ -20,57 +20,52 @@ class CrossSection(BaseModel):
     )
 
     @cached_property
-    def _computed(self):
-        nx, ny, nz = [np.ones(self.cell.mx.shape) for _ in range(3)]
-        for i, material in enumerate(self.cell.materials, start=1):
-            nx = np.where(self.cell.mx == i, material(self.env), nx)
-            ny = np.where(self.cell.my == i, material(self.env), ny)
-            nz = np.where(self.cell.mz == i, material(self.env), nz)
-        return {
-            "nx": nx,
-            "ny": ny,
-            "nz": nz,
-        }
+    def n_full(self):
+        n_full = np.ones_like(self.cell.mesh.X_full)
+        for material, idx in self.cell.materials.items():
+            n_full = np.where(self.cell.m_full == idx, material(self.env), n_full)
+        return n_full
 
     @property
     def nx(self):
-        """(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)"""
-        return self._computed["nx"]
+        return self.n_full[1::2, ::2]
 
     @property
     def ny(self):
-        """(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)"""
-        return self._computed["ny"]
+        return self.n_full[::2, 1::2]
 
     @property
     def nz(self):
-        """(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)"""
-        return self._computed["nz"]
+        return self.n_full[::2, ::2]
 
-    @property
-    def mesh(self):
-        return self.cell.mesh
-
-    @property
-    def structures(self):
-        return self.cell.structures
-
-    def _visualize(self, c="z", axs=None):
+    def _visualize(self, ax=None, n_cmap=None, cbar=True, show=True):
         import matplotlib.pyplot as plt  # fmt: skip
-
-        if axs is None:
-            _, axs = plt.subplots(1, len(c), figsize=(3 * len(c), 3))
-        c_list = list(c)
-        if any(c not in "xyz" for c in c_list):
-            raise ValueError(f"Invalid component. Got: {c}. Should be 'x', 'y' or 'z'.")
-        axs = np.array(axs, dtype=object).ravel()
-        for ax, c in zip(axs, c_list):
-            X = getattr(self.mesh, f"X{c}")
-            Y = getattr(self.mesh, f"Y{c}")
-            n = getattr(self, f"n{c}")
+        from matplotlib import colors  # fmt: skip
+        from mpl_toolkits.axes_grid1 import make_axes_locatable  # fmt: skip
+        if n_cmap is None:
+            n_cmap = colors.LinearSegmentedColormap.from_list(
+                name="c_cmap", colors=["#ffffff", "#86b5dc"]
+            )
+        if ax is not None:
             plt.sca(ax)
-            if len(c_list) > 1:
-                plt.title(f"n{c}")
-            plt.pcolormesh(X, Y, n)
-            plt.axis("scaled")
-            plt.grid(True)
+        else:
+            ax = plt.gca()
+        n_full = np.real(self.n_full).copy()
+        n_full[0, 0] = 1.0
+        plt.pcolormesh(
+            self.cell.mesh.X_full, self.cell.mesh.Y_full, n_full, cmap=n_cmap
+        )
+        plt.axis("scaled")
+        plt.grid(True)
+        if cbar:
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes("right", size="5%", pad=0.05)
+            values = np.unique(self.n_full)
+            _cbar = plt.colorbar(ticks=values, cax=cax)
+            # material_names = ['air'] + [mat.name for mat in self.cell.materials]
+            # labels = [f"\n{n}\n{v:.3f}" for n, v in zip(material_names, values)]
+            labels = [f"{v:.3f}" for v in values]
+            _cbar.ax.set_yticklabels(labels, rotation=90, va="center", ha="center")
+            plt.sca(ax)
+        if show:
+            plt.show()
