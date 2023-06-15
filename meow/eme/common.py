@@ -31,7 +31,7 @@ def compute_interface_s_matrix(
     O_LR = np.array([[inner_product(modes1[m], modes2[n]) for n in range(NR)] for m in range(NL)])  # fmt: skip
     O_RL = np.array([[inner_product(modes2[m], modes1[n]) for n in range(NL)] for m in range(NR)])  # fmt: skip
 
-    # extra phase correction (disabled?).
+    # additional phase correction (disabled?).
 
     if conjugate_transpose:
         O_LL = np.real(O_LL)

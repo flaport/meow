@@ -1,11 +1,11 @@
 """ an EME Cell """
 
-from typing import Any, Dict, List, Tuple, Union
+from typing import List, Tuple, Union
 
 import numpy as np
 from pydantic import Field
 
-from .base_model import BaseModel
+from .base_model import BaseModel, cached_property
 from .mesh import Mesh2d
 from .structures import Structure, sort_structures
 
@@ -19,40 +19,16 @@ class Cell(BaseModel):
     mesh: Mesh2d = Field(description="the mesh to slice the structures with")
     z_min: float = Field(description="the starting z-coordinate of the cell")
     z_max: float = Field(description="the ending z-coordinate of the cell")
-    extra: Dict[str, Any] = Field(
-        default_factory=lambda: {}, description="extra metadata"
-    )
 
-    @property
-    def mx(self):
-        """(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)"""
-        return self.extra["mx"]
-
-    @property
-    def my(self):
-        """(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)"""
-        return self.extra["my"]
-
-    @property
-    def mz(self):
-        """(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)"""
-        return self.extra["mz"]
-
-    @property
-    def materials(self):
-        """(derived) the materials in the cell"""
-        return self.extra["materials"]
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    @cached_property
+    def _computed(self):
         structures = sort_structures(self.structures)
         mx, my, mz = [np.zeros(self.mesh.Xx.shape, dtype=int) for _ in range(3)]
-        z = 0.5 * (self.z_min + self.z_max)
         # TODO: ideally we should downselect the relevant structures here...
         # structures not at z-location should ideally be ignored.
         materials = []
         for structure in structures:
-            mask_x, mask_y, mask_z = structure.geometry._mask2d(self.mesh, z)
+            mask_x, mask_y, mask_z = structure.geometry._mask2d(self.mesh, self.z)
             if (not mask_x.any()) or (not mask_y.any()) or (not mask_z.any()):
                 continue
             try:
@@ -63,10 +39,32 @@ class Cell(BaseModel):
             mx[mask_x] = material_index
             my[mask_y] = material_index
             mz[mask_z] = material_index
-        self.extra["mx"] = mx
-        self.extra["my"] = my
-        self.extra["mz"] = mz
-        self.extra["materials"] = materials
+        return {
+            "mx": mx,
+            "my": my,
+            "mz": mz,
+            "materials": materials,
+        }
+
+    @property
+    def mx(self):
+        """(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)"""
+        return self._computed["mx"]
+
+    @property
+    def my(self):
+        """(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)"""
+        return self._computed["my"]
+
+    @property
+    def mz(self):
+        """(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)"""
+        return self._computed["mz"]
+
+    @property
+    def materials(self):
+        """(derived) the materials in the cell"""
+        return self._computed["materials"]
 
     @property
     def z(self):
@@ -100,9 +98,6 @@ class Cell(BaseModel):
             plt.pcolormesh(X, Y, m, cmap=cmap, vmin=0, vmax=len(self.materials))
             plt.axis("scaled")
             plt.grid(True)
-
-    class Config:
-        fields = {"extra": {"exclude": True}}
 
 
 def create_cells(

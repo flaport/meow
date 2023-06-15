@@ -3,15 +3,15 @@
 import pickle
 import warnings
 from itertools import product
-from typing import Any, List, Tuple
+from typing import List, Tuple
 
 import numpy as np
-from pydantic import Field, PrivateAttr
+from pydantic import Field
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
 from scipy.linalg import norm
 
-from .base_model import BaseModel
+from .base_model import BaseModel, cached_property
 from .cross_section import CrossSection
 from .integrate import integrate_2d
 from .visualize import _figsize_visualize_mode
@@ -43,62 +43,45 @@ class Mode(BaseModel):
         description="the Hz-fields of the mode"
     )
 
-    _Px: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
-    _Py: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
-    _Pz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
-    _A: np.float_ = PrivateAttr()
-
-    def __init__(self, **data: Any):
-        super().__init__(**data)
-        self._Px = None  # type: ignore
-        self._Py = None  # type: ignore
-        self._Pz = None  # type: ignore
-        self._A = None  # type: ignore
-
     @property
     def te_fraction(self):
         """the TE polarization fraction of the mode."""
         return te_fraction(self)
 
-    def _calc_poynting(self):
+    @cached_property
+    def _pointing(self):
         """calculate and cache the poynting vector"""
         vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
         vecH = np.stack([self.Hx, self.Hy, self.Hz], axis=-1)
         vecP = np.cross(vecE, vecH)
-        self._Px, self._Py, self._Pz = np.rollaxis(vecP, -1)
+        Px, Py, Pz = np.rollaxis(vecP, -1)
+        return {
+            "Px": Px,
+            "Py": Py,
+            "Pz": Pz,
+        }
 
-    def _calc_area(self):
+    @property
+    def Px(self):
+        return self._pointing["Px"]
+
+    @property
+    def Py(self):
+        return self._pointing["Py"]
+
+    @property
+    def Pz(self):
+        return self._pointing["Pz"]
+
+    @cached_property
+    def A(self):
+        """mode area"""
         vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
         E_sq = norm(vecE, axis=-1, ord=2)
         E_qu = E_sq**2
         x = self.cs.mesh.x_
         y = self.cs.mesh.y_
-        self._A = np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
-
-    @property
-    def Px(self):
-        if self._Px is None:
-            self._calc_poynting()
-        return self._Px
-
-    @property
-    def Py(self):
-        if self._Py is None:
-            self._calc_poynting()
-        return self._Py
-
-    @property
-    def Pz(self):
-        if self._Pz is None:
-            self._calc_poynting()
-        return self._Pz
-
-    @property
-    def A(self):
-        """mode area"""
-        if self._A is None:
-            self._calc_area()
-        return self._A
+        return np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
 
     @property
     def env(self):

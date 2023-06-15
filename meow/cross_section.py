@@ -1,11 +1,9 @@
 """ A CrossSection """
 
-from typing import Any, Dict
-
 import numpy as np
 from pydantic import Field
 
-from .base_model import BaseModel
+from .base_model import BaseModel, cached_property
 from .cell import Cell
 from .environment import Environment
 
@@ -20,40 +18,34 @@ class CrossSection(BaseModel):
     env: Environment = Field(
         description="the environment for which the cross sectionw was calculated"
     )
-    extra: Dict[str, Any] = Field(
-        default_factory=lambda: {}, description="extra metadata"
-    )
 
-    def __init__(self, *, cell: Cell, env: Environment, **_):
-        cell = Cell.parse_obj(cell)
-        env = Environment.parse_obj(env)
-        nx, ny, nz = [np.ones(cell.mx.shape) for _ in range(3)]
-        for i, material in enumerate(cell.materials, start=1):
-            nx = np.where(cell.mx == i, material(env), nx)
-            ny = np.where(cell.my == i, material(env), ny)
-            nz = np.where(cell.mz == i, material(env), nz)
-        super().__init__(
-            cell=cell,
-            env=env,
-        )
-        self.extra["nx"] = nx
-        self.extra["ny"] = ny
-        self.extra["nz"] = nz
+    @cached_property
+    def _computed(self):
+        nx, ny, nz = [np.ones(self.cell.mx.shape) for _ in range(3)]
+        for i, material in enumerate(self.cell.materials, start=1):
+            nx = np.where(self.cell.mx == i, material(self.env), nx)
+            ny = np.where(self.cell.my == i, material(self.env), ny)
+            nz = np.where(self.cell.mz == i, material(self.env), nz)
+        return {
+            "nx": nx,
+            "ny": ny,
+            "nz": nz,
+        }
 
     @property
     def nx(self):
         """(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)"""
-        return self.extra["nx"]
+        return self._computed["nx"]
 
     @property
     def ny(self):
         """(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)"""
-        return self.extra["ny"]
+        return self._computed["ny"]
 
     @property
     def nz(self):
         """(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)"""
-        return self.extra["nz"]
+        return self._computed["nz"]
 
     @property
     def mesh(self):
@@ -82,6 +74,3 @@ class CrossSection(BaseModel):
             plt.pcolormesh(X, Y, n)
             plt.axis("scaled")
             plt.grid(True)
-
-    class Config:
-        fields = {"extra": {"exclude": True}}
