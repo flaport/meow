@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>meow package &#8212; meow 0.5.6 documentation</title>
+    <title>meow package &#8212; meow 0.6.0 documentation</title>
   
   
   
@@ -415,6 +415,16 @@ document.write(`
 
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.base_model.cache">
+<span class="sig-name descname"><span class="pre">cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/base_model.html#cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.base_model.cache" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.base_model.cached_property">
+<span class="sig-name descname"><span class="pre">cached_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/base_model.html#cached_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.base_model.cached_property" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 <span class="target" id="module-meow.cache"></span><dl class="py function">
 <dt class="sig sig-object py" id="meow.cache.enable_cache">
 <span class="sig-name descname"><span class="pre">enable_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cache.html#enable_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cache.enable_cache" title="Permalink to this definition">#</a></dt>
@@ -478,11 +488,6 @@ document.write(`
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Extra&quot;</span><span class="p">,</span>
-<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra metadata&quot;</span><span class="p">,</span>
-<span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">   </span><span class="p">},</span>
 <span class="w">   </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -672,7 +677,6 @@ document.write(`
 </details></p><dl class="field-list simple">
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference internal" href="#meow.cell.Cell.extra" title="meow.cell.Cell.extra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extra</span> <span class="pre">(Dict[str,</span> <span class="pre">Any])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.mesh" title="meow.cell.Cell.mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh</span> <span class="pre">(meow.mesh.Mesh2d)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.structures" title="meow.cell.Cell.structures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structures</span> <span class="pre">(List[meow.structures.Structure])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.z_max" title="meow.cell.Cell.z_max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">z_max</span> <span class="pre">(float)</span></code></a></p></li>
@@ -704,12 +708,6 @@ document.write(`
 <dd><p>the ending z-coordinate of the cell</p>
 </dd></dl>
 
-<dl class="py attribute pydantic_field">
-<dt class="sig sig-object py" id="meow.cell.Cell.extra">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extra</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.cell.Cell.extra" title="Permalink to this definition">#</a></dt>
-<dd><p>extra metadata</p>
-</dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.cell.Cell.mx">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mx</span></span><a class="headerlink" href="#meow.cell.Cell.mx" title="Permalink to this definition">#</a></dt>
@@ -732,13 +730,6 @@ document.write(`
 <dt class="sig sig-object py" id="meow.cell.Cell.materials">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">materials</span></span><a class="headerlink" href="#meow.cell.Cell.materials" title="Permalink to this definition">#</a></dt>
 <dd><p>(derived) the materials in the cell</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="meow.cell.Cell.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cell.html#Cell.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cell.Cell.__init__" title="Permalink to this definition">#</a></dt>
-<dd><p>Create a new model by parsing and validating input data from keyword arguments.</p>
-<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -802,11 +793,6 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Environment&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">]</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Extra&quot;</span><span class="p">,</span>
-<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra metadata&quot;</span><span class="p">,</span>
-<span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">   </span><span class="p">},</span>
 <span class="w">   </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -1018,11 +1004,6 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span>
-<span class="w">            </span><span class="p">},</span>
-<span class="w">            </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Extra&quot;</span><span class="p">,</span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra metadata&quot;</span><span class="p">,</span>
-<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">},</span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -1060,7 +1041,6 @@ which uniquely defines the refractive index everywhere.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="#meow.cross_section.CrossSection.cell" title="meow.cross_section.CrossSection.cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell</span> <span class="pre">(meow.cell.Cell)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cross_section.CrossSection.env" title="meow.cross_section.CrossSection.env"><code class="xref py py-obj docutils literal notranslate"><span class="pre">env</span> <span class="pre">(meow.environment.Environment)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#meow.cross_section.CrossSection.extra" title="meow.cross_section.CrossSection.extra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extra</span> <span class="pre">(Dict[str,</span> <span class="pre">Any])</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -1074,27 +1054,6 @@ which uniquely defines the refractive index everywhere.</p>
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.env">
 <em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">env</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#meow.environment.Environment" title="meow.environment.Environment"><span class="pre">Environment</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.cross_section.CrossSection.env" title="Permalink to this definition">#</a></dt>
 <dd><p>the environment for which the cross sectionw was calculated</p>
-</dd></dl>
-
-<dl class="py attribute pydantic_field">
-<dt class="sig sig-object py" id="meow.cross_section.CrossSection.extra">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extra</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.cross_section.CrossSection.extra" title="Permalink to this definition">#</a></dt>
-<dd><p>extra metadata</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="meow.cross_section.CrossSection.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cross_section.html#CrossSection.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cross_section.CrossSection.__init__" title="Permalink to this definition">#</a></dt>
-<dd><p>Create a new model by parsing and validating input data from keyword arguments.</p>
-<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cell</strong> (<a class="reference internal" href="#meow.cell.Cell" title="meow.cell.Cell"><em>Cell</em></a>) – </p></li>
-<li><p><strong>env</strong> (<a class="reference internal" href="#meow.environment.Environment" title="meow.environment.Environment"><em>Environment</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -1710,13 +1669,6 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <dt class="sig sig-object py" id="meow.materials.Material.name">
 <em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.materials.Material.name" title="Permalink to this definition">#</a></dt>
 <dd><p>the name of the material</p>
-<dl class="field-list simple">
-<dt class="field-odd">Validated by<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -1726,7 +1678,7 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <dl class="field-list simple">
 <dt class="field-odd">Validated by<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_params_pre</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -1745,7 +1697,7 @@ This procedure is best suited if one wants to integrate over a (small) region of
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_n_pre</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -1755,13 +1707,6 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <dt class="sig sig-object py" id="meow.materials.Material.meta">
 <em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">meta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#meow.materials.Material.meta" title="Permalink to this definition">#</a></dt>
 <dd><p>metadata for the material</p>
-<dl class="field-list simple">
-<dt class="field-odd">Validated by<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -2285,11 +2230,6 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span>
-<span class="w">            </span><span class="p">},</span>
-<span class="w">            </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Extra&quot;</span><span class="p">,</span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra metadata&quot;</span><span class="p">,</span>
-<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">},</span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -2340,11 +2280,6 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <span class="w">                     </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Environment&quot;</span>
 <span class="w">                  </span><span class="p">}</span>
 <span class="w">               </span><span class="p">]</span>
-<span class="w">            </span><span class="p">},</span>
-<span class="w">            </span><span class="nt">&quot;extra&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Extra&quot;</span><span class="p">,</span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extra metadata&quot;</span><span class="p">,</span>
-<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">},</span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -2470,18 +2405,6 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <li><p><strong>title</strong> = Hz</p></li>
 <li><p><strong>default</strong> = array</p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="meow.mode.Mode.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/mode.html#Mode.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.mode.Mode.__init__" title="Permalink to this definition">#</a></dt>
-<dd><p>Create a new model by parsing and validating input data from keyword arguments.</p>
-<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>Any</em>) – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -2862,13 +2785,6 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <dt class="sig sig-object py" id="meow.structures.Structure.material">
 <em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">material</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#meow.materials.Material" title="meow.materials.Material"><span class="pre">Material</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.structures.Structure.material" title="Permalink to this definition">#</a></dt>
 <dd><p>the material of the structure</p>
-<dl class="field-list simple">
-<dt class="field-odd">Validated by<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_material</span></code></p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute pydantic_field">

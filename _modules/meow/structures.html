@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.structures &#8212; meow 0.5.6 documentation</title>
+    <title>meow.structures &#8212; meow 0.6.0 documentation</title>
   
   
   
@@ -302,7 +302,7 @@ document.write(`
 <span></span><span class="sd">&quot;&quot;&quot; a Structure is a combination of a geometry with a material (and an optional mesh order) &quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">validator</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
 
 <span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 <span class="kn">from</span> <span class="nn">.geometries</span> <span class="kn">import</span> <span class="n">Geometry</span>
@@ -315,10 +315,6 @@ document.write(`
     <span class="n">material</span><span class="p">:</span> <span class="n">Material</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the material of the structure&quot;</span><span class="p">)</span>
     <span class="n">geometry</span><span class="p">:</span> <span class="n">Geometry</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the geometry of the structure&quot;</span><span class="p">)</span>
     <span class="n">mesh_order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the mesh order of the structure&quot;</span><span class="p">)</span>
-
-    <span class="nd">@validator</span><span class="p">(</span><span class="s2">&quot;material&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">validate_material</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">material</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Material</span><span class="o">.</span><span class="n">parse_obj</span><span class="p">(</span><span class="n">material</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_lumadd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="s2">&quot;yzx&quot;</span><span class="p">):</span>
         <span class="n">material_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">_lumadd</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>

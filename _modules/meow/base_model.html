@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.base_model &#8212; meow 0.5.6 documentation</title>
+    <title>meow.base_model &#8212; meow 0.6.0 documentation</title>
   
   
   
@@ -301,12 +301,13 @@ document.write(`
   <h1>Source code for meow.base_model</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; Provides a custom pydantic BaseModel which handles numpy arrays better &quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">md5</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pydantic.main</span> <span class="kn">import</span> <span class="n">BaseModel</span> <span class="k">as</span> <span class="n">_BaseModel</span>
-<span class="kn">from</span> <span class="nn">pydantic.main</span> <span class="kn">import</span> <span class="n">ModelMetaclass</span>
+<span class="kn">from</span> <span class="nn">pydantic.main</span> <span class="kn">import</span> <span class="n">ModelMetaclass</span><span class="p">,</span> <span class="n">PrivateAttr</span>
 
 <span class="kn">from</span> <span class="nn">.cache</span> <span class="kn">import</span> <span class="n">cache_array</span><span class="p">,</span> <span class="n">cache_model</span>
 
@@ -496,6 +497,8 @@ document.write(`
 <div class="viewcode-block" id="BaseModel"><a class="viewcode-back" href="../../meow.html#meow.base_model.BaseModel">[docs]</a><span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">_BaseModel</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">_ModelMetaclass</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A customized pydantic base model that handles numpy array type hints&quot;&quot;&quot;</span>
 
+    <span class="n">_cache</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">({})</span>
+
 <div class="viewcode-block" id="BaseModel.__init__"><a class="viewcode-back" href="../../meow.html#meow.base_model.BaseModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">_view_arrays</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
@@ -529,7 +532,7 @@ document.write(`
         <span class="k">try</span><span class="p">:</span>
             <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">md5</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">digest</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)[</span><span class="o">-</span><span class="mi">8</span><span class="p">:]</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr</span> <span class="o">*</span> <span class="mi">255</span><span class="o">**</span><span class="n">idx</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr</span> <span class="o">*</span> <span class="mi">255</span><span class="o">**</span><span class="n">idx</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -545,18 +548,35 @@ document.write(`
         <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">_view_arrays</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">_array</span><span class="p">):</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">_array</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="s2">&quot;Ex&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Ey&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Ez&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Hx&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Hy&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Hz&quot;</span><span class="p">,</span>
-        <span class="p">]:</span>  <span class="c1"># arbitrary: let&#39;s not spam the cache with this.</span>
+
+        <span class="c1"># arbitrary: let&#39;s not spam the cache with this.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">,</span> <span class="s2">&quot;Ey&quot;</span><span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">,</span> <span class="s2">&quot;Hx&quot;</span><span class="p">,</span> <span class="s2">&quot;Hy&quot;</span><span class="p">,</span> <span class="s2">&quot;Hz&quot;</span><span class="p">]:</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">cache_array</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">obj</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">obj</span>
+
+
+<div class="viewcode-block" id="cache"><a class="viewcode-back" href="../../meow.html#meow.base_model.cache">[docs]</a><span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="n">prop</span><span class="p">):</span>
+    <span class="n">prop_name</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="vm">__name__</span>
+
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">getter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stored_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">stored_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">stored_value</span>
+
+        <span class="n">computed</span> <span class="o">=</span> <span class="n">prop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">prop_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">computed</span>
+        <span class="k">return</span> <span class="n">computed</span>
+
+    <span class="k">return</span> <span class="n">getter</span></div>
+
+
+<div class="viewcode-block" id="cached_property"><a class="viewcode-back" href="../../meow.html#meow.base_model.cached_property">[docs]</a><span class="k">def</span> <span class="nf">cached_property</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">property</span><span class="p">(</span><span class="n">cache</span><span class="p">(</span><span class="n">method</span><span class="p">))</span></div>
 </pre></div>
 
                 </article>

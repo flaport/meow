@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.eme.common &#8212; meow 0.5.6 documentation</title>
+    <title>meow.eme.common &#8212; meow 0.6.0 documentation</title>
   
   
   
@@ -332,7 +332,7 @@ document.write(`
     <span class="n">O_LR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">inner_product</span><span class="p">(</span><span class="n">modes1</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">modes2</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NR</span><span class="p">)]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NL</span><span class="p">)])</span>  <span class="c1"># fmt: skip</span>
     <span class="n">O_RL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">inner_product</span><span class="p">(</span><span class="n">modes2</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">modes1</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NL</span><span class="p">)]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NR</span><span class="p">)])</span>  <span class="c1"># fmt: skip</span>
 
-    <span class="c1"># extra phase correction (disabled?).</span>
+    <span class="c1"># additional phase correction (disabled?).</span>
 
     <span class="k">if</span> <span class="n">conjugate_transpose</span><span class="p">:</span>
         <span class="n">O_LL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">O_LL</span><span class="p">)</span>
