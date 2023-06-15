@@ -24,7 +24,7 @@ for k in src:
 project = "meow"
 copyright = "2022, Apache2"
 author = "Floris Laporte"
-release = "0.5.6"
+release = "0.6.0"
 extensions = [
     "myst_nb",
     "matplotlib.sphinxext.plot_directive",
