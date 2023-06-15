@@ -7,6 +7,12 @@ repos:
     language: python
     pass_filenames: true
     types: [jupyter]
+  - id: formatnbs
+    name: formatnbs
+    entry: black
+    language: python
+    pass_filenames: true
+    types: [jupyter]
   - id: format
     name: format (autoimport + isort + black)
     entry: python .format.py
