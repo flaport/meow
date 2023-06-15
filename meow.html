@@ -709,30 +709,6 @@ document.write(`
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="meow.cell.Cell.mx">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mx</span></span><a class="headerlink" href="#meow.cell.Cell.mx" title="Permalink to this definition">#</a></dt>
-<dd><p>(derived) the material cross section at the Ex grid (integer y-coords, half-integer x-coords)</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="meow.cell.Cell.my">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">my</span></span><a class="headerlink" href="#meow.cell.Cell.my" title="Permalink to this definition">#</a></dt>
-<dd><p>(derived) the material cross section at the Ey grid (half-integer y-coords, integer x-coords)</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="meow.cell.Cell.mz">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mz</span></span><a class="headerlink" href="#meow.cell.Cell.mz" title="Permalink to this definition">#</a></dt>
-<dd><p>(derived) the material cross section at the Ez grid (integer y-coords, integer x-coords)</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="meow.cell.Cell.materials">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">materials</span></span><a class="headerlink" href="#meow.cell.Cell.materials" title="Permalink to this definition">#</a></dt>
-<dd><p>(derived) the materials in the cell</p>
-</dd></dl>
-
-<dl class="py property">
 <dt class="sig sig-object py" id="meow.cell.Cell.z">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">z</span></span><a class="headerlink" href="#meow.cell.Cell.z" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
@@ -740,6 +716,16 @@ document.write(`
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.cell.Cell.length">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">length</span></span><a class="headerlink" href="#meow.cell.Cell.length" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="meow.cell.Cell.materials">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">materials</span></span><a class="headerlink" href="#meow.cell.Cell.materials" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="meow.cell.Cell.m_full">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">m_full</span></span><a class="headerlink" href="#meow.cell.Cell.m_full" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -793,6 +779,12 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Environment&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">]</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;ez_interfaces&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ez Interfaces&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;when enabled, the meshing algorithm will throw away any index values at the interfaces which are not on even (Ez) half-grid locations. Enabling this should result in more symmetric modes.&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">   </span><span class="p">},</span>
 <span class="w">   </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -1041,6 +1033,7 @@ which uniquely defines the refractive index everywhere.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="#meow.cross_section.CrossSection.cell" title="meow.cross_section.CrossSection.cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell</span> <span class="pre">(meow.cell.Cell)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cross_section.CrossSection.env" title="meow.cross_section.CrossSection.env"><code class="xref py py-obj docutils literal notranslate"><span class="pre">env</span> <span class="pre">(meow.environment.Environment)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#meow.cross_section.CrossSection.ez_interfaces" title="meow.cross_section.CrossSection.ez_interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ez_interfaces</span> <span class="pre">(bool)</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -1056,32 +1049,30 @@ which uniquely defines the refractive index everywhere.</p>
 <dd><p>the environment for which the cross sectionw was calculated</p>
 </dd></dl>
 
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="meow.cross_section.CrossSection.ez_interfaces">
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ez_interfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#meow.cross_section.CrossSection.ez_interfaces" title="Permalink to this definition">#</a></dt>
+<dd><p>when enabled, the meshing algorithm will throw away any index values at the interfaces which are not on even (Ez) half-grid locations. Enabling this should result in more symmetric modes.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="meow.cross_section.CrossSection.n_full">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_full</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.n_full" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.nx">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nx</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.nx" title="Permalink to this definition">#</a></dt>
-<dd><p>(derived) the index cross section at the Ex grid (integer y-coords, half-integer x-coords)</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.ny">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ny</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.ny" title="Permalink to this definition">#</a></dt>
-<dd><p>(derived) the index cross section at the Ey grid (integer y-coords, half-integer x-coords)</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.nz">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nz</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.nz" title="Permalink to this definition">#</a></dt>
-<dd><p>(derived) the index cross section at the Ez grid (integer y-coords, half-integer x-coords)</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="meow.cross_section.CrossSection.mesh">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mesh</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.mesh" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="meow.cross_section.CrossSection.structures">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">structures</span></span><a class="headerlink" href="#meow.cross_section.CrossSection.structures" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1907,23 +1898,38 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.x_">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x_</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.x_" title="Permalink to this definition">#</a></dt>
-<dd><p>x-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)</p>
+<dd><p>x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.y_">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y_</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.y_" title="Permalink to this definition">#</a></dt>
-<dd><p>y-coordinates of the mesh (Hz locations, i.e. center of the 2D cell)</p>
+<dd><p>y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="meow.mesh.Mesh2d.X">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">X</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.X" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="meow.mesh.Mesh2d.x_full">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x_full</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.x_full" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="meow.mesh.Mesh2d.Y">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Y</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Y" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="meow.mesh.Mesh2d.y_full">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y_full</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.y_full" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="meow.mesh.Mesh2d.XY_full">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">XY_full</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.XY_full" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="meow.mesh.Mesh2d.X_full">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">X_full</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.X_full" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="meow.mesh.Mesh2d.Y_full">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Y_full</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Y_full" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -2280,6 +2286,12 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <span class="w">                     </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Environment&quot;</span>
 <span class="w">                  </span><span class="p">}</span>
 <span class="w">               </span><span class="p">]</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;ez_interfaces&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ez Interfaces&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;when enabled, the meshing algorithm will throw away any index values at the interfaces which are not on even (Ez) half-grid locations. Enabling this should result in more symmetric modes.&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">},</span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>

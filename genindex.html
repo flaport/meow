@@ -454,6 +454,8 @@ document.write(`
 </li>
       <li><a href="meow.html#meow.mode.Mode.Ez">Ez (Mode attribute)</a>
 </li>
+      <li><a href="meow.html#meow.cross_section.CrossSection.ez_interfaces">ez_interfaces (CrossSection attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -542,6 +544,8 @@ document.write(`
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.cell.Cell.m_full">m_full (Cell property)</a>
+</li>
       <li><a href="meow.html#meow.mode.magnetic_energy">magnetic_energy() (in module meow.mode)</a>
 </li>
       <li><a href="meow.html#meow.mode.magnetic_energy_density">magnetic_energy_density() (in module meow.mode)</a>
@@ -659,6 +663,8 @@ document.write(`
         <li><a href="meow.html#module-meow.integrate">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     meow.materials
 
@@ -666,8 +672,6 @@ document.write(`
         <li><a href="meow.html#module-meow.materials">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     meow.mesh
 
@@ -699,8 +703,6 @@ document.write(`
       <li><a href="meow.html#meow.cell.Cell.mesh">mesh (Cell attribute)</a>
 
       <ul>
-        <li><a href="meow.html#meow.cross_section.CrossSection.mesh">(CrossSection property)</a>
-</li>
         <li><a href="meow.html#meow.mode.Mode.mesh">(Mode property)</a>
 </li>
       </ul></li>
@@ -757,12 +759,6 @@ document.write(`
         <li><a href="meow.html#module-meow.visualize">meow.visualize</a>
 </li>
       </ul></li>
-      <li><a href="meow.html#meow.cell.Cell.mx">mx (Cell property)</a>
-</li>
-      <li><a href="meow.html#meow.cell.Cell.my">my (Cell property)</a>
-</li>
-      <li><a href="meow.html#meow.cell.Cell.mz">mz (Cell property)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -770,6 +766,8 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.html#meow.materials.Material.n">n (Material attribute)</a>
+</li>
+      <li><a href="meow.html#meow.cross_section.CrossSection.n_full">n_full (CrossSection property)</a>
 </li>
       <li><a href="meow.html#meow.materials.Material.name">name (Material attribute)</a>
 </li>
@@ -817,18 +815,14 @@ document.write(`
 </li>
       <li><a href="meow.eme.html#meow.eme.common.select_ports">select_ports() (in module meow.eme.common)</a>
 </li>
-      <li><a href="meow.fde.html#meow.fde.lumerical.set_sim">set_sim() (in module meow.fde.lumerical)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.fde.html#meow.fde.lumerical.set_sim">set_sim() (in module meow.fde.lumerical)</a>
+</li>
       <li><a href="meow.html#meow.structures.sort_structures">sort_structures() (in module meow.structures)</a>
 </li>
       <li><a href="meow.html#meow.cell.Cell.structures">structures (Cell attribute)</a>
-
-      <ul>
-        <li><a href="meow.html#meow.cross_section.CrossSection.structures">(CrossSection property)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -875,9 +869,11 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.html#meow.mesh.Mesh2d.x">x (Mesh2d attribute)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.X">X (Mesh2d property)</a>
-</li>
       <li><a href="meow.html#meow.mesh.Mesh2d.x_">x_ (Mesh2d property)</a>
+</li>
+      <li><a href="meow.html#meow.mesh.Mesh2d.X_full">X_full (Mesh2d property)</a>
+</li>
+      <li><a href="meow.html#meow.mesh.Mesh2d.x_full">x_full (Mesh2d property)</a>
 </li>
       <li><a href="meow.html#meow.geometries.Box.x_max">x_max (Box attribute)</a>
 </li>
@@ -889,6 +885,8 @@ document.write(`
 </li>
       <li><a href="meow.html#meow.mesh.Mesh2d.Xy">Xy (Mesh2d property)</a>
 </li>
+      <li><a href="meow.html#meow.mesh.Mesh2d.XY_full">XY_full (Mesh2d property)</a>
+</li>
       <li><a href="meow.html#meow.mesh.Mesh2d.Xz">Xz (Mesh2d property)</a>
 </li>
   </ul></td>
@@ -899,14 +897,16 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.html#meow.mesh.Mesh2d.y">y (Mesh2d attribute)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.Y">Y (Mesh2d property)</a>
-</li>
       <li><a href="meow.html#meow.mesh.Mesh2d.y_">y_ (Mesh2d property)</a>
 </li>
-      <li><a href="meow.html#meow.geometries.Box.y_max">y_max (Box attribute)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2d.Y_full">Y_full (Mesh2d property)</a>
+</li>
+      <li><a href="meow.html#meow.mesh.Mesh2d.y_full">y_full (Mesh2d property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.geometries.Box.y_max">y_max (Box attribute)</a>
+</li>
       <li><a href="meow.html#meow.geometries.Box.y_min">y_min (Box attribute)</a>
 </li>
       <li><a href="meow.html#meow.mesh.Mesh2d.Yx">Yx (Mesh2d property)</a>
