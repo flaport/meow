@@ -105,15 +105,15 @@ def compute_modes_lumerical(
     modes = []
     for j in range(1, num_modes + 1):
         try:
-            mode = Mode(
-                neff=sim.getdata(f"mode{j}", "neff").ravel().item(),
+            mode = _lumerical_fields_to_mode(
                 cs=cs,
-                Ez=sim.getdata(f"mode{j}", "Ex").squeeze()[:-1, :-1],
-                Ex=sim.getdata(f"mode{j}", "Ey").squeeze()[:-1, :-1],
-                Ey=sim.getdata(f"mode{j}", "Ez").squeeze()[:-1, :-1],
-                Hz=sim.getdata(f"mode{j}", "Hx").squeeze()[:-1, :-1],
-                Hx=sim.getdata(f"mode{j}", "Hy").squeeze()[:-1, :-1],
-                Hy=sim.getdata(f"mode{j}", "Hz").squeeze()[:-1, :-1],
+                lneff=sim.getdata(f"mode{j}", "neff"),
+                lEx=sim.getdata(f"mode{j}", "Ex"),
+                lEy=sim.getdata(f"mode{j}", "Ey"),
+                lEz=sim.getdata(f"mode{j}", "Ez"),
+                lHx=sim.getdata(f"mode{j}", "Hx"),
+                lHy=sim.getdata(f"mode{j}", "Hy"),
+                lHz=sim.getdata(f"mode{j}", "Hz"),
             )
         except LumApiError:
             break
@@ -122,6 +122,19 @@ def compute_modes_lumerical(
         modes.append(mode)
 
     return sorted(modes, key=lambda m: np.real(m.neff), reverse=True)
+
+
+def _lumerical_fields_to_mode(cs, lneff, lEx, lEy, lEz, lHx, lHy, lHz):
+    return Mode(
+        cs=cs,
+        neff=lneff.ravel().item(),
+        Ex=lEy.squeeze()[1:, :-1],
+        Ey=lEz.squeeze()[:-1, 1:],
+        Ez=lEx.squeeze()[:-1, :-1],
+        Hx=lHy.squeeze()[:-1, 1:],
+        Hy=lHz.squeeze()[1:, :-1],
+        Hz=lHx.squeeze()[1:, 1:],
+    )
 
 
 def _assert_default_mesh_setting(condition, param_name):
