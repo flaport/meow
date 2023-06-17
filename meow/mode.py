@@ -397,9 +397,20 @@ def normalize_energy(mode: Mode) -> Mode:
     )
 
 
-def is_pml_mode(mode, threshold=0.2):
-    """True is the mode has more than `threshold` part
-    of its energy density in the pml region"""
+def is_pml_mode(mode, threshold):
+    """check whether a mode can be considered a PML mode.
+
+    Args:
+        mode: the mode to classify as PML mode or not.
+        pml_mode_threshold: If the mode has more than `pml_mode_threshold` part of its
+            energy in the PML, it will be removed.
+
+    Returns:
+        bool: whether the mode is a PML mode or not
+    """
+    threshold = min(max(threshold, 0.0), 1.0)
+    if threshold > 0.999:
+        return False
     numx, numy = mode.cell.mesh.num_pml
     ed = energy_density(mode)
     m, n = ed.shape
