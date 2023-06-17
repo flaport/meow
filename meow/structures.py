@@ -1,7 +1,7 @@
 """ a Structure is a combination of a geometry with a material (and an optional mesh order) """
 
 import numpy as np
-from pydantic import Field, validator
+from pydantic import Field
 
 from .base_model import BaseModel
 from .geometries import Geometry
@@ -14,10 +14,6 @@ class Structure(BaseModel):
     material: Material = Field(description="the material of the structure")
     geometry: Geometry = Field(description="the geometry of the structure")
     mesh_order: int = Field(default=5, description="the mesh order of the structure")
-
-    @validator("material")
-    def validate_material(cls, material):
-        return Material.parse_obj(material)
 
     def _lumadd(self, sim, env, unit=1e-6, xyz="yzx"):
         material_name = self.material._lumadd(sim, env, unit)

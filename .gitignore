@@ -1,3 +1,7 @@
+# Other
+*.png
+*.pkl
+
 # IDE settings
 .vscode/
 .idea/

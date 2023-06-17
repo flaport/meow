@@ -2,21 +2,17 @@
 
 import os
 import re
-from hashlib import md5
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Mapping, Tuple
 
 import numpy as np
 import pandas as pd
 from numpy.typing import NDArray
-from pydantic import Field, root_validator
+from pydantic import Field, validator
 from scipy.constants import c
 from scipy.ndimage import map_coordinates
 
 from .base_model import BaseModel, _array
 from .environment import Environment
-
-MATERIAL_DATA_CACHE: Dict[str, Dict[str, Any]] = {}
-MATERIALS: Dict[str, "Material"] = {}
 
 
 class Material(BaseModel):
@@ -26,58 +22,53 @@ class Material(BaseModel):
     params: Dict[str, np.ndarray[Tuple[int], np.dtype[np.float_]]] = Field(
         description="the wavelength over which the refractive index is defined."
     )
-    n: np.ndarray[Any, np.dtype[np.complex_]] = Field(
+    n: np.ndarray[Tuple[int], np.dtype[np.complex_]] = Field(
         description="the complex refractive index of the material"
     )
     meta: Dict[str, Any] = Field(
         default_factory=lambda: {}, description="metadata for the material"
     )
 
+    @staticmethod
+    def _validate_array(arr):
+        if isinstance(arr, dict):
+            r = np.asarray(arr.get("real", 0.0), dtype=np.complex_)
+            i = np.asarray(arr.get("imag", 0.0), dtype=np.complex_)
+            new = r + 1j * i
+        else:
+            new = np.asarray(arr)
+        return new.view(_array)
+
+    @staticmethod
+    def _validate_1d(name, arr):
+        if arr.ndim != 1:
+            raise ValueError(f"{name} should be 1D. Got a {arr.ndim}D array.")
+        return arr
+
+    @validator("n", pre=True)
+    def validate_n_pre(cls, n):
+        return cls._validate_1d("n", cls._validate_array(n))
+
+    @validator("params", pre=True)
+    def validate_params_pre(cls, params):
+        if not isinstance(params, Mapping):
+            raise TypeError(f"instance of dict expected. Got: {type(params)}.")
+        return {
+            k: cls._validate_1d(f"params:{k}", cls._validate_array(v))
+            for k, v in params.items()
+        }
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         MATERIALS[self.name] = self
-
-    @root_validator(pre=True)
-    def validate(cls, values: Dict[str, Any]) -> Dict[str, Any]:
-        if isinstance(values, Material):
-            return values  # no idea why this should be neccessary, but without it we get weird errors...
-
-        values["params"] = params = {
-            k: np.asarray(v).view(_array) for k, v in values["params"].items()
-        }
-
-        n = values["n"]
-        if isinstance(n, dict):
-            r = np.asarray(n.get("real", 0.0), dtype=np.float_)
-            i = np.asarray(n.get("imag", 0.0), dtype=np.float_)
-            values["n"] = n = np.asarray(r + 1j * i, dtype=np.complex_)
-        else:
-            n = np.asarray(n, dtype=np.complex_)
-        n = n.view(_array)
-
-        if n.ndim != 1:
-            raise ValueError(f"Index n is not 1D. Got shape: {n.shape}")
-        for i, (p, v) in enumerate(params.items()):
-            if v.ndim != 1:
-                raise ValueError(f"Parameter {p} is not 1D. Got shape: {v.shape}")
+        for p, v in self.params.items():
             Lp = v.shape[0]
-            Ln = n.shape[0]
+            Ln = self.n.shape[0]
             if Lp != Ln:
                 raise ValueError(
                     f"length of parameter array {p} does not match length of refractive index array n. \n"
                     f"{Lp} != {Ln}"
                 )
-        values_hash = _hash_values(values)
-        if values_hash in MATERIAL_DATA_CACHE:
-            values = {
-                **MATERIAL_DATA_CACHE[values_hash],
-                "meta": values.get("meta", {}),
-            }  # shallow copy
-        else:
-            MATERIAL_DATA_CACHE[values_hash] = {
-                k: v for k, v in values.items() if k not in ["meta"]
-            }
-        return values
 
     @classmethod
     def from_path(cls, path, meta=None):
@@ -141,6 +132,10 @@ class Material(BaseModel):
         fields = {
             "meta": {"exclude": True},
         }
+
+
+Materials = List[Material]
+MATERIALS: Dict[str, Material] = {}
 
 
 def _to_ndgrid(df, wl_key="wl"):
@@ -260,14 +255,6 @@ def _sort_rows(df, not_by=("nr", "ni"), wl_key="wl"):
     return df.sort_values(by=by).reset_index(drop=True)
 
 
-def _hash_values(values):
-    values = {k: v for k, v in values.items() if k not in ["meta"]}
-    df = pd.DataFrame(
-        {**values["params"], "nr": np.real(values["n"]), "ni": np.imag(values["n"])}
-    )
-    return md5(np.asarray(df.values * 1e9, dtype=np.int64).tobytes()).hexdigest()
-
-
 def _validate_path(path):
     if not path.endswith(".csv"):
         path = f"{path}.csv"
@@ -289,5 +276,3 @@ silicon_oxide = Material.from_path(
     path="silicon_oxide",
     meta={"color": (0.9, 0.9, 0.9, 0.9)},
 )
-
-Materials = List[Material]

@@ -3,15 +3,15 @@
 import pickle
 import warnings
 from itertools import product
-from typing import Any, List, Tuple
+from typing import List, Tuple
 
 import numpy as np
-from pydantic import Field, PrivateAttr
+from pydantic import Field
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
 from scipy.linalg import norm
 
-from .base_model import BaseModel
+from .base_model import BaseModel, cached_property
 from .cross_section import CrossSection
 from .integrate import integrate_2d
 from .visualize import _figsize_visualize_mode
@@ -43,62 +43,45 @@ class Mode(BaseModel):
         description="the Hz-fields of the mode"
     )
 
-    _Px: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
-    _Py: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
-    _Pz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
-    _A: np.float_ = PrivateAttr()
-
-    def __init__(self, **data: Any):
-        super().__init__(**data)
-        self._Px = None  # type: ignore
-        self._Py = None  # type: ignore
-        self._Pz = None  # type: ignore
-        self._A = None  # type: ignore
-
     @property
     def te_fraction(self):
         """the TE polarization fraction of the mode."""
         return te_fraction(self)
 
-    def _calc_poynting(self):
+    @cached_property
+    def _pointing(self):
         """calculate and cache the poynting vector"""
         vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
         vecH = np.stack([self.Hx, self.Hy, self.Hz], axis=-1)
         vecP = np.cross(vecE, vecH)
-        self._Px, self._Py, self._Pz = np.rollaxis(vecP, -1)
-
-    def _calc_area(self):
-        vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
-        E_sq = norm(vecE, axis=-1, ord=2)
-        E_qu = E_sq**2
-        x = self.cs.mesh.x_
-        y = self.cs.mesh.y_
-        self._A = np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
+        Px, Py, Pz = np.rollaxis(vecP, -1)
+        return {
+            "Px": Px,
+            "Py": Py,
+            "Pz": Pz,
+        }
 
     @property
     def Px(self):
-        if self._Px is None:
-            self._calc_poynting()
-        return self._Px
+        return self._pointing["Px"]
 
     @property
     def Py(self):
-        if self._Py is None:
-            self._calc_poynting()
-        return self._Py
+        return self._pointing["Py"]
 
     @property
     def Pz(self):
-        if self._Pz is None:
-            self._calc_poynting()
-        return self._Pz
+        return self._pointing["Pz"]
 
-    @property
+    @cached_property
     def A(self):
         """mode area"""
-        if self._A is None:
-            self._calc_area()
-        return self._A
+        vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
+        E_sq = norm(vecE, axis=-1, ord=2)
+        E_qu = E_sq**2
+        x = self.cs.cell.mesh.x_
+        y = self.cs.cell.mesh.y_
+        return np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
 
     @property
     def env(self):
@@ -106,7 +89,7 @@ class Mode(BaseModel):
 
     @property
     def mesh(self):
-        return self.cs.mesh
+        return self.cs.cell.mesh
 
     @property
     def cell(self):
@@ -171,12 +154,15 @@ class Mode(BaseModel):
             ax = plt.gca()
         plt.sca(ax)
 
-        x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
-        c = field[-1]
         if n_cmap is None:
+            # little bit lighter colored than the one in cs._visualize:
             n_cmap = colors.LinearSegmentedColormap.from_list(
                 name="c_cmap", colors=["#ffffff", "#c1d9ed"]
             )
+        self.cs._visualize(ax=ax, n_cmap=n_cmap, cbar=False, show=False)
+
+        x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
+        c = {"Ex": "x", "Ey": "y", "Ez": "z", "Hx": "y", "Hy": "x", "Hz": "z"}[field]
         if mode_cmap is None:
             mode_cmap = "inferno"
         X = getattr(self.mesh, f"X{c}")
@@ -186,13 +172,12 @@ class Mode(BaseModel):
             warnings.filterwarnings("ignore", category=UserWarning)
             levels = np.linspace(mode.min(), mode.max(), num_levels + 1)[1:]
             plt.contour(X, Y, mode, cmap=mode_cmap, levels=levels)  # fmt: skip
+            # plt.pcolormesh(X, Y, mode, cmap=mode_cmap, alpha=0.5) #, levels=levels)  # fmt: skip
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
         plt.colorbar(cax=cax)
         plt.sca(ax)
 
-        n = np.real(getattr(self.cs, f"n{c}"))
-        plt.pcolormesh(X, Y, n, cmap=n_cmap)
         plt.xlabel(x)
         plt.ylabel(y)
         plt.grid(True, alpha=0.4)
@@ -233,7 +218,7 @@ class Mode(BaseModel):
         return new_mode
 
     def __mul__(self, other):
-        if not isinstance(other, (float, complex)):
+        if not isinstance(other, (float, np.floating, complex, int, np.integer)):
             raise TypeError(
                 f"unsupported operand type(s) for *: 'Mode' and '{type(other).__name__}'"
             )
@@ -252,7 +237,7 @@ class Mode(BaseModel):
     __rmul__ = __mul__
 
     def __truediv__(self, other):
-        if not isinstance(other, (float, complex)):
+        if not isinstance(other, (float, np.floating, complex, int, np.integer)):
             raise TypeError(
                 f"unsupported operand type(s) for /: 'Mode' and '{type(other).__name__}'"
             )
@@ -263,7 +248,7 @@ class Mode(BaseModel):
             raise TypeError(
                 f"unsupported operand type(s) for -: 'Mode' and '{type(other).__name__}'"
             )
-        return self + other * (-1)
+        return self + other * (-1.0)
 
 
 Modes = List[Mode]

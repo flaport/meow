@@ -9,7 +9,6 @@ import shapely.geometry as sg
 from pydantic import Field, validator
 
 from .base_model import BaseModel
-from .mesh import Mesh2d
 
 GEOMETRIES: Dict[str, type] = {}
 
@@ -43,14 +42,8 @@ class Geometry(BaseModel):
         scene.apply_transform(rotation_matrix(-np.pi / 6, (0, 1, 0)))
         return scene.show()
 
-    def _mask2d_single(self, X, Y, z):
+    def _mask2d(self, X, Y, z):
         raise NotImplementedError(f"{self.__class__.__name__!r} cannot be masked.")
-
-    def _mask2d(self, mesh: Mesh2d, z: float):
-        mx = self._mask2d_single(mesh.Xx, mesh.Yx, z)
-        my = self._mask2d_single(mesh.Xy, mesh.Yy, z)
-        mz = self._mask2d_single(mesh.Xz, mesh.Yz, z)
-        return mx, my, mz
 
     def _lumadd(self, sim, material_name, mesh_order, unit=1e-6, xyz="yzx"):
         raise NotImplementedError(
@@ -74,7 +67,7 @@ class Box(Geometry):
     z_min: float = Field(description="the minimum z-value of the box")
     z_max: float = Field(description="the maximum z-value of the box")
 
-    def _mask2d_single(self, X, Y, z):
+    def _mask2d(self, X, Y, z):
         if (z < self.z_min) or (self.z_max < z):
             return np.zeros_like(X, dtype=bool)
         return (
@@ -144,70 +137,76 @@ class Prism(Geometry):
         description="the axis along which the polygon will be extruded ('x', 'y', or 'z').",
     )
 
-    def _mask2d_single(self, X, Y, z):
+    def _mask2d_axis_x(self, X, Y, z):
+        # x, y, z -> y, z, x
         poly = sg.Polygon(self.poly)
-        if self.axis == "x":
-            # x, y, z -> y, z, x
-            y_min, _ = self.poly.min(0)
-            y_max, _ = self.poly.max(0)
-            line = sg.LineString([(y_min, z), (y_max, z)])
-            with warnings.catch_warnings():
-                warnings.filterwarnings(
-                    "ignore", category=RuntimeWarning, module="shapely"
-                )
-                intersections = poly.intersection(line)
+        y_min, _ = self.poly.min(0)
+        y_max, _ = self.poly.max(0)
+        line = sg.LineString([(y_min, z), (y_max, z)])
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=RuntimeWarning, module="shapely")
+            intersections = poly.intersection(line)
 
-            if not isinstance(intersections, sg.MultiLineString):
-                intersection_array = np.asarray(intersections.coords)
-                if not intersection_array.shape[0]:
-                    return np.zeros_like(Y, dtype=bool)
-                intersections = sg.MultiLineString([intersections])
+        if not isinstance(intersections, sg.MultiLineString):
+            intersection_array = np.asarray(intersections.coords)
+            if not intersection_array.shape[0]:
+                return np.zeros_like(Y, dtype=bool)
+            intersections = sg.MultiLineString([intersections])
 
-            mask = np.zeros_like(Y, dtype=bool)
-            for intersection in intersections.geoms:
-                intersection = np.asarray(intersection.coords)
-                if not intersection.shape[0]:
-                    return np.zeros_like(X, dtype=bool)
-                (y_min, _), (y_max, _) = intersection
-                y_min, y_max = min(y_min, y_max), max(y_min, y_max)
-                x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-                return (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
-
-        elif self.axis == "y":
-            # x, y, z -> z, x, y
-            _, x_min = self.poly.min(0)
-            _, x_max = self.poly.max(0)
-            line = sg.LineString([(z, x_min), (z, x_max)])
-            with warnings.catch_warnings():
-                warnings.filterwarnings(
-                    "ignore", category=RuntimeWarning, module="shapely"
-                )
-                intersections = poly.intersection(line)
-
-            if not isinstance(intersections, sg.MultiLineString):
-                intersection_array = np.asarray(intersections.coords)
-                if not intersection_array.shape[0]:
-                    return np.zeros_like(Y, dtype=bool)
-                intersections = sg.MultiLineString([intersections])
-
-            mask = np.zeros_like(Y, dtype=bool)
-            for intersection in intersections.geoms:
-                intersection = np.asarray(intersection.coords)
-                if not intersection.shape[0]:
-                    continue
-                (_, x_min), (_, x_max) = intersection
-                x_min, x_max = min(x_min, x_max), max(x_min, x_max)
-                y_min, y_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-                mask |= (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
-            return mask
-        else:
-            # x, y, z -> x, y, z
-            if (z < self.h_min) or (self.h_max < z):
+        mask = np.zeros_like(Y, dtype=bool)
+        for intersection in intersections.geoms:
+            intersection = np.asarray(intersection.coords)
+            if not intersection.shape[0]:
                 return np.zeros_like(X, dtype=bool)
-            return np.asarray(
-                [poly.contains(sg.Point(x, y)) for x, y in zip(X.ravel(), Y.ravel())],
-                dtype=bool,
-            ).reshape(X.shape)
+            (y_min, _), (y_max, _) = intersection
+            y_min, y_max = min(y_min, y_max), max(y_min, y_max)
+            x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
+            return (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+
+    def _mask2d_axis_y(self, X, Y, z):
+        # x, y, z -> z, x, y
+        poly = sg.Polygon(self.poly)
+        _, x_min = self.poly.min(0)
+        _, x_max = self.poly.max(0)
+        line = sg.LineString([(z, x_min), (z, x_max)])
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=RuntimeWarning, module="shapely")
+            intersections = poly.intersection(line)
+
+        if not isinstance(intersections, sg.MultiLineString):
+            intersection_array = np.asarray(intersections.coords)
+            if not intersection_array.shape[0]:
+                return np.zeros_like(Y, dtype=bool)
+            intersections = sg.MultiLineString([intersections])
+
+        mask = np.zeros_like(Y, dtype=bool)
+        for intersection in intersections.geoms:
+            intersection = np.asarray(intersection.coords)
+            if not intersection.shape[0]:
+                continue
+            (_, x_min), (_, x_max) = intersection
+            x_min, x_max = min(x_min, x_max), max(x_min, x_max)
+            y_min, y_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
+            mask |= (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+        return mask
+
+    def _mask2d_axis_z(self, X, Y, z):
+        # x, y, z -> x, y, z
+        poly = sg.Polygon(self.poly)
+        if (z < self.h_min) or (self.h_max < z):
+            return np.zeros_like(X, dtype=bool)
+        return np.asarray(
+            [poly.contains(sg.Point(x, y)) for x, y in zip(X.ravel(), Y.ravel())],
+            dtype=bool,
+        ).reshape(X.shape)
+
+    def _mask2d(self, X, Y, z):
+        if self.axis == "x":
+            return self._mask2d_axis_x(X, Y, z)
+        elif self.axis == "y":
+            return self._mask2d_axis_y(X, Y, z)
+        else:
+            return self._mask2d_axis_z(X, Y, z)
 
     def _lumadd(self, sim, material_name, mesh_order, unit=1e-6, xyz="yzx"):
         name = token_hex(4)

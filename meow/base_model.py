@@ -1,11 +1,12 @@
 """ Provides a custom pydantic BaseModel which handles numpy arrays better """
 
+from functools import wraps
 from hashlib import md5
 from typing import Any, Tuple
 
 import numpy as np
 from pydantic.main import BaseModel as _BaseModel
-from pydantic.main import ModelMetaclass
+from pydantic.main import ModelMetaclass, PrivateAttr
 
 from .cache import cache_array, cache_model
 
@@ -195,6 +196,8 @@ class _ModelMetaclass(ModelMetaclass):
 class BaseModel(_BaseModel, metaclass=_ModelMetaclass):
     """A customized pydantic base model that handles numpy array type hints"""
 
+    _cache = PrivateAttr({})
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.__dict__.update({k: _view_arrays(k, v) for k, v in self.__dict__.items()})
@@ -228,7 +231,7 @@ class BaseModel(_BaseModel, metaclass=_ModelMetaclass):
         try:
             arr = np.frombuffer(md5(self.json().encode()).digest(), dtype=np.uint8)[-8:]
             idx = np.arange(arr.shape[0], dtype=np.int64)[::-1]
-            return np.asarray(np.sum(arr * 255**idx), dtype=np.int_).item()
+            return int(np.sum(arr * 255**idx))
         except Exception:
             return None
 
@@ -244,15 +247,32 @@ def _view_arrays(key, obj):
         return {k: _view_arrays(k, v) for k, v in obj.items()}
     elif isinstance(obj, np.ndarray) or isinstance(obj, _array):
         obj = obj.view(_array)
-        if not key in [
-            "Ex",
-            "Ey",
-            "Ez",
-            "Hx",
-            "Hy",
-            "Hz",
-        ]:  # arbitrary: let's not spam the cache with this.
+
+        # arbitrary: let's not spam the cache with this.
+        if not key in ["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]:
             obj = cache_array(obj)
+
         return obj
     else:
         return obj
+
+
+def cache(prop):
+    prop_name = prop.__name__
+
+    @wraps(prop)
+    def getter(self):
+        stored_value = self._cache.get(prop_name)
+
+        if stored_value is not None:
+            return stored_value
+
+        computed = prop(self)
+        self._cache[prop_name] = computed
+        return computed
+
+    return getter
+
+
+def cached_property(method):
+    return property(cache(method))

@@ -4,7 +4,7 @@ requires = ["build", "pip", "setuptools", "wheel", "pybind11"]
 
 [project]
 name = "meow-sim"
-version = "0.5.5"
+version = "0.6.0"
 authors = [
 { name = "Rockley Photonics" },
 { name = "Floris Laporte", email = "floris.laporte@rockleyphotonics.com" },
@@ -52,7 +52,7 @@ jax = ["jax", "jaxlib"]
 klu = ["klujax>0.1.2"]
 ipy = ["ipykernel", "ipywidgets", "ipympl", "nbstripout", "tqdm"]
 gds = ["gdsfactory>6.27.0", "klayout>0.28.2"]
-dev = ["bump2version", "nbstripout", "pre-commit", "black", "sphinx", "autodoc-pydantic", "myst-nb>0.17.1", "jupyter-book"]
+dev = ["bump2version", "nbstripout", "pre-commit", "black[jupyter]", "autoimport", "isort", "sphinx", "autodoc-pydantic", "myst-nb>0.17.1", "jupyter-book", "papermill"]
 full = ["meow-sim[vis,klu,jax,ipy,gds]"]
 
 [tool.setuptools.packages.find]
