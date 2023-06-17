@@ -58,7 +58,7 @@ def compute_modes_tidy3d(
         x.squeeze()
         for x in _compute_modes(
             eps_cross=eps_cross,
-            coords=[cs.mesh.x, cs.mesh.y],
+            coords=[cs.cell.mesh.x, cs.cell.mesh.y],
             freq=c / (cs.env.wl * 1e-6),
             mode_spec=mode_spec,
         )

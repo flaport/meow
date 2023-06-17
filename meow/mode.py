@@ -79,8 +79,8 @@ class Mode(BaseModel):
         vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
         E_sq = norm(vecE, axis=-1, ord=2)
         E_qu = E_sq**2
-        x = self.cs.mesh.x_
-        y = self.cs.mesh.y_
+        x = self.cs.cell.mesh.x_
+        y = self.cs.cell.mesh.y_
         return np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
 
     @property
@@ -89,7 +89,7 @@ class Mode(BaseModel):
 
     @property
     def mesh(self):
-        return self.cs.mesh
+        return self.cs.cell.mesh
 
     @property
     def cell(self):
@@ -154,12 +154,15 @@ class Mode(BaseModel):
             ax = plt.gca()
         plt.sca(ax)
 
-        x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
-        c = field[-1]
         if n_cmap is None:
+            # little bit lighter colored than the one in cs._visualize:
             n_cmap = colors.LinearSegmentedColormap.from_list(
                 name="c_cmap", colors=["#ffffff", "#c1d9ed"]
             )
+        self.cs._visualize(ax=ax, n_cmap=n_cmap, cbar=False, show=False)
+
+        x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
+        c = {"Ex": "x", "Ey": "y", "Ez": "z", "Hx": "y", "Hy": "x", "Hz": "z"}[field]
         if mode_cmap is None:
             mode_cmap = "inferno"
         X = getattr(self.mesh, f"X{c}")
@@ -169,13 +172,12 @@ class Mode(BaseModel):
             warnings.filterwarnings("ignore", category=UserWarning)
             levels = np.linspace(mode.min(), mode.max(), num_levels + 1)[1:]
             plt.contour(X, Y, mode, cmap=mode_cmap, levels=levels)  # fmt: skip
+            # plt.pcolormesh(X, Y, mode, cmap=mode_cmap, alpha=0.5) #, levels=levels)  # fmt: skip
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
         plt.colorbar(cax=cax)
         plt.sca(ax)
 
-        n = np.real(getattr(self.cs, f"n{c}"))
-        plt.pcolormesh(X, Y, n, cmap=n_cmap)
         plt.xlabel(x)
         plt.ylabel(y)
         plt.grid(True, alpha=0.4)
@@ -216,7 +218,7 @@ class Mode(BaseModel):
         return new_mode
 
     def __mul__(self, other):
-        if not isinstance(other, (float, complex)):
+        if not isinstance(other, (float, np.floating, complex, int, np.integer)):
             raise TypeError(
                 f"unsupported operand type(s) for *: 'Mode' and '{type(other).__name__}'"
             )
@@ -235,7 +237,7 @@ class Mode(BaseModel):
     __rmul__ = __mul__
 
     def __truediv__(self, other):
-        if not isinstance(other, (float, complex)):
+        if not isinstance(other, (float, np.floating, complex, int, np.integer)):
             raise TypeError(
                 f"unsupported operand type(s) for /: 'Mode' and '{type(other).__name__}'"
             )
@@ -246,7 +248,7 @@ class Mode(BaseModel):
             raise TypeError(
                 f"unsupported operand type(s) for -: 'Mode' and '{type(other).__name__}'"
             )
-        return self + other * (-1)
+        return self + other * (-1.0)
 
 
 Modes = List[Mode]
