@@ -322,16 +322,17 @@ document.write(`
     <span class="n">num_modes</span><span class="p">:</span> <span class="n">PositiveInt</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">target_neff</span><span class="p">:</span> <span class="n">PositiveFloat</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">precision</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;single&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;double&quot;</span><span class="p">,</span>
-    <span class="n">filter_pml_modes</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">pml_mode_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Modes</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;compute ``Modes`` for a given ``FdeSpec`` (Tidy3D backend)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;compute ``Modes`` for a given ``CrossSection``</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        cs: The ``CrossSection`` to calculate the modes for</span>
 <span class="sd">        num_modes: Number of modes returned by mode solver.</span>
 <span class="sd">        target_neff: Guess for initial effective index of the mode.</span>
-<span class="sd">        filter_pml_modes: The threshold passed to `is_pml_mode` to filter out pml modes.</span>
-<span class="sd">            if `1` no modes will be filtered out</span>
+<span class="sd">        pml_mode_threshold: If the mode has more than `pml_mode_threshold` part of its</span>
+<span class="sd">            energy in the PML, it will be removed.</span>
+<span class="sd">            default: 1.0 = 100% = no fitering.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">num_modes</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -399,8 +400,7 @@ document.write(`
 
     <span class="n">modes</span> <span class="o">=</span> <span class="p">[</span><span class="n">zero_phase</span><span class="p">(</span><span class="n">normalize_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span> <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">]</span>
     <span class="n">modes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">modes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">neff</span><span class="p">)),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">filter_pml_modes</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">modes</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modes</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_pml_mode</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">filter_pml_modes</span><span class="p">)]</span>
+    <span class="n">modes</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modes</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_pml_mode</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">pml_mode_threshold</span><span class="p">)]</span>
 
     <span class="k">return</span> <span class="n">modes</span></div>
 </pre></div>
