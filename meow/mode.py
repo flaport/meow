@@ -3,7 +3,7 @@
 import pickle
 import warnings
 from itertools import product
-from typing import List, Tuple
+from typing import List, Literal, Tuple
 
 import numpy as np
 from pydantic import Field
@@ -42,6 +42,24 @@ class Mode(BaseModel):
     Hz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
         description="the Hz-fields of the mode"
     )
+    interpolation: Literal["Ex", "Ey", "Ez", "Hz"] | None = Field(
+        default=None,
+        description="To which 2D Yee-location the fields are interpolated to.",
+    )
+
+    def interpolate(self, location: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]):
+        if self.interpolation is not None:
+            raise RuntimeError("Cannot interpolate from already interpolated mode!")
+        interpolate_funcs = {
+            "EX": _interpolate_Ex,
+            "EY": _interpolate_Ey,
+            "EZ": _interpolate_Ez,
+            "HX": _interpolate_Ey,
+            "HY": _interpolate_Ex,
+            "HZ": _interpolate_Hz,
+        }
+        interpolate_func = interpolate_funcs[location.upper()]
+        return interpolate_func(self)
 
     @property
     def te_fraction(self):
@@ -433,3 +451,93 @@ def te_fraction(mode: Mode) -> float:
     e = np.sum(0.5 * eps0 * epsx * np.abs(mode.Ex) ** 2)
     h = np.sum(0.5 * mu0 * np.abs(mode.Hx) ** 2)
     return float(e / (e + h))
+
+
+def _average(field, direction="forward", axis=0):
+    direction = direction.lower()
+    if not direction in ["forward", "backward"]:
+        raise ValueError("direction should be 'forward' or backward")
+    if not axis in [0, 1]:
+        raise ValueError("axis should be zero or 1")
+    elif axis == 1:
+        return _average(field.T, direction=direction, axis=0).T
+    average = 0.5 * (field[1:] + field[:-1])
+    zero = np.zeros_like(average[:1])
+    if direction == "forward":
+        return np.concatenate([zero, average], axis=0)
+    else:
+        return np.concatenate([average, zero], axis=0)
+
+
+def _interpolate_Ex(mode: Mode) -> Mode:
+    # TODO: take grid spacing into account
+    Ey_at_Ez = _average(mode.Ey, direction="backward", axis=1)
+    Ey_at_Ex = _average(Ey_at_Ez, direction="forward", axis=0)
+    Ez_at_Ex = _average(mode.Ez, direction="forward", axis=0)
+    Hx_at_Hz = _average(mode.Hx, direction="forward", axis=0)
+    Hx_at_Ex = _average(Hx_at_Hz, direction="backward", axis=1)
+    Hz_at_Ex = _average(mode.Hz, direction="backward", axis=1)
+    return Mode(
+        neff=mode.neff,
+        cs=mode.cs,
+        Ex=mode.Ex,
+        Ey=Ey_at_Ex,
+        Ez=Ez_at_Ex,
+        Hx=Hx_at_Ex,
+        Hy=mode.Hy,
+        Hz=Hz_at_Ex,
+    )
+
+
+def _interpolate_Ey(mode: Mode) -> Mode:
+    # TODO: take grid spacing into account
+    Ex_at_Ez = _average(mode.Ex, direction="backward", axis=0)
+    Ex_at_Ey = _average(Ex_at_Ez, direction="forward", axis=1)
+    Ez_at_Ey = _average(mode.Ez, direction="forward", axis=1)
+    Hy_at_Hz = _average(mode.Hy, direction="forward", axis=1)
+    Hy_at_Ey = _average(Hy_at_Hz, direction="backward", axis=0)
+    Hz_at_Ey = _average(mode.Hz, direction="backward", axis=0)
+    return Mode(
+        neff=mode.neff,
+        cs=mode.cs,
+        Ex=Ex_at_Ey,
+        Ey=mode.Ey,
+        Ez=Ez_at_Ey,
+        Hx=mode.Hx,
+        Hy=Hy_at_Ey,
+        Hz=Hz_at_Ey,
+    )
+
+
+def _interpolate_Ez(mode: Mode) -> Mode:
+    # TODO: take grid spacing into account
+    return Mode(
+        neff=mode.neff,
+        cs=mode.cs,
+        Ex=_average(mode.Ex, direction="backward", axis=0),
+        Ey=_average(mode.Ey, direction="backward", axis=1),
+        Ez=mode.Ez,
+        Hx=_average(mode.Hx, direction="backward", axis=1),
+        Hy=_average(mode.Hy, direction="backward", axis=0),
+        Hz=_average(
+            _average(mode.Hz, direction="backward", axis=0),
+            direction="backward",
+            axis=1,
+        ),
+    )
+
+
+def _interpolate_Hz(mode: Mode) -> Mode:
+    # TODO: take grid spacing into account
+    return Mode(
+        neff=mode.neff,
+        cs=mode.cs,
+        Ex=_average(mode.Ex, direction="forward", axis=1),
+        Ey=_average(mode.Ey, direction="forward", axis=0),
+        Ez=_average(
+            _average(mode.Ez, direction="forward", axis=0), direction="forward", axis=1
+        ),
+        Hx=_average(mode.Hx, direction="forward", axis=0),
+        Hy=_average(mode.Hy, direction="forward", axis=1),
+        Hz=mode.Hz,
+    )
