@@ -67,6 +67,7 @@ class TidyMaterial(Material):
         super().__init__(**kwargs)
 
         # try:
+        # # somehow black complains about the except
         # except ModuleNotFoundError:
         #    raise ModuleNotFoundError("Tidy3D has to be installed to use its material database")
 
