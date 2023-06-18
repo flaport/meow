@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>meow package &#8212; meow 0.6.2 documentation</title>
+    <title>meow package &#8212; meow 0.6.3 documentation</title>
   
   
   
@@ -2042,6 +2042,17 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hz&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the Hz-fields of the mode&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;interpolation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Interpolation&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;To which 2D Yee-location the fields are interpolated to.&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;Ex&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Ey&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Ez&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;Hz&quot;</span>
+<span class="w">         </span><span class="p">],</span>
+<span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">   </span><span class="p">},</span>
 <span class="w">   </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -2336,6 +2347,7 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <li><p><a class="reference internal" href="#meow.mode.Mode.Hy" title="meow.mode.Mode.Hy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Hy</span> <span class="pre">(meow.base_model.Array)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.mode.Mode.Hz" title="meow.mode.Mode.Hz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Hz</span> <span class="pre">(meow.base_model.Array)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.mode.Mode.cs" title="meow.mode.Mode.cs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cs</span> <span class="pre">(meow.cross_section.CrossSection)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#meow.mode.Mode.interpolation" title="meow.mode.Mode.interpolation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolation</span> <span class="pre">(Optional[Literal['Ex',</span> <span class="pre">'Ey',</span> <span class="pre">'Ez',</span> <span class="pre">'Hz']])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.mode.Mode.neff" title="meow.mode.Mode.neff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neff</span> <span class="pre">(meow.base_model.Array)</span></code></a></p></li>
 </ul>
 </dd>
@@ -2440,6 +2452,22 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <li><p><strong>title</strong> = Hz</p></li>
 <li><p><strong>default</strong> = array</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="meow.mode.Mode.interpolation">
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Ex'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'Ey'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'Ez'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'Hz'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#meow.mode.Mode.interpolation" title="Permalink to this definition">#</a></dt>
+<dd><p>To which 2D Yee-location the fields are interpolated to.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="meow.mode.Mode.interpolate">
+<span class="sig-name descname"><span class="pre">interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/mode.html#Mode.interpolate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.mode.Mode.interpolate" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>location</strong> (<em>Literal</em><em>[</em><em>'Ex'</em><em>, </em><em>'Ey'</em><em>, </em><em>'Ez'</em><em>, </em><em>'Hx'</em><em>, </em><em>'Hy'</em><em>, </em><em>'Hz'</em><em>]</em>) – </p>
 </dd>
 </dl>
 </dd></dl>

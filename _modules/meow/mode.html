@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.mode &#8212; meow 0.6.2 documentation</title>
+    <title>meow.mode &#8212; meow 0.6.3 documentation</title>
   
   
   
@@ -304,7 +304,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
@@ -343,6 +343,24 @@ document.write(`
     <span class="n">Hz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Hz-fields of the mode&quot;</span>
     <span class="p">)</span>
+    <span class="n">interpolation</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">,</span> <span class="s2">&quot;Ey&quot;</span><span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">,</span> <span class="s2">&quot;Hz&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;To which 2D Yee-location the fields are interpolated to.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="Mode.interpolate"><a class="viewcode-back" href="../../meow.html#meow.mode.Mode.interpolate">[docs]</a>    <span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">,</span> <span class="s2">&quot;Ey&quot;</span><span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">,</span> <span class="s2">&quot;Hx&quot;</span><span class="p">,</span> <span class="s2">&quot;Hy&quot;</span><span class="p">,</span> <span class="s2">&quot;Hz&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot interpolate from already interpolated mode!&quot;</span><span class="p">)</span>
+        <span class="n">interpolate_funcs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;EX&quot;</span><span class="p">:</span> <span class="n">_interpolate_Ex</span><span class="p">,</span>
+            <span class="s2">&quot;EY&quot;</span><span class="p">:</span> <span class="n">_interpolate_Ey</span><span class="p">,</span>
+            <span class="s2">&quot;EZ&quot;</span><span class="p">:</span> <span class="n">_interpolate_Ez</span><span class="p">,</span>
+            <span class="s2">&quot;HX&quot;</span><span class="p">:</span> <span class="n">_interpolate_Ey</span><span class="p">,</span>
+            <span class="s2">&quot;HY&quot;</span><span class="p">:</span> <span class="n">_interpolate_Ex</span><span class="p">,</span>
+            <span class="s2">&quot;HZ&quot;</span><span class="p">:</span> <span class="n">_interpolate_Hz</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">interpolate_func</span> <span class="o">=</span> <span class="n">interpolate_funcs</span><span class="p">[</span><span class="n">location</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="n">interpolate_func</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">te_fraction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -734,6 +752,96 @@ document.write(`
     <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">eps0</span> <span class="o">*</span> <span class="n">epsx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">mu0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">e</span> <span class="o">/</span> <span class="p">(</span><span class="n">e</span> <span class="o">+</span> <span class="n">h</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_average</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="s2">&quot;backward&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;direction should be &#39;forward&#39; or backward&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;axis should be zero or 1&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_average</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">average</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">field</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">average</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;forward&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">zero</span><span class="p">,</span> <span class="n">average</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">average</span><span class="p">,</span> <span class="n">zero</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_interpolate_Ex</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+    <span class="c1"># TODO: take grid spacing into account</span>
+    <span class="n">Ey_at_Ez</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ey</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Ey_at_Ex</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">Ey_at_Ez</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">Ez_at_Ex</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ez</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">Hx_at_Hz</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">Hx_at_Ex</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">Hx_at_Hz</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Hz_at_Ex</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hz</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
+        <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
+        <span class="n">cs</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
+        <span class="n">Ex</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span><span class="p">,</span>
+        <span class="n">Ey</span><span class="o">=</span><span class="n">Ey_at_Ex</span><span class="p">,</span>
+        <span class="n">Ez</span><span class="o">=</span><span class="n">Ez_at_Ex</span><span class="p">,</span>
+        <span class="n">Hx</span><span class="o">=</span><span class="n">Hx_at_Ex</span><span class="p">,</span>
+        <span class="n">Hy</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hy</span><span class="p">,</span>
+        <span class="n">Hz</span><span class="o">=</span><span class="n">Hz_at_Ex</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_interpolate_Ey</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+    <span class="c1"># TODO: take grid spacing into account</span>
+    <span class="n">Ex_at_Ez</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">Ex_at_Ey</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">Ex_at_Ez</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Ez_at_Ey</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ez</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Hy_at_Hz</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hy</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Hy_at_Ey</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">Hy_at_Hz</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">Hz_at_Ey</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hz</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
+        <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
+        <span class="n">cs</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
+        <span class="n">Ex</span><span class="o">=</span><span class="n">Ex_at_Ey</span><span class="p">,</span>
+        <span class="n">Ey</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ey</span><span class="p">,</span>
+        <span class="n">Ez</span><span class="o">=</span><span class="n">Ez_at_Ey</span><span class="p">,</span>
+        <span class="n">Hx</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">,</span>
+        <span class="n">Hy</span><span class="o">=</span><span class="n">Hy_at_Ey</span><span class="p">,</span>
+        <span class="n">Hz</span><span class="o">=</span><span class="n">Hz_at_Ey</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_interpolate_Ez</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+    <span class="c1"># TODO: take grid spacing into account</span>
+    <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
+        <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
+        <span class="n">cs</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
+        <span class="n">Ex</span><span class="o">=</span><span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">Ey</span><span class="o">=</span><span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ey</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">Ez</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Ez</span><span class="p">,</span>
+        <span class="n">Hx</span><span class="o">=</span><span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">Hy</span><span class="o">=</span><span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hy</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">Hz</span><span class="o">=</span><span class="n">_average</span><span class="p">(</span>
+            <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hz</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_interpolate_Hz</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+    <span class="c1"># TODO: take grid spacing into account</span>
+    <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
+        <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
+        <span class="n">cs</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
+        <span class="n">Ex</span><span class="o">=</span><span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">Ey</span><span class="o">=</span><span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ey</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">Ez</span><span class="o">=</span><span class="n">_average</span><span class="p">(</span>
+            <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ez</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">),</span>
+        <span class="n">Hx</span><span class="o">=</span><span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">Hy</span><span class="o">=</span><span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hy</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">Hz</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">Hz</span><span class="p">,</span>
+    <span class="p">)</span>
 </pre></div>
 
                 </article>
