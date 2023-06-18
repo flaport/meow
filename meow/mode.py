@@ -3,15 +3,15 @@
 import pickle
 import warnings
 from itertools import product
-from typing import Any, List, Tuple
+from typing import List, Literal, Optional, Tuple
 
 import numpy as np
-from pydantic import Field, PrivateAttr
+from pydantic import Field
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
 from scipy.linalg import norm
 
-from .base_model import BaseModel
+from .base_model import BaseModel, cached_property
 from .cross_section import CrossSection
 from .integrate import integrate_2d
 from .visualize import _figsize_visualize_mode
@@ -42,63 +42,64 @@ class Mode(BaseModel):
     Hz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
         description="the Hz-fields of the mode"
     )
+    interpolation: Optional[Literal["Ex", "Ey", "Ez", "Hz"]] = Field(
+        default=None,
+        description="To which 2D Yee-location the fields are interpolated to.",
+    )
 
-    _Px: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
-    _Py: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
-    _Pz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = PrivateAttr()
-    _A: np.float_ = PrivateAttr()
-
-    def __init__(self, **data: Any):
-        super().__init__(**data)
-        self._Px = None  # type: ignore
-        self._Py = None  # type: ignore
-        self._Pz = None  # type: ignore
-        self._A = None  # type: ignore
+    def interpolate(self, location: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]):
+        if self.interpolation is not None:
+            raise RuntimeError("Cannot interpolate from already interpolated mode!")
+        interpolate_funcs = {
+            "EX": _interpolate_Ex,
+            "EY": _interpolate_Ey,
+            "EZ": _interpolate_Ez,
+            "HX": _interpolate_Ey,
+            "HY": _interpolate_Ex,
+            "HZ": _interpolate_Hz,
+        }
+        interpolate_func = interpolate_funcs[location.upper()]
+        return interpolate_func(self)
 
     @property
     def te_fraction(self):
         """the TE polarization fraction of the mode."""
         return te_fraction(self)
 
-    def _calc_poynting(self):
+    @cached_property
+    def _pointing(self):
         """calculate and cache the poynting vector"""
         vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
         vecH = np.stack([self.Hx, self.Hy, self.Hz], axis=-1)
         vecP = np.cross(vecE, vecH)
-        self._Px, self._Py, self._Pz = np.rollaxis(vecP, -1)
-
-    def _calc_area(self):
-        vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
-        E_sq = norm(vecE, axis=-1, ord=2)
-        E_qu = E_sq**2
-        x = self.cs.mesh.x_
-        y = self.cs.mesh.y_
-        self._A = np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
+        Px, Py, Pz = np.rollaxis(vecP, -1)
+        return {
+            "Px": Px,
+            "Py": Py,
+            "Pz": Pz,
+        }
 
     @property
     def Px(self):
-        if self._Px is None:
-            self._calc_poynting()
-        return self._Px
+        return self._pointing["Px"]
 
     @property
     def Py(self):
-        if self._Py is None:
-            self._calc_poynting()
-        return self._Py
+        return self._pointing["Py"]
 
     @property
     def Pz(self):
-        if self._Pz is None:
-            self._calc_poynting()
-        return self._Pz
+        return self._pointing["Pz"]
 
-    @property
+    @cached_property
     def A(self):
         """mode area"""
-        if self._A is None:
-            self._calc_area()
-        return self._A
+        vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
+        E_sq = norm(vecE, axis=-1, ord=2)
+        E_qu = E_sq**2
+        x = self.cs.cell.mesh.x_
+        y = self.cs.cell.mesh.y_
+        return np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
 
     @property
     def env(self):
@@ -106,7 +107,7 @@ class Mode(BaseModel):
 
     @property
     def mesh(self):
-        return self.cs.mesh
+        return self.cs.cell.mesh
 
     @property
     def cell(self):
@@ -171,12 +172,15 @@ class Mode(BaseModel):
             ax = plt.gca()
         plt.sca(ax)
 
-        x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
-        c = field[-1]
         if n_cmap is None:
+            # little bit lighter colored than the one in cs._visualize:
             n_cmap = colors.LinearSegmentedColormap.from_list(
                 name="c_cmap", colors=["#ffffff", "#c1d9ed"]
             )
+        self.cs._visualize(ax=ax, n_cmap=n_cmap, cbar=False, show=False)
+
+        x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
+        c = {"Ex": "x", "Ey": "y", "Ez": "z", "Hx": "y", "Hy": "x", "Hz": "z_"}[field]
         if mode_cmap is None:
             mode_cmap = "inferno"
         X = getattr(self.mesh, f"X{c}")
@@ -186,13 +190,12 @@ class Mode(BaseModel):
             warnings.filterwarnings("ignore", category=UserWarning)
             levels = np.linspace(mode.min(), mode.max(), num_levels + 1)[1:]
             plt.contour(X, Y, mode, cmap=mode_cmap, levels=levels)  # fmt: skip
+            # plt.pcolormesh(X, Y, mode, cmap=mode_cmap, alpha=0.5) #, levels=levels)  # fmt: skip
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
         plt.colorbar(cax=cax)
         plt.sca(ax)
 
-        n = np.real(getattr(self.cs, f"n{c}"))
-        plt.pcolormesh(X, Y, n, cmap=n_cmap)
         plt.xlabel(x)
         plt.ylabel(y)
         plt.grid(True, alpha=0.4)
@@ -233,7 +236,7 @@ class Mode(BaseModel):
         return new_mode
 
     def __mul__(self, other):
-        if not isinstance(other, (float, complex, int)):
+        if not isinstance(other, (float, np.floating, complex, int, np.integer)):
             raise TypeError(
                 f"unsupported operand type(s) for *: 'Mode' and '{type(other).__name__}'"
             )
@@ -252,7 +255,7 @@ class Mode(BaseModel):
     __rmul__ = __mul__
 
     def __truediv__(self, other):
-        if not isinstance(other, (float, complex, int)):
+        if not isinstance(other, (float, np.floating, complex, int, np.integer)):
             raise TypeError(
                 f"unsupported operand type(s) for /: 'Mode' and '{type(other).__name__}'"
             )
@@ -263,7 +266,7 @@ class Mode(BaseModel):
             raise TypeError(
                 f"unsupported operand type(s) for -: 'Mode' and '{type(other).__name__}'"
             )
-        return self + other * (-1)
+        return self + other * (-1.0)
 
 
 Modes = List[Mode]
@@ -412,7 +415,20 @@ def normalize_energy(mode: Mode) -> Mode:
     )
 
 
-def is_pml_mode(mode, threshold_factor=0.2):
+def is_pml_mode(mode, threshold):
+    """check whether a mode can be considered a PML mode.
+
+    Args:
+        mode: the mode to classify as PML mode or not.
+        pml_mode_threshold: If the mode has more than `pml_mode_threshold` part of its
+            energy in the PML, it will be removed.
+
+    Returns:
+        bool: whether the mode is a PML mode or not
+    """
+    threshold = min(max(threshold, 0.0), 1.0)
+    if threshold > 0.999:
+        return False
     numx, numy = mode.cell.mesh.num_pml
     ed = energy_density(mode)
     m, n = ed.shape
@@ -423,7 +439,9 @@ def is_pml_mode(mode, threshold_factor=0.2):
     rest = ed[numx : m - numx, numy : n - numy]
     pml_sum = lft.sum() + rgt.sum() + top.sum() + btm.sum()
     rest_sum = rest.sum()
-    is_pml = pml_sum > threshold_factor * rest_sum
+    # probably propper integration considering
+    # the size of the mesh cells would be better here
+    is_pml = pml_sum > threshold * (rest_sum + pml_sum)
     return is_pml
 
 
@@ -433,3 +451,93 @@ def te_fraction(mode: Mode) -> float:
     e = np.sum(0.5 * eps0 * epsx * np.abs(mode.Ex) ** 2)
     h = np.sum(0.5 * mu0 * np.abs(mode.Hx) ** 2)
     return float(e / (e + h))
+
+
+def _average(field, direction="forward", axis=0):
+    direction = direction.lower()
+    if not direction in ["forward", "backward"]:
+        raise ValueError("direction should be 'forward' or backward")
+    if not axis in [0, 1]:
+        raise ValueError("axis should be zero or 1")
+    elif axis == 1:
+        return _average(field.T, direction=direction, axis=0).T
+    average = 0.5 * (field[1:] + field[:-1])
+    zero = np.zeros_like(average[:1])
+    if direction == "forward":
+        return np.concatenate([zero, average], axis=0)
+    else:
+        return np.concatenate([average, zero], axis=0)
+
+
+def _interpolate_Ex(mode: Mode) -> Mode:
+    # TODO: take grid spacing into account
+    Ey_at_Ez = _average(mode.Ey, direction="backward", axis=1)
+    Ey_at_Ex = _average(Ey_at_Ez, direction="forward", axis=0)
+    Ez_at_Ex = _average(mode.Ez, direction="forward", axis=0)
+    Hx_at_Hz = _average(mode.Hx, direction="forward", axis=0)
+    Hx_at_Ex = _average(Hx_at_Hz, direction="backward", axis=1)
+    Hz_at_Ex = _average(mode.Hz, direction="backward", axis=1)
+    return Mode(
+        neff=mode.neff,
+        cs=mode.cs,
+        Ex=mode.Ex,
+        Ey=Ey_at_Ex,
+        Ez=Ez_at_Ex,
+        Hx=Hx_at_Ex,
+        Hy=mode.Hy,
+        Hz=Hz_at_Ex,
+    )
+
+
+def _interpolate_Ey(mode: Mode) -> Mode:
+    # TODO: take grid spacing into account
+    Ex_at_Ez = _average(mode.Ex, direction="backward", axis=0)
+    Ex_at_Ey = _average(Ex_at_Ez, direction="forward", axis=1)
+    Ez_at_Ey = _average(mode.Ez, direction="forward", axis=1)
+    Hy_at_Hz = _average(mode.Hy, direction="forward", axis=1)
+    Hy_at_Ey = _average(Hy_at_Hz, direction="backward", axis=0)
+    Hz_at_Ey = _average(mode.Hz, direction="backward", axis=0)
+    return Mode(
+        neff=mode.neff,
+        cs=mode.cs,
+        Ex=Ex_at_Ey,
+        Ey=mode.Ey,
+        Ez=Ez_at_Ey,
+        Hx=mode.Hx,
+        Hy=Hy_at_Ey,
+        Hz=Hz_at_Ey,
+    )
+
+
+def _interpolate_Ez(mode: Mode) -> Mode:
+    # TODO: take grid spacing into account
+    return Mode(
+        neff=mode.neff,
+        cs=mode.cs,
+        Ex=_average(mode.Ex, direction="backward", axis=0),
+        Ey=_average(mode.Ey, direction="backward", axis=1),
+        Ez=mode.Ez,
+        Hx=_average(mode.Hx, direction="backward", axis=1),
+        Hy=_average(mode.Hy, direction="backward", axis=0),
+        Hz=_average(
+            _average(mode.Hz, direction="backward", axis=0),
+            direction="backward",
+            axis=1,
+        ),
+    )
+
+
+def _interpolate_Hz(mode: Mode) -> Mode:
+    # TODO: take grid spacing into account
+    return Mode(
+        neff=mode.neff,
+        cs=mode.cs,
+        Ex=_average(mode.Ex, direction="forward", axis=1),
+        Ey=_average(mode.Ey, direction="forward", axis=0),
+        Ez=_average(
+            _average(mode.Ez, direction="forward", axis=0), direction="forward", axis=1
+        ),
+        Hx=_average(mode.Hx, direction="forward", axis=0),
+        Hy=_average(mode.Hy, direction="forward", axis=1),
+        Hz=mode.Hz,
+    )

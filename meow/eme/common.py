@@ -1,6 +1,6 @@
 """ SAX backend for EME (default backend) """
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
@@ -31,7 +31,7 @@ def compute_interface_s_matrix(
     O_LR = np.array([[inner_product(modes1[m], modes2[n]) for n in range(NR)] for m in range(NL)])  # fmt: skip
     O_RL = np.array([[inner_product(modes2[m], modes1[n]) for n in range(NL)] for m in range(NR)])  # fmt: skip
 
-    # extra phase correction (disabled?).
+    # additional phase correction (disabled?).
 
     if conjugate_transpose:
         O_LL = np.real(O_LL)
@@ -126,7 +126,7 @@ def compute_interface_s_matrices(
 
 
 def compute_propagation_s_matrix(
-    modes: List[Mode], override_cell_length: float | None = None
+    modes: List[Mode], override_cell_length: Optional[float] = None
 ):
     """get the propagation S-matrix of each `Mode` belonging to a `CrossSection` in a `Cell` with a certain length."""
     cell_length = modes[0].cell.length
@@ -144,7 +144,7 @@ def compute_propagation_s_matrix(
 
 
 def compute_propagation_s_matrices(
-    modes: List[List[Mode]], override_cell_lengths: list[float] | None = None
+    modes: List[List[Mode]], override_cell_lengths: Optional[List[float]] = None
 ):
     """get all the propagation S-matrices of all the `Modes` belonging to each `CrossSection`"""
     if override_cell_lengths:

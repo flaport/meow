@@ -1,7 +1,7 @@
 """ FDE Tidy3d backend (default backend for MEOW) """
 
 from types import SimpleNamespace
-from typing import Literal
+from typing import Literal, Optional
 
 import numpy as np
 import tidy3d
@@ -12,22 +12,26 @@ from scipy.constants import c
 from tidy3d.plugins.mode.solver import compute_modes as _compute_modes
 
 from ..cross_section import CrossSection
-from ..mode import Mode, Modes, normalize_energy, zero_phase
+from ..mode import Mode, Modes, is_pml_mode, normalize_energy, zero_phase
 
 
 @validate_arguments
 def compute_modes_tidy3d(
     cs: CrossSection,
     num_modes: PositiveInt = 10,
-    target_neff: PositiveFloat | None = None,
+    target_neff: Optional[PositiveFloat] = None,
     precision: Literal["single", "double"] = "double",
+    pml_mode_threshold: float = 1.0,
 ) -> Modes:
-    """compute ``Modes`` for a given ``FdeSpec`` (Tidy3D backend)
+    """compute ``Modes`` for a given ``CrossSection``
 
     Args:
         cs: The ``CrossSection`` to calculate the modes for
         num_modes: Number of modes returned by mode solver.
         target_neff: Guess for initial effective index of the mode.
+        pml_mode_threshold: If the mode has more than `pml_mode_threshold` part of its
+            energy in the PML, it will be removed.
+            default: 1.0 = 100% = no fitering.
     """
 
     if num_modes < 1:
@@ -58,7 +62,7 @@ def compute_modes_tidy3d(
         x.squeeze()
         for x in _compute_modes(
             eps_cross=eps_cross,
-            coords=[cs.mesh.x, cs.mesh.y],
+            coords=[cs.cell.mesh.x, cs.cell.mesh.y],
             freq=c / (cs.env.wl * 1e-6),
             mode_spec=mode_spec,
         )
@@ -95,5 +99,6 @@ def compute_modes_tidy3d(
 
     modes = [zero_phase(normalize_energy(mode)) for mode in modes]
     modes = sorted(modes, key=lambda m: float(np.real(m.neff)), reverse=True)
+    modes = [m for m in modes if not is_pml_mode(m, pml_mode_threshold)]
 
     return modes

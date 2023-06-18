@@ -1,6 +1,6 @@
 """ SAX backend for EME (default backend) """
 
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 import sax
@@ -19,7 +19,6 @@ from .common import (
 
 try:
     import klujax
-
 
 except ImportError:
     klujax = None
@@ -80,11 +79,11 @@ def _validate_sax_backend(sax_backend):
 
 def compute_s_matrix_sax(
     modes: List[List[Mode]],
-    sax_backend: str | None = None,
+    sax_backend: Optional[str] = None,
     conjugate_transpose: bool = DEFAULT_CONJUGATE_TRANSPOSE,
     enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
     enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
-    override_cell_lengths: list[float] | None = None,
+    override_cell_lengths: Optional[List[float]] = None,
     **kwargs,
 ):
     """Calculate the S-matrix for given sets of modes, each set belonging to a `Cell`
