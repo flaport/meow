@@ -3,7 +3,7 @@
 import pickle
 import warnings
 from itertools import product
-from typing import List, Literal, Tuple
+from typing import List, Literal, Optional, Tuple
 
 import numpy as np
 from pydantic import Field
@@ -42,7 +42,7 @@ class Mode(BaseModel):
     Hz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
         description="the Hz-fields of the mode"
     )
-    interpolation: Literal["Ex", "Ey", "Ez", "Hz"] | None = Field(
+    interpolation: Optional[Literal["Ex", "Ey", "Ez", "Hz"]] = Field(
         default=None,
         description="To which 2D Yee-location the fields are interpolated to.",
     )

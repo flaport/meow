@@ -10,7 +10,6 @@ from meow.structures import visualize_structures
 try:
     import matplotlib.pyplot as plt  # fmt: skip
 
-
 except ImportError:
     plt = None
 

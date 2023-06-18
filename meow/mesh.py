@@ -1,6 +1,6 @@
 """ a 2D Mesh """
 
-from typing import Literal, Tuple
+from typing import Literal, Optional, Tuple
 
 import numpy as np
 from pydantic import Field
@@ -30,7 +30,7 @@ class Mesh2d(Mesh):
         default=0.0,
         description="Polar angle of the propagation axis from the injection axis.",
     )
-    bend_radius: float | None = Field(
+    bend_radius: Optional[float] = Field(
         default=None,
         description=(
             "A curvature radius for simulation of waveguide bends. "
@@ -38,7 +38,7 @@ class Mesh2d(Mesh):
             "the curvature center along the tangential axis perpendicular to the bend axis."
         ),
     )
-    bend_axis: Literal[0, 1] | None = Field(
+    bend_axis: Optional[Literal[0, 1]] = Field(
         default=None,
         description=(
             "Index into the two tangential axes defining the normal to the plane in which the bend lies. "
