@@ -1,14 +1,19 @@
 """Propagating fields throug devices"""
 
-from meow.eme import compute_interface_s_matrices, compute_propagation_s_matrices
-from meow.eme import compute_interface_s_matrix
+import jax.numpy as np
+import matplotlib.pyplot as plt
+import numpy as onp
 import sax
 from sax.backends import circuit_backends
 
-evaluate_circuit = circuit_backends["klu"]
-import jax.numpy as np
-import numpy as onp
-import matplotlib.pyplot as plt
+from meow.eme import (
+    compute_interface_s_matrices,
+    compute_interface_s_matrix,
+    compute_propagation_s_matrices,
+)
+from meow.eme.sax import _validate_sax_backend
+
+evaluate_circuit = circuit_backends[_validate_sax_backend(None)]
 
 
 def _connect_two(l, r):
