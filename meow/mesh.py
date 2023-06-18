@@ -54,76 +54,93 @@ class Mesh2d(Mesh):
 
     @cached_property
     def dx(self):
-        """x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
+        """dx at Hz locations, i.e. center of the 2D cell"""
         return (self.x[1:] - self.x[:-1]).view(_array)
 
     @cached_property
     def dy(self):
-        """y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
+        """dy at Hz locations, i.e. center of the 2D cell"""
         return (self.y[1:] - self.y[:-1]).view(_array)
 
     @cached_property
     def x_(self):
-        """x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
+        """x at Hz locations, i.e. center of the 2D cell"""
         return 0.5 * (self.x[1:] + self.x[:-1]).view(_array)
 
     @cached_property
     def y_(self):
-        """y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)"""
+        """y at Hz locations, i.e. center of the 2D cell"""
         return 0.5 * (self.y[1:] + self.y[:-1]).view(_array)
 
     @cached_property
     def x_full(self):
+        """x at half-integer locations"""
         return (
-            np.stack([self.x[:-1] + self.dx / 4, self.x[:-1] + 3 * self.dx / 4], 1)
-            .ravel()
-            .view(_array)
+            np.stack([self.x[:-1], self.x[:-1] + self.dx / 2], 1).ravel().view(_array)
         )
 
     @cached_property
     def y_full(self):
+        """y at half-integer locations"""
         return (
-            np.stack([self.y[:-1] + self.dy / 4, self.y[:-1] + 3 * self.dy / 4], 1)
-            .ravel()
-            .view(_array)
+            np.stack([self.y[:-1], self.y[:-1] + self.dy / 2], 1).ravel().view(_array)
         )
 
     @cached_property
     def XY_full(self):
+        """X and Y at half-integer locations"""
         Y_full, X_full = np.meshgrid(self.y_full, self.x_full)
         return X_full.view(_array), Y_full.view(_array)
 
     @property
     def X_full(self):
+        """X at half-integer locations"""
         return self.XY_full[0].view(_array)
 
     @property
     def Y_full(self):
+        """Y at half-integer locations"""
         return self.XY_full[1].view(_array)
 
     @property
     def Xx(self):
+        """X at Ex locations"""
         return self.X_full[1::2, ::2].view(_array)
 
     @property
     def Yx(self):
+        """Y at Ex locations"""
         return self.Y_full[1::2, ::2].view(_array)
 
     @property
     def Xy(self):
+        """X at Ey locations"""
         return self.X_full[::2, 1::2].view(_array)
 
     @property
     def Yy(self):
+        """Y at Ey locations"""
         return self.Y_full[::2, 1::2].view(_array)
 
     @property
     def Xz(self):
+        """X at Ez locations"""
         return self.X_full[::2, ::2].view(_array)
 
     @property
     def Yz(self):
+        """Y at Ez locations"""
         return self.Y_full[::2, ::2].view(_array)
+
+    @property
+    def Xz_(self):
+        """X at Hz locations"""
+        return self.X_full[1::2, 1::2].view(_array)
+
+    @property
+    def Yz_(self):
+        """Y at Hz locations"""
+        return self.Y_full[1::2, 1::2].view(_array)
 
     def __eq__(self, other):
         eq = True
