@@ -301,7 +301,7 @@ document.write(`
   <h1>Source code for meow.eme.sax</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; SAX backend for EME (default backend) &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sax</span>
@@ -381,11 +381,11 @@ document.write(`
 
 <div class="viewcode-block" id="compute_s_matrix_sax"><a class="viewcode-back" href="../../../meow.eme.html#meow.eme.sax.compute_s_matrix_sax">[docs]</a><span class="k">def</span> <span class="nf">compute_s_matrix_sax</span><span class="p">(</span>
     <span class="n">modes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">]],</span>
-    <span class="n">sax_backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sax_backend</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">conjugate_transpose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_CONJUGATE_TRANSPOSE</span><span class="p">,</span>
     <span class="n">enforce_reciprocity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_ENFORCE_RECIPROCITY</span><span class="p">,</span>
     <span class="n">enforce_lossy_unitarity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_ENFORCE_LOSSY_UNITARITY</span><span class="p">,</span>
-    <span class="n">override_cell_lengths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">override_cell_lengths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the S-matrix for given sets of modes, each set belonging to a `Cell`</span>
