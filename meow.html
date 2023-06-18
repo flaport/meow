@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>meow package &#8212; meow 0.6.1 documentation</title>
+    <title>meow package &#8212; meow 0.6.2 documentation</title>
   
   
   
@@ -1886,81 +1886,104 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.dx">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dx</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.dx" title="Permalink to this definition">#</a></dt>
-<dd><p>x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)</p>
+<dd><p>dx at Hz locations, i.e. center of the 2D cell</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.dy">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dy</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.dy" title="Permalink to this definition">#</a></dt>
-<dd><p>y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)</p>
+<dd><p>dy at Hz locations, i.e. center of the 2D cell</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.x_">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x_</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.x_" title="Permalink to this definition">#</a></dt>
-<dd><p>x-coordinate mesh step (Hz locations, i.e. center of the 2D cell)</p>
+<dd><p>x at Hz locations, i.e. center of the 2D cell</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.y_">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y_</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.y_" title="Permalink to this definition">#</a></dt>
-<dd><p>y-coordinate mesh step (Hz locations, i.e. center of the 2D cell)</p>
+<dd><p>y at Hz locations, i.e. center of the 2D cell</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.x_full">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x_full</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.x_full" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>x at half-integer locations</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.y_full">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y_full</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.y_full" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>y at half-integer locations</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.XY_full">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">XY_full</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.XY_full" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>X and Y at half-integer locations</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.X_full">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">X_full</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.X_full" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>X at half-integer locations</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.Y_full">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Y_full</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Y_full" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Y at half-integer locations</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.Xx">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Xx</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Xx" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>X at Ex locations</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.Yx">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Yx</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Yx" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Y at Ex locations</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.Xy">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Xy</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Xy" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>X at Ey locations</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.Yy">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Yy</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Yy" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Y at Ey locations</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.Xz">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Xz</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Xz" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>X at Ez locations</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2d.Yz">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Yz</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Yz" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Y at Ez locations</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="meow.mesh.Mesh2d.Xz_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Xz_</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Xz_" title="Permalink to this definition">#</a></dt>
+<dd><p>X at Hz locations</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="meow.mesh.Mesh2d.Yz_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Yz_</span></span><a class="headerlink" href="#meow.mesh.Mesh2d.Yz_" title="Permalink to this definition">#</a></dt>
+<dd><p>Y at Hz locations</p>
+</dd></dl>
 
 </dd></dl>
 
