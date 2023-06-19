@@ -75,16 +75,26 @@ class TidyMaterial(Material):
             raise ValueError(
                 f"Specified material name is invalid. Use one of {material_library.keys()}"
             )
-        if self.variant not in material_library[self.name].variants:
+        _material = material_library[self.name]
+        _variants = getattr(_material, "variants", {})
+        if not _variants:
+            raise ValueError(f"Tidy3D material '{self.name}' not supported.")
+        if self.variant not in _variants:
+            _variant_options = list(_variants.keys())
             raise ValueError(
-                f"Specified variant is invalid. Use one of {material_library[self.name].variants.keys()}"
+                f"Specified variant is invalid. Use one of {_variant_options}."
             )
 
     def __call__(self, env: Environment) -> NDArray[np.complex_]:
         if not isinstance(env, Environment):
             env = Environment(**env)
-        mat = material_library[self.name][self.variant]
-        eps = mat.eps_comp(0, 0, td.C_0 / env.wl)
+        _material = material_library[self.name]
+        _variants = getattr(_material, "variants", None)
+        assert _variants is not None
+        mat = _material[self.variant]  # type: ignore
+        eps_comp = getattr(mat, "eps_comp", None)
+        assert eps_comp is not None
+        eps = eps_comp(0, 0, td.C_0 / env.wl)
         return np.sqrt(eps)
 
 
