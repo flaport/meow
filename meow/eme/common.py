@@ -40,7 +40,7 @@ def compute_interface_s_matrix(
     # ignoring the phase seems to corresponds best with lumerical.
 
     # alternative phase correction (probably worth testing this out)
-    # Question: is this not just a conjugation?
+    # Question: is this not just an abs ;) ?
     # O_LL = O_LL*np.exp(-1j*np.angle(O_LL))
     # O_RR = O_RR*np.exp(-1j*np.angle(O_RR))
 
