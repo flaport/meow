@@ -46,6 +46,9 @@ class CrossSection(BaseModel):
             maskh = _get_boundary_mask_horizontal(n_full)
             maskh = maskh & (~mh)
             mask = maskv | maskh
+            maskcl = _fill_corner_left_mask(mask)
+            maskcr = _fill_corner_right_mask(mask)
+            mask = mask | maskcl | maskcr
             mask = (n_full > 1) & (~mask)
             mz = np.zeros_like(n_full, dtype=bool)
             mz[::2, ::2] = True
@@ -119,6 +122,23 @@ class CrossSection(BaseModel):
             plt.sca(ax)
         if show:
             plt.show()
+
+
+def _fill_corner_left_mask(mask):
+    return (
+        convolve(np.asarray(mask, dtype=float), np.array([[-1.0, +1.0], [+1.0, -1.0]]))
+        > 1.0
+    )  # fmt: skip # type: ignore
+
+
+def _fill_corner_right_mask(mask):
+    return (
+        convolve(
+            np.asarray(mask, dtype=float),
+            np.array([[0.0, 0.0], [+1.0, -1.0], [-1.0, +1.0]]),
+        )
+        > 1
+    )  # fmt: skip # type: ignore
 
 
 def _get_boundary_mask_horizontal(n_full, negate=False):
