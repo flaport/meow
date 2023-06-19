@@ -26,7 +26,6 @@ try:
 
     old_install = pretty.install
     pretty.install = lambda *_, **__: None
-    import tidy3d
 
     pretty.install = old_install
 except ImportError:
@@ -34,7 +33,6 @@ except ImportError:
 
 
 try:
-    import sax
 
     warnings.filterwarnings(action="ignore", module="sax")
 except ImportError:
@@ -54,15 +52,15 @@ from . import mode as mode
 from . import structures as structures
 
 # from . import visualize as visualize
-from .cell import *
-from .cross_section import *
+from .cell import Cell, create_cells
+from .cross_section import CrossSection
 from .eme import *
-from .environment import *
+from .environment import Environment
 from .fde import *
 from .gds_structures import *
 from .geometries import *
 from .materials import *
-from .mesh import *
-from .mode import *
-from .structures import *
-from .visualize import *
+from .mesh import Mesh, Mesh2d
+from .mode import Mode, Modes
+from .structures import Structure, visualize_structures, sort_structures
+from .visualize import visualize

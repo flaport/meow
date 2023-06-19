@@ -153,7 +153,7 @@ class Prism(Geometry):
                 return np.zeros_like(Y, dtype=bool)
             intersections = sg.MultiLineString([intersections])
 
-        mask = np.zeros_like(Y, dtype=bool)
+        np.zeros_like(Y, dtype=bool)
         for intersection in intersections.geoms:
             intersection = np.asarray(intersection.coords)
             if not intersection.shape[0]:

@@ -100,13 +100,13 @@ class CrossSection(BaseModel):
             dy = self.cell.mesh.dy
             x_ticks = np.sort(np.unique(self.cell.mesh.X_full.ravel()))[::2]
             y_ticks = np.sort(np.unique(self.cell.mesh.Y_full.ravel()))[::2]
-            plt.xticks(x_ticks - 0.25 * dx, [f"" for x in x_ticks - 0.25 * dx])
-            plt.yticks(y_ticks - 0.25 * dy, [f"" for y in y_ticks - 0.25 * dy])
+            plt.xticks(x_ticks - 0.25 * dx, ["" for x in x_ticks - 0.25 * dx])
+            plt.yticks(y_ticks - 0.25 * dy, ["" for y in y_ticks - 0.25 * dy])
             plt.xticks(
-                x_ticks + 0.25 * dx, [f"" for x in x_ticks + 0.25 * dx], minor=True
+                x_ticks + 0.25 * dx, ["" for x in x_ticks + 0.25 * dx], minor=True
             )
             plt.yticks(
-                y_ticks + 0.25 * dy, [f"" for y in y_ticks + 0.25 * dy], minor=True
+                y_ticks + 0.25 * dy, ["" for y in y_ticks + 0.25 * dy], minor=True
             )
             plt.grid(True, which="major", ls="-")
             plt.grid(True, which="minor", ls=":")

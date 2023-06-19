@@ -202,7 +202,7 @@ class BaseModel(_BaseModel, metaclass=_ModelMetaclass):
         super().__init__(**kwargs)
         self.__dict__.update({k: _view_arrays(k, v) for k, v in self.__dict__.items()})
         model = cache_model(self)
-        if not model is self:
+        if model is not self:
             object.__setattr__(self, "__dict__", model.__dict__)
 
     def _repr(self, indent=0, shift=2):
@@ -249,7 +249,7 @@ def _view_arrays(key, obj):
         obj = obj.view(_array)
 
         # arbitrary: let's not spam the cache with this.
-        if not key in ["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]:
+        if key not in ["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]:
             obj = cache_array(obj)
 
         return obj

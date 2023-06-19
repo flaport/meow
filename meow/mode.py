@@ -455,9 +455,9 @@ def te_fraction(mode: Mode) -> float:
 
 def _average(field, direction="forward", axis=0):
     direction = direction.lower()
-    if not direction in ["forward", "backward"]:
+    if direction not in ["forward", "backward"]:
         raise ValueError("direction should be 'forward' or backward")
-    if not axis in [0, 1]:
+    if axis not in [0, 1]:
         raise ValueError("axis should be zero or 1")
     elif axis == 1:
         return _average(field.T, direction=direction, axis=0).T

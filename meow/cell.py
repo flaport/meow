@@ -32,7 +32,7 @@ class Cell(BaseModel):
     def materials(self):
         materials = {}
         for i, structure in enumerate(sort_structures(self.structures), start=1):
-            if not structure.material in materials:
+            if structure.material not in materials:
                 materials[structure.material] = i
         return materials
 
