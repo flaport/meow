@@ -16,15 +16,36 @@ from tidy3d import material_library
 from .base_model import BaseModel, _array
 from .environment import Environment
 
+MATERIAL_TYPES: Dict[str, type] = {}
+
 
 class Material(BaseModel):
     """a `Material` defines the refractive index of a `Structure` within an `Environment`."""
+
+    type: str = ""
 
     name: str = Field(description="the name of the material")
 
     meta: Dict[str, Any] = Field(
         default_factory=lambda: {}, description="metadata for the material"
     )
+
+    def __init_subclass__(cls):
+        MATERIAL_TYPES[cls.__name__] = cls
+
+    def __new__(cls, **kwargs):
+        cls = MATERIAL_TYPES.get(kwargs.get("type", cls.__name__), cls)
+        return BaseModel.__new__(cls)  # type: ignore
+
+    @validator("type", pre=True, always=True)
+    def validate_type(cls, value):
+        if not value:
+            value = getattr(cls, "__name__", "Geometry")
+        if value not in MATERIAL_TYPES:
+            raise ValueError(
+                f"Invalid Material type. Got: {value!r}. Valid types: {MATERIAL_TYPES}."
+            )
+        return value
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
