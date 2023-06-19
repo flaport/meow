@@ -1,7 +1,7 @@
 """ MEOW: Modeling of Eigenmodes and Overlaps in Waveguides """
 
 __author__ = "Floris Laporte"
-__version__ = "0.6.4"
+__version__ = "0.6.5"
 
 import warnings
 
