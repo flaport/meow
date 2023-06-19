@@ -347,6 +347,9 @@ document.write(`
             <span class="n">maskh</span> <span class="o">=</span> <span class="n">_get_boundary_mask_horizontal</span><span class="p">(</span><span class="n">n_full</span><span class="p">)</span>
             <span class="n">maskh</span> <span class="o">=</span> <span class="n">maskh</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">mh</span><span class="p">)</span>
             <span class="n">mask</span> <span class="o">=</span> <span class="n">maskv</span> <span class="o">|</span> <span class="n">maskh</span>
+            <span class="n">maskcl</span> <span class="o">=</span> <span class="n">_fill_corner_left_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+            <span class="n">maskcr</span> <span class="o">=</span> <span class="n">_fill_corner_right_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">|</span> <span class="n">maskcl</span> <span class="o">|</span> <span class="n">maskcr</span>
             <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_full</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">mask</span><span class="p">)</span>
             <span class="n">mz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">n_full</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
             <span class="n">mz</span><span class="p">[::</span><span class="mi">2</span><span class="p">,</span> <span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
@@ -420,6 +423,23 @@ document.write(`
             <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<span class="k">def</span> <span class="nf">_fill_corner_left_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">convolve</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">+</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="o">+</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">]]))</span>
+        <span class="o">&gt;</span> <span class="mf">1.0</span>
+    <span class="p">)</span>  <span class="c1"># fmt: skip # type: ignore</span>
+
+
+<span class="k">def</span> <span class="nf">_fill_corner_right_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">convolve</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="o">+</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">+</span><span class="mf">1.0</span><span class="p">]]),</span>
+        <span class="p">)</span>
+        <span class="o">&gt;</span> <span class="mi">1</span>
+    <span class="p">)</span>  <span class="c1"># fmt: skip # type: ignore</span>
 
 
 <span class="k">def</span> <span class="nf">_get_boundary_mask_horizontal</span><span class="p">(</span><span class="n">n_full</span><span class="p">,</span> <span class="n">negate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
