@@ -461,6 +461,48 @@ document.write(`
 </dl>
 </dd></dl>
 
+<span class="target" id="module-meow.eme.propagate"></span><p>Propagating fields throug devices</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.eme.propagate.pi_pairs">
+<span class="sig-name descname"><span class="pre">pi_pairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">propagations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interfaces</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#pi_pairs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.pi_pairs" title="Permalink to this definition">#</a></dt>
+<dd><p>generates the S-matrices of cells: a combination of propagation and interface matrix</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.eme.propagate.l2r_matrices">
+<span class="sig-name descname"><span class="pre">l2r_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#l2r_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.l2r_matrices" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.eme.propagate.r2l_matrices">
+<span class="sig-name descname"><span class="pre">r2l_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pairs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#r2l_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.r2l_matrices" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.eme.propagate.split_square_matrix">
+<span class="sig-name descname"><span class="pre">split_square_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#split_square_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.split_square_matrix" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.eme.propagate.propagate">
+<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l2rs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2ls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excitation_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excitation_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.propagate" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.eme.propagate.compute_mode_amplitudes">
+<span class="sig-name descname"><span class="pre">compute_mode_amplitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excitation_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excitation_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#compute_mode_amplitudes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.compute_mode_amplitudes" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.eme.propagate.plot_fields">
+<span class="sig-name descname"><span class="pre">plot_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forwards</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backwards</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#plot_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.plot_fields" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.eme.propagate.propagate_modes">
+<span class="sig-name descname"><span class="pre">propagate_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ex_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ex_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#propagate_modes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.propagate_modes" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 <span class="target" id="module-meow.eme.sax"></span><p>SAX backend for EME (default backend)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.sax.compute_s_matrix_sax">

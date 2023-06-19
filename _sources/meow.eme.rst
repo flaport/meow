@@ -16,6 +16,12 @@ Submodules
    :show-inheritance:
 
 
+.. automodule:: meow.eme.propagate
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 .. automodule:: meow.eme.sax
    :members:
    :undoc-members:
