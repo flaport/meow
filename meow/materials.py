@@ -6,10 +6,12 @@ from typing import Any, Dict, List, Mapping, Tuple
 
 import numpy as np
 import pandas as pd
+import tidy3d as td
 from numpy.typing import NDArray
 from pydantic import Field, validator
 from scipy.constants import c
 from scipy.ndimage import map_coordinates
+from tidy3d import material_library
 
 from .base_model import BaseModel, _array
 from .environment import Environment
@@ -19,14 +21,79 @@ class Material(BaseModel):
     """a `Material` defines the refractive index of a `Structure` within an `Environment`."""
 
     name: str = Field(description="the name of the material")
+
+    meta: Dict[str, Any] = Field(
+        default_factory=lambda: {}, description="metadata for the material"
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        MATERIALS[self.name] = self
+
+    def __call__(self, env: Environment) -> NDArray[np.complex_]:
+        """returns an array of the refractive index at the wavelengths specified by the environment"""
+        raise NotImplementedError("Please use one of the Material child classes")
+
+    def _lumadd(self, sim, env, unit):
+        from matplotlib.cm import get_cmap  # fmt: skip
+
+        n = self(env)
+        wl = np.asarray(env.wl * unit, dtype=complex).ravel()
+        eps = np.asarray(n, dtype=complex).ravel() ** 2
+        data = np.stack([c / wl, eps], 1)  # permittivity, not index
+
+        if not sim.materialexists(self.name):
+            sim.setmaterial(sim.addmaterial("Sampled data"), "name", self.name)
+            color = np.asarray(
+                self.meta.get("color") or get_cmap("jet")(np.abs(eps) / 15.0)
+            )
+            sim.setmaterial(self.name, "color", color)
+
+        sim.setmaterial(self.name, "sampled data", data)
+
+        return self.name
+
+    class Config:
+        fields = {
+            "meta": {"exclude": True},
+        }
+
+
+class TidyMaterial(Material):
+    name: str = Field(description="The material name as also used by tidy3d")
+    variant: str = Field(description="The material name as also used by tidy3d")
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        # try:
+        # # somehow black complains about the except
+        # except ModuleNotFoundError:
+        #    raise ModuleNotFoundError("Tidy3D has to be installed to use its material database")
+
+        if self.name not in material_library:
+            raise ValueError(
+                f"Specified material name is invalid. Use one of {material_library.keys()}"
+            )
+        if self.variant not in material_library[self.name].variants:
+            raise ValueError(
+                f"Specified variant is invalid. Use one of {material_library[self.name].variants.keys()}"
+            )
+
+    def __call__(self, env: Environment) -> NDArray[np.complex_]:
+        if not isinstance(env, Environment):
+            env = Environment(**env)
+        mat = material_library[self.name][self.variant]
+        eps = mat.eps_comp(0, 0, td.C_0 / env.wl)
+        return np.sqrt(eps)
+
+
+class SampledMaterial(Material):
     params: Dict[str, np.ndarray[Tuple[int], np.dtype[np.float_]]] = Field(
         description="the wavelength over which the refractive index is defined."
     )
     n: np.ndarray[Tuple[int], np.dtype[np.complex_]] = Field(
         description="the complex refractive index of the material"
-    )
-    meta: Dict[str, Any] = Field(
-        default_factory=lambda: {}, description="metadata for the material"
     )
 
     @staticmethod
@@ -60,7 +127,6 @@ class Material(BaseModel):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        MATERIALS[self.name] = self
         for p, v in self.params.items():
             Lp = v.shape[0]
             Ln = self.n.shape[0]
@@ -108,30 +174,6 @@ class Material(BaseModel):
         # FIXME: ideally we should just be able to return `n` here...
         # return n
         return np.squeeze(np.real(n))  # TODO: allow complex multi-dimensional n
-
-    def _lumadd(self, sim, env, unit):
-        from matplotlib.cm import get_cmap  # fmt: skip
-
-        n = self(env)
-        wl = np.asarray(env.wl * unit, dtype=complex).ravel()
-        eps = np.asarray(n, dtype=complex).ravel() ** 2
-        data = np.stack([c / wl, eps], 1)  # permittivity, not index
-
-        if not sim.materialexists(self.name):
-            sim.setmaterial(sim.addmaterial("Sampled data"), "name", self.name)
-            color = np.asarray(
-                self.meta.get("color") or get_cmap("jet")(np.abs(eps) / 15.0)
-            )
-            sim.setmaterial(self.name, "color", color)
-
-        sim.setmaterial(self.name, "sampled data", data)
-
-        return self.name
-
-    class Config:
-        fields = {
-            "meta": {"exclude": True},
-        }
 
 
 Materials = List[Material]
@@ -268,11 +310,13 @@ def _validate_path(path):
     return path
 
 
-silicon = Material.from_path(
+silicon = SampledMaterial.from_path(
     path="silicon",
     meta={"color": (0.9, 0, 0, 0.9)},
 )
-silicon_oxide = Material.from_path(
+silicon_oxide = SampledMaterial.from_path(
     path="silicon_oxide",
     meta={"color": (0.9, 0.9, 0.9, 0.9)},
 )
+
+silicon_nitride = TidyMaterial(name="Si3N4", variant="Luke2015PMLStable")
