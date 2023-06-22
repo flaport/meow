@@ -5,7 +5,7 @@ from pydantic.types import PositiveInt
 
 from ..cross_section import CrossSection
 from ..environment import Environment
-from ..mode import Mode, normalize_energy, zero_phase
+from ..mode import Mode, normalize_product, zero_phase
 from ..structures import Structure
 
 _global = {"sim": None}
@@ -117,7 +117,7 @@ def compute_modes_lumerical(
             )
         except LumApiError:
             break
-        mode = normalize_energy(mode)
+        mode = normalize_product(mode)
         mode = zero_phase(mode)
         modes.append(mode)
 

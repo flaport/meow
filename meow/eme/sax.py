@@ -10,7 +10,7 @@ from sax.utils import get_ports
 from ..base_model import _array
 from ..mode import Mode
 from .common import (
-    DEFAULT_CONJUGATE_TRANSPOSE,
+    DEFAULT_CONJUGATE,
     DEFAULT_ENFORCE_LOSSY_UNITARITY,
     DEFAULT_ENFORCE_RECIPROCITY,
     compute_interface_s_matrices,
@@ -19,6 +19,7 @@ from .common import (
 
 try:
     import klujax
+
 
 except ImportError:
     klujax = None
@@ -80,7 +81,7 @@ def _validate_sax_backend(sax_backend):
 def compute_s_matrix_sax(
     modes: List[List[Mode]],
     sax_backend: Optional[str] = None,
-    conjugate_transpose: bool = DEFAULT_CONJUGATE_TRANSPOSE,
+    conjugate: bool = DEFAULT_CONJUGATE,
     enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
     enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
     override_cell_lengths: Optional[List[float]] = None,
@@ -104,7 +105,7 @@ def compute_s_matrix_sax(
     )
     interfaces = _compute_interface_s_matrices(
         modes,
-        conjugate_transpose=conjugate_transpose,
+        conjugate=conjugate,
         enforce_reciprocity=enforce_reciprocity,
         enforce_lossy_unitarity=enforce_lossy_unitarity,
         **kwargs,
