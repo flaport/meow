@@ -8,7 +8,7 @@ from ..mode import Mode
 from ..mode import inner_product as inner_product_normal
 from ..mode import inner_product_conj
 
-DEFAULT_CONJUGATE_TRANSPOSE = True
+DEFAULT_CONJUGATE = True
 DEFAULT_ENFORCE_RECIPROCITY = False
 DEFAULT_ENFORCE_LOSSY_UNITARITY = False
 
@@ -16,14 +16,14 @@ DEFAULT_ENFORCE_LOSSY_UNITARITY = False
 def compute_interface_s_matrix(
     modes1: List[Mode],
     modes2: List[Mode],
-    conjugate_transpose: bool = DEFAULT_CONJUGATE_TRANSPOSE,
+    conjugate: bool = DEFAULT_CONJUGATE,
     enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
     enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
 ):
     """get the S-matrix of the interface between two `CrossSection`s"""
     # overlap matrices
-    inner_product = inner_product_conj if conjugate_transpose else inner_product_normal
-    conjugate = np.conj if conjugate_transpose else lambda a: a
+    inner_product = inner_product_conj if conjugate else inner_product_normal
+    conj = np.conj if conjugate else lambda a: a
 
     NL, NR = len(modes1), len(modes2)
     O_LL = np.array([inner_product(modes1[m], modes1[m]) for m in range(NL)])
@@ -33,7 +33,7 @@ def compute_interface_s_matrix(
 
     # additional phase correction (disabled?).
 
-    if conjugate_transpose:
+    if conjugate:
         O_LL = np.real(O_LL)
         O_RR = np.real(O_RR)
 
@@ -49,7 +49,7 @@ def compute_interface_s_matrix(
     # O_RL = O_RL*np.diag(np.exp(-1j*np.angle(np.diag(O_RL))))
 
     # transmission L->R
-    LHS = conjugate(O_LR) + O_RL.T
+    LHS = conj(O_LR) + O_RL.T
     RHS = np.diag(2 * O_LL)
 
     # print(f"LHS: {LHS}")
@@ -67,7 +67,7 @@ def compute_interface_s_matrix(
     T_LR = U @ np.diag(t) @ V
 
     # transmission R->L
-    LHS = conjugate(O_RL) + O_LR.T
+    LHS = conj(O_RL) + O_LR.T
     RHS = np.diag(2 * O_RR)
     T_RL, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
 
@@ -77,8 +77,8 @@ def compute_interface_s_matrix(
     T_RL = U @ np.diag(t) @ V
 
     # reflection
-    R_LR = np.diag(1 / (2 * O_LL)) @ (O_RL.T - conjugate(O_LR)) @ T_LR  # type: ignore
-    R_RL = np.diag(1 / (2 * O_RR)) @ (O_LR.T - conjugate(O_RL)) @ T_RL  # type: ignore
+    R_LR = np.diag(1 / (2 * O_LL)) @ (O_RL.T - conj(O_LR)) @ T_LR  # type: ignore
+    R_RL = np.diag(1 / (2 * O_RR)) @ (O_LR.T - conj(O_RL)) @ T_RL  # type: ignore
 
     # s-matrix
     S = np.concatenate(
@@ -108,7 +108,7 @@ def compute_interface_s_matrix(
 
 def compute_interface_s_matrices(
     modes: List[List[Mode]],
-    conjugate_transpose: bool = DEFAULT_CONJUGATE_TRANSPOSE,
+    conjugate: bool = DEFAULT_CONJUGATE,
     enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
     enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
 ):
@@ -117,7 +117,7 @@ def compute_interface_s_matrices(
         f"i_{i}_{i + 1}": compute_interface_s_matrix(
             modes1=modes1,
             modes2=modes2,
-            conjugate_transpose=conjugate_transpose,
+            conjugate=conjugate,
             enforce_reciprocity=enforce_reciprocity,
             enforce_lossy_unitarity=enforce_lossy_unitarity,
         )

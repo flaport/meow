@@ -37,29 +37,39 @@ class CrossSection(BaseModel):
             n_full = np.where(self.cell.m_full == idx, material(self.env), n_full)
 
         if self.ez_interfaces:
-            mh = np.zeros_like(n_full, dtype=bool)
-            mh[:, ::2] = True
-            mv = np.zeros_like(n_full, dtype=bool)
-            mv[::2, :] = True
-            maskv = _get_boundary_mask_vertical(n_full)
-            maskv = maskv & (~mv)
-            maskh = _get_boundary_mask_horizontal(n_full)
-            maskh = maskh & (~mh)
-            mask = maskv | maskh
-            maskcl = _fill_corner_left_mask(mask)
-            maskcr = _fill_corner_right_mask(mask)
-            mask = mask | maskcl | maskcr
-            mask = (n_full > 1) & (~mask)
-            mz = np.zeros_like(n_full, dtype=bool)
-            mz[::2, ::2] = True
-            mx = np.zeros_like(n_full, dtype=bool)
-            mx[1::2, ::2] = True
-            my = np.zeros_like(n_full, dtype=bool)
-            my[::2, 1::2] = True
-            m_ = np.zeros_like(n_full, dtype=bool)
-            m_[1::2, 1::2] = True
-            mask = (mask & mx) | (mask & my) | (mask & mz) | (mask & m_)
-            n_full[~mask] = 1.0
+            mask_ez_horizontal = np.zeros_like(n_full, dtype=bool)
+            mask_ez_horizontal[:, ::2] = True
+            mask_ez_vertical = np.zeros_like(n_full, dtype=bool)
+            mask_ez_vertical[::2, :] = True
+            mask_boundaries_vertical = _get_boundary_mask_vertical(n_full)
+            mask_boundaries_vertical = mask_boundaries_vertical & (~mask_ez_vertical)
+            mask_boundaries_horizontal = _get_boundary_mask_horizontal(n_full)
+            mask_boundaries_horizontal = mask_boundaries_horizontal & (
+                ~mask_ez_horizontal
+            )
+            mask_temp = mask_boundaries_vertical | mask_boundaries_horizontal
+            mask_corner_left = _fill_corner_left_mask(mask_temp)
+            mask_corner_right = _fill_corner_right_mask(mask_temp)
+            mask_to_remove = mask_temp | mask_corner_left | mask_corner_right
+            mask_to_keep = (n_full > 1) & (~mask_to_remove)
+
+            mask_ez = np.zeros_like(n_full, dtype=bool)
+            mask_ez[::2, ::2] = True
+            final_mask_to_keep = mask_to_keep & mask_ez
+
+            mask_ex = np.zeros_like(n_full, dtype=bool)
+            mask_ex[1::2, ::2] = True
+            final_mask_to_keep |= mask_to_keep & mask_ex
+
+            mask_ey = np.zeros_like(n_full, dtype=bool)
+            mask_ey[::2, 1::2] = True
+            final_mask_to_keep |= mask_to_keep & mask_ey
+
+            mask_hz = np.zeros_like(n_full, dtype=bool)
+            mask_hz[1::2, 1::2] = True
+            final_mask_to_keep |= mask_to_keep & mask_hz
+
+            n_full[~final_mask_to_keep] = 1.0
         return n_full.view(_array)
 
     @property

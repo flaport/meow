@@ -71,10 +71,7 @@ class Box(Geometry):
         if (z < self.z_min) or (self.z_max < z):
             return np.zeros_like(X, dtype=bool)
         return (
-            (self.x_min <= X)
-            & (X <= self.x_max)
-            & (self.y_min <= Y)
-            & (Y <= self.y_max)
+            (self.x_min <= X) & (X < self.x_max) & (self.y_min <= Y) & (Y < self.y_max)
         )
 
     def _lumadd(self, sim, material_name, mesh_order, unit, xyz):
@@ -161,7 +158,8 @@ class Prism(Geometry):
             (y_min, _), (y_max, _) = intersection
             y_min, y_max = min(y_min, y_max), max(y_min, y_max)
             x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-            return (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+            mask |= (x_min <= X) & (X < x_max) & (y_min <= Y) & (Y < y_max)
+        return mask
 
     def _mask2d_axis_y(self, X, Y, z):
         # x, y, z -> z, x, y
@@ -187,7 +185,7 @@ class Prism(Geometry):
             (_, x_min), (_, x_max) = intersection
             x_min, x_max = min(x_min, x_max), max(x_min, x_max)
             y_min, y_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-            mask |= (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+            mask |= (x_min <= X) & (X < x_max) & (y_min <= Y) & (Y < y_max)
         return mask
 
     def _mask2d_axis_z(self, X, Y, z):
