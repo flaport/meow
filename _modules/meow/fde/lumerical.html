@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.fde.lumerical &#8212; meow 0.6.5 documentation</title>
+    <title>meow.fde.lumerical &#8212; meow 0.6.7 documentation</title>
   
   
   
@@ -306,7 +306,7 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">..cross_section</span> <span class="kn">import</span> <span class="n">CrossSection</span>
 <span class="kn">from</span> <span class="nn">..environment</span> <span class="kn">import</span> <span class="n">Environment</span>
-<span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">normalize_energy</span><span class="p">,</span> <span class="n">zero_phase</span>
+<span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">normalize_product</span><span class="p">,</span> <span class="n">zero_phase</span>
 <span class="kn">from</span> <span class="nn">..structures</span> <span class="kn">import</span> <span class="n">Structure</span>
 
 <span class="n">_global</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sim&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
@@ -418,7 +418,7 @@ document.write(`
             <span class="p">)</span>
         <span class="k">except</span> <span class="n">LumApiError</span><span class="p">:</span>
             <span class="k">break</span>
-        <span class="n">mode</span> <span class="o">=</span> <span class="n">normalize_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">normalize_product</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
         <span class="n">mode</span> <span class="o">=</span> <span class="n">zero_phase</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
         <span class="n">modes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
 

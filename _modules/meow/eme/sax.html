@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.eme.sax &#8212; meow 0.6.5 documentation</title>
+    <title>meow.eme.sax &#8212; meow 0.6.7 documentation</title>
   
   
   
@@ -311,7 +311,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..base_model</span> <span class="kn">import</span> <span class="n">_array</span>
 <span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span>
 <span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">DEFAULT_CONJUGATE_TRANSPOSE</span><span class="p">,</span>
+    <span class="n">DEFAULT_CONJUGATE</span><span class="p">,</span>
     <span class="n">DEFAULT_ENFORCE_LOSSY_UNITARITY</span><span class="p">,</span>
     <span class="n">DEFAULT_ENFORCE_RECIPROCITY</span><span class="p">,</span>
     <span class="n">compute_interface_s_matrices</span><span class="p">,</span>
@@ -320,6 +320,7 @@ document.write(`
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">klujax</span>
+
 
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">klujax</span> <span class="o">=</span> <span class="kc">None</span>
@@ -381,7 +382,7 @@ document.write(`
 <div class="viewcode-block" id="compute_s_matrix_sax"><a class="viewcode-back" href="../../../meow.eme.html#meow.eme.sax.compute_s_matrix_sax">[docs]</a><span class="k">def</span> <span class="nf">compute_s_matrix_sax</span><span class="p">(</span>
     <span class="n">modes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">]],</span>
     <span class="n">sax_backend</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">conjugate_transpose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_CONJUGATE_TRANSPOSE</span><span class="p">,</span>
+    <span class="n">conjugate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_CONJUGATE</span><span class="p">,</span>
     <span class="n">enforce_reciprocity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_ENFORCE_RECIPROCITY</span><span class="p">,</span>
     <span class="n">enforce_lossy_unitarity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_ENFORCE_LOSSY_UNITARITY</span><span class="p">,</span>
     <span class="n">override_cell_lengths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -405,7 +406,7 @@ document.write(`
     <span class="p">)</span>
     <span class="n">interfaces</span> <span class="o">=</span> <span class="n">_compute_interface_s_matrices</span><span class="p">(</span>
         <span class="n">modes</span><span class="p">,</span>
-        <span class="n">conjugate_transpose</span><span class="o">=</span><span class="n">conjugate_transpose</span><span class="p">,</span>
+        <span class="n">conjugate</span><span class="o">=</span><span class="n">conjugate</span><span class="p">,</span>
         <span class="n">enforce_reciprocity</span><span class="o">=</span><span class="n">enforce_reciprocity</span><span class="p">,</span>
         <span class="n">enforce_lossy_unitarity</span><span class="o">=</span><span class="n">enforce_lossy_unitarity</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
