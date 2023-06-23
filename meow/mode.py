@@ -180,7 +180,17 @@ class Mode(BaseModel):
         self.cs._visualize(ax=ax, n_cmap=n_cmap, cbar=False, show=False)
 
         x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
-        c = {"Ex": "x", "Ey": "y", "Ez": "z", "Hx": "y", "Hy": "x", "Hz": "z_"}[field]
+        c = {
+            "Ex": "x",
+            "Ey": "y",
+            "Ez": "z",
+            "Hx": "y",
+            "Hy": "x",
+            "Hz": "z_",
+            "Px": "x",
+            "Py": "y",
+            "Pz": "z",
+        }[field]
         if mode_cmap is None:
             mode_cmap = "inferno"
         X = getattr(self.mesh, f"X{c}")
