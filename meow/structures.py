@@ -45,3 +45,15 @@ def sort_structures(structures):
     struct_info = [(s.mesh_order, -i, s) for i, s in enumerate(structures)]
     sorted_struct_info = sorted(struct_info, key=lambda I: (I[0], I[1]), reverse=True)
     return [s for _, _, s in sorted_struct_info]
+
+
+def classify_structures_by_mesh_order_and_material(structures, materials):
+    structures = sort_structures(structures)
+    structures_dict = {}
+    for structure in structures:
+        mo = structure.mesh_order
+        mat = materials[structure.material]
+        if (mo, mat) not in structures_dict:
+            structures_dict[mo, mat] = []
+        structures_dict[mo, mat].append(structure)
+    return structures_dict

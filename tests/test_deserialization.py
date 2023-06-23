@@ -34,6 +34,7 @@ SIMPLE_MODE_DATA = {
                         "name": "SiO2",
                         "params": {"wl": [1.2]},
                         "n": {"real": [1.955], "imag": [0.0]},
+                        "type": "SampledMaterial",
                     },
                     "geometry": {
                         "type": "Box",
@@ -51,6 +52,7 @@ SIMPLE_MODE_DATA = {
                         "name": "SiO2",
                         "params": {"wl": [1.2]},
                         "n": {"real": [1.955], "imag": [0.0]},
+                        "type": "SampledMaterial",
                     },
                     "geometry": {
                         "type": "Box",
@@ -68,6 +70,7 @@ SIMPLE_MODE_DATA = {
                         "name": "Si",
                         "params": {"wl": [1.2], "T": [38.0]},
                         "n": {"real": [3.526617910662], "imag": [0.0]},
+                        "type": "SampledMaterial",
                     },
                     "geometry": {
                         "type": "Box",
@@ -85,6 +88,7 @@ SIMPLE_MODE_DATA = {
                         "name": "Si",
                         "params": {"wl": [1.2], "T": [38.0]},
                         "n": {"real": [3.526617910662], "imag": [0.0]},
+                        "type": "SampledMaterial",
                     },
                     "geometry": {
                         "type": "Box",
