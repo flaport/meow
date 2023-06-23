@@ -1,6 +1,7 @@
 # Other
 *.png
 *.pkl
+temp
 
 # IDE settings
 .vscode/
