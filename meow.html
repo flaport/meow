@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>meow package &#8212; meow 0.6.7 documentation</title>
+    <title>meow package &#8212; meow 0.6.8 documentation</title>
   
   
   
@@ -488,6 +488,12 @@ document.write(`
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;ez_interfaces&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ez Interfaces&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;when enabled, the meshing algorithm will throw away any index values at the interfaces which are not on even (Ez) half-grid locations. Enabling this should result in more symmetric modes.&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">   </span><span class="p">},</span>
 <span class="w">   </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -644,6 +650,7 @@ document.write(`
 </details></p><dl class="field-list simple">
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#meow.cell.Cell.ez_interfaces" title="meow.cell.Cell.ez_interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ez_interfaces</span> <span class="pre">(bool)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.mesh" title="meow.cell.Cell.mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mesh</span> <span class="pre">(meow.mesh.Mesh2d)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.structures" title="meow.cell.Cell.structures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structures</span> <span class="pre">(List[meow.structures.Structure])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cell.Cell.z_max" title="meow.cell.Cell.z_max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">z_max</span> <span class="pre">(float)</span></code></a></p></li>
@@ -673,6 +680,12 @@ document.write(`
 <dt class="sig sig-object py" id="meow.cell.Cell.z_max">
 <em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">z_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.cell.Cell.z_max" title="Permalink to this definition">#</a></dt>
 <dd><p>the ending z-coordinate of the cell</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="meow.cell.Cell.ez_interfaces">
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ez_interfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#meow.cell.Cell.ez_interfaces" title="Permalink to this definition">#</a></dt>
+<dd><p>when enabled, the meshing algorithm will throw away any index values at the interfaces which are not on even (Ez) half-grid locations. Enabling this should result in more symmetric modes.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -746,12 +759,6 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Environment&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">]</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="nt">&quot;ez_interfaces&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ez Interfaces&quot;</span><span class="p">,</span>
-<span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;when enabled, the meshing algorithm will throw away any index values at the interfaces which are not on even (Ez) half-grid locations. Enabling this should result in more symmetric modes.&quot;</span><span class="p">,</span>
-<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-<span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">   </span><span class="p">},</span>
 <span class="w">   </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -930,6 +937,12 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;ez_interfaces&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ez Interfaces&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;when enabled, the meshing algorithm will throw away any index values at the interfaces which are not on even (Ez) half-grid locations. Enabling this should result in more symmetric modes.&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">},</span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -967,7 +980,6 @@ which uniquely defines the refractive index everywhere.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="#meow.cross_section.CrossSection.cell" title="meow.cross_section.CrossSection.cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell</span> <span class="pre">(meow.cell.Cell)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.cross_section.CrossSection.env" title="meow.cross_section.CrossSection.env"><code class="xref py py-obj docutils literal notranslate"><span class="pre">env</span> <span class="pre">(meow.environment.Environment)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#meow.cross_section.CrossSection.ez_interfaces" title="meow.cross_section.CrossSection.ez_interfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ez_interfaces</span> <span class="pre">(bool)</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -981,12 +993,6 @@ which uniquely defines the refractive index everywhere.</p>
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.env">
 <em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">env</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#meow.environment.Environment" title="meow.environment.Environment"><span class="pre">Environment</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.cross_section.CrossSection.env" title="Permalink to this definition">#</a></dt>
 <dd><p>the environment for which the cross sectionw was calculated</p>
-</dd></dl>
-
-<dl class="py attribute pydantic_field">
-<dt class="sig sig-object py" id="meow.cross_section.CrossSection.ez_interfaces">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ez_interfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#meow.cross_section.CrossSection.ez_interfaces" title="Permalink to this definition">#</a></dt>
-<dd><p>when enabled, the meshing algorithm will throw away any index values at the interfaces which are not on even (Ez) half-grid locations. Enabling this should result in more symmetric modes.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -2270,6 +2276,12 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Z Max&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;number&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;ez_interfaces&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ez Interfaces&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;when enabled, the meshing algorithm will throw away any index values at the interfaces which are not on even (Ez) half-grid locations. Enabling this should result in more symmetric modes.&quot;</span><span class="p">,</span>
+<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">},</span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -2320,12 +2332,6 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <span class="w">                     </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Environment&quot;</span>
 <span class="w">                  </span><span class="p">}</span>
 <span class="w">               </span><span class="p">]</span>
-<span class="w">            </span><span class="p">},</span>
-<span class="w">            </span><span class="nt">&quot;ez_interfaces&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ez Interfaces&quot;</span><span class="p">,</span>
-<span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;when enabled, the meshing algorithm will throw away any index values at the interfaces which are not on even (Ez) half-grid locations. Enabling this should result in more symmetric modes.&quot;</span><span class="p">,</span>
-<span class="w">               </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
-<span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">},</span>
 <span class="w">         </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -2856,6 +2862,11 @@ energy in the PML, it will be removed.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.structures.sort_structures">
 <span class="sig-name descname"><span class="pre">sort_structures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structures</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/structures.html#sort_structures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.structures.sort_structures" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="meow.structures.classify_structures_by_mesh_order_and_material">
+<span class="sig-name descname"><span class="pre">classify_structures_by_mesh_order_and_material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">materials</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/structures.html#classify_structures_by_mesh_order_and_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.structures.classify_structures_by_mesh_order_and_material" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <span class="target" id="module-meow.visualize"></span><p>Visualizations for common meow-datatypes</p>
