@@ -61,34 +61,7 @@ class Cell(BaseModel):
             mask = _m_full > 0
             m_full[mask] = _m_full[mask]
 
-        if self.ez_interfaces:  # fill in 1-pixel gaps
-            mat_x = np.maximum(
-                np.roll(m_full, shift=1, axis=0),
-                np.roll(m_full, shift=-1, axis=0),
-            )
-            mat_y = np.maximum(
-                np.roll(m_full, shift=1, axis=1),
-                np.roll(m_full, shift=-1, axis=1),
-            )
-            mat = mat_x | mat_y
-
-            mask = m_full > 0
-            mask_x = (
-                np.roll(mask, shift=1, axis=0)
-                & (~mask)
-                & np.roll(mask, shift=-1, axis=0)
-            )
-            mask_y = (
-                np.roll(mask, shift=1, axis=1)
-                & (~mask)
-                & np.roll(mask, shift=-1, axis=1)
-            )
-            mask = mask_x | mask_y
-            mask[:1, :] = False
-            mask[-1:, :] = False
-            mask[:, :1] = False
-            mask[:, -1:] = False
-            m_full[mask] = mat[mask]
+        m_full = _fill_single_pixel_gaps(m_full)
 
         return m_full.view(_array)
 
@@ -136,6 +109,7 @@ def create_cells(
     mesh: Union[Mesh2d, List[Mesh2d]],
     Ls: np.ndarray[Tuple[int], np.dtype[np.float_]],
     z_min: float = 0.0,
+    ez_interfaces: bool = False,
 ) -> List[Cell]:
     """easily create multiple `Cell` objects given a `Mesh` and a collection of cell lengths"""
 
@@ -153,7 +127,13 @@ def create_cells(
 
     z = np.cumsum(np.concatenate([np.asarray([z_min], float), Ls]))
     cells = [
-        Cell(structures=structures, mesh=mesh, z_min=z_min, z_max=z_max)
+        Cell(
+            structures=structures,
+            mesh=mesh,
+            z_min=z_min,
+            z_max=z_max,
+            ez_interfaces=ez_interfaces,
+        )
         for mesh, (z_min, z_max) in zip(meshes, zip(z[:-1], z[1:]))
     ]
 
@@ -238,3 +218,26 @@ def _get_boundary_mask_horizontal(m_full, negate=False):
 
 def _get_boundary_mask_vertical(m_full, negate=False):
     return _get_boundary_mask_horizontal(m_full.T, negate=negate).T
+
+
+def _fill_single_pixel_gaps(m_full):
+    mat_x = np.maximum(
+        np.roll(m_full, shift=1, axis=0),
+        np.roll(m_full, shift=-1, axis=0),
+    )
+    mat_y = np.maximum(
+        np.roll(m_full, shift=1, axis=1),
+        np.roll(m_full, shift=-1, axis=1),
+    )
+    mat = mat_x | mat_y
+
+    mask = m_full > 0
+    mask_x = np.roll(mask, shift=1, axis=0) & (~mask) & np.roll(mask, shift=-1, axis=0)
+    mask_y = np.roll(mask, shift=1, axis=1) & (~mask) & np.roll(mask, shift=-1, axis=1)
+    mask = mask_x | mask_y
+    mask[:1, :] = False
+    mask[-1:, :] = False
+    mask[:, :1] = False
+    mask[:, -1:] = False
+    m_full[mask] = mat[mask]
+    return m_full
