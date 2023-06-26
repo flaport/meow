@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>meow package &#8212; meow 0.6.8 documentation</title>
+    <title>meow package &#8212; meow 0.6.9 documentation</title>
   
   
   
@@ -712,7 +712,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.cell.create_cells">
-<span class="sig-name descname"><span class="pre">create_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cell.html#create_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cell.create_cells" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">create_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ez_interfaces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/cell.html#create_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.cell.create_cells" title="Permalink to this definition">#</a></dt>
 <dd><p>easily create multiple <cite>Cell</cite> objects given a <cite>Mesh</cite> and a collection of cell lengths</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -721,6 +721,7 @@ document.write(`
 <li><p><strong>mesh</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#meow.mesh.Mesh2d" title="meow.mesh.Mesh2d"><em>Mesh2d</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#meow.mesh.Mesh2d" title="meow.mesh.Mesh2d"><em>Mesh2d</em></a><em>]</em><em>]</em>) – </p></li>
 <li><p><strong>Ls</strong> (<em>ndarray</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>]</em><em>, </em><em>dtype</em><em>[</em><em>float64</em><em>]</em><em>]</em>) – </p></li>
 <li><p><strong>z_min</strong> (<em>float</em>) – </p></li>
+<li><p><strong>ez_interfaces</strong> (<em>bool</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
