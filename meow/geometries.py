@@ -160,7 +160,8 @@ class Prism(Geometry):
             (y_min, _), (y_max, _) = intersection
             y_min, y_max = min(y_min, y_max), max(y_min, y_max)
             x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-            return (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+            mask |= (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
+        return mask
 
     def _mask2d_axis_y(self, X, Y, z):
         # x, y, z -> z, x, y

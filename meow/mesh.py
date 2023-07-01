@@ -146,7 +146,7 @@ class Mesh2d(Mesh):
         eq = True
         for k, v in self.dict().items():
             if isinstance(v, np.ndarray):
-                eq &= ((v - getattr(other, k)) < 1e-6).all()
+                eq &= bool(((v - getattr(other, k)) < 1e-6).all())
             else:
-                eq &= v == getattr(other, k)
+                eq &= bool(v == getattr(other, k))
         return eq
