@@ -32,7 +32,6 @@ def _get_netlist(propagations, interfaces):
         **{k: S for k, S in interfaces.items()},
     }
 
-    list(interfaces)
     propagation_keys = list(propagations)
     connections = {}
     for i in range(len(interfaces)):
