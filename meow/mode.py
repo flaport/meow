@@ -457,7 +457,7 @@ def is_pml_mode(mode, threshold):
 
 def te_fraction(mode: Mode) -> float:
     """the TE polarization fraction of the `Mode`"""
-    epsx = mode.cs.nx**2
+    epsx = np.real(mode.cs.nx**2)
     e = np.sum(0.5 * eps0 * epsx * np.abs(mode.Ex) ** 2)
     h = np.sum(0.5 * mu0 * np.abs(mode.Hx) ** 2)
     return float(e / (e + h))
