@@ -1,5 +1,7 @@
 """ a Structure is a combination of a geometry with a material (and an optional mesh order) """
 
+from typing import List
+
 import numpy as np
 from pydantic import Field
 
@@ -41,7 +43,7 @@ def visualize_structures(structures, scale=None):
     return scene.show()
 
 
-def sort_structures(structures):
+def sort_structures(structures: List[Structure]) -> List[Structure]:
     struct_info = [(s.mesh_order, -i, s) for i, s in enumerate(structures)]
     sorted_struct_info = sorted(struct_info, key=lambda I: (I[0], I[1]), reverse=True)
     return [s for _, _, s in sorted_struct_info]

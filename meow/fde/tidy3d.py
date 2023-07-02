@@ -58,15 +58,14 @@ def compute_modes_tidy3d(
         group_index_step=False,
     )
 
-    ((Ex, Ey, Ez), (Hx, Hy, Hz)), neffs = (
-        x.squeeze()
-        for x in _compute_modes(
-            eps_cross=eps_cross,
-            coords=[cs.cell.mesh.x, cs.cell.mesh.y],
-            freq=c / (cs.env.wl * 1e-6),
-            mode_spec=mode_spec,
-        )
+    result = _compute_modes(
+        eps_cross=eps_cross,
+        coords=[cs.cell.mesh.x, cs.cell.mesh.y],
+        freq=c / (cs.env.wl * 1e-6),
+        mode_spec=mode_spec,
     )
+
+    ((Ex, Ey, Ez), (Hx, Hy, Hz)), neffs = (x.squeeze() for x in result[:2])
 
     if num_modes == 1:
         modes = [

@@ -20,7 +20,6 @@ from .common import (
 try:
     import klujax
 
-
 except ImportError:
     klujax = None
 
