@@ -1,4 +1,4 @@
-. """ FDE Tidy3d backend (default backend for MEOW) """
+""" FDE Tidy3d backend (default backend for MEOW) """
 
 from types import SimpleNamespace
 from typing import Literal, Optional
