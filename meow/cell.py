@@ -9,6 +9,7 @@ from scipy.ndimage import convolve
 from .base_model import BaseModel, _array, cached_property
 from .mesh import Mesh2D
 from .structures import (
+    Structure2D,
     Structure3D,
     classify_structures_by_mesh_order_and_material,
     sort_structures,
@@ -51,10 +52,17 @@ class Cell(BaseModel):
         return materials
 
     @cached_property
+    def structures_2d(self) -> List[Structure2D]:
+        z = 0.5 * (self.z_min + self.z_max)
+        list_of_list = [s._project(z) for s in self.structures]
+        structures = [s for ss in list_of_list for s in ss]
+        return structures
+
+    @cached_property
     def m_full(self):
         m_full = np.zeros_like(self.mesh.X_full, dtype=np.int_)
         structures_dict = classify_structures_by_mesh_order_and_material(
-            self.structures, self.materials
+            self.structures_2d, self.materials
         )
         for structures in structures_dict.values():
             _m_full = _create_material_array(self, structures, self.ez_interfaces)
@@ -141,11 +149,11 @@ def create_cells(
 
 
 def _create_material_array(
-    cell: Cell, structures: List[Structure3D], ez_interfaces: bool
+    cell: Cell, structures: List[Structure2D], ez_interfaces: bool
 ) -> np.ndarray:
     m_full = np.zeros_like(cell.mesh.X_full, dtype=np.int_)
     for structure in structures:
-        mask = structure.geometry._mask2d(cell.mesh.X_full, cell.mesh.Y_full, cell.z)
+        mask = structure.geometry._mask(cell.mesh.X_full, cell.mesh.Y_full)
         m_full[mask] = cell.materials[structure.material]
 
     if ez_interfaces:

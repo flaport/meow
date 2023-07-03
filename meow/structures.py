@@ -29,13 +29,17 @@ class Structure3D(BaseModel):
     geometry: Geometry3D = Field(description="the geometry of the structure")
     mesh_order: int = Field(default=5, description="the mesh order of the structure")
 
-    def _project(self, z):
+    def _project(self, z) -> List[Structure2D]:
         geometry_2d = self.geometry._project(z)
-        return Structure2D(
-            material=self.material,
-            geometry=geometry_2d,
-            mesh_order=self.mesh_order,
-        )
+        structs = []
+        for geom in geometry_2d:
+            struct = Structure2D(
+                material=self.material,
+                geometry=geom,
+                mesh_order=self.mesh_order,
+            )
+            structs.append(struct)
+        return structs
 
     def _lumadd(self, sim, env, unit=1e-6, xyz="yzx"):
         material_name = self.material._lumadd(sim, env, unit)
@@ -84,21 +88,23 @@ def sort_structures(
 @overload
 def classify_structures_by_mesh_order_and_material(
     structures: List[Structure3D], materials: Dict[Material, int]
-) -> Dict[Tuple[int, int], Structure3D]:
+) -> Dict[Tuple[int, int], List[Structure3D]]:
     ...
 
 
 @overload
 def classify_structures_by_mesh_order_and_material(
     structures: List[Structure2D], materials: Dict[Material, int]
-) -> Dict[Tuple[int, int], Structure2D]:
+) -> Dict[Tuple[int, int], List[Structure2D]]:
     ...
 
 
 def classify_structures_by_mesh_order_and_material(
     structures: Union[List[Structure3D], List[Structure2D]],
     materials: Dict[Material, int],
-) -> Union[Dict[Tuple[int, int], Structure3D], Dict[Tuple[int, int], Structure2D]]:
+) -> Union[
+    Dict[Tuple[int, int], List[Structure2D]], Dict[Tuple[int, int], List[Structure3D]]
+]:
     structures = sort_structures(structures)
     structures_dict = {}
     for structure in structures:
