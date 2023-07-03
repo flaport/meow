@@ -1,4 +1,4 @@
-""" FDE Tidy3d backend (default backend for MEOW) """
+. """ FDE Tidy3d backend (default backend for MEOW) """
 
 from types import SimpleNamespace
 from typing import Literal, Optional
@@ -65,7 +65,7 @@ def compute_modes_tidy3d(
             coords=[cs.cell.mesh.x, cs.cell.mesh.y],
             freq=c / (cs.env.wl * 1e-6),
             mode_spec=mode_spec,
-        )
+        )[:2]
     )
 
     if num_modes == 1:
