@@ -151,11 +151,10 @@ def propagate_modes(modes, ex_l, ex_r, y, z):
     interfaces = compute_interface_s_matrices(
         modes,
         enforce_reciprocity=False,
+        conjugate=False,
     )
     identity = compute_interface_s_matrix(
-        modes[0],
-        modes[0],
-        enforce_reciprocity=False,
+        modes[0], modes[0], enforce_reciprocity=False, conjugate=False
     )
 
     pairs = pi_pairs(propagations, interfaces)
@@ -163,4 +162,4 @@ def propagate_modes(modes, ex_l, ex_r, y, z):
     r2ls = r2l_matrices(pairs)
 
     forwards, backwards = propagate(l2rs, r2ls, ex_l, ex_r)
-    return plot_fields(modes, forwards, backwards, y, z)
+    return plot_fields(modes, forwards, backwards, y, z), forwards, backwards

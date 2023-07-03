@@ -26,6 +26,10 @@ class CrossSection(BaseModel):
             n_full = np.where(self.cell.m_full == idx, material(self.env), n_full)
         return n_full.view(_array)
 
+    @cached_property
+    def cache_key(self) -> str:
+        return str(hash(self.n_full)) + str(hash(self.cell.mesh))
+
     @property
     def nx(self):
         return self.n_full[1::2, ::2].view(_array)

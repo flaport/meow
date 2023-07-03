@@ -1,5 +1,6 @@
 """ FDE Tidy3d backend (default backend for MEOW) """
 
+from functools import cache
 from types import SimpleNamespace
 from typing import Literal, Optional
 
@@ -13,6 +14,8 @@ from tidy3d.plugins.mode.solver import compute_modes as _compute_modes
 
 from ..cross_section import CrossSection
 from ..mode import Mode, Modes, is_pml_mode, normalize_product, zero_phase
+
+cache = {}
 
 
 @validate_arguments
@@ -33,6 +36,13 @@ def compute_modes_tidy3d(
             energy in the PML, it will be removed.
             default: 1.0 = 100% = no fitering.
     """
+    cache_key = (
+        cs.cache_key + f"{num_modes}, {target_neff}, {precision}, {pml_mode_threshold}"
+    )
+    if cache_key in cache:
+        modes = cache[cache_key]
+        modes = [mode.copy(update={"cs": cs}) for mode in modes]
+        return modes
 
     if num_modes < 1:
         raise ValueError("You need to request at least 1 mode.")
@@ -40,9 +50,9 @@ def compute_modes_tidy3d(
     od = np.zeros_like(cs.nx)  # off diagonal entry
     new_tidy3d = version.parse(tidy3d.__version__) >= version.parse("2.2.0")
     if new_tidy3d:
-        eps_cross = [cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2]
+        eps_cross = (cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2)
     else:
-        eps_cross = [cs.nx**2, cs.ny**2, cs.nz**2]
+        eps_cross = (cs.nx**2, cs.ny**2, cs.nz**2)
 
     mode_spec = SimpleNamespace(  # tidy3d.ModeSpec alternative (prevents type checking)
         num_modes=num_modes,
@@ -58,12 +68,14 @@ def compute_modes_tidy3d(
         group_index_step=False,
     )
 
-    result = _compute_modes(
+    kwargs = dict(
         eps_cross=eps_cross,
-        coords=[cs.cell.mesh.x, cs.cell.mesh.y],
+        coords=(cs.cell.mesh.x, cs.cell.mesh.y),
         freq=c / (cs.env.wl * 1e-6),
         mode_spec=mode_spec,
     )
+
+    result = _compute_modes(**kwargs)
 
     ((Ex, Ey, Ez), (Hx, Hy, Hz)), neffs = (x.squeeze() for x in result[:2])
 
@@ -100,4 +112,5 @@ def compute_modes_tidy3d(
     modes = sorted(modes, key=lambda m: float(np.real(m.neff)), reverse=True)
     modes = [m for m in modes if not is_pml_mode(m, pml_mode_threshold)]
 
+    cache[cache_key] = modes
     return modes
