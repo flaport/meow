@@ -7,7 +7,7 @@ from pydantic import Field
 from scipy.ndimage import convolve
 
 from .base_model import BaseModel, _array, cached_property
-from .mesh import Mesh2d
+from .mesh import Mesh2D
 from .structures import (
     Structure,
     classify_structures_by_mesh_order_and_material,
@@ -21,7 +21,7 @@ class Cell(BaseModel):
     structures: List[Structure] = Field(
         description="the structures which will be sliced by the cell"
     )
-    mesh: Mesh2d = Field(description="the mesh to slice the structures with")
+    mesh: Mesh2D = Field(description="the mesh to slice the structures with")
     z_min: float = Field(description="the starting z-coordinate of the cell")
     z_max: float = Field(description="the ending z-coordinate of the cell")
 
@@ -106,7 +106,7 @@ class Cell(BaseModel):
 
 def create_cells(
     structures: List[Structure],
-    mesh: Union[Mesh2d, List[Mesh2d]],
+    mesh: Union[Mesh2D, List[Mesh2D]],
     Ls: np.ndarray[Tuple[int], np.dtype[np.float_]],
     z_min: float = 0.0,
     ez_interfaces: bool = False,
@@ -119,7 +119,7 @@ def create_cells(
     if Ls.shape[0] < 0:
         raise ValueError(f"length of Ls array should be nonzero. Got: {Ls}.")
 
-    meshes = [mesh] * Ls.shape[0] if isinstance(mesh, Mesh2d) else mesh
+    meshes = [mesh] * Ls.shape[0] if isinstance(mesh, Mesh2D) else mesh
     if len(Ls) != len(meshes):
         raise ValueError(
             f"Number of meshes should correspond to number of lengths (length of Ls). Got {len(meshes)} != {len(Ls)}."

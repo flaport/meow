@@ -179,7 +179,7 @@ class Mode(BaseModel):
             )
         self.cs._visualize(ax=ax, n_cmap=n_cmap, cbar=False, show=False)
 
-        x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
+        x, y = "x", "y"  # currently only propagation in z supported, see Mesh2D
         c = {
             "Ex": "x",
             "Ey": "y",
