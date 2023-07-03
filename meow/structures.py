@@ -4,15 +4,15 @@ import numpy as np
 from pydantic import Field
 
 from .base_model import BaseModel
-from .geometries import Geometry
+from .geometries import Geometry3D
 from .materials import Material
 
 
 class Structure(BaseModel):
-    """a `Structure` is an association between a `Geometry` and a `Material`"""
+    """a `Structure` is an association between a `Geometry3D` and a `Material`"""
 
     material: Material = Field(description="the material of the structure")
-    geometry: Geometry = Field(description="the geometry of the structure")
+    geometry: Geometry3D = Field(description="the geometry of the structure")
     mesh_order: int = Field(default=5, description="the mesh order of the structure")
 
     def _lumadd(self, sim, env, unit=1e-6, xyz="yzx"):

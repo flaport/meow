@@ -1,37 +1,104 @@
-""" Geometries """
-
 import warnings
 from secrets import token_hex
 from typing import Dict, List, Literal, Tuple, Union, cast
 
+import matplotlib.pyplot as plt
 import numpy as np
 import shapely.geometry as sg
+from matplotlib.patches import Rectangle as MplRect
 from pydantic import Field, validator
 
-from .base_model import BaseModel
+from meow.base_model import BaseModel
 
-GEOMETRIES: Dict[str, type] = {}
+GEOMETRIES_3D: Dict[str, type] = {}
+GEOMETRIES_2D: Dict[str, type] = {}
+AxisDirection = Union[Literal["x"], Literal["y"], Literal["z"]]
 
 
-class Geometry(BaseModel):
+class Geometry2D(BaseModel):
     type: str = ""
 
     def __init_subclass__(cls):
-        GEOMETRIES[cls.__name__] = cls
+        GEOMETRIES_2D[cls.__name__] = cls
 
     def __new__(cls, **kwargs):
-        cls = GEOMETRIES.get(kwargs.get("type", cls.__name__), cls)
+        cls = GEOMETRIES_2D.get(kwargs.get("type", cls.__name__), cls)
         return BaseModel.__new__(cls)  # type: ignore
 
     @validator("type", pre=True, always=True)
     def validate_type(cls, value):
         if not value:
             value = getattr(cls, "__name__", "Geometry")
-        if value not in GEOMETRIES:
+        if value not in GEOMETRIES_2D:
             raise ValueError(
-                f"Invalid Geometry type. Got: {value!r}. Valid types: {GEOMETRIES}."
+                f"Invalid Geometry type. Got: {value!r}. Valid types: {GEOMETRIES_2D}."
             )
         return value
+
+    def _mask(self, X, Y):
+        raise NotImplementedError(f"{self.__class__.__name__!r} cannot be masked.")
+
+
+class Rectangle(Geometry2D):
+    """a Rectangle"""
+
+    x_min: float = Field(description="the minimum x-value of the box")
+    x_max: float = Field(description="the maximum x-value of the box")
+    y_min: float = Field(description="the minimum y-value of the box")
+    y_max: float = Field(description="the maximum y-value of the box")
+
+    def _mask(self, X, Y):
+        mask = (
+            (self.x_min <= X)
+            & (X <= self.x_max)
+            & (self.y_min <= Y)
+            & (Y <= self.y_max)
+        )
+        return mask
+
+    def _visualize(self, ax=None, show=True):
+        if ax is None:
+            ax = plt.gca()
+        width = self.x_max - self.x_min
+        height = self.y_max - self.y_min
+        mpl_rect = MplRect(
+            xy=(self.x_min, self.y_min),
+            width=width,
+            height=height,
+            color="grey",
+        )
+        ax.add_patch(mpl_rect)
+        ax.set_xlim(self.x_min - 0.1 * width, self.x_max + 0.1 * width)
+        ax.set_ylim(self.y_min - 0.1 * width, self.y_max + 0.1 * width)
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        plt.grid(True)
+        if show:
+            plt.show()
+
+
+class Geometry3D(BaseModel):
+    type: str = ""
+
+    def __init_subclass__(cls):
+        GEOMETRIES_3D[cls.__name__] = cls
+
+    def __new__(cls, **kwargs):
+        cls = GEOMETRIES_3D.get(kwargs.get("type", cls.__name__), cls)
+        return BaseModel.__new__(cls)  # type: ignore
+
+    @validator("type", pre=True, always=True)
+    def validate_type(cls, value):
+        if not value:
+            value = getattr(cls, "__name__", "Geometry")
+        if value not in GEOMETRIES_3D:
+            raise ValueError(
+                f"Invalid Geometry type. Got: {value!r}. Valid types: {GEOMETRIES_3D}."
+            )
+        return value
+
+    def _project(self, z: float) -> List[Geometry2D]:
+        raise NotImplementedError(f"{self.__class__.__name__!r} cannot be projected.")
 
     def _visualize(self, scale=None):
         from trimesh.scene import Scene  # fmt: skip
@@ -42,9 +109,6 @@ class Geometry(BaseModel):
         scene.apply_transform(rotation_matrix(-np.pi / 6, (0, 1, 0)))
         return scene.show()
 
-    def _mask2d(self, X, Y, z):
-        raise NotImplementedError(f"{self.__class__.__name__!r} cannot be masked.")
-
     def _lumadd(self, sim, material_name, mesh_order, unit=1e-6, xyz="yzx"):
         raise NotImplementedError(
             f"{self.__class__.__name__!r} cannot be added to Lumerical."
@@ -54,10 +118,7 @@ class Geometry(BaseModel):
         raise NotImplementedError(f"{self.__class__.__name__!r} cannot be visualized.")
 
 
-Geometries = List[Geometry]
-
-
-class Box(Geometry):
+class Box(Geometry3D):
     """A Box is a simple rectangular cuboid"""
 
     x_min: float = Field(description="the minimum x-value of the box")
@@ -67,15 +128,16 @@ class Box(Geometry):
     z_min: float = Field(description="the minimum z-value of the box")
     z_max: float = Field(description="the maximum z-value of the box")
 
-    def _mask2d(self, X, Y, z):
-        if (z < self.z_min) or (self.z_max < z):
-            return np.zeros_like(X, dtype=bool)
-        return (
-            (self.x_min <= X)
-            & (X <= self.x_max)
-            & (self.y_min <= Y)
-            & (Y <= self.y_max)
+    def _project(self, z: float) -> List[Geometry2D]:
+        if z < self.z_min or z > self.z_max:
+            return []
+        rect = Rectangle(
+            x_min=self.x_min,
+            x_max=self.x_max,
+            y_min=self.y_min,
+            y_max=self.y_max,
         )
+        return [rect]
 
     def _lumadd(self, sim, material_name, mesh_order, unit, xyz):
         x, y, z = xyz
@@ -116,16 +178,8 @@ class Box(Geometry):
         return prism
 
 
-AxisDirection = Union[Literal["x"], Literal["y"], Literal["z"]]
-
-
-class Prism(Geometry):
-    """A prism is a 2D Polygon extruded along a certain axis direction ('x', 'y', or 'z').
-
-    Note:
-        currently only extrusions along 'y' (perpendicular to the chip)
-        are fully supported!
-    """
+class Prism(Geometry3D):
+    """A prism is a 2D Polygon extruded along a certain axis direction ('x', 'y', or 'z')."""
 
     poly: np.ndarray[Tuple[int, Literal[2]], np.dtype[np.float_]] = Field(
         description="the 2D array (Nx2) with polygon vertices"
@@ -137,7 +191,7 @@ class Prism(Geometry):
         description="the axis along which the polygon will be extruded ('x', 'y', or 'z').",
     )
 
-    def _mask2d_axis_x(self, X, Y, z):
+    def _project_axis_x(self, z):
         # x, y, z -> y, z, x
         poly = sg.Polygon(self.poly)
         y_min, _ = self.poly.min(0)
@@ -150,21 +204,27 @@ class Prism(Geometry):
         if not isinstance(intersections, sg.MultiLineString):
             intersection_array = np.asarray(intersections.coords)
             if not intersection_array.shape[0]:
-                return np.zeros_like(Y, dtype=bool)
+                return []
             intersections = sg.MultiLineString([intersections])
 
-        mask = np.zeros_like(Y, dtype=bool)
+        geoms_2d = []
         for intersection in intersections.geoms:
             intersection = np.asarray(intersection.coords)
             if not intersection.shape[0]:
-                return np.zeros_like(X, dtype=bool)
+                continue
             (y_min, _), (y_max, _) = intersection
             y_min, y_max = min(y_min, y_max), max(y_min, y_max)
             x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-            mask |= (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
-        return mask
+            rect = Rectangle(
+                x_min=x_min,
+                x_max=x_max,
+                y_min=y_min,
+                y_max=y_max,
+            )
+            geoms_2d.append(rect)
+        return geoms_2d
 
-    def _mask2d_axis_y(self, X, Y, z):
+    def _project_axis_y(self, z):
         # x, y, z -> z, x, y
         poly = sg.Polygon(self.poly)
         _, x_min = self.poly.min(0)
@@ -177,10 +237,10 @@ class Prism(Geometry):
         if not isinstance(intersections, sg.MultiLineString):
             intersection_array = np.asarray(intersections.coords)
             if not intersection_array.shape[0]:
-                return np.zeros_like(Y, dtype=bool)
+                return []
             intersections = sg.MultiLineString([intersections])
 
-        mask = np.zeros_like(Y, dtype=bool)
+        geoms_2d = []
         for intersection in intersections.geoms:
             intersection = np.asarray(intersection.coords)
             if not intersection.shape[0]:
@@ -188,26 +248,29 @@ class Prism(Geometry):
             (_, x_min), (_, x_max) = intersection
             x_min, x_max = min(x_min, x_max), max(x_min, x_max)
             y_min, y_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
-            mask |= (x_min <= X) & (X <= x_max) & (y_min <= Y) & (Y <= y_max)
-        return mask
+            rect = Rectangle(
+                x_min=x_min,
+                x_max=x_max,
+                y_min=y_min,
+                y_max=y_max,
+            )
+            geoms_2d.append(rect)
+        return geoms_2d
 
-    def _mask2d_axis_z(self, X, Y, z):
+    def _project_axis_z(self, z):
         # x, y, z -> x, y, z
-        poly = sg.Polygon(self.poly)
-        if (z < self.h_min) or (self.h_max < z):
-            return np.zeros_like(X, dtype=bool)
-        return np.asarray(
-            [poly.contains(sg.Point(x, y)) for x, y in zip(X.ravel(), Y.ravel())],
-            dtype=bool,
-        ).reshape(X.shape)
-
-    def _mask2d(self, X, Y, z):
-        if self.axis == "x":
-            return self._mask2d_axis_x(X, Y, z)
-        elif self.axis == "y":
-            return self._mask2d_axis_y(X, Y, z)
+        if z < self.h_min or z < self.h_max:
+            return []
         else:
-            return self._mask2d_axis_z(X, Y, z)
+            return [self.poly]
+
+    def _project(self, z):
+        if self.axis == "x":
+            return self._project_axis_x(z)
+        elif self.axis == "y":
+            return self._project_axis_y(z)
+        else:
+            return self._project_axis_z(z)
 
     def _lumadd(self, sim, material_name, mesh_order, unit=1e-6, xyz="yzx"):
         name = token_hex(4)

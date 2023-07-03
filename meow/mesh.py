@@ -1,5 +1,7 @@
 """ a 2D Mesh """
 
+import warnings
+from functools import wraps
 from typing import Literal, Optional, Tuple
 
 import numpy as np
@@ -13,7 +15,7 @@ class Mesh(BaseModel):
     """[BaseClass] a ``Mesh`` describes how a ``Structure`` is discretized"""
 
 
-class Mesh2d(Mesh):
+class Mesh2D(Mesh):
     """a 2D Mesh or ``Mesh2D`` describes how a ``Structure`` is discritized into a ``Cell`` or ``CrossSection``"""
 
     x: np.ndarray[Tuple[int], np.dtype[np.float_]] = Field(
@@ -150,3 +152,12 @@ class Mesh2d(Mesh):
             else:
                 eq &= bool(v == getattr(other, k))
         return eq
+
+
+@wraps(Mesh2D)
+def Mesh2d(*args, **kwargs):
+    warnings.warn(
+        "Mesh2d is deprecated. Please use Mesh2D (with capital D in the end).",
+        DeprecationWarning,
+    )
+    return Mesh2D(*args, **kwargs)
