@@ -1,19 +1,41 @@
-""" a Structure is a combination of a geometry with a material (and an optional mesh order) """
+""" a Structure2D/Structure3D is a combination of a Geometry2D/Geometry3D with a material (and an optional mesh order) """
+
+from typing import Dict, List, Tuple, Union, overload
 
 import numpy as np
 from pydantic import Field
 
 from .base_model import BaseModel
-from .geometries import Geometry3D
+from .geometries import Geometry2D, Geometry3D
 from .materials import Material
 
 
-class Structure(BaseModel):
-    """a `Structure` is an association between a `Geometry3D` and a `Material`"""
+class Structure2D(BaseModel):
+    """a `Structure2D` is an association between a `Geometry2D` and a `Material`"""
+
+    material: Material = Field(description="the material of the structure")
+    geometry: Geometry2D = Field(description="the geometry of the structure")
+    mesh_order: int = Field(default=5, description="the mesh order of the structure")
+
+    def _visualize(self):
+        color = self.material.meta.get("color", None)
+        return self.geometry._visualize(color=color)
+
+
+class Structure3D(BaseModel):
+    """a `Structure3D` is an association between a `Geometry3D` and a `Material`"""
 
     material: Material = Field(description="the material of the structure")
     geometry: Geometry3D = Field(description="the geometry of the structure")
     mesh_order: int = Field(default=5, description="the mesh order of the structure")
+
+    def _project(self, z):
+        geometry_2d = self.geometry._project(z)
+        return Structure2D(
+            material=self.material,
+            geometry=geometry_2d,
+            mesh_order=self.mesh_order,
+        )
 
     def _lumadd(self, sim, env, unit=1e-6, xyz="yzx"):
         material_name = self.material._lumadd(sim, env, unit)
@@ -29,8 +51,8 @@ class Structure(BaseModel):
         return self._trimesh(scale=scale).show()
 
 
-def visualize_structures(structures, scale=None):
-    """easily visualize a collection (list) of `Structure` objects"""
+def visualize_structures(structures: List[Structure3D], scale=None):
+    """easily visualize a collection (list) of `Structure3D` objects"""
     from trimesh.scene import Scene  # fmt: skip
     from trimesh.transformations import rotation_matrix  # fmt: skip
 
@@ -41,13 +63,42 @@ def visualize_structures(structures, scale=None):
     return scene.show()
 
 
-def sort_structures(structures):
+@overload
+def sort_structures(structures: List[Structure3D]) -> List[Structure3D]:
+    ...
+
+
+@overload
+def sort_structures(structures: List[Structure2D]) -> List[Structure2D]:
+    ...
+
+
+def sort_structures(
+    structures: Union[List[Structure3D], List[Structure2D]]
+) -> Union[List[Structure2D], List[Structure3D]]:
     struct_info = [(s.mesh_order, -i, s) for i, s in enumerate(structures)]
     sorted_struct_info = sorted(struct_info, key=lambda I: (I[0], I[1]), reverse=True)
-    return [s for _, _, s in sorted_struct_info]
+    return [s for _, _, s in sorted_struct_info]  # type: ignore
 
 
-def classify_structures_by_mesh_order_and_material(structures, materials):
+@overload
+def classify_structures_by_mesh_order_and_material(
+    structures: List[Structure3D], materials: Dict[Material, int]
+) -> Dict[Tuple[int, int], Structure3D]:
+    ...
+
+
+@overload
+def classify_structures_by_mesh_order_and_material(
+    structures: List[Structure2D], materials: Dict[Material, int]
+) -> Dict[Tuple[int, int], Structure2D]:
+    ...
+
+
+def classify_structures_by_mesh_order_and_material(
+    structures: Union[List[Structure3D], List[Structure2D]],
+    materials: Dict[Material, int],
+) -> Union[Dict[Tuple[int, int], Structure3D], Dict[Tuple[int, int], Structure2D]]:
     structures = sort_structures(structures)
     structures_dict = {}
     for structure in structures:

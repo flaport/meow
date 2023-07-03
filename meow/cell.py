@@ -9,16 +9,16 @@ from scipy.ndimage import convolve
 from .base_model import BaseModel, _array, cached_property
 from .mesh import Mesh2D
 from .structures import (
-    Structure,
+    Structure3D,
     classify_structures_by_mesh_order_and_material,
     sort_structures,
 )
 
 
 class Cell(BaseModel):
-    """A `Cell` defines a location in a `Structure` associated with a `Mesh`"""
+    """A `Cell` defines a location in a `Structure3D` associated with a `Mesh`"""
 
-    structures: List[Structure] = Field(
+    structures: List[Structure3D] = Field(
         description="the structures which will be sliced by the cell"
     )
     mesh: Mesh2D = Field(description="the mesh to slice the structures with")
@@ -105,7 +105,7 @@ class Cell(BaseModel):
 
 
 def create_cells(
-    structures: List[Structure],
+    structures: List[Structure3D],
     mesh: Union[Mesh2D, List[Mesh2D]],
     Ls: np.ndarray[Tuple[int], np.dtype[np.float_]],
     z_min: float = 0.0,
@@ -140,7 +140,9 @@ def create_cells(
     return cells
 
 
-def _create_material_array(cell, structures, ez_interfaces):
+def _create_material_array(
+    cell: Cell, structures: List[Structure3D], ez_interfaces: bool
+) -> np.ndarray:
     m_full = np.zeros_like(cell.mesh.X_full, dtype=np.int_)
     for structure in structures:
         mask = structure.geometry._mask2d(cell.mesh.X_full, cell.mesh.Y_full, cell.z)

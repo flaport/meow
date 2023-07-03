@@ -9,7 +9,7 @@ from pydantic import Field
 from .base_model import BaseModel
 from .geometries import Prism
 from .materials import Material
-from .structures import Structure
+from .structures import Structure3D
 
 # TODO: Maybe it makes more sense to use native GDSFactory tooling for this
 
@@ -26,10 +26,10 @@ class GdsExtrusionRule(BaseModel):
         description="an extra buffer (=grow or shrink) operation applied to the polygon",
     )
     mesh_order: int = Field(
-        default=5.0, description="the mesh order of the resulting `Structure`"
+        default=5.0, description="the mesh order of the resulting `Structure3D`"
     )
 
-    def __call__(self, poly) -> Structure:
+    def __call__(self, poly) -> Structure3D:
         if self.buffer > 0:
             try:
                 poly = np.asarray(sg.Polygon(poly).buffer(self.buffer).boundary.coords)
@@ -39,7 +39,7 @@ class GdsExtrusionRule(BaseModel):
                 polygonset = gdspy.offset(gdspy.Polygon(poly), 0.25)
                 assert polygonset is not None
                 poly = polygonset.polygons[0]
-        return Structure(
+        return Structure3D(
             material=self.material,
             geometry=Prism(
                 poly=poly,

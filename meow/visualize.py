@@ -10,6 +10,7 @@ from meow.structures import visualize_structures
 try:
     import matplotlib.pyplot as plt  # fmt: skip
 
+
 except ImportError:
     plt = None
 
@@ -251,9 +252,9 @@ def _is_mode_list(obj: Any) -> bool:
     return isinstance(obj, Iterable) and all(isinstance(o, Mode) for o in obj)
 
 
-def _is_structure_list(obj: Any) -> bool:
-    from .structures import Structure  # fmt: skip
-    return isinstance(obj, Iterable) and all(isinstance(o, Structure) for o in obj)
+def _is_structure_3d_list(obj: Any) -> bool:
+    from .structures import Structure3D  # fmt: skip
+    return isinstance(obj, Iterable) and all(isinstance(o, Structure3D) for o in obj)
 
 
 def _is_base_model(obj: Any) -> bool:
@@ -289,7 +290,7 @@ def _is_gf_component(obj):
 VISUALIZATION_MAPPING: dict[Callable, Callable] = {
     _is_base_model: _visualize_base_model,
     _is_mode_list: _visualize_modes,
-    _is_structure_list: visualize_structures,
+    _is_structure_3d_list: visualize_structures,
     _is_mode_overlap: _visualize_overlap_density,
     _is_s_matrix: _visualize_s_matrix,
     _is_s_pm_matrix: _visualize_s_pm_matrix,

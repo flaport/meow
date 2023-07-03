@@ -20,7 +20,7 @@ MATERIAL_TYPES: Dict[str, type] = {}
 
 
 class Material(BaseModel):
-    """a `Material` defines the refractive index of a `Structure` within an `Environment`."""
+    """a `Material` defines the refractive index of a `Structure3D` within an `Environment`."""
 
     type: str = ""
 

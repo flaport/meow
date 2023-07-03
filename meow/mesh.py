@@ -12,11 +12,11 @@ from .base_model import BaseModel, _array, cached_property
 
 
 class Mesh(BaseModel):
-    """[BaseClass] a ``Mesh`` describes how a ``Structure`` is discretized"""
+    """[BaseClass] a ``Mesh`` describes how a ``Structure3D`` is discretized"""
 
 
 class Mesh2D(Mesh):
-    """a 2D Mesh or ``Mesh2D`` describes how a ``Structure`` is discritized into a ``Cell`` or ``CrossSection``"""
+    """a 2D Mesh or ``Mesh2D`` describes how a ``Structure3D`` is discritized into a ``Cell`` or ``CrossSection``"""
 
     x: np.ndarray[Tuple[int], np.dtype[np.float_]] = Field(
         description="x-coordinates of the mesh (Ez locations, i.e. corners of the 2D cell)"

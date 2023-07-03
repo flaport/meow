@@ -38,6 +38,9 @@ class Geometry2D(BaseModel):
     def _mask(self, X, Y):
         raise NotImplementedError(f"{self.__class__.__name__!r} cannot be masked.")
 
+    def _visualize(self, color=None):
+        raise NotImplementedError(f"{self.__class__.__name__!r} cannot be visualized.")
+
 
 class Rectangle(Geometry2D):
     """a Rectangle"""
@@ -56,16 +59,18 @@ class Rectangle(Geometry2D):
         )
         return mask
 
-    def _visualize(self, ax=None, show=True):
+    def _visualize(self, ax=None, show=True, color=None):
         if ax is None:
             ax = plt.gca()
+        if color is None:
+            color = "grey"
         width = self.x_max - self.x_min
         height = self.y_max - self.y_min
         mpl_rect = MplRect(
             xy=(self.x_min, self.y_min),
             width=width,
             height=height,
-            color="grey",
+            color=color,
         )
         ax.add_patch(mpl_rect)
         ax.set_xlim(self.x_min - 0.1 * width, self.x_max + 0.1 * width)

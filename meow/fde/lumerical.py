@@ -6,7 +6,7 @@ from pydantic.types import PositiveInt
 from ..cross_section import CrossSection
 from ..environment import Environment
 from ..mode import Mode, normalize_product, zero_phase
-from ..structures import Structure
+from ..structures import Structure3D
 
 _global = {"sim": None}
 
@@ -26,7 +26,7 @@ def get_sim(**kwargs):
 
 
 def create_lumerical_geometries(
-    sim, structures: list[Structure], env: Environment, unit: float
+    sim, structures: list[Structure3D], env: Environment, unit: float
 ):
     sim = get_sim(sim=sim)
     sim.switchtolayout()
