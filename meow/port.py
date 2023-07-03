@@ -6,7 +6,7 @@ from pydantic import Field
 
 from meow.eme.propagate import _connect_two
 
-from .base_model import BaseModel, cached_property
+from .base_model import BaseModel, _array, cached_property
 from .cell import Cell
 from .cross_section import CrossSection
 from .fde import compute_modes as fde_compute_modes
@@ -81,4 +81,6 @@ def outer_S_matrix(modes: Modes, ports: Tuple[Ports, Ports], inner_S):
     port_modes_r = compute_port_modes(modes[-1][0].cs, ports[-1])
     O_L = overlap_matrix(port_modes_l, modes[0])
     O_R = overlap_matrix(modes[-1], port_modes_r)
-    return sax.sdense(_connect_two(O_L, _connect_two(inner_S, O_R)))
+    S, pm = sax.sdense(_connect_two(O_L, _connect_two(inner_S, O_R)))
+    S = np.asarray(S).view(_array)
+    return S, pm

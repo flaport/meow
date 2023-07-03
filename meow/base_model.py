@@ -42,6 +42,12 @@ class _array(np.ndarray):
         else:
             return f"{cls_str}([{self[0]:.3e}, {self[1]:.3e}, ..., {self[-1]:.3e}])"
 
+    def __eq__(self, other):
+        if isinstance(other, _array) and self.shape == other.shape:
+            # warnings.warn(f"comparing Arrays to Arrays: {self}; {other}")
+            return np.all(np.ndarray.__eq__(self, other))
+        return np.ndarray.__eq__(self, other)
+
 
 def _array_cls(annot) -> type:
     def get_validators(cls) -> Any:
