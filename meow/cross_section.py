@@ -1,6 +1,6 @@
 """ A CrossSection """
 
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 from pydantic import Field
@@ -26,7 +26,9 @@ class CrossSection(BaseModel):
 
     @classmethod
     def from_cell(cls, *, cell: Cell, env: Environment):
-        return cls(structures=cell.structures_2d, mesh=cell.mesh, env=env)
+        cs = cls(structures=cell.structures_2d, mesh=cell.mesh, env=env)
+        cs._cache["cell"] = cell
+        return cs
 
     @cached_property
     def materials(self):
@@ -102,3 +104,11 @@ class CrossSection(BaseModel):
             plt.sca(ax)
         if show:
             plt.show()
+
+    @property
+    def _cell(self) -> Optional[Cell]:
+        """this is a hack. Don't use this property unless you know what you're doing."""
+        if "cell" in self._cache:
+            return self._cache["cell"]
+        else:
+            return None

@@ -52,17 +52,20 @@ def compute_modes_lumerical(
     from lumapi import LumApiError  # fmt: skip # type: ignore
 
     sim = get_sim(sim=sim)
-    _assert_default_mesh_setting(cs.cell.mesh.angle_phi == 0, "angle_phi")
-    _assert_default_mesh_setting(cs.cell.mesh.angle_theta == 0, "angle_theta")
-    _assert_default_mesh_setting(cs.cell.mesh.bend_radius is None, "bend_radius")
+    cell = cs._cell
+    assert cell is not None
+
+    _assert_default_mesh_setting(cell.mesh.angle_phi == 0, "angle_phi")
+    _assert_default_mesh_setting(cell.mesh.angle_theta == 0, "angle_theta")
+    _assert_default_mesh_setting(cell.mesh.bend_radius is None, "bend_radius")
 
     assert sim is not None
-    create_lumerical_geometries(sim, cs.cell.structures, cs.env, unit)
+    create_lumerical_geometries(sim, cell.structures, cs.env, unit)
     sim.select("FDE")
     sim.delete()
     pml_settings = {}
     num_pml_y, num_pml_z = 0, 0
-    if cs.cell.mesh.num_pml[0] > 0:
+    if cell.mesh.num_pml[0] > 0:
         pml_settings.update(
             {
                 "y_min_bc": "PML",
@@ -70,7 +73,7 @@ def compute_modes_lumerical(
             }
         )
         num_pml_y = 22  # TODO: allow adjusting these values
-    if cs.cell.mesh.num_pml[1] > 0:
+    if cell.mesh.num_pml[1] > 0:
         pml_settings.update(
             {
                 "z_min_bc": "PML",
@@ -81,22 +84,22 @@ def compute_modes_lumerical(
     sim.addfde(
         background_index=1.0,
         solver_type="2D X normal",
-        x=float(cs.cell.z * unit),
-        y_min=float(cs.cell.mesh.x.min() * unit),
-        y_max=float(cs.cell.mesh.x.max() * unit),
-        z_min=float(cs.cell.mesh.y.min() * unit),
-        z_max=float(cs.cell.mesh.y.max() * unit),
+        x=float(cell.z * unit),
+        y_min=float(cell.mesh.x.min() * unit),
+        y_max=float(cell.mesh.x.max() * unit),
+        z_min=float(cell.mesh.y.min() * unit),
+        z_max=float(cell.mesh.y.max() * unit),
         define_y_mesh_by="number of mesh cells",
         define_z_mesh_by="number of mesh cells",
-        mesh_cells_y=cs.cell.mesh.x_.shape[0],
-        mesh_cells_z=cs.cell.mesh.y_.shape[0],
+        mesh_cells_y=cell.mesh.x_.shape[0],
+        mesh_cells_z=cell.mesh.y_.shape[0],
         **pml_settings,
     )
     # set mesh size again, because PML messes with it:
-    if cs.cell.mesh.num_pml[0] > 0:
-        sim.setnamed("FDE", "mesh cells y", cs.cell.mesh.x_.shape[0] - num_pml_y)
-    if cs.cell.mesh.num_pml[1] > 0:
-        sim.setnamed("FDE", "mesh cells z", cs.cell.mesh.y_.shape[0] - num_pml_z)
+    if cell.mesh.num_pml[0] > 0:
+        sim.setnamed("FDE", "mesh cells y", cell.mesh.x_.shape[0] - num_pml_y)
+    if cell.mesh.num_pml[1] > 0:
+        sim.setnamed("FDE", "mesh cells z", cell.mesh.y_.shape[0] - num_pml_z)
     sim.setanalysis("number of trial modes", int(num_modes))
     sim.setanalysis("search", "near n")
     sim.setanalysis("use max index", True)
