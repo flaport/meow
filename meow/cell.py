@@ -27,15 +27,6 @@ class Cell(BaseModel):
     z_min: float = Field(description="the starting z-coordinate of the cell")
     z_max: float = Field(description="the ending z-coordinate of the cell")
 
-    ez_interfaces: bool = Field(
-        default=False,
-        description=(
-            "when enabled, the meshing algorithm will throw away any index values "
-            "at the interfaces which are not on even (Ez) half-grid locations. "
-            "Enabling this should result in more symmetric modes."
-        ),
-    )
-
     @property
     def z(self):
         return 0.5 * (self.z_min + self.z_max)
@@ -65,7 +56,6 @@ class Cell(BaseModel):
             mesh=self.mesh,
             structures=self.structures_2d,
             materials=self.materials,
-            ez_interfaces=self.ez_interfaces,
         )
 
     def _visualize(self, ax=None, cbar=True, show=True):
@@ -112,7 +102,6 @@ def create_cells(
     mesh: Union[Mesh2D, List[Mesh2D]],
     Ls: np.ndarray[Tuple[int], np.dtype[np.float_]],
     z_min: float = 0.0,
-    ez_interfaces: bool = False,
 ) -> List[Cell]:
     """easily create multiple `Cell` objects given a `Mesh` and a collection of cell lengths"""
 
@@ -135,7 +124,6 @@ def create_cells(
             mesh=mesh,
             z_min=z_min,
             z_max=z_max,
-            ez_interfaces=ez_interfaces,
         )
         for mesh, (z_min, z_max) in zip(meshes, zip(z[:-1], z[1:]))
     ]
@@ -147,14 +135,13 @@ def _create_full_material_array(
     mesh: Mesh2D,
     structures: List[Structure2D],
     materials: Dict[Material, int],
-    ez_interfaces: bool,
 ):
     m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
     structures_dict = classify_structures_by_mesh_order_and_material(
         structures, materials
     )
     for structures in structures_dict.values():
-        _m_full = _create_material_array(mesh, materials, structures, ez_interfaces)
+        _m_full = _create_material_array(mesh, materials, structures)
         mask = _m_full > 0
         m_full[mask] = _m_full[mask]
 
@@ -167,14 +154,13 @@ def _create_material_array(
     mesh: Mesh2D,
     materials: Dict[Material, int],
     structures: List[Structure2D],
-    ez_interfaces: bool,
 ) -> np.ndarray:
     m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
     for structure in structures:
         mask = structure.geometry._mask(mesh.X_full, mesh.Y_full)
         m_full[mask] = materials[structure.material]
 
-    if ez_interfaces:
+    if mesh.ez_interfaces:
         mask_ez_horizontal = np.zeros_like(m_full, dtype=bool)
         mask_ez_horizontal[:, ::2] = True
         mask_ez_vertical = np.zeros_like(m_full, dtype=bool)
