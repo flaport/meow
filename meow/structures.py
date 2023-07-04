@@ -9,13 +9,34 @@ from .base_model import BaseModel
 from .geometries import Geometry2D, Geometry3D
 from .materials import Material
 
+DEFAULT_MESH_ORDER = 5
+
+
+def Structure(
+    *,
+    material: Material,
+    geometry: Union[Geometry2D, Geometry3D],
+    mesh_order: int = DEFAULT_MESH_ORDER,
+):
+    kwargs = {
+        "material": material,
+        "geometry": geometry,
+        "mesh_order": mesh_order,
+    }
+    if isinstance(geometry, Geometry2D):
+        return Structure2D(**kwargs)
+    else:
+        return Structure3D(**kwargs)
+
 
 class Structure2D(BaseModel):
     """a `Structure2D` is an association between a `Geometry2D` and a `Material`"""
 
     material: Material = Field(description="the material of the structure")
     geometry: Geometry2D = Field(description="the geometry of the structure")
-    mesh_order: int = Field(default=5, description="the mesh order of the structure")
+    mesh_order: int = Field(
+        default=DEFAULT_MESH_ORDER, description="the mesh order of the structure"
+    )
 
     def _visualize(self):
         color = self.material.meta.get("color", None)
@@ -27,7 +48,9 @@ class Structure3D(BaseModel):
 
     material: Material = Field(description="the material of the structure")
     geometry: Geometry3D = Field(description="the geometry of the structure")
-    mesh_order: int = Field(default=5, description="the mesh order of the structure")
+    mesh_order: int = Field(
+        default=DEFAULT_MESH_ORDER, description="the mesh order of the structure"
+    )
 
     def _project(self, z) -> List[Structure2D]:
         geometry_2d = self.geometry._project(z)
