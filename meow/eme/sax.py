@@ -113,7 +113,7 @@ def compute_s_matrix_sax(
     # TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.
     net = _get_netlist(propagations, interfaces)
     evaluate_circuit = circuit_backends[sax_backend]
-    S, pm = sax.sdense(
+    S, port_map = sax.sdense(
         evaluate_circuit(
             instances=net["instances"],
             connections=net["connections"],
@@ -121,4 +121,17 @@ def compute_s_matrix_sax(
         )
     )
     S = np.asarray(S).view(_array)
-    return S, pm
+
+    # final sorting of result:
+    current_port_map = {
+        (p, int(i)): j
+        for (p, i), j in {
+            tuple(pm.split("@")): idx for pm, idx in port_map.items()
+        }.items()
+    }
+    desired_port_map = {pm: i for i, pm in enumerate(sorted(current_port_map))}
+    idxs = [current_port_map[pm] for pm in desired_port_map]
+    S = S[idxs, :][:, idxs]
+    port_map = {f"{p}@{m}": v for (p, m), v in desired_port_map.items()}
+
+    return S, port_map
