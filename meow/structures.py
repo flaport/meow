@@ -1,4 +1,4 @@
-""" a Structure2D/Structure3D is a combination of a Geometry2D/Geometry3D with a material (and an optional mesh order) """
+""" a Structure is a combination of a Geometry with a material (and an optional mesh order) """
 
 from typing import Dict, List, Tuple, Union, overload
 
