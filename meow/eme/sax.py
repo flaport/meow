@@ -8,6 +8,7 @@ from sax.backends import circuit_backends
 from sax.utils import get_ports
 
 from ..base_model import _array
+from ..cell import Cell
 from ..mode import Mode
 from .common import (
     DEFAULT_CONJUGATE,
@@ -79,11 +80,12 @@ def _validate_sax_backend(sax_backend):
 
 def compute_s_matrix_sax(
     modes: List[List[Mode]],
+    cells: Optional[List[Cell]] = None,
+    cell_lengths: Optional[List[float]] = None,
     sax_backend: Optional[str] = None,
     conjugate: bool = DEFAULT_CONJUGATE,
     enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
     enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
-    override_cell_lengths: Optional[List[float]] = None,
     **kwargs,
 ):
     """Calculate the S-matrix for given sets of modes, each set belonging to a `Cell`
@@ -100,7 +102,7 @@ def compute_s_matrix_sax(
         "compute_interface_s_matrices", compute_interface_s_matrices
     )
     propagations = _compute_propagation_s_matrices(
-        modes, override_cell_lengths=override_cell_lengths
+        modes, cells, cell_lengths=cell_lengths
     )
     interfaces = _compute_interface_s_matrices(
         modes,
