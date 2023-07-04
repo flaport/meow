@@ -1,7 +1,6 @@
 """Propagating fields throug devices"""
 
 import jax.numpy as np
-import matplotlib.pyplot as plt
 import numpy as onp
 import sax
 from sax.backends import circuit_backends
@@ -113,7 +112,7 @@ def plot_fields(modes, forwards, backwards, y, z, lim=1):
     lim = None
     E_tot = onp.zeros((len(z), len(mesh_x)), dtype=complex)
     for mode_set, forward, backward in zip(modes, forwards, backwards):
-        Ex = 0 + 0j
+        Ex = np.array(0 + 0j)
         cell = mode_set[0].cell
         i_min = np.argmax(z >= cell.z_min)
         i_max = np.argmax(z > cell.z_max)

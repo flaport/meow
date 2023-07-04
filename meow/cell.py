@@ -1,12 +1,13 @@
 """ an EME Cell """
 
-from typing import List, Tuple, Union, cast
+from typing import Dict, List, Tuple, Union, cast
 
 import numpy as np
 from pydantic import Field
 from scipy.ndimage import convolve
 
 from .base_model import BaseModel, _array, cached_property
+from .materials import Material
 from .mesh import Mesh2D
 from .structures import (
     Structure2D,
@@ -20,9 +21,9 @@ class Cell(BaseModel):
     """A `Cell` defines a location in a `Structure3D` associated with a `Mesh`"""
 
     structures: List[Structure3D] = Field(
-        description="the structures which will be sliced by the cell"
+        description="the 3D structures which will be sliced by the cell"
     )
-    mesh: Mesh2D = Field(description="the mesh to slice the structures with")
+    mesh: Mesh2D = Field(description="the mesh to discretize the structures with")
     z_min: float = Field(description="the starting z-coordinate of the cell")
     z_max: float = Field(description="the ending z-coordinate of the cell")
 
@@ -60,18 +61,12 @@ class Cell(BaseModel):
 
     @cached_property
     def m_full(self):
-        m_full = np.zeros_like(self.mesh.X_full, dtype=np.int_)
-        structures_dict = classify_structures_by_mesh_order_and_material(
-            self.structures_2d, self.materials
+        return _create_full_material_array(
+            mesh=self.mesh,
+            structures=self.structures_2d,
+            materials=self.materials,
+            ez_interfaces=self.ez_interfaces,
         )
-        for structures in structures_dict.values():
-            _m_full = _create_material_array(self, structures, self.ez_interfaces)
-            mask = _m_full > 0
-            m_full[mask] = _m_full[mask]
-
-        m_full = _fill_single_pixel_gaps(m_full)
-
-        return m_full.view(_array)
 
     def _visualize(self, ax=None, cbar=True, show=True):
         import matplotlib.pyplot as plt  # fmt: skip
@@ -148,13 +143,36 @@ def create_cells(
     return cells
 
 
+def _create_full_material_array(
+    mesh: Mesh2D,
+    structures: List[Structure2D],
+    materials: Dict[Material, int],
+    ez_interfaces: bool,
+):
+    m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
+    structures_dict = classify_structures_by_mesh_order_and_material(
+        structures, materials
+    )
+    for structures in structures_dict.values():
+        _m_full = _create_material_array(mesh, materials, structures, ez_interfaces)
+        mask = _m_full > 0
+        m_full[mask] = _m_full[mask]
+
+    m_full = _fill_single_pixel_gaps(m_full)
+
+    return m_full.view(_array)
+
+
 def _create_material_array(
-    cell: Cell, structures: List[Structure2D], ez_interfaces: bool
+    mesh: Mesh2D,
+    materials: Dict[Material, int],
+    structures: List[Structure2D],
+    ez_interfaces: bool,
 ) -> np.ndarray:
-    m_full = np.zeros_like(cell.mesh.X_full, dtype=np.int_)
+    m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
     for structure in structures:
-        mask = structure.geometry._mask(cell.mesh.X_full, cell.mesh.Y_full)
-        m_full[mask] = cell.materials[structure.material]
+        mask = structure.geometry._mask(mesh.X_full, mesh.Y_full)
+        m_full[mask] = materials[structure.material]
 
     if ez_interfaces:
         mask_ez_horizontal = np.zeros_like(m_full, dtype=bool)
