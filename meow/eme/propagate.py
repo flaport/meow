@@ -102,18 +102,17 @@ def compute_mode_amplitudes(u, v, m, excitation_l, excitation_r):
     return forward, backward
 
 
-def plot_fields(modes, forwards, backwards, y, z, lim=1):
+def plot_fields(modes, cells, forwards, backwards, y, z, lim=1):
     mode_set = modes[0]
-    mesh_y = mode_set[0].cell.mesh.y
-    mesh_x = mode_set[0].cell.mesh.x
+    mesh_y = cells[0].mesh.y
+    mesh_x = cells[0].mesh.x
     mesh_x = mesh_x[:-1] + np.diff(mesh_x) / 2
     i_y = np.argmin(np.abs(mesh_y - y))
 
     lim = None
     E_tot = onp.zeros((len(z), len(mesh_x)), dtype=complex)
-    for mode_set, forward, backward in zip(modes, forwards, backwards):
+    for mode_set, forward, backward, cell in zip(modes, forwards, backwards, cells):
         Ex = np.array(0 + 0j)
-        cell = mode_set[0].cell
         i_min = np.argmax(z >= cell.z_min)
         i_max = np.argmax(z > cell.z_max)
         if i_max == 0:
@@ -145,8 +144,8 @@ def plot_fields(modes, forwards, backwards, y, z, lim=1):
     return E_tot, mesh_x
 
 
-def propagate_modes(modes, ex_l, ex_r, y, z):
-    propagations = compute_propagation_s_matrices(modes)
+def propagate_modes(modes, cells, ex_l, ex_r, y, z):
+    propagations = compute_propagation_s_matrices(modes, cells)
     interfaces = compute_interface_s_matrices(
         modes,
         enforce_reciprocity=False,
@@ -162,4 +161,4 @@ def propagate_modes(modes, ex_l, ex_r, y, z):
     r2ls = r2l_matrices(pairs)
 
     forwards, backwards = propagate(l2rs, r2ls, ex_l, ex_r)
-    return plot_fields(modes, forwards, backwards, y, z)
+    return plot_fields(modes, cells, forwards, backwards, y, z)
