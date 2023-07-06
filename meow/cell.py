@@ -18,7 +18,9 @@ from .structures import (
 
 
 class Cell(BaseModel):
-    """A `Cell` defines a location in a `Structure3D` associated with a `Mesh`"""
+    """A Cell defines an interval in z (the direction of propagation) within
+    the simulation domain. The intersecting Structure3Ds are discretized by
+    a given mesh at the center of the Cell"""
 
     structures: List[Structure3D] = Field(
         description="the 3D structures which will be sliced by the cell"
