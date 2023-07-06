@@ -1,38 +1,33 @@
 """ an EME Cell """
 
-from typing import List, Tuple, Union, cast
+from typing import Dict, List, Tuple, Union, cast
 
 import numpy as np
 from pydantic import Field
 from scipy.ndimage import convolve
 
 from .base_model import BaseModel, _array, cached_property
-from .mesh import Mesh2d
+from .materials import Material
+from .mesh import Mesh2D
 from .structures import (
-    Structure,
+    Structure2D,
+    Structure3D,
     classify_structures_by_mesh_order_and_material,
     sort_structures,
 )
 
 
 class Cell(BaseModel):
-    """A `Cell` defines a location in a `Structure` associated with a `Mesh`"""
+    """A Cell defines an interval in z (the direction of propagation) within
+    the simulation domain. The intersecting Structure3Ds are discretized by
+    a given mesh at the center of the Cell"""
 
-    structures: List[Structure] = Field(
-        description="the structures which will be sliced by the cell"
+    structures: List[Structure3D] = Field(
+        description="the 3D structures which will be sliced by the cell"
     )
-    mesh: Mesh2d = Field(description="the mesh to slice the structures with")
+    mesh: Mesh2D = Field(description="the mesh to discretize the structures with")
     z_min: float = Field(description="the starting z-coordinate of the cell")
     z_max: float = Field(description="the ending z-coordinate of the cell")
-
-    ez_interfaces: bool = Field(
-        default=False,
-        description=(
-            "when enabled, the meshing algorithm will throw away any index values "
-            "at the interfaces which are not on even (Ez) half-grid locations. "
-            "Enabling this should result in more symmetric modes."
-        ),
-    )
 
     @property
     def z(self):
@@ -51,19 +46,19 @@ class Cell(BaseModel):
         return materials
 
     @cached_property
+    def structures_2d(self) -> List[Structure2D]:
+        z = 0.5 * (self.z_min + self.z_max)
+        list_of_list = [s._project(z) for s in self.structures]
+        structures = [s for ss in list_of_list for s in ss]
+        return structures
+
+    @cached_property
     def m_full(self):
-        m_full = np.zeros_like(self.mesh.X_full, dtype=np.int_)
-        structures_dict = classify_structures_by_mesh_order_and_material(
-            self.structures, self.materials
+        return _create_full_material_array(
+            mesh=self.mesh,
+            structures=self.structures_2d,
+            materials=self.materials,
         )
-        for structures in structures_dict.values():
-            _m_full = _create_material_array(self, structures, self.ez_interfaces)
-            mask = _m_full > 0
-            m_full[mask] = _m_full[mask]
-
-        m_full = _fill_single_pixel_gaps(m_full)
-
-        return m_full.view(_array)
 
     def _visualize(self, ax=None, cbar=True, show=True):
         import matplotlib.pyplot as plt  # fmt: skip
@@ -105,11 +100,10 @@ class Cell(BaseModel):
 
 
 def create_cells(
-    structures: List[Structure],
-    mesh: Union[Mesh2d, List[Mesh2d]],
+    structures: List[Structure3D],
+    mesh: Union[Mesh2D, List[Mesh2D]],
     Ls: np.ndarray[Tuple[int], np.dtype[np.float_]],
     z_min: float = 0.0,
-    ez_interfaces: bool = False,
 ) -> List[Cell]:
     """easily create multiple `Cell` objects given a `Mesh` and a collection of cell lengths"""
 
@@ -119,7 +113,7 @@ def create_cells(
     if Ls.shape[0] < 0:
         raise ValueError(f"length of Ls array should be nonzero. Got: {Ls}.")
 
-    meshes = [mesh] * Ls.shape[0] if isinstance(mesh, Mesh2d) else mesh
+    meshes = [mesh] * Ls.shape[0] if isinstance(mesh, Mesh2D) else mesh
     if len(Ls) != len(meshes):
         raise ValueError(
             f"Number of meshes should correspond to number of lengths (length of Ls). Got {len(meshes)} != {len(Ls)}."
@@ -132,7 +126,6 @@ def create_cells(
             mesh=mesh,
             z_min=z_min,
             z_max=z_max,
-            ez_interfaces=ez_interfaces,
         )
         for mesh, (z_min, z_max) in zip(meshes, zip(z[:-1], z[1:]))
     ]
@@ -140,13 +133,36 @@ def create_cells(
     return cells
 
 
-def _create_material_array(cell, structures, ez_interfaces):
-    m_full = np.zeros_like(cell.mesh.X_full, dtype=np.int_)
-    for structure in structures:
-        mask = structure.geometry._mask2d(cell.mesh.X_full, cell.mesh.Y_full, cell.z)
-        m_full[mask] = cell.materials[structure.material]
+def _create_full_material_array(
+    mesh: Mesh2D,
+    structures: List[Structure2D],
+    materials: Dict[Material, int],
+):
+    m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
+    structures_dict = classify_structures_by_mesh_order_and_material(
+        structures, materials
+    )
+    for structures in structures_dict.values():
+        _m_full = _create_material_array(mesh, materials, structures)
+        mask = _m_full > 0
+        m_full[mask] = _m_full[mask]
 
-    if ez_interfaces:
+    m_full = _fill_single_pixel_gaps(m_full)
+
+    return m_full.view(_array)
+
+
+def _create_material_array(
+    mesh: Mesh2D,
+    materials: Dict[Material, int],
+    structures: List[Structure2D],
+) -> np.ndarray:
+    m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
+    for structure in structures:
+        mask = structure.geometry._mask(mesh.X_full, mesh.Y_full)
+        m_full[mask] = materials[structure.material]
+
+    if mesh.ez_interfaces:
         mask_ez_horizontal = np.zeros_like(m_full, dtype=bool)
         mask_ez_horizontal[:, ::2] = True
         mask_ez_vertical = np.zeros_like(m_full, dtype=bool)

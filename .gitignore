@@ -2,6 +2,7 @@
 *.png
 *.pkl
 temp
+*-Copy*.ipynb
 
 # IDE settings
 .vscode/

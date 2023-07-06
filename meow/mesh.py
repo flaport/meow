@@ -1,5 +1,7 @@
 """ a 2D Mesh """
 
+import warnings
+from functools import wraps
 from typing import Literal, Optional, Tuple
 
 import numpy as np
@@ -10,11 +12,11 @@ from .base_model import BaseModel, _array, cached_property
 
 
 class Mesh(BaseModel):
-    """[BaseClass] a ``Mesh`` describes how a ``Structure`` is discretized"""
+    """[BaseClass] a ``Mesh`` describes how a ``Structure3D`` is discretized"""
 
 
-class Mesh2d(Mesh):
-    """a 2D Mesh or ``Mesh2D`` describes how a ``Structure`` is discritized into a ``Cell`` or ``CrossSection``"""
+class Mesh2D(Mesh):
+    """a 2D Mesh or ``Mesh2D`` describes how a ``Structure3D`` is discritized into a ``Cell`` or ``CrossSection``"""
 
     x: np.ndarray[Tuple[int], np.dtype[np.float_]] = Field(
         description="x-coordinates of the mesh (Ez locations, i.e. corners of the 2D cell)"
@@ -50,6 +52,15 @@ class Mesh2d(Mesh):
     num_pml: Tuple[NonNegativeInt, NonNegativeInt] = Field(
         default=(0, 0),
         description="Number of standard pml layers to add in the two tangential axes.",
+    )
+
+    ez_interfaces: bool = Field(
+        default=False,
+        description=(
+            "when enabled, the meshing algorithm will throw away any index values "
+            "at the interfaces which are not on even (Ez) half-grid locations. "
+            "Enabling this should result in more symmetric modes."
+        ),
     )
 
     @cached_property
@@ -150,3 +161,12 @@ class Mesh2d(Mesh):
             else:
                 eq &= bool(v == getattr(other, k))
         return eq
+
+
+@wraps(Mesh2D)
+def Mesh2d(*args, **kwargs):
+    warnings.warn(
+        "Mesh2d is deprecated. Please use Mesh2D (with capital D in the end).",
+        DeprecationWarning,
+    )
+    return Mesh2D(*args, **kwargs)

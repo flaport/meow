@@ -47,13 +47,13 @@ def compute_modes_tidy3d(
     mode_spec = SimpleNamespace(  # tidy3d.ModeSpec alternative (prevents type checking)
         num_modes=num_modes,
         target_neff=target_neff,
-        num_pml=cs.cell.mesh.num_pml,
+        num_pml=cs.mesh.num_pml,
         filter_pol=None,
-        angle_theta=cs.cell.mesh.angle_theta,
-        angle_phi=cs.cell.mesh.angle_phi,
-        bend_radius=cs.cell.mesh.bend_radius,
+        angle_theta=cs.mesh.angle_theta,
+        angle_phi=cs.mesh.angle_phi,
+        bend_radius=cs.mesh.bend_radius,
         precision=precision,
-        bend_axis=cs.cell.mesh.bend_axis,
+        bend_axis=cs.mesh.bend_axis,
         track_freq="central",
         group_index_step=False,
     )
@@ -62,7 +62,7 @@ def compute_modes_tidy3d(
         x.squeeze()
         for x in _compute_modes(
             eps_cross=eps_cross,
-            coords=[cs.cell.mesh.x, cs.cell.mesh.y],
+            coords=[cs.mesh.x, cs.mesh.y],
             freq=c / (cs.env.wl * 1e-6),
             mode_spec=mode_spec,
         )[:2]

@@ -97,8 +97,8 @@ class Mode(BaseModel):
         vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
         E_sq = norm(vecE, axis=-1, ord=2)
         E_qu = E_sq**2
-        x = self.cs.cell.mesh.x_
-        y = self.cs.cell.mesh.y_
+        x = self.cs.mesh.x_
+        y = self.cs.mesh.y_
         return np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
 
     @property
@@ -107,11 +107,7 @@ class Mode(BaseModel):
 
     @property
     def mesh(self):
-        return self.cs.cell.mesh
-
-    @property
-    def cell(self):
-        return self.cs.cell
+        return self.cs.mesh
 
     def _visualize(
         self,
@@ -179,7 +175,7 @@ class Mode(BaseModel):
             )
         self.cs._visualize(ax=ax, n_cmap=n_cmap, cbar=False, show=False)
 
-        x, y = "x", "y"  # currently only propagation in z supported, see Mesh2d
+        x, y = "x", "y"  # currently only propagation in z supported, see Mesh2D
         c = {
             "Ex": "x",
             "Ey": "y",
@@ -439,7 +435,7 @@ def is_pml_mode(mode, threshold):
     threshold = min(max(threshold, 0.0), 1.0)
     if threshold > 0.999:
         return False
-    numx, numy = mode.cell.mesh.num_pml
+    numx, numy = mode.mesh.num_pml
     ed = energy_density(mode)
     m, n = ed.shape
     lft = ed[:numx, :]

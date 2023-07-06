@@ -1,29 +1,49 @@
 """ A CrossSection """
 
+from typing import List, Optional
+
 import numpy as np
 from pydantic import Field
 
 from .base_model import BaseModel, _array, cached_property
-from .cell import Cell
+from .cell import Cell, _create_full_material_array, sort_structures
 from .environment import Environment
+from .mesh import Mesh2D
+from .structures import Structure2D
 
 
 class CrossSection(BaseModel):
     """A `CrossSection` is created from the association of a `Cell` with an `Environment`,
     which uniquely defines the refractive index everywhere."""
 
-    cell: Cell = Field(
-        description="the cell for which the cross section was calculated"
+    structures: List[Structure2D] = Field(
+        description="the 2D structures in the CrossSection"
     )
+    mesh: Mesh2D = Field(description="the mesh to discretize the structures with")
     env: Environment = Field(
         description="the environment for which the cross sectionw was calculated"
     )
 
+    @classmethod
+    def from_cell(cls, *, cell: Cell, env: Environment):
+        cs = cls(structures=cell.structures_2d, mesh=cell.mesh, env=env)
+        cs._cache["cell"] = cell
+        return cs
+
+    @cached_property
+    def materials(self):
+        materials = {}
+        for i, structure in enumerate(sort_structures(self.structures), start=1):
+            if not structure.material in materials:
+                materials[structure.material] = i
+        return materials
+
     @cached_property
     def n_full(self):
-        n_full = np.ones_like(self.cell.mesh.X_full)
-        for material, idx in self.cell.materials.items():
-            n_full = np.where(self.cell.m_full == idx, material(self.env), n_full)
+        m_full = _create_full_material_array(self.mesh, self.structures, self.materials)
+        n_full = np.ones_like(self.mesh.X_full)
+        for material, idx in self.materials.items():
+            n_full = np.where(m_full == idx, material(self.env), n_full)
         return n_full.view(_array)
 
     @property
@@ -53,17 +73,15 @@ class CrossSection(BaseModel):
             ax = plt.gca()
         n_full = np.real(self.n_full).copy()
         n_full[0, 0] = 1.0
-        plt.pcolormesh(
-            self.cell.mesh.X_full, self.cell.mesh.Y_full, n_full, cmap=n_cmap
-        )
+        plt.pcolormesh(self.mesh.X_full, self.mesh.Y_full, n_full, cmap=n_cmap)
         plt.axis("scaled")
         if not debug_grid:
             plt.grid(True)
         else:
-            dx = self.cell.mesh.dx
-            dy = self.cell.mesh.dy
-            x_ticks = np.sort(np.unique(self.cell.mesh.X_full.ravel()))[::2]
-            y_ticks = np.sort(np.unique(self.cell.mesh.Y_full.ravel()))[::2]
+            dx = self.mesh.dx
+            dy = self.mesh.dy
+            x_ticks = np.sort(np.unique(self.mesh.X_full.ravel()))[::2]
+            y_ticks = np.sort(np.unique(self.mesh.Y_full.ravel()))[::2]
             plt.xticks(x_ticks - 0.25 * dx, [f"" for x in x_ticks - 0.25 * dx])
             plt.yticks(y_ticks - 0.25 * dy, [f"" for y in y_ticks - 0.25 * dy])
             plt.xticks(
@@ -86,3 +104,11 @@ class CrossSection(BaseModel):
             plt.sca(ax)
         if show:
             plt.show()
+
+    @property
+    def _cell(self) -> Optional[Cell]:
+        """this is a hack. Don't use this property unless you know what you're doing."""
+        if "cell" in self._cache:
+            return self._cache["cell"]
+        else:
+            return None
