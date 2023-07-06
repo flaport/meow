@@ -19,7 +19,7 @@ class CrossSection(BaseModel):
         description="the environment for which the cross sectionw was calculated"
     )
 
-    @cached_property
+    @property # TODO: cached
     def n_full(self):
         n_full = np.ones_like(self.cell.mesh.X_full)
         for material, idx in self.cell.materials.items():

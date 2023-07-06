@@ -56,7 +56,15 @@ class PortCell(Cell):
             m_full[mask] = self.materials[structure.material]
         return m_full
 
-
+def ordered_sdense(x):
+    S, pm = sax.sdense(x)
+    keys = list(pm.keys())
+    reorder = np.argsort(keys)
+    new_pm_keys = np.sort(keys)
+    pm = {k:i for i,k in enumerate(new_pm_keys)}
+    S = S[reorder, :][:, reorder]
+    return (S, pm)
+    
 def compute_port_modes(cs: CrossSection, ports: Ports):
     """computes the set of modes for a set of ports on a CrossSection"""
     modes = []
@@ -67,10 +75,14 @@ def compute_port_modes(cs: CrossSection, ports: Ports):
 
 def overlap_matrix(modes_l: Modes, modes_r: Modes):
     """compute the overlaps between port and crosssection modes used for deembedding the inner S-matrix"""
+    def norm_inner_product(l, r):
+        def abs_sqrt(a):
+            return np.sqrt(np.abs(inner_product(a,a)))
+        return inner_product(l,r)/(abs_sqrt(l)*abs_sqrt(r))
     forward = {
-        (f"left@{m}", f"right@{n}"): inner_product(modes_l[m], modes_r[n])
-        for n in range(len(modes_r))
-        for m in range(len(modes_l))
+        (f"left@{m}", f"right@{n}"): norm_inner_product(l, r)
+        for n,r in enumerate(modes_r)
+        for m,l in enumerate(modes_l)
     }
     return sax.reciprocal(forward)
 
@@ -81,6 +93,6 @@ def outer_S_matrix(modes: Modes, ports: Tuple[Ports, Ports], inner_S):
     port_modes_r = compute_port_modes(modes[-1][0].cs, ports[-1])
     O_L = overlap_matrix(port_modes_l, modes[0])
     O_R = overlap_matrix(modes[-1], port_modes_r)
-    S, pm = sax.sdense(_connect_two(O_L, _connect_two(inner_S, O_R)))
+    S, pm = ordered_sdense(_connect_two(O_L, _connect_two(inner_S, O_R)))
     S = np.asarray(S).view(_array)
     return S, pm

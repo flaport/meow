@@ -112,12 +112,14 @@ def compute_s_matrix_sax(
     # TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.
     net = _get_netlist(propagations, interfaces)
     evaluate_circuit = circuit_backends[sax_backend]
+    sparse_res = evaluate_circuit(
+       instances=net["instances"],
+       connections=net["connections"],
+       ports=net["ports"],
+    )
+    
     S, pm = sax.sdense(
-        evaluate_circuit(
-            instances=net["instances"],
-            connections=net["connections"],
-            ports=net["ports"],
-        )
+        sparse_res
     )
     S = np.asarray(S).view(_array)
     return S, pm
