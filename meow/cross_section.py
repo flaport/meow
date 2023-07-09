@@ -6,7 +6,7 @@ import numpy as np
 from pydantic import Field
 
 from .base_model import BaseModel, _array, cached_property
-from .cell import Cell, _create_full_material_array, sort_structures
+from .cell import Cell, _create_full_material_array, _sort_structures
 from .environment import Environment
 from .mesh import Mesh2D
 from .structures import Structure2D
@@ -33,7 +33,7 @@ class CrossSection(BaseModel):
     @cached_property
     def materials(self):
         materials = {}
-        for i, structure in enumerate(sort_structures(self.structures), start=1):
+        for i, structure in enumerate(_sort_structures(self.structures), start=1):
             if not structure.material in materials:
                 materials[structure.material] = i
         return materials

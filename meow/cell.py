@@ -1,5 +1,6 @@
 """ an EME Cell """
 
+import warnings
 from typing import Dict, List, Tuple, Union, cast
 
 import numpy as np
@@ -12,8 +13,8 @@ from .mesh import Mesh2D
 from .structures import (
     Structure2D,
     Structure3D,
-    classify_structures_by_mesh_order_and_material,
-    sort_structures,
+    _classify_structures_by_mesh_order_and_material,
+    _sort_structures,
 )
 
 
@@ -40,7 +41,7 @@ class Cell(BaseModel):
     @cached_property
     def materials(self):
         materials = {}
-        for i, structure in enumerate(sort_structures(self.structures), start=1):
+        for i, structure in enumerate(_sort_structures(self.structures), start=1):
             if not structure.material in materials:
                 materials[structure.material] = i
         return materials
@@ -106,6 +107,10 @@ def create_cells(
     z_min: float = 0.0,
 ) -> List[Cell]:
     """easily create multiple `Cell` objects given a `Mesh` and a collection of cell lengths"""
+    warnings.warn(
+        "create_cells will be removed in a future version. Please create your cells in a loop instead.",
+        DeprecationWarning,
+    )
 
     Ls = np.asarray(Ls, float)
     if Ls.ndim != 1:
@@ -139,7 +144,7 @@ def _create_full_material_array(
     materials: Dict[Material, int],
 ):
     m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
-    structures_dict = classify_structures_by_mesh_order_and_material(
+    structures_dict = _classify_structures_by_mesh_order_and_material(
         structures, materials
     )
     for structures in structures_dict.values():

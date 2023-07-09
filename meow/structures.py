@@ -78,29 +78,29 @@ class Structure3D(BaseModel):
         return self._trimesh(scale=scale).show()
 
 
-def visualize_structures(structures: List[Structure3D], scale=None):
+def _visualize_structures(structures: List[Structure3D], scale=None):
     """easily visualize a collection (list) of `Structure3D` objects"""
     from trimesh.scene import Scene  # fmt: skip
     from trimesh.transformations import rotation_matrix  # fmt: skip
 
     scene = Scene(
-        geometry=[s._trimesh(scale=scale) for s in sort_structures(structures)]
+        geometry=[s._trimesh(scale=scale) for s in _sort_structures(structures)]
     )
     scene.apply_transform(rotation_matrix(np.pi - np.pi / 6, (0, 1, 0)))
     return scene.show()
 
 
 @overload
-def sort_structures(structures: List[Structure3D]) -> List[Structure3D]:
+def _sort_structures(structures: List[Structure3D]) -> List[Structure3D]:
     ...
 
 
 @overload
-def sort_structures(structures: List[Structure2D]) -> List[Structure2D]:
+def _sort_structures(structures: List[Structure2D]) -> List[Structure2D]:
     ...
 
 
-def sort_structures(
+def _sort_structures(
     structures: Union[List[Structure3D], List[Structure2D]]
 ) -> Union[List[Structure2D], List[Structure3D]]:
     struct_info = [(s.mesh_order, -i, s) for i, s in enumerate(structures)]
@@ -109,26 +109,26 @@ def sort_structures(
 
 
 @overload
-def classify_structures_by_mesh_order_and_material(
+def _classify_structures_by_mesh_order_and_material(
     structures: List[Structure3D], materials: Dict[Material, int]
 ) -> Dict[Tuple[int, int], List[Structure3D]]:
     ...
 
 
 @overload
-def classify_structures_by_mesh_order_and_material(
+def _classify_structures_by_mesh_order_and_material(
     structures: List[Structure2D], materials: Dict[Material, int]
 ) -> Dict[Tuple[int, int], List[Structure2D]]:
     ...
 
 
-def classify_structures_by_mesh_order_and_material(
+def _classify_structures_by_mesh_order_and_material(
     structures: Union[List[Structure3D], List[Structure2D]],
     materials: Dict[Material, int],
 ) -> Union[
     Dict[Tuple[int, int], List[Structure2D]], Dict[Tuple[int, int], List[Structure3D]]
 ]:
-    structures = sort_structures(structures)
+    structures = _sort_structures(structures)
     structures_dict = {}
     for structure in structures:
         mo = structure.mesh_order

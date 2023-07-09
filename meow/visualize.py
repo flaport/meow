@@ -5,7 +5,7 @@ from typing import Any, Callable
 
 import numpy as np
 
-from meow.structures import visualize_structures
+from meow.structures import _visualize_structures
 
 try:
     import matplotlib.pyplot as plt  # fmt: skip
@@ -290,7 +290,7 @@ def _is_gf_component(obj):
 VISUALIZATION_MAPPING: dict[Callable, Callable] = {
     _is_base_model: _visualize_base_model,
     _is_mode_list: _visualize_modes,
-    _is_structure_3d_list: visualize_structures,
+    _is_structure_3d_list: _visualize_structures,
     _is_mode_overlap: _visualize_overlap_density,
     _is_s_matrix: _visualize_s_matrix,
     _is_s_pm_matrix: _visualize_s_pm_matrix,
