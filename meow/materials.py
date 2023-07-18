@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import tidy3d as td
 from numpy.typing import NDArray
-from pydantic import Field, validator
+from pydantic import field_validator, ConfigDict, Field, validator
 from scipy.constants import c
 from scipy.ndimage import map_coordinates
 from tidy3d import material_library
@@ -37,6 +37,8 @@ class Material(BaseModel):
         cls = MATERIAL_TYPES.get(kwargs.get("type", cls.__name__), cls)
         return BaseModel.__new__(cls)  # type: ignore
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("type", pre=True, always=True)
     def validate_type(cls, value):
         if not value:
@@ -73,11 +75,11 @@ class Material(BaseModel):
         sim.setmaterial(self.name, "sampled data", data)
 
         return self.name
-
-    class Config:
-        fields = {
-            "meta": {"exclude": True},
-        }
+    # TODO[pydantic]: The following keys were removed: `fields`.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-config for more information.
+    model_config = ConfigDict(fields={
+        "meta": {"exclude": True},
+    })
 
 
 class TidyMaterial(Material):
@@ -143,11 +145,13 @@ class SampledMaterial(Material):
             raise ValueError(f"{name} should be 1D. Got a {arr.ndim}D array.")
         return arr
 
-    @validator("n", pre=True)
+    @field_validator("n", mode="before")
+    @classmethod
     def validate_n_pre(cls, n):
         return cls._validate_1d("n", cls._validate_array(n))
 
-    @validator("params", pre=True)
+    @field_validator("params", mode="before")
+    @classmethod
     def validate_params_pre(cls, params):
         if not isinstance(params, Mapping):
             raise TypeError(f"instance of dict expected. Got: {type(params)}.")

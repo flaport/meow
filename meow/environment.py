@@ -1,6 +1,6 @@
 """ A simulation Environment """
 
-from pydantic import Extra, Field
+from pydantic import ConfigDict, Field
 
 from .base_model import BaseModel
 
@@ -11,7 +11,4 @@ class Environment(BaseModel):
 
     wl: float = Field(default=1.5, description="the wavelength of the environment")
     T: float = Field(default=25.0, description="the temperature of the environment")
-
-    class Config:
-        allow_population_by_field_name = True
-        extra = Extra.allow
+    model_config = ConfigDict(populate_by_name=True, extra="allow")
