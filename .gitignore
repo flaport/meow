@@ -10,6 +10,7 @@ temp
 sandbox
 tests/nbs_fail
 
+log.txt
 # nbdev
 *.bak
 *.log

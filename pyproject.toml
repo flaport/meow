@@ -36,7 +36,7 @@ classifiers = [
 dependencies = [
   "matplotlib",
   "numpy>=1.24",
-  "pydantic",
+  "pydantic<2",
   "sax>=0.8.4",
   "scipy",
   "shapely",
