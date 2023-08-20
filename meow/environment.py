@@ -1,6 +1,6 @@
 """ A simulation Environment """
 
-from pydantic import Extra, Field
+from pydantic.v1 import Extra, Field
 
 from .base_model import BaseModel
 

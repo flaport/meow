@@ -3,7 +3,7 @@
 from typing import List, Optional
 
 import numpy as np
-from pydantic import Field
+from pydantic.v1 import Field
 
 from .base_model import BaseModel, _array, cached_property
 from .cell import Cell, _create_full_material_array, _sort_structures

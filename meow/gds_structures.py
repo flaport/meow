@@ -4,7 +4,7 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 import shapely.geometry as sg
-from pydantic import Field
+from pydantic.v1 import Field
 
 from .base_model import BaseModel
 from .geometries import Prism

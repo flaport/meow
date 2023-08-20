@@ -6,7 +6,7 @@ from itertools import product
 from typing import List, Literal, Optional, Tuple
 
 import numpy as np
-from pydantic import Field
+from pydantic.v1 import Field
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
 from scipy.linalg import norm

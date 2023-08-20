@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import shapely.geometry as sg
 from matplotlib.patches import Rectangle as MplRect
-from pydantic import Field, validator
+from pydantic.v1 import Field, validator
 
 from meow.base_model import BaseModel
 

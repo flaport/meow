@@ -36,11 +36,11 @@ classifiers = [
 dependencies = [
   "matplotlib",
   "numpy>=1.24",
-  "pydantic<2",
-  "sax>=0.8.4",
+  "pydantic>=2",
+  "sax>=0.9.0",
   "scipy",
   "shapely",
-  "tidy3d>=2.1",
+  "tidy3d>=2.4",
   "trimesh[easy]",
   "packaging",
 ]

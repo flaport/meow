@@ -4,7 +4,7 @@ import warnings
 from typing import Dict, List, Tuple, Union, cast
 
 import numpy as np
-from pydantic import Field
+from pydantic.v1 import Field
 from scipy.ndimage import convolve
 
 from .base_model import BaseModel, _array, cached_property

@@ -5,8 +5,8 @@ from functools import wraps
 from typing import Literal, Optional, Tuple
 
 import numpy as np
-from pydantic import Field
-from pydantic.types import NonNegativeInt
+from pydantic.v1 import Field
+from pydantic.v1.types import NonNegativeInt
 
 from .base_model import BaseModel, _array, cached_property
 

@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import tidy3d as td
 from numpy.typing import NDArray
-from pydantic import Field, validator
+from pydantic.v1 import Field, validator
 from scipy.constants import c
 from scipy.ndimage import map_coordinates
 from tidy3d import material_library

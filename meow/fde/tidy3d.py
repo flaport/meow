@@ -6,8 +6,8 @@ from typing import Literal, Optional
 import numpy as np
 import tidy3d
 from packaging import version
-from pydantic import validate_arguments
-from pydantic.types import PositiveFloat, PositiveInt
+from pydantic.v1 import validate_arguments
+from pydantic.v1.types import PositiveFloat, PositiveInt
 from scipy.constants import c
 from tidy3d.plugins.mode.solver import compute_modes as _compute_modes
 

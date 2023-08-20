@@ -1,7 +1,7 @@
 """ FDE Lumerical Backend """
 
 import numpy as np
-from pydantic.types import PositiveInt
+from pydantic.v1.types import PositiveInt
 
 from ..cross_section import CrossSection
 from ..environment import Environment

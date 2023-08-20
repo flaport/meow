@@ -3,7 +3,7 @@
 from typing import Dict, List, Tuple, Union, overload
 
 import numpy as np
-from pydantic import Field
+from pydantic.v1 import Field
 
 from .base_model import BaseModel
 from .geometries import Geometry2D, Geometry3D

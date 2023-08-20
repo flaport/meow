@@ -5,8 +5,8 @@ from hashlib import md5
 from typing import Any, Tuple
 
 import numpy as np
-from pydantic.main import BaseModel as _BaseModel
-from pydantic.main import ModelMetaclass, PrivateAttr
+from pydantic.v1.main import BaseModel as _BaseModel
+from pydantic.v1.main import ModelMetaclass, PrivateAttr
 
 from .cache import cache_array, cache_model
 
