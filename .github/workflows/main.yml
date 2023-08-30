@@ -25,10 +25,9 @@ jobs:
         uses: actions/checkout@master
       - name: Install dependencies
         run: |
-          mamba install make papermill parallel ipyevents ipytree
-          pip install gdsfactory[full,tidy3d,kfactory]
+          mamba install make papermill parallel ipyevents ipytree gdspy gdstk
       - name: Install meow
-        run: pip install .[full,dev]
+        run: pip install .[vis,jax,klu,ipy,gds,dev]
       - name: Run notebooks
         run: find examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | xargs parallel papermill {} {} -k python3 ':::'
       - name: Expose 'examples' as artifact
@@ -56,7 +55,7 @@ jobs:
           name: examples
           path: ./examples
       - name: Install meow
-        run: pip install .[full,dev]
+        run: pip install .[vis,jax,klu,ipy,gds,dev]
       - name: Build docs
         run: make docs && touch docs/build/html/.nojekyll
       - name: Patch binder links
