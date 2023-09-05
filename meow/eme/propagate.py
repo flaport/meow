@@ -12,10 +12,8 @@ from meow.eme import (
 )
 from meow.eme.sax import _validate_sax_backend
 
-evaluate_circuit = circuit_backends[_validate_sax_backend(None)]
 
-
-def _connect_two(l, r):
+def _connect_two(l, r, sax_backend):
     """l -> left, r -> right"""
     # TODO there must be an easier way to do this...
     s_l, p_l = sax.sdense(l)
@@ -32,10 +30,12 @@ def _connect_two(l, r):
     connections = {f"l,{pl}": f"r,{pr}" for pl, pr in zip(p_lr, p_rl)}
     ports = {**{p: f"l,{p}" for p in p_ll}, **{p: f"r,{p}" for p in p_rr}}
     net = dict(instances=instances, connections=connections, ports=ports)
-    return evaluate_circuit(**net)
+    analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
+    analyzed = analyze_circuit(net["connections"], net["ports"])
+    return evaluate_circuit(analyzed, net["instances"])
 
 
-def pi_pairs(propagations, interfaces):
+def pi_pairs(propagations, interfaces, sax_backend):
     """generates the S-matrices of cells: a combination of propagation and interface matrix"""
     S = []
     for i in range(len(propagations)):
@@ -44,25 +44,25 @@ def pi_pairs(propagations, interfaces):
             S.append(p)
         else:
             c = interfaces[f"i_{i}_{i+1}"]
-            S.append(_connect_two(p, c))
+            S.append(_connect_two(p, c, sax_backend))
 
     return S
 
 
-def l2r_matrices(pairs, identity):
+def l2r_matrices(pairs, identity, sax_backend):
     Ss = [identity]
 
     for p in pairs[:-1]:
-        Ss.append(_connect_two(Ss[-1], p))
+        Ss.append(_connect_two(Ss[-1], p, sax_backend))
 
     return Ss
 
 
-def r2l_matrices(pairs):
+def r2l_matrices(pairs, sax_backend):
     Ss = [pairs[-1]]
 
     for p in pairs[-1::-1]:
-        Ss.append(_connect_two(p, Ss[-1]))
+        Ss.append(_connect_two(p, Ss[-1], sax_backend))
 
     return Ss[::-1]
 
@@ -144,7 +144,8 @@ def plot_fields(modes, cells, forwards, backwards, y, z, lim=1):
     return E_tot, mesh_x
 
 
-def propagate_modes(modes, cells, ex_l, ex_r, y, z):
+def propagate_modes(modes, cells, ex_l, ex_r, y, z, sax_backend=None):
+    sax_backend = _validate_sax_backend(sax_backend)
     propagations = compute_propagation_s_matrices(modes, cells)
     interfaces = compute_interface_s_matrices(
         modes,
@@ -156,9 +157,9 @@ def propagate_modes(modes, cells, ex_l, ex_r, y, z):
         enforce_reciprocity=False,
     )
 
-    pairs = pi_pairs(propagations, interfaces)
-    l2rs = l2r_matrices(pairs, identity)
-    r2ls = r2l_matrices(pairs)
+    pairs = pi_pairs(propagations, interfaces, sax_backend)
+    l2rs = l2r_matrices(pairs, identity, sax_backend)
+    r2ls = r2l_matrices(pairs, sax_backend)
 
     forwards, backwards = propagate(l2rs, r2ls, ex_l, ex_r)
     return plot_fields(modes, cells, forwards, backwards, y, z)
