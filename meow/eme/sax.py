@@ -6,6 +6,7 @@ import numpy as np
 import sax
 from sax.backends import circuit_backends
 from sax.utils import get_ports
+from sax.saxtypes import scoo
 
 from ..base_model import _array
 from ..cell import Cell
@@ -114,8 +115,10 @@ def compute_s_matrix_sax(
 
     # TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.
     net = _get_netlist(propagations, interfaces)
-    _, analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
-    analyzed = analyze_circuit(net["connections"], net["ports"])
+    analyze_instances, analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
+    # TODO: use analyze_instances instead of manually converting to scoo
+    net["instances"] = {k: scoo(v) for k, v in net["instances"].items()}
+    analyzed = analyze_circuit(net["instances"], net["connections"], net["ports"])
     S, port_map = sax.sdense(
         evaluate_circuit(
             analyzed,
