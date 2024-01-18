@@ -3,13 +3,13 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>meow.eme package &#8212; meow 0.6.9 documentation</title>
+    <title>meow.eme package &#8212; meow 0.8.1 documentation</title>
   
   
   
@@ -19,15 +19,15 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
@@ -38,8 +38,9 @@
     <link rel="stylesheet" type="text/css" href="_static/_static/css/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -63,7 +64,16 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -97,12 +107,18 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <header>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+    </div>
   
+  </header>
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -117,9 +133,11 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="index.html">
+  
   
   
   
@@ -129,8 +147,8 @@
       
     
     
-    <img src="_static/meow.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="_static/meow.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="_static/meow.png" class="logo__image only-light" alt="meow 0.8.1 documentation - Home"/>
+    <script>document.write(`<img src="_static/meow.png" class="logo__image only-dark" alt="meow 0.8.1 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -324,20 +342,22 @@
 </button>
 
 
+
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -374,7 +394,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section id="module-meow.eme">
 <span id="meow-eme-package"></span><h1>meow.eme package<a class="headerlink" href="#module-meow.eme" title="Permalink to this heading">#</a></h1>
@@ -417,13 +437,13 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.common.compute_propagation_s_matrix">
-<span class="sig-name descname"><span class="pre">compute_propagation_s_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_cell_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_propagation_s_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_propagation_s_matrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_propagation_s_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_propagation_s_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_propagation_s_matrix" title="Permalink to this definition">#</a></dt>
 <dd><p>get the propagation S-matrix of each <cite>Mode</cite> belonging to a <cite>CrossSection</cite> in a <cite>Cell</cite> with a certain length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>modes</strong> (<em>List</em><em>[</em><a class="reference internal" href="meow.html#meow.mode.Mode" title="meow.mode.Mode"><em>Mode</em></a><em>]</em>) – </p></li>
-<li><p><strong>override_cell_length</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – </p></li>
+<li><p><strong>cell_length</strong> (<em>float</em>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -431,13 +451,14 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.common.compute_propagation_s_matrices">
-<span class="sig-name descname"><span class="pre">compute_propagation_s_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_cell_lengths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_propagation_s_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_propagation_s_matrices" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_propagation_s_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_lengths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/common.html#compute_propagation_s_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.common.compute_propagation_s_matrices" title="Permalink to this definition">#</a></dt>
 <dd><p>get all the propagation S-matrices of all the <cite>Modes</cite> belonging to each <cite>CrossSection</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>modes</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="meow.html#meow.mode.Mode" title="meow.mode.Mode"><em>Mode</em></a><em>]</em><em>]</em>) – </p></li>
-<li><p><strong>override_cell_lengths</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>cells</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="meow.html#meow.cell.Cell" title="meow.cell.Cell"><em>Cell</em></a><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>cell_lengths</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -464,18 +485,18 @@ document.write(`
 <span class="target" id="module-meow.eme.propagate"></span><p>Propagating fields throug devices</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.propagate.pi_pairs">
-<span class="sig-name descname"><span class="pre">pi_pairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">propagations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interfaces</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#pi_pairs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.pi_pairs" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">pi_pairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">propagations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sax_backend</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#pi_pairs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.pi_pairs" title="Permalink to this definition">#</a></dt>
 <dd><p>generates the S-matrices of cells: a combination of propagation and interface matrix</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.propagate.l2r_matrices">
-<span class="sig-name descname"><span class="pre">l2r_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#l2r_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.l2r_matrices" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">l2r_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sax_backend</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#l2r_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.l2r_matrices" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.propagate.r2l_matrices">
-<span class="sig-name descname"><span class="pre">r2l_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pairs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#r2l_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.r2l_matrices" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">r2l_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sax_backend</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#r2l_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.r2l_matrices" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -495,29 +516,30 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.propagate.plot_fields">
-<span class="sig-name descname"><span class="pre">plot_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forwards</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backwards</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#plot_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.plot_fields" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forwards</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backwards</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#plot_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.plot_fields" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.propagate.propagate_modes">
-<span class="sig-name descname"><span class="pre">propagate_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ex_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ex_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#propagate_modes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.propagate_modes" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">propagate_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ex_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ex_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sax_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/propagate.html#propagate_modes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.propagate.propagate_modes" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <span class="target" id="module-meow.eme.sax"></span><p>SAX backend for EME (default backend)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="meow.eme.sax.compute_s_matrix_sax">
-<span class="sig-name descname"><span class="pre">compute_s_matrix_sax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sax_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conjugate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_reciprocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_lossy_unitarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_cell_lengths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#compute_s_matrix_sax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.compute_s_matrix_sax" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_s_matrix_sax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_lengths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sax_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conjugate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_reciprocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce_lossy_unitarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/eme/sax.html#compute_s_matrix_sax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.eme.sax.compute_s_matrix_sax" title="Permalink to this definition">#</a></dt>
 <dd><p>Calculate the S-matrix for given sets of modes, each set belonging to a <cite>Cell</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>modes</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="meow.html#meow.mode.Mode" title="meow.mode.Mode"><em>Mode</em></a><em>]</em><em>]</em>) – Each collection of modes for each of the <cite>Cell</cite> objects</p></li>
 <li><p><strong>backend</strong> – which SAX backend to use to calculate the final S-matrix.</p></li>
+<li><p><strong>cells</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="meow.html#meow.cell.Cell" title="meow.cell.Cell"><em>Cell</em></a><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>cell_lengths</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
 <li><p><strong>sax_backend</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – </p></li>
 <li><p><strong>conjugate</strong> (<em>bool</em>) – </p></li>
 <li><p><strong>enforce_reciprocity</strong> (<em>bool</em>) – </p></li>
 <li><p><strong>enforce_lossy_unitarity</strong> (<em>bool</em>) – </p></li>
-<li><p><strong>override_cell_lengths</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>float</em><em>]</em><em>]</em>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -532,11 +554,10 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="meow.html"
@@ -556,10 +577,7 @@ document.write(`
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -567,6 +585,7 @@ document.write(`
             
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
 
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
@@ -596,6 +615,7 @@ By Floris Laporte
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2022, Apache2.
@@ -622,8 +642,8 @@ By Floris Laporte
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
 
   <footer class="bd-footer">
   </footer>

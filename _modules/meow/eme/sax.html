@@ -3,12 +3,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.eme.sax &#8212; meow 0.6.9 documentation</title>
+    <title>meow.eme.sax &#8212; meow 0.8.1 documentation</title>
   
   
   
@@ -18,15 +18,15 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
@@ -37,8 +37,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/_static/css/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
+  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
 
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
@@ -60,7 +61,16 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -94,12 +104,20 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <header>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+    </div>
   
+  </header>
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -114,9 +132,11 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
+  
   
   
   
@@ -126,8 +146,8 @@
       
     
     
-    <img src="../../../_static/meow.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../../_static/meow.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../../../_static/meow.png" class="logo__image only-light" alt="meow 0.8.1 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/meow.png" class="logo__image only-dark" alt="meow 0.8.1 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -256,20 +276,22 @@
 </button>
 
 
+
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -296,7 +318,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <h1>Source code for meow.eme.sax</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; SAX backend for EME (default backend) &quot;&quot;&quot;</span>
@@ -307,8 +329,10 @@ document.write(`
 <span class="kn">import</span> <span class="nn">sax</span>
 <span class="kn">from</span> <span class="nn">sax.backends</span> <span class="kn">import</span> <span class="n">circuit_backends</span>
 <span class="kn">from</span> <span class="nn">sax.utils</span> <span class="kn">import</span> <span class="n">get_ports</span>
+<span class="kn">from</span> <span class="nn">sax.saxtypes</span> <span class="kn">import</span> <span class="n">scoo</span>
 
 <span class="kn">from</span> <span class="nn">..base_model</span> <span class="kn">import</span> <span class="n">_array</span>
+<span class="kn">from</span> <span class="nn">..cell</span> <span class="kn">import</span> <span class="n">Cell</span>
 <span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span>
 <span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">DEFAULT_CONJUGATE</span><span class="p">,</span>
@@ -334,7 +358,6 @@ document.write(`
         <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">S</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">interfaces</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
     <span class="p">}</span>
 
-    <span class="n">interface_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">interfaces</span><span class="p">)</span>
     <span class="n">propagation_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">propagations</span><span class="p">)</span>
     <span class="n">connections</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">interfaces</span><span class="p">)):</span>
@@ -381,11 +404,12 @@ document.write(`
 
 <div class="viewcode-block" id="compute_s_matrix_sax"><a class="viewcode-back" href="../../../meow.eme.html#meow.eme.sax.compute_s_matrix_sax">[docs]</a><span class="k">def</span> <span class="nf">compute_s_matrix_sax</span><span class="p">(</span>
     <span class="n">modes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">]],</span>
+    <span class="n">cells</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Cell</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">cell_lengths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">sax_backend</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">conjugate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_CONJUGATE</span><span class="p">,</span>
     <span class="n">enforce_reciprocity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_ENFORCE_RECIPROCITY</span><span class="p">,</span>
     <span class="n">enforce_lossy_unitarity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_ENFORCE_LOSSY_UNITARITY</span><span class="p">,</span>
-    <span class="n">override_cell_lengths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the S-matrix for given sets of modes, each set belonging to a `Cell`</span>
@@ -402,7 +426,7 @@ document.write(`
         <span class="s2">&quot;compute_interface_s_matrices&quot;</span><span class="p">,</span> <span class="n">compute_interface_s_matrices</span>
     <span class="p">)</span>
     <span class="n">propagations</span> <span class="o">=</span> <span class="n">_compute_propagation_s_matrices</span><span class="p">(</span>
-        <span class="n">modes</span><span class="p">,</span> <span class="n">override_cell_lengths</span><span class="o">=</span><span class="n">override_cell_lengths</span>
+        <span class="n">modes</span><span class="p">,</span> <span class="n">cells</span><span class="p">,</span> <span class="n">cell_lengths</span><span class="o">=</span><span class="n">cell_lengths</span>
     <span class="p">)</span>
     <span class="n">interfaces</span> <span class="o">=</span> <span class="n">_compute_interface_s_matrices</span><span class="p">(</span>
         <span class="n">modes</span><span class="p">,</span>
@@ -414,16 +438,31 @@ document.write(`
 
     <span class="c1"># TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.</span>
     <span class="n">net</span> <span class="o">=</span> <span class="n">_get_netlist</span><span class="p">(</span><span class="n">propagations</span><span class="p">,</span> <span class="n">interfaces</span><span class="p">)</span>
-    <span class="n">evaluate_circuit</span> <span class="o">=</span> <span class="n">circuit_backends</span><span class="p">[</span><span class="n">sax_backend</span><span class="p">]</span>
-    <span class="n">S</span><span class="p">,</span> <span class="n">pm</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span>
+    <span class="n">analyze_instances</span><span class="p">,</span> <span class="n">analyze_circuit</span><span class="p">,</span> <span class="n">evaluate_circuit</span> <span class="o">=</span> <span class="n">circuit_backends</span><span class="p">[</span><span class="n">sax_backend</span><span class="p">]</span>
+    <span class="c1"># TODO: use analyze_instances instead of manually converting to scoo</span>
+    <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">scoo</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="n">analyzed</span> <span class="o">=</span> <span class="n">analyze_circuit</span><span class="p">(</span><span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">],</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">],</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;ports&quot;</span><span class="p">])</span>
+    <span class="n">S</span><span class="p">,</span> <span class="n">port_map</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span>
         <span class="n">evaluate_circuit</span><span class="p">(</span>
+            <span class="n">analyzed</span><span class="p">,</span>
             <span class="n">instances</span><span class="o">=</span><span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">],</span>
-            <span class="n">connections</span><span class="o">=</span><span class="n">net</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">],</span>
-            <span class="n">ports</span><span class="o">=</span><span class="n">net</span><span class="p">[</span><span class="s2">&quot;ports&quot;</span><span class="p">],</span>
         <span class="p">)</span>
     <span class="p">)</span>
     <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">_array</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">pm</span></div>
+
+    <span class="c1"># final sorting of result:</span>
+    <span class="n">current_port_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)):</span> <span class="n">j</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">j</span> <span class="ow">in</span> <span class="p">{</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="n">pm</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)):</span> <span class="n">idx</span> <span class="k">for</span> <span class="n">pm</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">port_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="n">desired_port_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">pm</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pm</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">current_port_map</span><span class="p">))}</span>
+    <span class="n">idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">current_port_map</span><span class="p">[</span><span class="n">pm</span><span class="p">]</span> <span class="k">for</span> <span class="n">pm</span> <span class="ow">in</span> <span class="n">desired_port_map</span><span class="p">]</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="n">idxs</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">idxs</span><span class="p">]</span>
+    <span class="n">port_map</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">@</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">),</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">desired_port_map</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">port_map</span></div>
 </pre></div>
 
                 </article>
@@ -431,21 +470,19 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>
@@ -463,6 +500,7 @@ By Floris Laporte
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2022, Apache2.
@@ -489,8 +527,8 @@ By Floris Laporte
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
 
   <footer class="bd-footer">
   </footer>

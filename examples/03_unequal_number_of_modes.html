@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -12,7 +12,7 @@
 <meta content="Sphinx, MyST" name="keywords" />
 <meta content="en_US" property="og:locale" />
 
-    <title>Unequal Number of Modes &#8212; meow 0.6.9 documentation</title>
+    <title>Unequal Number of Modes &#8212; meow 0.8.1 documentation</title>
   
   
   
@@ -22,15 +22,15 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
@@ -41,8 +41,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/_static/css/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -66,7 +67,16 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -100,12 +110,20 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <header>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+    </div>
   
+  </header>
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -120,9 +138,11 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../index.html">
+  
   
   
   
@@ -132,8 +152,8 @@
       
     
     
-    <img src="../_static/meow.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../_static/meow.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../_static/meow.png" class="logo__image only-light" alt="meow 0.8.1 documentation - Home"/>
+    <script>document.write(`<img src="../_static/meow.png" class="logo__image only-dark" alt="meow 0.8.1 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -376,20 +396,22 @@
 </button>
 
 
+
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -427,7 +449,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="unequal-number-of-modes">
 <h1>Unequal Number of Modes<a class="headerlink" href="#unequal-number-of-modes" title="Permalink to this heading">#</a></h1>
@@ -1721,7 +1743,7 @@ return Promise.all(pending).then(function(){return scene;});};}();return GLTFLoa
 Math.pow(distanceToCamera,2)+
 Math.pow(distanceToCamera,2));camera.position.set(len,len,len);controls.update();camera.lookAt(boundingSphere.center);controls.target.set(boundingSphere.center.x,boundingSphere.center.y,boundingSphere.center.z);camera.updateProjectionMatrix();}
 function centerControls(obj,camera,controls){const boundingBox=new THREE.Box3().setFromObject(obj);const boundingSphere=new THREE.Sphere();boundingBox.getBoundingSphere((target=boundingSphere));controls.update();controls.target.set(boundingSphere.center.x,boundingSphere.center.y,boundingSphere.center.z);}
-function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);tracklight=new THREE.DirectionalLight(0xffffff,1.75);scene.add(tracklight);base64_data=&quot;Z2xURgIAAABoCQAAvAcAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjEsImNvdW50Ijo4LCJtYXgiOlsyLjA5OTk5OTkwNDYzMjU2ODQsMC4wLDEwLjBdLCJtaW4iOlstMi4wOTk5OTk5MDQ2MzI1Njg0LC0zLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjIsImNvdW50Ijo4LCJtYXgiOlsyMzAsMjMwLDIzMCwyMzBdLCJtaW4iOlsyMzAsMjMwLDIzMCwyMzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MywiY291bnQiOjgsIm1heCI6WzAuMjUsMC4yMTk5OTk5OTg4MDc5MDcxLDEwLjBdLCJtaW4iOlstMC4yNSwwLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjQsImNvdW50Ijo4LCJtYXgiOlsyMzAsMCwwLDIzMF0sIm1pbiI6WzIzMCwwLDAsMjMwXX1dLCJtZXNoZXMiOlt7Im5hbWUiOiJnZW9tZXRyeV8wIiwiZXh0cmFzIjp7InByb2Nlc3NlZCI6dHJ1ZX0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEsIkNPTE9SXzAiOjJ9LCJpbmRpY2VzIjowLCJtb2RlIjo0fV19LHsibmFtZSI6Imdlb21ldHJ5XzEiLCJleHRyYXMiOnsicHJvY2Vzc2VkIjp0cnVlfSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MywiQ09MT1JfMCI6NH0sImluZGljZXMiOjAsIm1vZGUiOjR9XX1dLCJjYW1lcmFzIjpbeyJuYW1lIjoiY2FtZXJhXzlENkZENSIsInR5cGUiOiJwZXJzcGVjdGl2ZSIsInBlcnNwZWN0aXZlIjp7ImFzcGVjdFJhdGlvIjoxLjMzMzMzMzMzMzMzMzMzMzMsInlmb3YiOjAuNzg1Mzk4MTYzMzk3NDQ4Mywiem5lYXIiOjAuMDF9fV0sIm5vZGVzIjpbeyJuYW1lIjoid29ybGQiLCJjaGlsZHJlbiI6WzEsMiwzXX0seyJuYW1lIjoiZ2VvbWV0cnlfMCIsIm1lc2giOjAsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiZ2VvbWV0cnlfMSIsIm1lc2giOjEsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiY2FtZXJhXzlENkZENSIsImNhbWVyYSI6MCwibWF0cml4IjpbMS4wLDAuMCwtMC4wLDAuMCwwLjAsMS4wLDAuMCwwLjAsMC4wLDAuMCwxLjAsMC4wLDIuNSwtMS4zOSw4LjUzMDEyNzAxODkyMjE5NiwxLjBdfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjQwMH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoxNDR9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoxNDQsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MjQwLCJieXRlTGVuZ3RoIjozMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI3MiwiYnl0ZUxlbmd0aCI6OTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjozNjgsImJ5dGVMZW5ndGgiOjMyfV19ICCQAQAAQklOAAEAAAAAAAAAAwAAAAMAAAACAAAAAQAAAAcAAAAEAAAABQAAAAUAAAAGAAAABwAAAAUAAAAEAAAAAQAAAAEAAAAEAAAAAAAAAAYAAAAFAAAAAgAAAAIAAAAFAAAAAQAAAAQAAAAHAAAAAAAAAAAAAAAHAAAAAwAAAAcAAAAGAAAAAwAAAAMAAAAGAAAAAgAAAGZmBsAAAEDAAAAAAGZmBsAAAEDAAAAgQWZmBkAAAEDAAAAgQWZmBkAAAEDAAAAAAGZmBsAAAAAAAAAAAGZmBsAAAAAAAAAgQWZmBkAAAAAAAAAgQWZmBkAAAAAAAAAAAObm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubmZmZmvgAAAAAAAAAAAACAvgAAAAAAACBBAACAPgAAAAAAACBBZmZmPgAAAAAAAAAAZmZmvq5HYT4AAAAAAACAvq5HYT4AACBBAACAPq5HYT4AACBBZmZmPq5HYT4AAAAA5gAA5uYAAObmAADm5gAA5uYAAObmAADm5gAA5uYAAOY=&quot;;;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(window.devicePixelRatio);renderer.setSize(window.innerWidth,window.innerHeight);document.body.appendChild(renderer.domElement);loader=new THREE.GLTFLoader();loader.load(&quot;data:text/plain;base64,&quot;+base64_data,function(gltf){scene.add(gltf.scene);camera=gltf.cameras[0];controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=1.0;controls.zoomSpeed=1.2;controls.panSpeed=0.8;controls.noZoom=false;controls.noPan=false;controls.staticMoving=true;controls.dynamicDampingFactor=0.3;controls.keys=[65,83,68];controls.addEventListener(&quot;change&quot;,render);centerControls(scene,camera,controls);render();window.addEventListener(&quot;resize&quot;,onWindowResize,false);animate();onWindowResize();});}
+function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);tracklight=new THREE.DirectionalLight(0xffffff,1.75);scene.add(tracklight);base64_data=&quot;Z2xURgIAAABoCQAAvAcAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjEsImNvdW50Ijo4LCJtYXgiOlsyLjA5OTk5OTkwNDYzMjU2ODQsMC4wLDEwLjBdLCJtaW4iOlstMi4wOTk5OTk5MDQ2MzI1Njg0LC0zLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjIsImNvdW50Ijo4LCJtYXgiOlsyMzAsMjMwLDIzMCwyMzBdLCJtaW4iOlsyMzAsMjMwLDIzMCwyMzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MywiY291bnQiOjgsIm1heCI6WzAuMjUsMC4yMTk5OTk5OTg4MDc5MDcxLDEwLjBdLCJtaW4iOlstMC4yNSwwLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjQsImNvdW50Ijo4LCJtYXgiOlsyMzAsMCwwLDIzMF0sIm1pbiI6WzIzMCwwLDAsMjMwXX1dLCJtZXNoZXMiOlt7Im5hbWUiOiJnZW9tZXRyeV8wIiwiZXh0cmFzIjp7InByb2Nlc3NlZCI6dHJ1ZX0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEsIkNPTE9SXzAiOjJ9LCJpbmRpY2VzIjowLCJtb2RlIjo0fV19LHsibmFtZSI6Imdlb21ldHJ5XzEiLCJleHRyYXMiOnsicHJvY2Vzc2VkIjp0cnVlfSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MywiQ09MT1JfMCI6NH0sImluZGljZXMiOjAsIm1vZGUiOjR9XX1dLCJjYW1lcmFzIjpbeyJuYW1lIjoiY2FtZXJhXzdEQjk0NSIsInR5cGUiOiJwZXJzcGVjdGl2ZSIsInBlcnNwZWN0aXZlIjp7ImFzcGVjdFJhdGlvIjoxLjMzMzMzMzMzMzMzMzMzMzMsInlmb3YiOjAuNzg1Mzk4MTYzMzk3NDQ4Mywiem5lYXIiOjAuMDF9fV0sIm5vZGVzIjpbeyJuYW1lIjoid29ybGQiLCJjaGlsZHJlbiI6WzEsMiwzXX0seyJuYW1lIjoiZ2VvbWV0cnlfMCIsIm1lc2giOjAsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiZ2VvbWV0cnlfMSIsIm1lc2giOjEsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiY2FtZXJhXzdEQjk0NSIsImNhbWVyYSI6MCwibWF0cml4IjpbMS4wLDAuMCwtMC4wLDAuMCwwLjAsMS4wLDAuMCwwLjAsMC4wLDAuMCwxLjAsMC4wLDIuNSwtMS4zOSw4LjUzMDEyNzAxODkyMjE5MiwxLjBdfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjQwMH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoxNDR9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoxNDQsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MjQwLCJieXRlTGVuZ3RoIjozMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI3MiwiYnl0ZUxlbmd0aCI6OTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjozNjgsImJ5dGVMZW5ndGgiOjMyfV19ICCQAQAAQklOAAEAAAAAAAAAAwAAAAMAAAACAAAAAQAAAAcAAAAEAAAABQAAAAUAAAAGAAAABwAAAAUAAAAEAAAAAQAAAAEAAAAEAAAAAAAAAAYAAAAFAAAAAgAAAAIAAAAFAAAAAQAAAAQAAAAHAAAAAAAAAAAAAAAHAAAAAwAAAAcAAAAGAAAAAwAAAAMAAAAGAAAAAgAAAGZmBsAAAEDAAAAAAGZmBsAAAEDAAAAgQWZmBkAAAEDAAAAgQWZmBkAAAEDAAAAAAGZmBsAAAAAAAAAAAGZmBsAAAAAAAAAgQWZmBkAAAAAAAAAgQWZmBkAAAAAAAAAAAObm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubmZmZmvgAAAAAAAAAAAACAvgAAAAAAACBBAACAPgAAAAAAACBBZmZmPgAAAAAAAAAAZmZmvq5HYT4AAAAAAACAvq5HYT4AACBBAACAPq5HYT4AACBBZmZmPq5HYT4AAAAA5gAA5uYAAObmAADm5gAA5uYAAObmAADm5gAA5uYAAOY=&quot;;;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(window.devicePixelRatio);renderer.setSize(window.innerWidth,window.innerHeight);document.body.appendChild(renderer.domElement);loader=new THREE.GLTFLoader();loader.load(&quot;data:text/plain;base64,&quot;+base64_data,function(gltf){scene.add(gltf.scene);camera=gltf.cameras[0];controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=1.0;controls.zoomSpeed=1.2;controls.panSpeed=0.8;controls.noZoom=false;controls.noPan=false;controls.staticMoving=true;controls.dynamicDampingFactor=0.3;controls.keys=[65,83,68];controls.addEventListener(&quot;change&quot;,render);centerControls(scene,camera,controls);render();window.addEventListener(&quot;resize&quot;,onWindowResize,false);animate();onWindowResize();});}
 function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);controls.handleResize();render();}
 function animate(){requestAnimationFrame(animate);controls.update();}
 function render(){tracklight.position.copy(camera.position);renderer.render(scene,camera);}
@@ -1752,7 +1774,7 @@ init();</script></body>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells</span> <span class="o">=</span> <span class="n">create_cells</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">wl</span><span class="o">=</span><span class="mf">1.55</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mf">25.0</span><span class="p">)</span>
-<span class="n">css</span> <span class="o">=</span> <span class="p">[</span><span class="n">mw</span><span class="o">.</span><span class="n">CrossSection</span><span class="p">(</span><span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">]</span>
+<span class="n">css</span> <span class="o">=</span> <span class="p">[</span><span class="n">mw</span><span class="o">.</span><span class="n">CrossSection</span><span class="o">.</span><span class="n">from_cell</span><span class="p">(</span><span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1789,28 +1811,25 @@ init();</script></body>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/cadea788e40c89b922b7ce82dde0cba386fe89b3247813736cda1405f9c34043.png" src="../_images/cadea788e40c89b922b7ce82dde0cba386fe89b3247813736cda1405f9c34043.png" />
-<img alt="../_images/1ea7e9c726314c5ad846db85fca512244efd968bf350c8e00aecd3fc1ba0be6e.png" src="../_images/1ea7e9c726314c5ad846db85fca512244efd968bf350c8e00aecd3fc1ba0be6e.png" />
-<img alt="../_images/7ffbff03e00525000e7364cf10a35a89cbfc2e7b8dbe68e8828116601ed354d7.png" src="../_images/7ffbff03e00525000e7364cf10a35a89cbfc2e7b8dbe68e8828116601ed354d7.png" />
-<img alt="../_images/4736dc5c6ad9afecc76b31c54ee931c339f8f6b093d7e34fe4118fcb8e847847.png" src="../_images/4736dc5c6ad9afecc76b31c54ee931c339f8f6b093d7e34fe4118fcb8e847847.png" />
-<img alt="../_images/34c39c82ea79a49d877db2eb0cf63d172dfe62aeacdef827e1e3c9397fded51e.png" src="../_images/34c39c82ea79a49d877db2eb0cf63d172dfe62aeacdef827e1e3c9397fded51e.png" />
-<img alt="../_images/9dd67f2e944979e04334c5fb50d334f3b943f930f5a33cf43006e8fccbb10308.png" src="../_images/9dd67f2e944979e04334c5fb50d334f3b943f930f5a33cf43006e8fccbb10308.png" />
-<img alt="../_images/f88c793ea089cf484399849bf3b8b0192af4a14d3aeb564b64ef11c8dcb2448d.png" src="../_images/f88c793ea089cf484399849bf3b8b0192af4a14d3aeb564b64ef11c8dcb2448d.png" />
-<img alt="../_images/1cc2b00fe96b4e285618f3b147e98140f922c5023e115216346dcda8cd32b1aa.png" src="../_images/1cc2b00fe96b4e285618f3b147e98140f922c5023e115216346dcda8cd32b1aa.png" />
+<img alt="../_images/400db0d9e48af5ebc65d04663f861e3fab7b6b9e2c0d49c67f4c0a284b6ceab1.png" src="../_images/400db0d9e48af5ebc65d04663f861e3fab7b6b9e2c0d49c67f4c0a284b6ceab1.png" />
+<img alt="../_images/937528fbfcc3c31b7b273a5f43b381e882a1ee9f9aefb3f81f62ced78d4428a2.png" src="../_images/937528fbfcc3c31b7b273a5f43b381e882a1ee9f9aefb3f81f62ced78d4428a2.png" />
+<img alt="../_images/6d9518fc239bd4e3a1b59a3c8bc6f4b024d3834b22a00fd61572b4b7394a12af.png" src="../_images/6d9518fc239bd4e3a1b59a3c8bc6f4b024d3834b22a00fd61572b4b7394a12af.png" />
+<img alt="../_images/9b053f7695ddc0df30b87567aa939da36b1aa68c69625f5a55419e8fac618de3.png" src="../_images/9b053f7695ddc0df30b87567aa939da36b1aa68c69625f5a55419e8fac618de3.png" />
+<img alt="../_images/7695efc711590a4afe7bcc942215bcf97dfe04ca0f0b455ba8c61de9890c74b8.png" src="../_images/7695efc711590a4afe7bcc942215bcf97dfe04ca0f0b455ba8c61de9890c74b8.png" />
+<img alt="../_images/8147d4823b2285a51cde5b863784d62e33f141553e622fc0ba56b93928ebf2b3.png" src="../_images/8147d4823b2285a51cde5b863784d62e33f141553e622fc0ba56b93928ebf2b3.png" />
+<img alt="../_images/2b3d54677a57653015302544243e37d04e89c750b0e0d35e6e0cabc47d452273.png" src="../_images/2b3d54677a57653015302544243e37d04e89c750b0e0d35e6e0cabc47d452273.png" />
+<img alt="../_images/a80911f2ab91d9991caf5a0a3322cf09dce3d4be369439e2d536c10b73b99680.png" src="../_images/a80911f2ab91d9991caf5a0a3322cf09dce3d4be369439e2d536c10b73b99680.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="p">,</span> <span class="n">pm</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">compute_s_matrix</span><span class="p">(</span><span class="n">modes</span><span class="p">)</span>
-<span class="n">mw</span><span class="o">.</span><span class="n">visualize</span><span class="p">((</span><span class="n">S</span><span class="p">,</span> <span class="n">pm</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="p">,</span> <span class="n">pm</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">compute_s_matrix</span><span class="p">(</span><span class="n">modes</span><span class="p">,</span> <span class="n">cells</span><span class="p">)</span>
+<span class="n">mw</span><span class="o">.</span><span class="n">visualize</span><span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">S</span><span class="p">),</span> <span class="n">pm</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
-</pre></div>
-</div>
-<img alt="../_images/29c3eece441855869698e7c69cda3de7525e3318b80e85ee041fc774c54b9f98.png" src="../_images/29c3eece441855869698e7c69cda3de7525e3318b80e85ee041fc774c54b9f98.png" />
+<img alt="../_images/75b8e6c519792db9f95da599477159c8c0cf44cc1774a17c10b782f7e08294f1.png" src="../_images/75b8e6c519792db9f95da599477159c8c0cf44cc1774a17c10b782f7e08294f1.png" />
 </div>
 </div>
 </section>
@@ -1840,13 +1859,13 @@ init();</script></body>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="p">,</span> <span class="n">pm</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">compute_s_matrix</span><span class="p">(</span><span class="n">modes</span><span class="p">)</span>
-<span class="n">mw</span><span class="o">.</span><span class="n">visualize</span><span class="p">((</span><span class="n">S</span><span class="p">,</span> <span class="n">pm</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="p">,</span> <span class="n">pm</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">compute_s_matrix</span><span class="p">(</span><span class="n">modes</span><span class="p">,</span> <span class="n">cells</span><span class="p">)</span>
+<span class="n">mw</span><span class="o">.</span><span class="n">visualize</span><span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">S</span><span class="p">),</span> <span class="n">pm</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0e726507c0b58f315f02b3c1be3208719cbfd415bbf0963970010635c418cb32.png" src="../_images/0e726507c0b58f315f02b3c1be3208719cbfd415bbf0963970010635c418cb32.png" />
+<img alt="../_images/b21e0f0f34dd4c3d31b659685c03635221700a42a81943279d7533e4a86b8bfb.png" src="../_images/b21e0f0f34dd4c3d31b659685c03635221700a42a81943279d7533e4a86b8bfb.png" />
 </div>
 </div>
 </section>
@@ -1858,11 +1877,10 @@ init();</script></body>
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="02_taper_length_sweep.html"
@@ -1882,10 +1900,7 @@ init();</script></body>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -1893,6 +1908,7 @@ init();</script></body>
             
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
 
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
@@ -1923,6 +1939,7 @@ By Floris Laporte
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2022, Apache2.
@@ -1949,8 +1966,8 @@ By Floris Laporte
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
 
   <footer class="bd-footer">
   </footer>

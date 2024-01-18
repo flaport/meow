@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
@@ -12,7 +12,7 @@
 <meta content="Sphinx, MyST" name="keywords" />
 <meta content="en_US" property="og:locale" />
 
-    <title>Quick Start &#8212; meow 0.6.9 documentation</title>
+    <title>Quick Start &#8212; meow 0.8.1 documentation</title>
   
   
   
@@ -22,15 +22,15 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
@@ -41,8 +41,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/_static/css/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -66,7 +67,16 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -100,12 +110,20 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <header>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+    </div>
   
+  </header>
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -120,9 +138,11 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../index.html">
+  
   
   
   
@@ -132,8 +152,8 @@
       
     
     
-    <img src="../_static/meow.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../_static/meow.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../_static/meow.png" class="logo__image only-light" alt="meow 0.8.1 documentation - Home"/>
+    <script>document.write(`<img src="../_static/meow.png" class="logo__image only-dark" alt="meow 0.8.1 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -376,20 +396,22 @@
 </button>
 
 
+
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -434,7 +456,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="quick-start">
 <h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this heading">#</a></h1>
@@ -451,7 +473,7 @@ document.write(`
 <h2>Quick Start<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
 <section id="structure">
 <h3>1. Structure<a class="headerlink" href="#structure" title="Permalink to this heading">#</a></h3>
-<p>First create the structures to be simulated. A <a class="reference internal" href="../meow.html#meow.structures.Structure" title="meow.structures.Structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">Structure</span></code></a> is a collection of a <a class="reference internal" href="../meow.html#meow.geometries.Geometry" title="meow.geometries.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a> with a <a class="reference internal" href="../meow.html#meow.materials.Material" title="meow.materials.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>.</p>
+<p>First create the structures to be simulated. A <code class="xref py py-class docutils literal notranslate"><span class="pre">Structure</span></code> is a collection of a <code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code> with a <a class="reference internal" href="../meow.html#meow.materials.Material" title="meow.materials.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code class="docutils literal notranslate"><span class="pre">meow</span></code> expects the propagation direction to be the <code class="docutils literal notranslate"><span class="pre">z</span></code>-axis! This makes the <code class="docutils literal notranslate"><span class="pre">zx</span></code>-plane parallel with the chip and the <code class="docutils literal notranslate"><span class="pre">y</span></code>-axis perpendicular to the chip. Keep this in mind when creating your structures.</p>
@@ -1731,7 +1753,7 @@ return Promise.all(pending).then(function(){return scene;});};}();return GLTFLoa
 Math.pow(distanceToCamera,2)+
 Math.pow(distanceToCamera,2));camera.position.set(len,len,len);controls.update();camera.lookAt(boundingSphere.center);controls.target.set(boundingSphere.center.x,boundingSphere.center.y,boundingSphere.center.z);camera.updateProjectionMatrix();}
 function centerControls(obj,camera,controls){const boundingBox=new THREE.Box3().setFromObject(obj);const boundingSphere=new THREE.Sphere();boundingBox.getBoundingSphere((target=boundingSphere));controls.update();controls.target.set(boundingSphere.center.x,boundingSphere.center.y,boundingSphere.center.z);}
-function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);tracklight=new THREE.DirectionalLight(0xffffff,1.75);scene.add(tracklight);base64_data=&quot;Z2xURgIAAAB4CQAAzAcAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjEsImNvdW50Ijo4LCJtYXgiOlsxLjAsMC4wLDEwLjBdLCJtaW4iOlstMS4wLC0xLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjIsImNvdW50Ijo4LCJtYXgiOlsyMzAsMjMwLDIzMCwyMzBdLCJtaW4iOlsyMzAsMjMwLDIzMCwyMzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MywiY291bnQiOjgsIm1heCI6WzAuMjI0OTk5OTk0MDM5NTM1NTIsMC4yMTk5OTk5OTg4MDc5MDcxLDEwLjBdLCJtaW4iOlstMC4yMjQ5OTk5OTQwMzk1MzU1MiwwLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjQsImNvdW50Ijo4LCJtYXgiOlsyMzAsMCwwLDIzMF0sIm1pbiI6WzIzMCwwLDAsMjMwXX1dLCJtZXNoZXMiOlt7Im5hbWUiOiJnZW9tZXRyeV8wIiwiZXh0cmFzIjp7InByb2Nlc3NlZCI6dHJ1ZX0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEsIkNPTE9SXzAiOjJ9LCJpbmRpY2VzIjowLCJtb2RlIjo0fV19LHsibmFtZSI6Imdlb21ldHJ5XzEiLCJleHRyYXMiOnsicHJvY2Vzc2VkIjp0cnVlfSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MywiQ09MT1JfMCI6NH0sImluZGljZXMiOjAsIm1vZGUiOjR9XX1dLCJjYW1lcmFzIjpbeyJuYW1lIjoiY2FtZXJhXzg5QzEzMyIsInR5cGUiOiJwZXJzcGVjdGl2ZSIsInBlcnNwZWN0aXZlIjp7ImFzcGVjdFJhdGlvIjoxLjMzMzMzMzMzMzMzMzMzMzMsInlmb3YiOjAuNzg1Mzk4MTYzMzk3NDQ4Mywiem5lYXIiOjAuMDF9fV0sIm5vZGVzIjpbeyJuYW1lIjoid29ybGQiLCJjaGlsZHJlbiI6WzEsMiwzXX0seyJuYW1lIjoiZ2VvbWV0cnlfMCIsIm1lc2giOjAsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiZ2VvbWV0cnlfMSIsIm1lc2giOjEsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiY2FtZXJhXzg5QzEzMyIsImNhbWVyYSI6MCwibWF0cml4IjpbMS4wLDAuMCwtMC4wLDAuMCwwLjAsMS4wLDAuMCwwLjAsMC4wLDAuMCwxLjAsMC4wLDIuNDk5OTk5OTk5OTk5OTk5NiwtMC4zOSw2LjMzMDEyNzAxODkyMjE5NSwxLjBdfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjQwMH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoxNDR9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoxNDQsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MjQwLCJieXRlTGVuZ3RoIjozMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI3MiwiYnl0ZUxlbmd0aCI6OTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjozNjgsImJ5dGVMZW5ndGgiOjMyfV19ICAgkAEAAEJJTgACAAAAAwAAAAAAAAAAAAAAAQAAAAIAAAAEAAAABwAAAAYAAAAGAAAABQAAAAQAAAAEAAAABQAAAAAAAAAAAAAABQAAAAEAAAAFAAAABgAAAAEAAAABAAAABgAAAAIAAAAHAAAABAAAAAMAAAADAAAABAAAAAAAAAAGAAAABwAAAAIAAAACAAAABwAAAAMAAAAAAIC/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAvwAAAAAAAIC/AACAvwAAAAAAAIC/AAAAAAAAIEEAAIA/AAAAAAAAIEEAAIA/AACAvwAAIEEAAIC/AACAvwAAIEHm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5mZmZr6uR2E+AAAAAGZmZj6uR2E+AAAAAGZmZj4AAAAAAAAAAGZmZr4AAAAAAAAAAGZmZr6uR2E+AAAgQWZmZj6uR2E+AAAgQWZmZj4AAAAAAAAgQWZmZr4AAAAAAAAgQeYAAObmAADm5gAA5uYAAObmAADm5gAA5uYAAObmAADm&quot;;;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(window.devicePixelRatio);renderer.setSize(window.innerWidth,window.innerHeight);document.body.appendChild(renderer.domElement);loader=new THREE.GLTFLoader();loader.load(&quot;data:text/plain;base64,&quot;+base64_data,function(gltf){scene.add(gltf.scene);camera=gltf.cameras[0];controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=1.0;controls.zoomSpeed=1.2;controls.panSpeed=0.8;controls.noZoom=false;controls.noPan=false;controls.staticMoving=true;controls.dynamicDampingFactor=0.3;controls.keys=[65,83,68];controls.addEventListener(&quot;change&quot;,render);centerControls(scene,camera,controls);render();window.addEventListener(&quot;resize&quot;,onWindowResize,false);animate();onWindowResize();});}
+function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);tracklight=new THREE.DirectionalLight(0xffffff,1.75);scene.add(tracklight);base64_data=&quot;Z2xURgIAAAB4CQAAzAcAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjEsImNvdW50Ijo4LCJtYXgiOlsxLjAsMC4wLDEwLjBdLCJtaW4iOlstMS4wLC0xLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjIsImNvdW50Ijo4LCJtYXgiOlsyMzAsMjMwLDIzMCwyMzBdLCJtaW4iOlsyMzAsMjMwLDIzMCwyMzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MywiY291bnQiOjgsIm1heCI6WzAuMjI0OTk5OTk0MDM5NTM1NTIsMC4yMTk5OTk5OTg4MDc5MDcxLDEwLjBdLCJtaW4iOlstMC4yMjQ5OTk5OTQwMzk1MzU1MiwwLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjQsImNvdW50Ijo4LCJtYXgiOlsyMzAsMCwwLDIzMF0sIm1pbiI6WzIzMCwwLDAsMjMwXX1dLCJtZXNoZXMiOlt7Im5hbWUiOiJnZW9tZXRyeV8wIiwiZXh0cmFzIjp7InByb2Nlc3NlZCI6dHJ1ZX0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEsIkNPTE9SXzAiOjJ9LCJpbmRpY2VzIjowLCJtb2RlIjo0fV19LHsibmFtZSI6Imdlb21ldHJ5XzEiLCJleHRyYXMiOnsicHJvY2Vzc2VkIjp0cnVlfSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MywiQ09MT1JfMCI6NH0sImluZGljZXMiOjAsIm1vZGUiOjR9XX1dLCJjYW1lcmFzIjpbeyJuYW1lIjoiY2FtZXJhXzQxMzI3OSIsInR5cGUiOiJwZXJzcGVjdGl2ZSIsInBlcnNwZWN0aXZlIjp7ImFzcGVjdFJhdGlvIjoxLjMzMzMzMzMzMzMzMzMzMzMsInlmb3YiOjAuNzg1Mzk4MTYzMzk3NDQ4Mywiem5lYXIiOjAuMDF9fV0sIm5vZGVzIjpbeyJuYW1lIjoid29ybGQiLCJjaGlsZHJlbiI6WzEsMiwzXX0seyJuYW1lIjoiZ2VvbWV0cnlfMCIsIm1lc2giOjAsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiZ2VvbWV0cnlfMSIsIm1lc2giOjEsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiY2FtZXJhXzQxMzI3OSIsImNhbWVyYSI6MCwibWF0cml4IjpbMS4wLDAuMCwtMC4wLDAuMCwwLjAsMS4wLDAuMCwwLjAsMC4wLDAuMCwxLjAsMC4wLDIuNDk5OTk5OTk5OTk5OTk5NiwtMC4zOSw2LjMzMDEyNzAxODkyMjE5NCwxLjBdfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjQwMH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoxNDR9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoxNDQsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MjQwLCJieXRlTGVuZ3RoIjozMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI3MiwiYnl0ZUxlbmd0aCI6OTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjozNjgsImJ5dGVMZW5ndGgiOjMyfV19ICAgkAEAAEJJTgACAAAAAwAAAAAAAAAAAAAAAQAAAAIAAAAEAAAABwAAAAYAAAAGAAAABQAAAAQAAAAEAAAABQAAAAAAAAAAAAAABQAAAAEAAAAFAAAABgAAAAEAAAABAAAABgAAAAIAAAAHAAAABAAAAAMAAAADAAAABAAAAAAAAAAGAAAABwAAAAIAAAACAAAABwAAAAMAAAAAAIC/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AACAvwAAAAAAAIC/AACAvwAAAAAAAIC/AAAAAAAAIEEAAIA/AAAAAAAAIEEAAIA/AACAvwAAIEEAAIC/AACAvwAAIEHm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5mZmZr6uR2E+AAAAAGZmZj6uR2E+AAAAAGZmZj4AAAAAAAAAAGZmZr4AAAAAAAAAAGZmZr6uR2E+AAAgQWZmZj6uR2E+AAAgQWZmZj4AAAAAAAAgQWZmZr4AAAAAAAAgQeYAAObmAADm5gAA5uYAAObmAADm5gAA5uYAAObmAADm&quot;;;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(window.devicePixelRatio);renderer.setSize(window.innerWidth,window.innerHeight);document.body.appendChild(renderer.domElement);loader=new THREE.GLTFLoader();loader.load(&quot;data:text/plain;base64,&quot;+base64_data,function(gltf){scene.add(gltf.scene);camera=gltf.cameras[0];controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=1.0;controls.zoomSpeed=1.2;controls.panSpeed=0.8;controls.noZoom=false;controls.noPan=false;controls.staticMoving=true;controls.dynamicDampingFactor=0.3;controls.keys=[65,83,68];controls.addEventListener(&quot;change&quot;,render);centerControls(scene,camera,controls);render();window.addEventListener(&quot;resize&quot;,onWindowResize,false);animate();onWindowResize();});}
 function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);controls.handleResize();render();}
 function animate(){requestAnimationFrame(animate);controls.update();}
 function render(){tracklight.position.copy(camera.position);renderer.render(scene,camera);}
@@ -1745,7 +1767,7 @@ init();</script></body>
 </section>
 <section id="cells">
 <h3>2. Cells<a class="headerlink" href="#cells" title="Permalink to this heading">#</a></h3>
-<p>Once you have a list of <a class="reference internal" href="../meow.html#meow.structures.Structure" title="meow.structures.Structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">Structure</span></code></a> objects, they need to be divided into cells. A <a class="reference internal" href="../meow.html#meow.cell.Cell" title="meow.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> is a combination of those structures with 2D meshing info (<a class="reference internal" href="../meow.html#meow.mesh.Mesh2d" title="meow.mesh.Mesh2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh2d</span></code></a>) and a cell length.</p>
+<p>Once you have a list of <code class="xref py py-class docutils literal notranslate"><span class="pre">Structure</span></code> objects, they need to be divided into cells. A <a class="reference internal" href="../meow.html#meow.cell.Cell" title="meow.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> is a combination of those structures with 2D meshing info (<code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh2d</span></code>) and a cell length.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_cells</span> <span class="o">=</span> <span class="mi">5</span>
@@ -1758,6 +1780,7 @@ init();</script></body>
         <span class="c1"># specify possible conformal mesh specifications here:</span>
         <span class="c1"># bend_radius=2.0,</span>
         <span class="c1"># bend_axis=1,</span>
+        <span class="n">ez_interfaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">),</span>
     <span class="n">Ls</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">length</span> <span class="o">/</span> <span class="n">num_cells</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_cells</span><span class="p">)]),</span>
 <span class="p">)</span>
@@ -1773,24 +1796,24 @@ init();</script></body>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ddb71b26201ff23e0615f24278d478469055de78849939a8dd7d7fc901988ee4.png" src="../_images/ddb71b26201ff23e0615f24278d478469055de78849939a8dd7d7fc901988ee4.png" />
+<img alt="../_images/9232a58634d20b36535d95a10b1af066900c3110a1e972679efd249472132375.png" src="../_images/9232a58634d20b36535d95a10b1af066900c3110a1e972679efd249472132375.png" />
 </div>
 </div>
 </section>
 <section id="cross-sections">
 <h3>3. Cross Sections<a class="headerlink" href="#cross-sections" title="Permalink to this heading">#</a></h3>
-<p>A <a class="reference internal" href="../meow.html#meow.cell.Cell" title="meow.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> contains all the <a class="reference internal" href="../meow.html#meow.structures.Structure" title="meow.structures.Structure"><code class="xref py py-class docutils literal notranslate"><span class="pre">Structure</span></code></a> info, but does not take any <a class="reference internal" href="../meow.html#meow.environment.Environment" title="meow.environment.Environment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code></a> information (such as temparature or wavelength) into account. This information is important as it influences the refractive index of the <a class="reference internal" href="../meow.html#meow.cross_section.CrossSection" title="meow.cross_section.CrossSection"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrossSection</span></code></a>.</p>
+<p>A <a class="reference internal" href="../meow.html#meow.cell.Cell" title="meow.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> contains all the <code class="xref py py-class docutils literal notranslate"><span class="pre">Structure</span></code> info, but does not take any <a class="reference internal" href="../meow.html#meow.environment.Environment" title="meow.environment.Environment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code></a> information (such as temparature or wavelength) into account. This information is important as it influences the refractive index of the <a class="reference internal" href="../meow.html#meow.cross_section.CrossSection" title="meow.cross_section.CrossSection"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrossSection</span></code></a>.</p>
 <p>Therefore, combining a <a class="reference internal" href="../meow.html#meow.cell.Cell" title="meow.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> with an <a class="reference internal" href="../meow.html#meow.environment.Environment" title="meow.environment.Environment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code></a> yields a <a class="reference internal" href="../meow.html#meow.cross_section.CrossSection" title="meow.cross_section.CrossSection"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrossSection</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">wl</span><span class="o">=</span><span class="mf">1.55</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mf">25.0</span><span class="p">)</span>
-<span class="n">css</span> <span class="o">=</span> <span class="p">[</span><span class="n">mw</span><span class="o">.</span><span class="n">CrossSection</span><span class="p">(</span><span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">]</span>
+<span class="n">css</span> <span class="o">=</span> <span class="p">[</span><span class="n">mw</span><span class="o">.</span><span class="n">CrossSection</span><span class="o">.</span><span class="n">from_cell</span><span class="p">(</span><span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">]</span>
 <span class="n">mw</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">css</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/673a25fd4928521e5c5d665fdd950a37114f6a8664719e4f0b4efee7c2e76eef.png" src="../_images/673a25fd4928521e5c5d665fdd950a37114f6a8664719e4f0b4efee7c2e76eef.png" />
+<img alt="../_images/1ed05440441303b19cfd2b0a8691765c7d21a6442e7c5f1c72cf2ca2a1e293ed.png" src="../_images/1ed05440441303b19cfd2b0a8691765c7d21a6442e7c5f1c72cf2ca2a1e293ed.png" />
 </div>
 </div>
 </section>
@@ -1805,15 +1828,22 @@ init();</script></body>
 <span class="k">for</span> <span class="n">cs</span> <span class="ow">in</span> <span class="n">css</span><span class="p">:</span>
     <span class="n">modes_in_cs</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">compute_modes</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">num_modes</span><span class="o">=</span><span class="n">num_modes</span><span class="p">)</span>
     <span class="n">modes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modes_in_cs</span><span class="p">)</span>
-
-<span class="c1"># show Hx component of the second mode (idx 1)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show Hx component of the second mode (idx 1)</span>
 <span class="c1"># of the first cell (idx 0):</span>
 <span class="n">mw</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">])</span>
+<span class="n">mw</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">modes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2b3c4206a06ae5890cf6d938f9b92fc5e65fff6c2f68b5f43170792edc0605a0.png" src="../_images/2b3c4206a06ae5890cf6d938f9b92fc5e65fff6c2f68b5f43170792edc0605a0.png" />
+<img alt="../_images/67939fec6d363a2958eac7497a98be16c39878a02861211f1cbef9618fe9daa0.png" src="../_images/67939fec6d363a2958eac7497a98be16c39878a02861211f1cbef9618fe9daa0.png" />
+<img alt="../_images/67939fec6d363a2958eac7497a98be16c39878a02861211f1cbef9618fe9daa0.png" src="../_images/67939fec6d363a2958eac7497a98be16c39878a02861211f1cbef9618fe9daa0.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -1826,7 +1856,7 @@ init();</script></body>
 <p>The S-matrix of a collection of modes can now easily be calculated with <code class="xref py py-func docutils literal notranslate"><span class="pre">compute_s_matrix()</span></code>. This step uses the <a class="reference external" href="https://github.com/flaport/sax">sax</a> circuit solver under the hood.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="p">,</span> <span class="n">port_map</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">compute_s_matrix</span><span class="p">(</span><span class="n">modes</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">S</span><span class="p">,</span> <span class="n">port_map</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">compute_s_matrix</span><span class="p">(</span><span class="n">modes</span><span class="p">,</span> <span class="n">cells</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">port_map</span><span class="p">)</span>
 <span class="n">mw</span><span class="o">.</span><span class="n">visualize</span><span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">S</span><span class="p">),</span> <span class="n">port_map</span><span class="p">))</span>
@@ -1834,13 +1864,10 @@ init();</script></body>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;left@0&#39;: 0, &#39;left@1&#39;: 1, &#39;left@2&#39;: 2, &#39;left@3&#39;: 3, &#39;right@0&#39;: 4, &#39;right@1&#39;: 5, &#39;right@2&#39;: 6, &#39;right@3&#39;: 7}
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;left@2&#39;: 0, &#39;left@3&#39;: 1, &#39;left@1&#39;: 2, &#39;left@0&#39;: 3, &#39;right@2&#39;: 4, &#39;right@3&#39;: 5, &#39;right@1&#39;: 6, &#39;right@0&#39;: 7}
-</pre></div>
-</div>
-<img alt="../_images/a744e9e9da13cf9297ad952ef5ede501ba3c9da6f582ad571bc5326e1ec31f23.png" src="../_images/a744e9e9da13cf9297ad952ef5ede501ba3c9da6f582ad571bc5326e1ec31f23.png" />
+<img alt="../_images/3157673af1a4ef1d46ab99d61d56b138df75f6c00d50dc14837319c658a033df.png" src="../_images/3157673af1a4ef1d46ab99d61d56b138df75f6c00d50dc14837319c658a033df.png" />
 </div>
 </div>
 <p>That’s it! this was a quick introduction to the <code class="docutils literal notranslate"><span class="pre">meow</span></code> library!</p>
@@ -1854,11 +1881,10 @@ init();</script></body>
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="../index.html"
@@ -1878,10 +1904,7 @@ init();</script></body>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -1889,6 +1912,7 @@ init();</script></body>
             
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
 
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
@@ -1926,6 +1950,7 @@ By Floris Laporte
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2022, Apache2.
@@ -1952,8 +1977,8 @@ By Floris Laporte
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
 
   <footer class="bd-footer">
   </footer>

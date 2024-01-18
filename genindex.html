@@ -3,12 +3,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; meow 0.6.9 documentation</title>
+    <title>Index &#8212; meow 0.8.1 documentation</title>
   
   
   
@@ -18,15 +18,15 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
@@ -37,8 +37,9 @@
     <link rel="stylesheet" type="text/css" href="_static/_static/css/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -60,7 +61,16 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -94,12 +104,20 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <header>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+    </div>
   
+  </header>
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -114,9 +132,11 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="index.html">
+  
   
   
   
@@ -126,8 +146,8 @@
       
     
     
-    <img src="_static/meow.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="_static/meow.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="_static/meow.png" class="logo__image only-light" alt="meow 0.8.1 documentation - Home"/>
+    <script>document.write(`<img src="_static/meow.png" class="logo__image only-dark" alt="meow 0.8.1 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -256,20 +276,22 @@
 </button>
 
 
+
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -296,7 +318,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
 
 <h1 id="index">Index</h1>
@@ -312,6 +334,7 @@ document.write(`
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -347,12 +370,86 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.html#meow.mode.Mode.A">A (Mode property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.angle_phi">angle_phi (Mesh2d attribute)</a>
+      <li><a href="meow.html#meow.base_model.BaseModel.Config.allow_mutation">allow_mutation (BaseModel.Config attribute)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.geometries.Box.Config.allow_mutation">(Box.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.cell.Cell.Config.allow_mutation">(Cell.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.cross_section.CrossSection.Config.allow_mutation">(CrossSection.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.gds_structures.GdsExtrusionRule.Config.allow_mutation">(GdsExtrusionRule.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Geometry2D.Config.allow_mutation">(Geometry2D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Geometry3D.Config.allow_mutation">(Geometry3D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.mesh.Mesh.Config.allow_mutation">(Mesh.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.mesh.Mesh2D.Config.allow_mutation">(Mesh2D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.mode.Mode.Config.allow_mutation">(Mode.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Prism.Config.allow_mutation">(Prism.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Rectangle.Config.allow_mutation">(Rectangle.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.materials.SampledMaterial.Config.allow_mutation">(SampledMaterial.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.structures.Structure2D.Config.allow_mutation">(Structure2D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.structures.Structure3D.Config.allow_mutation">(Structure3D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.materials.TidyMaterial.Config.allow_mutation">(TidyMaterial.Config attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="meow.html#meow.environment.Environment.Config.allow_population_by_field_name">allow_population_by_field_name (Environment.Config attribute)</a>
+</li>
+      <li><a href="meow.html#meow.mesh.Mesh2D.angle_phi">angle_phi (Mesh2D attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="meow.html#meow.mesh.Mesh2d.angle_theta">angle_theta (Mesh2d attribute)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.angle_theta">angle_theta (Mesh2D attribute)</a>
 </li>
+      <li><a href="meow.html#meow.base_model.BaseModel.Config.arbitrary_types_allowed">arbitrary_types_allowed (BaseModel.Config attribute)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.geometries.Box.Config.arbitrary_types_allowed">(Box.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.cell.Cell.Config.arbitrary_types_allowed">(Cell.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.cross_section.CrossSection.Config.arbitrary_types_allowed">(CrossSection.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.environment.Environment.Config.arbitrary_types_allowed">(Environment.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.gds_structures.GdsExtrusionRule.Config.arbitrary_types_allowed">(GdsExtrusionRule.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Geometry2D.Config.arbitrary_types_allowed">(Geometry2D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Geometry3D.Config.arbitrary_types_allowed">(Geometry3D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.materials.Material.Config.arbitrary_types_allowed">(Material.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.mesh.Mesh.Config.arbitrary_types_allowed">(Mesh.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.mesh.Mesh2D.Config.arbitrary_types_allowed">(Mesh2D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.mode.Mode.Config.arbitrary_types_allowed">(Mode.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Prism.Config.arbitrary_types_allowed">(Prism.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Rectangle.Config.arbitrary_types_allowed">(Rectangle.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.materials.SampledMaterial.Config.arbitrary_types_allowed">(SampledMaterial.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.structures.Structure2D.Config.arbitrary_types_allowed">(Structure2D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.structures.Structure3D.Config.arbitrary_types_allowed">(Structure3D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.materials.TidyMaterial.Config.arbitrary_types_allowed">(TidyMaterial.Config attribute)</a>
+</li>
+      </ul></li>
       <li><a href="meow.html#meow.geometries.Prism.axis">axis (Prism attribute)</a>
 </li>
   </ul></td>
@@ -361,11 +458,19 @@ document.write(`
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="meow.html#meow.mesh.Mesh2d.bend_axis">bend_axis (Mesh2d attribute)</a>
+      <li><a href="meow.html#meow.base_model.BaseModel">BaseModel (class in meow.base_model)</a>
+</li>
+      <li><a href="meow.html#meow.base_model.BaseModel.Config">BaseModel.Config (class in meow.base_model)</a>
+</li>
+      <li><a href="meow.html#meow.mesh.Mesh2D.bend_axis">bend_axis (Mesh2D attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="meow.html#meow.mesh.Mesh2d.bend_radius">bend_radius (Mesh2d attribute)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.bend_radius">bend_radius (Mesh2D attribute)</a>
+</li>
+      <li><a href="meow.html#meow.geometries.Box">Box (class in meow.geometries)</a>
+</li>
+      <li><a href="meow.html#meow.geometries.Box.Config">Box.Config (class in meow.geometries)</a>
 </li>
       <li><a href="meow.html#meow.gds_structures.GdsExtrusionRule.buffer">buffer (GdsExtrusionRule attribute)</a>
 </li>
@@ -383,22 +488,18 @@ document.write(`
 </li>
       <li><a href="meow.html#meow.base_model.cached_property">cached_property() (in module meow.base_model)</a>
 </li>
-      <li><a href="meow.html#meow.cross_section.CrossSection.cell">cell (CrossSection attribute)</a>
-
-      <ul>
-        <li><a href="meow.html#meow.mode.Mode.cell">(Mode property)</a>
+      <li><a href="meow.html#meow.cell.Cell">Cell (class in meow.cell)</a>
 </li>
-      </ul></li>
-      <li><a href="meow.html#meow.structures.classify_structures_by_mesh_order_and_material">classify_structures_by_mesh_order_and_material() (in module meow.structures)</a>
+      <li><a href="meow.html#meow.cell.Cell.Config">Cell.Config (class in meow.cell)</a>
 </li>
       <li><a href="meow.eme.html#meow.eme.common.compute_interface_s_matrices">compute_interface_s_matrices() (in module meow.eme.common)</a>
 </li>
       <li><a href="meow.eme.html#meow.eme.common.compute_interface_s_matrix">compute_interface_s_matrix() (in module meow.eme.common)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.eme.html#meow.eme.propagate.compute_mode_amplitudes">compute_mode_amplitudes() (in module meow.eme.propagate)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.fde.html#meow.fde.lumerical.compute_modes_lumerical">compute_modes_lumerical() (in module meow.fde.lumerical)</a>
 </li>
       <li><a href="meow.fde.html#meow.fde.tidy3d.compute_modes_tidy3d">compute_modes_tidy3d() (in module meow.fde.tidy3d)</a>
@@ -413,6 +514,10 @@ document.write(`
 </li>
       <li><a href="meow.fde.html#meow.fde.lumerical.create_lumerical_geometries">create_lumerical_geometries() (in module meow.fde.lumerical)</a>
 </li>
+      <li><a href="meow.html#meow.cross_section.CrossSection">CrossSection (class in meow.cross_section)</a>
+</li>
+      <li><a href="meow.html#meow.cross_section.CrossSection.Config">CrossSection.Config (class in meow.cross_section)</a>
+</li>
       <li><a href="meow.html#meow.mode.Mode.cs">cs (Mode attribute)</a>
 </li>
   </ul></td>
@@ -425,9 +530,9 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="meow.html#meow.mesh.Mesh2d.dx">dx (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.dx">dx (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.dy">dy (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.dy">dy (Mesh2D property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -447,15 +552,21 @@ document.write(`
 </li>
       <li><a href="meow.html#meow.mode.energy_density">energy_density() (in module meow.mode)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.html#meow.cross_section.CrossSection.env">env (CrossSection attribute)</a>
 
       <ul>
         <li><a href="meow.html#meow.mode.Mode.env">(Mode property)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.environment.Environment">Environment (class in meow.environment)</a>
+</li>
+      <li><a href="meow.html#meow.environment.Environment.Config">Environment.Config (class in meow.environment)</a>
+</li>
       <li><a href="meow.html#meow.mode.Mode.Ex">Ex (Mode attribute)</a>
+</li>
+      <li><a href="meow.html#meow.environment.Environment.Config.extra">extra (Environment.Config attribute)</a>
 </li>
       <li><a href="meow.html#meow.gds_structures.extrude_gds">extrude_gds() (in module meow.gds_structures)</a>
 </li>
@@ -463,7 +574,7 @@ document.write(`
 </li>
       <li><a href="meow.html#meow.mode.Mode.Ez">Ez (Mode attribute)</a>
 </li>
-      <li><a href="meow.html#meow.cell.Cell.ez_interfaces">ez_interfaces (Cell attribute)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.ez_interfaces">ez_interfaces (Mesh2D attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -471,10 +582,14 @@ document.write(`
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="meow.html#meow.materials.SampledMaterial.from_df">from_df() (SampledMaterial class method)</a>
+      <li><a href="meow.html#meow.materials.Material.Config.fields">fields (Material.Config attribute)</a>
+</li>
+      <li><a href="meow.html#meow.cross_section.CrossSection.from_cell">from_cell() (CrossSection class method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.materials.SampledMaterial.from_df">from_df() (SampledMaterial class method)</a>
+</li>
       <li><a href="meow.html#meow.materials.SampledMaterial.from_path">from_path() (SampledMaterial class method)</a>
 </li>
   </ul></td>
@@ -483,10 +598,26 @@ document.write(`
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="meow.html#meow.structures.Structure.geometry">geometry (Structure attribute)</a>
+      <li><a href="meow.html#meow.gds_structures.GdsExtrusionRule">GdsExtrusionRule (class in meow.gds_structures)</a>
 </li>
+      <li><a href="meow.html#meow.gds_structures.GdsExtrusionRule.Config">GdsExtrusionRule.Config (class in meow.gds_structures)</a>
+</li>
+      <li><a href="meow.html#meow.structures.Structure2D.geometry">geometry (Structure2D attribute)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.structures.Structure3D.geometry">(Structure3D attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.geometries.Geometry2D">Geometry2D (class in meow.geometries)</a>
+</li>
+      <li><a href="meow.html#meow.geometries.Geometry2D.Config">Geometry2D.Config (class in meow.geometries)</a>
+</li>
+      <li><a href="meow.html#meow.geometries.Geometry3D">Geometry3D (class in meow.geometries)</a>
+</li>
+      <li><a href="meow.html#meow.geometries.Geometry3D.Config">Geometry3D.Config (class in meow.geometries)</a>
+</li>
       <li><a href="meow.fde.html#meow.fde.lumerical.get_sim">get_sim() (in module meow.fde.lumerical)</a>
 </li>
   </ul></td>
@@ -542,6 +673,50 @@ document.write(`
   </ul></td>
 </tr></table>
 
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.base_model.BaseModel.Config.json_encoders">json_encoders (BaseModel.Config attribute)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.geometries.Box.Config.json_encoders">(Box.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.cell.Cell.Config.json_encoders">(Cell.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.cross_section.CrossSection.Config.json_encoders">(CrossSection.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.environment.Environment.Config.json_encoders">(Environment.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.gds_structures.GdsExtrusionRule.Config.json_encoders">(GdsExtrusionRule.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Geometry2D.Config.json_encoders">(Geometry2D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Geometry3D.Config.json_encoders">(Geometry3D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.materials.Material.Config.json_encoders">(Material.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.mesh.Mesh.Config.json_encoders">(Mesh.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.mesh.Mesh2D.Config.json_encoders">(Mesh2D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.mode.Mode.Config.json_encoders">(Mode.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Prism.Config.json_encoders">(Prism.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.geometries.Rectangle.Config.json_encoders">(Rectangle.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.materials.SampledMaterial.Config.json_encoders">(SampledMaterial.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.structures.Structure2D.Config.json_encoders">(Structure2D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.structures.Structure3D.Config.json_encoders">(Structure3D.Config attribute)</a>
+</li>
+        <li><a href="meow.html#meow.materials.TidyMaterial.Config.json_encoders">(TidyMaterial.Config attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -565,14 +740,24 @@ document.write(`
 </li>
       <li><a href="meow.html#meow.mode.magnetic_energy_density">magnetic_energy_density() (in module meow.mode)</a>
 </li>
+      <li><a href="meow.html#meow.materials.Material">Material (class in meow.materials)</a>
+</li>
       <li><a href="meow.html#meow.gds_structures.GdsExtrusionRule.material">material (GdsExtrusionRule attribute)</a>
 
       <ul>
-        <li><a href="meow.html#meow.structures.Structure.material">(Structure attribute)</a>
+        <li><a href="meow.html#meow.structures.Structure2D.material">(Structure2D attribute)</a>
+</li>
+        <li><a href="meow.html#meow.structures.Structure3D.material">(Structure3D attribute)</a>
 </li>
       </ul></li>
-      <li><a href="meow.html#meow.cell.Cell.materials">materials (Cell property)</a>
+      <li><a href="meow.html#meow.materials.Material.Config">Material.Config (class in meow.materials)</a>
 </li>
+      <li><a href="meow.html#meow.cell.Cell.materials">materials (Cell property)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.cross_section.CrossSection.materials">(CrossSection property)</a>
+</li>
+      </ul></li>
       <li>
     meow
 
@@ -685,8 +870,6 @@ document.write(`
         <li><a href="meow.html#module-meow.integrate">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     meow.materials
 
@@ -694,6 +877,8 @@ document.write(`
         <li><a href="meow.html#module-meow.materials">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     meow.mesh
 
@@ -723,18 +908,34 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="meow.html#meow.cell.Cell.mesh">mesh (Cell attribute)</a>
+</li>
+      <li><a href="meow.html#meow.mesh.Mesh">Mesh (class in meow.mesh)</a>
+</li>
+      <li><a href="meow.html#meow.cross_section.CrossSection.mesh">mesh (CrossSection attribute)</a>
 
       <ul>
         <li><a href="meow.html#meow.mode.Mode.mesh">(Mode property)</a>
 </li>
       </ul></li>
+      <li><a href="meow.html#meow.mesh.Mesh.Config">Mesh.Config (class in meow.mesh)</a>
+</li>
+      <li><a href="meow.html#meow.mesh.Mesh2D">Mesh2D (class in meow.mesh)</a>
+</li>
+      <li><a href="meow.html#meow.mesh.Mesh2D.Config">Mesh2D.Config (class in meow.mesh)</a>
+</li>
       <li><a href="meow.html#meow.gds_structures.GdsExtrusionRule.mesh_order">mesh_order (GdsExtrusionRule attribute)</a>
 
       <ul>
-        <li><a href="meow.html#meow.structures.Structure.mesh_order">(Structure attribute)</a>
+        <li><a href="meow.html#meow.structures.Structure2D.mesh_order">(Structure2D attribute)</a>
+</li>
+        <li><a href="meow.html#meow.structures.Structure3D.mesh_order">(Structure3D attribute)</a>
 </li>
       </ul></li>
       <li><a href="meow.html#meow.materials.Material.meta">meta (Material attribute)</a>
+</li>
+      <li><a href="meow.html#meow.mode.Mode">Mode (class in meow.mode)</a>
+</li>
+      <li><a href="meow.html#meow.mode.Mode.Config">Mode.Config (class in meow.mode)</a>
 </li>
       <li>
     module
@@ -807,7 +1008,7 @@ document.write(`
 </li>
       <li><a href="meow.html#meow.mode.normalize_product">normalize_product() (in module meow.mode)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.num_pml">num_pml (Mesh2d attribute)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.num_pml">num_pml (Mesh2D attribute)</a>
 </li>
       <li><a href="meow.html#meow.cross_section.CrossSection.nx">nx (CrossSection property)</a>
 </li>
@@ -829,8 +1030,12 @@ document.write(`
 </li>
       <li><a href="meow.html#meow.geometries.Prism.poly">poly (Prism attribute)</a>
 </li>
+      <li><a href="meow.html#meow.geometries.Prism">Prism (class in meow.geometries)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.geometries.Prism.Config">Prism.Config (class in meow.geometries)</a>
+</li>
       <li><a href="meow.eme.html#meow.eme.propagate.propagate">propagate() (in module meow.eme.propagate)</a>
 </li>
       <li><a href="meow.eme.html#meow.eme.propagate.propagate_modes">propagate_modes() (in module meow.eme.propagate)</a>
@@ -850,24 +1055,48 @@ document.write(`
       <li><a href="meow.eme.html#meow.eme.propagate.r2l_matrices">r2l_matrices() (in module meow.eme.propagate)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.geometries.Rectangle">Rectangle (class in meow.geometries)</a>
+</li>
+      <li><a href="meow.html#meow.geometries.Rectangle.Config">Rectangle.Config (class in meow.geometries)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.materials.SampledMaterial">SampledMaterial (class in meow.materials)</a>
+</li>
+      <li><a href="meow.html#meow.materials.SampledMaterial.Config">SampledMaterial.Config (class in meow.materials)</a>
+</li>
       <li><a href="meow.html#meow.mode.Mode.save">save() (Mode method)</a>
 </li>
       <li><a href="meow.eme.html#meow.eme.common.select_ports">select_ports() (in module meow.eme.common)</a>
 </li>
       <li><a href="meow.fde.html#meow.fde.lumerical.set_sim">set_sim() (in module meow.fde.lumerical)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="meow.html#meow.structures.sort_structures">sort_structures() (in module meow.structures)</a>
-</li>
       <li><a href="meow.eme.html#meow.eme.propagate.split_square_matrix">split_square_matrix() (in module meow.eme.propagate)</a>
 </li>
+      <li><a href="meow.html#meow.structures.Structure">Structure() (in module meow.structures)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.structures.Structure2D">Structure2D (class in meow.structures)</a>
+</li>
+      <li><a href="meow.html#meow.structures.Structure2D.Config">Structure2D.Config (class in meow.structures)</a>
+</li>
+      <li><a href="meow.html#meow.structures.Structure3D">Structure3D (class in meow.structures)</a>
+</li>
+      <li><a href="meow.html#meow.structures.Structure3D.Config">Structure3D.Config (class in meow.structures)</a>
+</li>
       <li><a href="meow.html#meow.cell.Cell.structures">structures (Cell attribute)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.cross_section.CrossSection.structures">(CrossSection attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="meow.html#meow.cell.Cell.structures_2d">structures_2d (Cell property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -879,13 +1108,19 @@ document.write(`
 </li>
       <li><a href="meow.html#meow.mode.Mode.te_fraction">te_fraction (Mode property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.html#meow.mode.te_fraction">te_fraction() (in module meow.mode)</a>
 </li>
-      <li><a href="meow.html#meow.geometries.Geometry.type">type (Geometry attribute)</a>
+      <li><a href="meow.html#meow.materials.TidyMaterial">TidyMaterial (class in meow.materials)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.materials.TidyMaterial.Config">TidyMaterial.Config (class in meow.materials)</a>
+</li>
+      <li><a href="meow.html#meow.geometries.Geometry2D.type">type (Geometry2D attribute)</a>
 
       <ul>
+        <li><a href="meow.html#meow.geometries.Geometry3D.type">(Geometry3D attribute)</a>
+</li>
         <li><a href="meow.html#meow.materials.Material.type">(Material attribute)</a>
 </li>
       </ul></li>
@@ -895,15 +1130,25 @@ document.write(`
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="meow.html#meow.materials.SampledMaterial.validate_n_pre">validate_n_pre() (SampledMaterial class method)</a>
+</li>
+      <li><a href="meow.html#meow.materials.SampledMaterial.validate_params_pre">validate_params_pre() (SampledMaterial class method)</a>
+</li>
+      <li><a href="meow.html#meow.geometries.Geometry2D.validate_type">validate_type() (Geometry2D class method)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.geometries.Geometry3D.validate_type">(Geometry3D class method)</a>
+</li>
+        <li><a href="meow.html#meow.materials.Material.validate_type">(Material class method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.html#meow.materials.TidyMaterial.variant">variant (TidyMaterial attribute)</a>
 </li>
       <li><a href="meow.html#meow.visualize.vis">vis() (in module meow.visualize)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.html#meow.visualize.visualize">visualize() (in module meow.visualize)</a>
-</li>
-      <li><a href="meow.html#meow.structures.visualize_structures">visualize_structures() (in module meow.structures)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -919,29 +1164,37 @@ document.write(`
 <h2 id="X">X</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="meow.html#meow.mesh.Mesh2d.x">x (Mesh2d attribute)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.x">x (Mesh2D attribute)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.x_">x_ (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.x_">x_ (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.X_full">X_full (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.X_full">X_full (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.x_full">x_full (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.x_full">x_full (Mesh2D property)</a>
 </li>
       <li><a href="meow.html#meow.geometries.Box.x_max">x_max (Box attribute)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.geometries.Rectangle.x_max">(Rectangle attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.html#meow.geometries.Box.x_min">x_min (Box attribute)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.geometries.Rectangle.x_min">(Rectangle attribute)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.Xx">Xx (Mesh2d property)</a>
+      </ul></li>
+      <li><a href="meow.html#meow.mesh.Mesh2D.Xx">Xx (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.Xy">Xy (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.Xy">Xy (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.XY_full">XY_full (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.XY_full">XY_full (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.Xz">Xz (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.Xz">Xz (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.Xz_">Xz_ (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.Xz_">Xz_ (Mesh2D property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -949,27 +1202,35 @@ document.write(`
 <h2 id="Y">Y</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="meow.html#meow.mesh.Mesh2d.y">y (Mesh2d attribute)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.y">y (Mesh2D attribute)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.y_">y_ (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.y_">y_ (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.Y_full">Y_full (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.Y_full">Y_full (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.y_full">y_full (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.y_full">y_full (Mesh2D property)</a>
 </li>
       <li><a href="meow.html#meow.geometries.Box.y_max">y_max (Box attribute)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.geometries.Rectangle.y_max">(Rectangle attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="meow.html#meow.geometries.Box.y_min">y_min (Box attribute)</a>
+
+      <ul>
+        <li><a href="meow.html#meow.geometries.Rectangle.y_min">(Rectangle attribute)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.Yx">Yx (Mesh2d property)</a>
+      </ul></li>
+      <li><a href="meow.html#meow.mesh.Mesh2D.Yx">Yx (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.Yy">Yy (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.Yy">Yy (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.Yz">Yz (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.Yz">Yz (Mesh2D property)</a>
 </li>
-      <li><a href="meow.html#meow.mesh.Mesh2d.Yz_">Yz_ (Mesh2d property)</a>
+      <li><a href="meow.html#meow.mesh.Mesh2D.Yz_">Yz_ (Mesh2D property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1005,21 +1266,19 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>
@@ -1037,6 +1296,7 @@ By Floris Laporte
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2022, Apache2.
@@ -1063,8 +1323,8 @@ By Floris Laporte
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
 
   <footer class="bd-footer">
   </footer>
