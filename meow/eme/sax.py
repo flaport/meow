@@ -114,7 +114,7 @@ def compute_s_matrix_sax(
 
     # TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.
     net = _get_netlist(propagations, interfaces)
-    analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
+    _, analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
     analyzed = analyze_circuit(net["connections"], net["ports"])
     S, port_map = sax.sdense(
         evaluate_circuit(
