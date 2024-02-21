@@ -11,6 +11,7 @@ from meow.eme import (
     compute_propagation_s_matrices,
 )
 from meow.eme.sax import _validate_sax_backend
+from sax.saxtypes import scoo
 
 
 def _connect_two(l, r, sax_backend):
@@ -30,8 +31,11 @@ def _connect_two(l, r, sax_backend):
     connections = {f"l,{pl}": f"r,{pr}" for pl, pr in zip(p_lr, p_rl)}
     ports = {**{p: f"l,{p}" for p in p_ll}, **{p: f"r,{p}" for p in p_rr}}
     net = dict(instances=instances, connections=connections, ports=ports)
-    analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
-    analyzed = analyze_circuit(net["connections"], net["ports"])
+
+    analyze_instances, analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
+    net["instances"] = {k: scoo(v) for k, v in net["instances"].items()}
+
+    analyzed = analyze_circuit(net["instances"], net["connections"], net["ports"])
     return evaluate_circuit(analyzed, net["instances"])
 
 
@@ -90,6 +94,9 @@ def propagate(l2rs, r2ls, excitation_l, excitation_r):
 
 
 def compute_mode_amplitudes(u, v, m, excitation_l, excitation_r):
+    """
+    Mode amplitudes according to derivation here: 
+    """
     n = u.shape[0] - m
     l = v.shape[0] - m
     [u11, u12], [u21, u22] = split_square_matrix(u, n)
@@ -98,11 +105,11 @@ def compute_mode_amplitudes(u, v, m, excitation_l, excitation_r):
     RHS = u21 @ excitation_l + u22 @ v12 @ excitation_r
     LHS = np.diag(np.ones(m)) - u22 @ v11
     forward = np.linalg.solve(LHS, RHS)
-    backward = v12 @ excitation_r + v11 @ forward  # Attention v21 was v12
+    backward = v12 @ excitation_r + v11 @ forward
     return forward, backward
 
 
-def plot_fields(modes, cells, forwards, backwards, y, z, lim=1):
+def eval_fields(modes, cells, forwards, backwards, y, z, lim=1):
     mode_set = modes[0]
     mesh_y = cells[0].mesh.y
     mesh_x = cells[0].mesh.x
@@ -137,10 +144,6 @@ def plot_fields(modes, cells, forwards, backwards, y, z, lim=1):
         else:
             E_tot[i_min:i_max] = Ex.T
 
-        # X, Y = np.meshgrid(z_, mesh_x)
-        # plt.pcolormesh(X, Y, np.abs(Ex), vmin = -lim, vmax = lim)
-    # plt.xlabel("z in um")
-    # plt.ylabel("x in um")
     return E_tot, mesh_x
 
 
@@ -162,4 +165,4 @@ def propagate_modes(modes, cells, ex_l, ex_r, y, z, sax_backend=None):
     r2ls = r2l_matrices(pairs, sax_backend)
 
     forwards, backwards = propagate(l2rs, r2ls, ex_l, ex_r)
-    return plot_fields(modes, cells, forwards, backwards, y, z)
+    return eval_fields(modes, cells, forwards, backwards, y, z)
