@@ -62,7 +62,7 @@ def extrude_gds(
         extrusions: the extrusion rules to use (if not given, the example extrusions will be used.)
     """
     structs = []
-    for layer, polys in cell.get_polygons(by_spec=True, depth=None).items():
+    for layer, polys in cell.get_polygons().items():
         for poly in polys:
             if layer not in extrusions:
                 continue
