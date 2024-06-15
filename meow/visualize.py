@@ -309,6 +309,17 @@ def visualize(obj: Any, **kwargs: Any):
         Most meow objects have a `._visualize` method.
         Check out its help to see which kwargs are accepted.
     """
+    try:
+        is_empty = bool(not obj)
+    except ValueError:
+        if isinstance(obj, np.ndarray):
+            is_empty = obj.size == 0
+        else:
+            is_empty = False
+
+    if is_empty:
+        raise ValueError("Nothing to visualize!")
+
     if plt is None:
         print(obj)
         return

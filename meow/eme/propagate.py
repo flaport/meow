@@ -30,8 +30,9 @@ def _connect_two(l, r, sax_backend):
     connections = {f"l,{pl}": f"r,{pr}" for pl, pr in zip(p_lr, p_rl)}
     ports = {**{p: f"l,{p}" for p in p_ll}, **{p: f"r,{p}" for p in p_rr}}
     net = dict(instances=instances, connections=connections, ports=ports)
-    analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
-    analyzed = analyze_circuit(net["connections"], net["ports"])
+    _, analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
+    net["instances"] = {k: sax.scoo(v) for k, v in net["instances"].items()}
+    analyzed = analyze_circuit(net["instances"], net["connections"], net["ports"])
     return evaluate_circuit(analyzed, net["instances"])
 
 

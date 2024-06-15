@@ -3,6 +3,7 @@
 from typing import Dict, List, Tuple
 
 import numpy as np
+import pkg_resources
 import shapely.geometry as sg
 from pydantic.v1 import Field
 
@@ -62,9 +63,36 @@ def extrude_gds(
         extrusions: the extrusion rules to use (if not given, the example extrusions will be used.)
     """
     structs = []
-    for layer, polys in cell.get_polygons(by_spec=True, depth=None).items():
+    for layer, polys in _get_polygons(cell).items():
         for poly in polys:
             if layer not in extrusions:
                 continue
             structs.extend(extrusion(poly) for extrusion in extrusions[layer])
     return structs
+
+
+def _get_polygons(cell) -> dict[tuple[int, int], list[np.ndarray]]:
+    if _get_major_gdsfactory_version() < 8:
+        return cell.get_polygons(by_spec=True, depth=None)
+    else:
+        dbu = cell.layout().dbu
+        polys = cell.get_polygons()
+        layers = cell.layout().layer_infos()
+        return {
+            (layers[i].layer, layers[i].datatype): [
+                np.asarray([(p.x * dbu, p.y * dbu) for p in p.each_point_hull()])
+                for p in ps
+            ]
+            for i, ps in polys.items()
+        }
+
+
+def _get_major_gdsfactory_version() -> int:
+    try:
+        import gdsfactory as _
+
+        version = pkg_resources.get_distribution("gdsfactory").version
+        major_version = int(version.split(".")[0])
+        return major_version
+    except ImportError:
+        return 0
