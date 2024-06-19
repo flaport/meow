@@ -1,5 +1,7 @@
 """Propagating fields throug devices"""
 
+from typing import Any
+
 import jax.numpy as np
 import numpy as onp
 import sax
@@ -13,12 +15,12 @@ from meow.eme import (
 from meow.eme.sax import _validate_sax_backend
 
 
-def _connect_two(l, r, sax_backend):
+def _connect_two(l: sax.SType, r: sax.SType, sax_backend: str):
     """l -> left, r -> right"""
     # TODO there must be an easier way to do this...
-    s_l, p_l = sax.sdense(l)
-    s_r, p_r = sax.sdense(r)
-    instances = {"l": l, "r": r}
+    _s_l, p_l = sax.sdense(l)
+    _s_r, p_r = sax.sdense(r)
+    instances: dict[str, sax.SType] = {"l": l, "r": r}
     p_lr = [p for p in p_l.keys() if "right" in p]  # right ports of left
     p_rl = [p for p in p_r.keys() if "left" in p]  # left ports of right
 
@@ -29,7 +31,9 @@ def _connect_two(l, r, sax_backend):
     p_rl.sort()
     connections = {f"l,{pl}": f"r,{pr}" for pl, pr in zip(p_lr, p_rl)}
     ports = {**{p: f"l,{p}" for p in p_ll}, **{p: f"r,{p}" for p in p_rr}}
-    net = dict(instances=instances, connections=connections, ports=ports)
+    net: dict[str, dict[str, Any]] = dict(
+        instances=instances, connections=connections, ports=ports
+    )
     _, analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
     net["instances"] = {k: sax.scoo(v) for k, v in net["instances"].items()}
     analyzed = analyze_circuit(net["instances"], net["connections"], net["ports"])

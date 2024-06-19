@@ -1,21 +1,19 @@
 """ an EME Cell """
 
+from __future__ import annotations
+
 import warnings
-from typing import Dict, List, Tuple, Union, cast
+from typing import Annotated, cast, overload
 
 import numpy as np
-from pydantic.v1 import Field
+from pydantic import Field
 from scipy.ndimage import convolve
 
-from .base_model import BaseModel, _array, cached_property
-from .materials import Material
-from .mesh import Mesh2D
-from .structures import (
-    Structure2D,
-    Structure3D,
-    _classify_structures_by_mesh_order_and_material,
-    _sort_structures,
-)
+from meow.array import Dim, DType, NDArray
+from meow.base_model import BaseModel, cached_property
+from meow.materials import Material
+from meow.mesh import Mesh2D
+from meow.structures import Structure2D, Structure3D, _sort_structures
 
 
 class Cell(BaseModel):
@@ -23,7 +21,7 @@ class Cell(BaseModel):
     the simulation domain. The intersecting Structure3Ds are discretized by
     a given mesh at the center of the Cell"""
 
-    structures: List[Structure3D] = Field(
+    structures: list[Structure3D] = Field(
         description="the 3D structures which will be sliced by the cell"
     )
     mesh: Mesh2D = Field(description="the mesh to discretize the structures with")
@@ -47,7 +45,7 @@ class Cell(BaseModel):
         return materials
 
     @cached_property
-    def structures_2d(self) -> List[Structure2D]:
+    def structures_2d(self) -> list[Structure2D]:
         z = 0.5 * (self.z_min + self.z_max)
         list_of_list = [s._project(z) for s in self.structures]
         structures = [s for ss in list_of_list for s in ss]
@@ -61,7 +59,7 @@ class Cell(BaseModel):
             materials=self.materials,
         )
 
-    def _visualize(self, ax=None, cbar=True, show=True):
+    def _visualize(self, ax=None, cbar=True, show=True, **ignored):
         import matplotlib.pyplot as plt  # fmt: skip
         from matplotlib.colors import ListedColormap, to_rgba  # fmt: skip
         from mpl_toolkits.axes_grid1 import make_axes_locatable  # fmt: skip
@@ -101,11 +99,11 @@ class Cell(BaseModel):
 
 
 def create_cells(
-    structures: List[Structure3D],
-    mesh: Union[Mesh2D, List[Mesh2D]],
-    Ls: np.ndarray[Tuple[int], np.dtype[np.float_]],
+    structures: list[Structure3D],
+    mesh: Mesh2D | list[Mesh2D],
+    Ls: Annotated[NDArray, Dim(1), DType("float64")],
     z_min: float = 0.0,
-) -> List[Cell]:
+) -> list[Cell]:
     """easily create multiple `Cell` objects given a `Mesh` and a collection of cell lengths"""
     warnings.warn(
         "create_cells will be removed in a future version. Please create your cells in a loop instead.",
@@ -140,8 +138,8 @@ def create_cells(
 
 def _create_full_material_array(
     mesh: Mesh2D,
-    structures: List[Structure2D],
-    materials: Dict[Material, int],
+    structures: list[Structure2D],
+    materials: dict[Material, int],
 ):
     m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
     structures_dict = _classify_structures_by_mesh_order_and_material(
@@ -154,13 +152,13 @@ def _create_full_material_array(
 
     m_full = _fill_single_pixel_gaps(m_full)
 
-    return m_full.view(_array)
+    return m_full
 
 
 def _create_material_array(
     mesh: Mesh2D,
-    materials: Dict[Material, int],
-    structures: List[Structure2D],
+    materials: dict[Material, int],
+    structures: list[Structure2D],
 ) -> np.ndarray:
     m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
     for structure in structures:
@@ -224,10 +222,15 @@ def _get_boundary_mask_horizontal(m_full, negate=False):
     mask[1:-1, 1:-1] = m_full > 0
     if negate:
         mask = ~mask
-    f = np.ndarray[Tuple[int, int], np.dtype[np.float_]]
-    conv1 = cast(f, convolve(np.array(mask[:, :], dtype=int), np.array([[-1, 1]])))
-    conv2 = cast(f, convolve(np.array(mask[:, ::-1], dtype=int), np.array([[-1, 1]])))
-    conv3 = cast(f, convolve(np.array(mask[::-1, :], dtype=int), np.array([[-1, 1]])))
+    conv1 = cast(
+        np.ndarray, convolve(np.array(mask[:, :], dtype=int), np.array([[-1, 1]]))
+    )
+    conv2 = cast(
+        np.ndarray, convolve(np.array(mask[:, ::-1], dtype=int), np.array([[-1, 1]]))
+    )
+    conv3 = cast(
+        np.ndarray, convolve(np.array(mask[::-1, :], dtype=int), np.array([[-1, 1]]))
+    )
     mask1 = (conv1 > 0.0)[:, :]
     mask2 = (conv2 > 0.0)[:, ::-1]
     mask3 = (conv3 > 0.0)[::-1, :]
@@ -262,3 +265,34 @@ def _fill_single_pixel_gaps(m_full):
     mask[:, -1:] = False
     m_full[mask] = mat[mask]
     return m_full
+
+
+@overload
+def _classify_structures_by_mesh_order_and_material(
+    structures: list[Structure3D], materials: dict[Material, int]
+) -> dict[tuple[int, int], list[Structure3D]]:
+    ...
+
+
+@overload
+def _classify_structures_by_mesh_order_and_material(
+    structures: list[Structure2D], materials: dict[Material, int]
+) -> dict[tuple[int, int], list[Structure2D]]:
+    ...
+
+
+def _classify_structures_by_mesh_order_and_material(
+    structures: list[Structure3D] | list[Structure2D],
+    materials: dict[Material, int],
+) -> (
+    dict[tuple[int, int], list[Structure2D]] | dict[tuple[int, int], list[Structure3D]]
+):
+    structures = _sort_structures(structures)
+    structures_dict = {}
+    for structure in structures:
+        mo = structure.mesh_order
+        mat = materials[structure.material]
+        if (mo, mat) not in structures_dict:
+            structures_dict[mo, mat] = []
+        structures_dict[mo, mat].append(structure)
+    return structures_dict

@@ -1,57 +1,36 @@
-""" Materials """
+""" Meow Materials """
 
 import os
 import re
-from typing import Any, Dict, List, Mapping, Tuple
+from typing import Annotated, Any
 
 import numpy as np
 import pandas as pd
 import tidy3d as td
-from numpy.typing import NDArray
-from pydantic.v1 import Field, validator
+from pydantic import Field, model_validator
 from scipy.constants import c
 from scipy.ndimage import map_coordinates
 from tidy3d import material_library
 
-from .base_model import BaseModel, _array
-from .environment import Environment
-
-MATERIAL_TYPES: Dict[str, type] = {}
+from meow.array import Dim, DType, NDArray
+from meow.base_model import BaseModel
+from meow.environment import Environment
 
 
 class Material(BaseModel):
     """a `Material` defines the refractive index of a `Structure3D` within an `Environment`."""
 
-    type: str = ""
-
     name: str = Field(description="the name of the material")
-
-    meta: Dict[str, Any] = Field(
-        default_factory=lambda: {}, description="metadata for the material"
+    meta: dict[str, Any] = Field(
+        default_factory=dict, description="metadata for the material"
     )
 
-    def __init_subclass__(cls):
-        MATERIAL_TYPES[cls.__name__] = cls
-
-    def __new__(cls, **kwargs):
-        cls = MATERIAL_TYPES.get(kwargs.get("type", cls.__name__), cls)
-        return BaseModel.__new__(cls)  # type: ignore
-
-    @validator("type", pre=True, always=True)
-    def validate_type(cls, value):
-        if not value:
-            value = getattr(cls, "__name__", "Geometry")
-        if value not in MATERIAL_TYPES:
-            raise ValueError(
-                f"Invalid Material type. Got: {value!r}. Valid types: {MATERIAL_TYPES}."
-            )
-        return value
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    @model_validator(mode="after")
+    def _validate_model(self):
         MATERIALS[self.name] = self
+        return self
 
-    def __call__(self, env: Environment) -> NDArray[np.complex_]:
+    def __call__(self, env: Environment) -> np.ndarray:
         """returns an array of the refractive index at the wavelengths specified by the environment"""
         raise NotImplementedError("Please use one of the Material child classes")
 
@@ -74,15 +53,10 @@ class Material(BaseModel):
 
         return self.name
 
-    class Config:
-        fields = {
-            "meta": {"exclude": True},
-        }
-
 
 class TidyMaterial(Material):
     name: str = Field(description="The material name as also used by tidy3d")
-    variant: str = Field(description="The material name as also used by tidy3d")
+    variant: str = Field(description="The material variant as also used by tidy3d")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -106,7 +80,7 @@ class TidyMaterial(Material):
                 f"Specified variant is invalid. Use one of {_variant_options}."
             )
 
-    def __call__(self, env: Environment) -> NDArray[np.complex_]:
+    def __call__(self, env: Environment) -> np.ndarray:
         if not isinstance(env, Environment):
             env = Environment(**env)
         _material = material_library[self.name]
@@ -116,26 +90,23 @@ class TidyMaterial(Material):
         eps_comp = getattr(mat, "eps_comp", None)
         assert eps_comp is not None
         eps = eps_comp(0, 0, td.C_0 / env.wl)
-        return np.sqrt(eps)
+        return np.real(np.sqrt(eps))  # TODO: implement complex n
+
+
+class IndexMaterial(Material):
+    n: float = Field(description="the refractive index of the material")
+
+    def __call__(self, _: Environment) -> np.ndarray:
+        return np.squeeze(np.real(self.n))  # TODO: allow complex multi-dimensional n
 
 
 class SampledMaterial(Material):
-    params: Dict[str, np.ndarray[Tuple[int], np.dtype[np.float_]]] = Field(
-        description="the wavelength over which the refractive index is defined."
-    )
-    n: np.ndarray[Tuple[int], np.dtype[np.complex_]] = Field(
+    n: Annotated[NDArray, Dim(1), DType("float64")] = Field(
         description="the complex refractive index of the material"
     )
-
-    @staticmethod
-    def _validate_array(arr):
-        if isinstance(arr, dict):
-            r = np.asarray(arr.get("real", 0.0), dtype=np.complex_)
-            i = np.asarray(arr.get("imag", 0.0), dtype=np.complex_)
-            new = r + 1j * i
-        else:
-            new = np.asarray(arr)
-        return new.view(_array)
+    params: dict[str, Annotated[NDArray, Dim(1), DType("float64")]] = Field(
+        description="the wavelength over which the refractive index is defined."
+    )
 
     @staticmethod
     def _validate_1d(name, arr):
@@ -143,29 +114,17 @@ class SampledMaterial(Material):
             raise ValueError(f"{name} should be 1D. Got a {arr.ndim}D array.")
         return arr
 
-    @validator("n", pre=True)
-    def validate_n_pre(cls, n):
-        return cls._validate_1d("n", cls._validate_array(n))
-
-    @validator("params", pre=True)
-    def validate_params_pre(cls, params):
-        if not isinstance(params, Mapping):
-            raise TypeError(f"instance of dict expected. Got: {type(params)}.")
-        return {
-            k: cls._validate_1d(f"params:{k}", cls._validate_array(v))
-            for k, v in params.items()
-        }
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    @model_validator(mode="after")
+    def validate_params_length(self):
+        Ln = self.n.shape[0]
         for p, v in self.params.items():
             Lp = v.shape[0]
-            Ln = self.n.shape[0]
             if Lp != Ln:
                 raise ValueError(
-                    f"length of parameter array {p} does not match length of refractive index array n. \n"
-                    f"{Lp} != {Ln}"
+                    f"length of parameter array {p} does not match length "
+                    f"of refractive index array n. \n {Lp} != {Ln}"
                 )
+        return self
 
     @classmethod
     def from_path(cls, path, meta=None):
@@ -185,30 +144,28 @@ class SampledMaterial(Material):
         columns = [c for c in df.columns if c not in ["nr", "ni"]]
         params = {c: np.asarray(df[c].values, dtype=np.float_) for c in columns}
 
-        return cls(name=name, params=params, n=n, meta=meta)
+        # TODO: support complex n
+        return cls(name=name, params=params, n=np.real(n), meta=meta)
 
-    def __call__(self, env: Environment) -> NDArray[np.complex_]:
+    def __call__(self, env: Environment) -> np.ndarray:
         if not isinstance(env, Environment):
             env = Environment(**env)
-        # n = interp1d(1 / self.params['wl'], self.n, fill_value="extrapolate")(1 / env.wl)
         df = pd.DataFrame({**self.params, "nr": np.real(self.n), "ni": np.imag(self.n)})
         data, params, strings = _to_ndgrid(df, wl_key="wl")
         result, axs, pos = _evaluate_general_corner_model(
             data,
             params,
             strings,
-            **{k: np.atleast_1d(v) for k, v in env.dict().items()},
+            **{k: np.atleast_1d(v) for k, v in env.model_dump().items()},
         )
         nr = result.take(pos["targets"]["nr"], axs["targets"])
         ni = result.take(pos["targets"]["ni"], axs["targets"])
         n = nr + 1j * ni
-        # FIXME: ideally we should just be able to return `n` here...
-        # return n
         return np.squeeze(np.real(n))  # TODO: allow complex multi-dimensional n
 
 
-Materials = List[Material]
-MATERIALS: Dict[str, Material] = {}
+Materials = list[Material]
+MATERIALS: dict[str, Material] = {}
 
 
 def _to_ndgrid(df, wl_key="wl"):
@@ -305,7 +262,7 @@ def _get_coordinate(arr1d: np.ndarray, value: np.ndarray):
     return np.interp(value, arr1d, np.arange(arr1d.shape[0]))
 
 
-def _get_coordinates(arrs1d: List[np.ndarray], values: np.ndarray):
+def _get_coordinates(arrs1d: list[np.ndarray], values: np.ndarray):
     # don't use vmap as arrays in arrs1d could have different shapes...
     return np.array([_get_coordinate(a, v) for a, v in zip(arrs1d, values)])
 

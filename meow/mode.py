@@ -3,52 +3,41 @@
 import pickle
 import warnings
 from itertools import product
-from typing import List, Literal, Optional, Tuple
+from typing import Literal
 
 import numpy as np
-from pydantic.v1 import Field
+from pydantic import Field
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
 from scipy.linalg import norm
 
-from .base_model import BaseModel, cached_property
-from .cross_section import CrossSection
-from .integrate import integrate_2d
-from .visualize import _figsize_visualize_mode
+from meow.array import Complex, ComplexArray2D
+from meow.base_model import BaseModel, cached_property
+from meow.cross_section import CrossSection
+from meow.integrate import integrate_2d
+from meow.visualize import _figsize_visualize_mode
 
 
 class Mode(BaseModel):
     """A `Mode` contains the field information for a given `CrossSection`."""
 
-    neff: complex = Field(description="the effective index of the mode")
+    neff: Complex = Field(description="the effective index of the mode")
     cs: CrossSection = Field(
         description="the index cross section for which the mode was calculated"
     )
-    Ex: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
-        description="the Ex-fields of the mode"
-    )
-    Ey: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
-        description="the Ey-fields of the mode"
-    )
-    Ez: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
-        description="the Ez-fields of the mode"
-    )
-    Hx: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
-        description="the Hx-fields of the mode"
-    )
-    Hy: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
-        description="the Hy-fields of the mode"
-    )
-    Hz: np.ndarray[Tuple[int, int], np.dtype[np.complex_]] = Field(
-        description="the Hz-fields of the mode"
-    )
-    interpolation: Optional[Literal["Ex", "Ey", "Ez", "Hz"]] = Field(
-        default=None,
+    Ex: ComplexArray2D = Field(description="the Ex-fields of the mode")
+    Ey: ComplexArray2D = Field(description="the Ey-fields of the mode")
+    Ez: ComplexArray2D = Field(description="the Ez-fields of the mode")
+    Hx: ComplexArray2D = Field(description="the Hx-fields of the mode")
+    Hy: ComplexArray2D = Field(description="the Hy-fields of the mode")
+    Hz: ComplexArray2D = Field(description="the Hz-fields of the mode")
+    interpolation: Literal["Ex", "Ey", "Ez", "Hz", ""] = Field(
+        default="",
         description="To which 2D Yee-location the fields are interpolated to.",
     )
 
     def interpolate(self, location: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]):
-        if self.interpolation is not None:
+        if self.interpolation != "":
             raise RuntimeError("Cannot interpolate from already interpolated mode!")
         interpolate_funcs = {
             "EX": _interpolate_Ex,
@@ -120,6 +109,7 @@ class Mode(BaseModel):
         num_levels=8,
         operation=lambda x: np.abs(x) ** 2,
         show=True,
+        **ignored,
     ):
         import matplotlib.pyplot as plt  # fmt: skip
         from matplotlib import colors  # fmt: skip
@@ -230,7 +220,7 @@ class Mode(BaseModel):
                 f"unsupported operand type(s) for +: 'Mode' and '{type(other).__name__}'"
             )
         new_mode = Mode(
-            neff=np.mean([self.neff, other.neff]),
+            neff=0.5 * (self.neff + other.neff),
             cs=self.cs,
             Ex=self.Ex + other.Ex,
             Ey=self.Ey + other.Ey,
@@ -275,7 +265,7 @@ class Mode(BaseModel):
         return self + other * (-1.0)
 
 
-Modes = List[Mode]
+Modes = list[Mode]
 
 
 def zero_phase(mode: Mode) -> Mode:
@@ -361,7 +351,7 @@ def normalize_product(mode: Mode) -> Mode:
 
 def electric_energy_density(
     mode: Mode,
-) -> np.ndarray[Tuple[int, int], np.dtype[np.float_]]:
+) -> np.ndarray[tuple[int, int], np.dtype[np.float_]]:
     """get the electric energy density contained in a `Mode`"""
     epsx, epsy, epsz = mode.cs.nx**2, mode.cs.ny**2, mode.cs.nz**2
     return (
@@ -382,7 +372,7 @@ def electric_energy(mode: Mode) -> float:
 
 def magnetic_energy_density(
     mode: Mode,
-) -> np.ndarray[Tuple[int, int], np.dtype[np.float_]]:
+) -> np.ndarray[tuple[int, int], np.dtype[np.float_]]:
     """get the magnetic energy density contained in a `Mode`"""
     return (
         0.5 * mu0 * (np.abs(mode.Hx) ** 2 + np.abs(mode.Hy) ** 2 + np.abs(mode.Hz) ** 2)
@@ -394,7 +384,7 @@ def magnetic_energy(mode: Mode) -> float:
     return magnetic_energy_density(mode).sum()
 
 
-def energy_density(mode: Mode) -> np.ndarray[Tuple[int, int], np.dtype[np.float_]]:
+def energy_density(mode: Mode) -> np.ndarray[tuple[int, int], np.dtype[np.float_]]:
     """get the energy density contained in a `Mode`"""
     return electric_energy_density(mode) + magnetic_energy_density(mode)
 

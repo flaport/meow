@@ -5,7 +5,7 @@ from typing import Any, Callable
 
 import numpy as np
 
-from meow.structures import _visualize_structures
+from meow.structures import Structure3D, _sort_structures
 
 try:
     import matplotlib.pyplot as plt  # fmt: skip
@@ -285,6 +285,18 @@ def _is_s_pm_matrix(obj):
 
 def _is_gf_component(obj):
     return gf is not None and isinstance(obj, gf.Component)
+
+
+def _visualize_structures(structures: list[Structure3D], scale=None):
+    """easily visualize a collection (list) of `Structure3D` objects"""
+    from trimesh.scene import Scene  # fmt: skip
+    from trimesh.transformations import rotation_matrix  # fmt: skip
+
+    scene = Scene(
+        geometry=[s._trimesh(scale=scale) for s in _sort_structures(structures)]
+    )
+    scene.apply_transform(rotation_matrix(np.pi - np.pi / 6, (0, 1, 0)))
+    return scene.show()
 
 
 VISUALIZATION_MAPPING: dict[Callable, Callable] = {

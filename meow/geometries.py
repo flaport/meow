@@ -1,44 +1,28 @@
+""" meow geometries """
+
+from __future__ import annotations
+
 import warnings
 from secrets import token_hex
-from typing import Dict, List, Literal, Tuple, Union, cast
+from typing import Annotated, Literal, cast
 
 import matplotlib.pyplot as plt
 import numpy as np
 import shapely.geometry as sg
 from matplotlib.patches import Rectangle as MplRect
-from pydantic.v1 import Field, validator
+from pydantic import Field
 
+from meow.array import DType, NDArray, Shape
 from meow.base_model import BaseModel
 
-GEOMETRIES_3D: Dict[str, type] = {}
-GEOMETRIES_2D: Dict[str, type] = {}
-AxisDirection = Union[Literal["x"], Literal["y"], Literal["z"]]
+AxisDirection = Literal["x", "y", "z"]
 
 
 class Geometry2D(BaseModel):
-    type: str = ""
-
-    def __init_subclass__(cls):
-        GEOMETRIES_2D[cls.__name__] = cls
-
-    def __new__(cls, **kwargs):
-        cls = GEOMETRIES_2D.get(kwargs.get("type", cls.__name__), cls)
-        return BaseModel.__new__(cls)  # type: ignore
-
-    @validator("type", pre=True, always=True)
-    def validate_type(cls, value):
-        if not value:
-            value = getattr(cls, "__name__", "Geometry")
-        if value not in GEOMETRIES_2D:
-            raise ValueError(
-                f"Invalid Geometry type. Got: {value!r}. Valid types: {GEOMETRIES_2D}."
-            )
-        return value
-
     def _mask(self, X, Y):
         raise NotImplementedError(f"{self.__class__.__name__!r} cannot be masked.")
 
-    def _visualize(self, color=None):
+    def _visualize(self, *, ax=None, show=True, color=None, **ignored):
         raise NotImplementedError(f"{self.__class__.__name__!r} cannot be visualized.")
 
 
@@ -59,7 +43,7 @@ class Rectangle(Geometry2D):
         )
         return mask
 
-    def _visualize(self, ax=None, show=True, color=None):
+    def _visualize(self, ax=None, show=True, color=None, **ignored):
         if ax is None:
             ax = plt.gca()
         if color is None:
@@ -83,29 +67,12 @@ class Rectangle(Geometry2D):
 
 
 class Geometry3D(BaseModel):
-    type: str = ""
+    def _project(self, z: float) -> list[Geometry2D]:
+        raise NotImplementedError(
+            f"{self.__class__.__name__!r} cannot be projected to 2D."
+        )
 
-    def __init_subclass__(cls):
-        GEOMETRIES_3D[cls.__name__] = cls
-
-    def __new__(cls, **kwargs):
-        cls = GEOMETRIES_3D.get(kwargs.get("type", cls.__name__), cls)
-        return BaseModel.__new__(cls)  # type: ignore
-
-    @validator("type", pre=True, always=True)
-    def validate_type(cls, value):
-        if not value:
-            value = getattr(cls, "__name__", "Geometry")
-        if value not in GEOMETRIES_3D:
-            raise ValueError(
-                f"Invalid Geometry type. Got: {value!r}. Valid types: {GEOMETRIES_3D}."
-            )
-        return value
-
-    def _project(self, z: float) -> List[Geometry2D]:
-        raise NotImplementedError(f"{self.__class__.__name__!r} cannot be projected.")
-
-    def _visualize(self, scale=None):
+    def _visualize(self, scale=None, **ignored):
         from trimesh.scene import Scene  # fmt: skip
         from trimesh.transformations import rotation_matrix  # fmt: skip
 
@@ -119,7 +86,7 @@ class Geometry3D(BaseModel):
             f"{self.__class__.__name__!r} cannot be added to Lumerical."
         )
 
-    def _trimesh(self, **kwargs):
+    def _trimesh(self, color=None, scale=None):
         raise NotImplementedError(f"{self.__class__.__name__!r} cannot be visualized.")
 
 
@@ -133,7 +100,7 @@ class Box(Geometry3D):
     z_min: float = Field(description="the minimum z-value of the box")
     z_max: float = Field(description="the maximum z-value of the box")
 
-    def _project(self, z: float) -> List[Geometry2D]:
+    def _project(self, z: float) -> list[Geometry2D]:
         if z < self.z_min or z > self.z_max:
             return []
         rect = Rectangle(
@@ -144,7 +111,7 @@ class Box(Geometry3D):
         )
         return [rect]
 
-    def _lumadd(self, sim, material_name, mesh_order, unit, xyz):
+    def _lumadd(self, sim, material_name, mesh_order, unit=1e-6, xyz="yzx"):
         x, y, z = xyz
         name = token_hex(4)
         kwargs = {
@@ -186,7 +153,7 @@ class Box(Geometry3D):
 class Prism(Geometry3D):
     """A prism is a 2D Polygon extruded along a certain axis direction ('x', 'y', or 'z')."""
 
-    poly: np.ndarray[Tuple[int, Literal[2]], np.dtype[np.float_]] = Field(
+    poly: Annotated[NDArray, Shape(-1, 2), DType("float64")] = Field(
         description="the 2D array (Nx2) with polygon vertices"
     )
     h_min: float = Field(description="the start height of the extrusion")
@@ -210,7 +177,7 @@ class Prism(Geometry3D):
             intersection_array = np.asarray(intersections.coords)
             if not intersection_array.shape[0]:
                 return []
-            intersections = sg.MultiLineString([intersections])
+            intersections = sg.MultiLineString([intersections])  # type: ignore
 
         geoms_2d = []
         for intersection in intersections.geoms:
@@ -243,7 +210,7 @@ class Prism(Geometry3D):
             intersection_array = np.asarray(intersections.coords)
             if not intersection_array.shape[0]:
                 return []
-            intersections = sg.MultiLineString([intersections])
+            intersections = sg.MultiLineString([intersections])  # type: ignore
 
         geoms_2d = []
         for intersection in intersections.geoms:
@@ -269,13 +236,13 @@ class Prism(Geometry3D):
         else:
             return [self.poly]
 
-    def _project(self, z):
+    def _project(self, z: float) -> list[Geometry2D]:
         if self.axis == "x":
             return self._project_axis_x(z)
         elif self.axis == "y":
             return self._project_axis_y(z)
         else:
-            return self._project_axis_z(z)
+            return self._project_axis_z(z)  # type: ignore
 
     def _lumadd(self, sim, material_name, mesh_order, unit=1e-6, xyz="yzx"):
         name = token_hex(4)

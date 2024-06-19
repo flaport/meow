@@ -1,7 +1,7 @@
 """ FDE Tidy3d backend (default backend for MEOW) """
 
 from types import SimpleNamespace
-from typing import Literal, Optional
+from typing import Literal
 
 import numpy as np
 import tidy3d
@@ -15,11 +15,11 @@ from ..cross_section import CrossSection
 from ..mode import Mode, Modes, is_pml_mode, normalize_product, zero_phase
 
 
-@validate_arguments
+# @validate_arguments
 def compute_modes_tidy3d(
     cs: CrossSection,
     num_modes: PositiveInt = 10,
-    target_neff: Optional[PositiveFloat] = None,
+    target_neff: PositiveFloat | None = None,
     precision: Literal["single", "double"] = "double",
     pml_mode_threshold: float = 1.0,
 ) -> Modes:
@@ -44,6 +44,13 @@ def compute_modes_tidy3d(
     else:
         eps_cross = [cs.nx**2, cs.ny**2, cs.nz**2]
 
+    if np.isinf(cs.mesh.bend_radius) or np.isnan(cs.mesh.bend_radius):
+        bend_radius = None
+        bend_axis = None
+    else:
+        bend_radius = cs.mesh.bend_radius
+        bend_axis = cs.mesh.bend_axis
+
     mode_spec = SimpleNamespace(  # tidy3d.ModeSpec alternative (prevents type checking)
         num_modes=num_modes,
         target_neff=target_neff,
@@ -51,9 +58,9 @@ def compute_modes_tidy3d(
         filter_pol=None,
         angle_theta=cs.mesh.angle_theta,
         angle_phi=cs.mesh.angle_phi,
-        bend_radius=cs.mesh.bend_radius,
+        bend_radius=bend_radius,
         precision=precision,
-        bend_axis=cs.mesh.bend_axis,
+        bend_axis=bend_axis,
         track_freq="central",
         group_index_step=False,
     )

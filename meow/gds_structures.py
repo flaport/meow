@@ -1,16 +1,14 @@
 """ GDS Extrusions """
 
-from typing import Dict, List, Tuple
-
 import numpy as np
 import pkg_resources
 import shapely.geometry as sg
-from pydantic.v1 import Field
+from pydantic import Field
 
-from .base_model import BaseModel
-from .geometries import Prism
-from .materials import Material
-from .structures import Structure3D
+from meow.base_model import BaseModel
+from meow.geometries import Prism
+from meow.materials import Material
+from meow.structures import Structure3D
 
 # TODO: Maybe it makes more sense to use native GDSFactory tooling for this
 
@@ -35,7 +33,7 @@ class GdsExtrusionRule(BaseModel):
             try:
                 poly = np.asarray(sg.Polygon(poly).buffer(self.buffer).boundary.coords)
             except NotImplementedError:
-                import gdspy  # fmt: skip
+                import gdspy  # fmt: skip # type: ignore
 
                 polygonset = gdspy.offset(gdspy.Polygon(poly), 0.25)
                 assert polygonset is not None
@@ -54,7 +52,7 @@ class GdsExtrusionRule(BaseModel):
 
 def extrude_gds(
     cell,  # type: ignore
-    extrusions: Dict[Tuple[int, int], List[GdsExtrusionRule]],
+    extrusions: dict[tuple[int, int], list[GdsExtrusionRule]],
 ):
     """extrude a gds cell given a dictionary of extruson rules
 
