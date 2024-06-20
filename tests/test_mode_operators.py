@@ -2,8 +2,8 @@ from mode_data import MODE_DATA
 
 from meow import Mode
 
-mode1 = Mode.parse_obj(MODE_DATA)
-mode2 = Mode.parse_obj(MODE_DATA)
+mode1 = Mode.model_validate(MODE_DATA)
+mode2 = Mode.model_validate(MODE_DATA)
 
 
 def test_multiply_modes():
