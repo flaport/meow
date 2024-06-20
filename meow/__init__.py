@@ -1,7 +1,7 @@
 """ MEOW: Modeling of Eigenmodes and Overlaps in Waveguides """
 
 __author__ = "Floris Laporte"
-__version__ = "0.10.0"
+__version__ = "0.11.0"
 
 from .array import Dim as Dim
 from .array import DType as DType
