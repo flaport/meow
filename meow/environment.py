@@ -1,8 +1,10 @@
-""" A simulation Environment """
+""" one place to gather your environment settings """
 
-from pydantic.v1 import Extra, Field
+from __future__ import annotations
 
-from .base_model import BaseModel
+from pydantic import ConfigDict, Field
+
+from meow.base_model import BaseModel
 
 
 class Environment(BaseModel):
@@ -12,6 +14,7 @@ class Environment(BaseModel):
     wl: float = Field(default=1.5, description="the wavelength of the environment")
     T: float = Field(default=25.0, description="the temperature of the environment")
 
-    class Config:
-        allow_population_by_field_name = True
-        extra = Extra.allow
+    model_config = ConfigDict(
+        extra="allow",
+        frozen=True,
+    )

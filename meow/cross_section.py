@@ -1,34 +1,32 @@
 """ A CrossSection """
 
-from typing import List, Optional
-
 import numpy as np
-from pydantic.v1 import Field
+from pydantic import Field
+from pydantic.v1 import PrivateAttr
 
-from .base_model import BaseModel, _array, cached_property
-from .cell import Cell, _create_full_material_array, _sort_structures
-from .environment import Environment
-from .mesh import Mesh2D
-from .structures import Structure2D
+from meow.base_model import BaseModel, cached_property
+from meow.cell import Cell, _create_full_material_array, _sort_structures
+from meow.environment import Environment
+from meow.mesh import Mesh2D
+from meow.structures import Structure2D
 
 
 class CrossSection(BaseModel):
     """A `CrossSection` is created from the association of a `Cell` with an `Environment`,
     which uniquely defines the refractive index everywhere."""
 
-    structures: List[Structure2D] = Field(
+    structures: list[Structure2D] = Field(
         description="the 2D structures in the CrossSection"
     )
     mesh: Mesh2D = Field(description="the mesh to discretize the structures with")
     env: Environment = Field(
-        description="the environment for which the cross sectionw was calculated"
+        description="the environment for which the cross section was calculated"
     )
+    _cell: Cell | None = PrivateAttr(default=None)
 
     @classmethod
     def from_cell(cls, *, cell: Cell, env: Environment):
-        cs = cls(structures=cell.structures_2d, mesh=cell.mesh, env=env)
-        cs._cache["cell"] = cell
-        return cs
+        return cls(structures=cell.structures_2d, mesh=cell.mesh, env=env, _cell=cell)
 
     @cached_property
     def materials(self):
@@ -44,19 +42,19 @@ class CrossSection(BaseModel):
         n_full = np.ones_like(self.mesh.X_full)
         for material, idx in self.materials.items():
             n_full = np.where(m_full == idx, material(self.env), n_full)
-        return n_full.view(_array)
+        return n_full
 
     @property
     def nx(self):
-        return self.n_full[1::2, ::2].view(_array)
+        return self.n_full[1::2, ::2]
 
     @property
     def ny(self):
-        return self.n_full[::2, 1::2].view(_array)
+        return self.n_full[::2, 1::2]
 
     @property
     def nz(self):
-        return self.n_full[::2, ::2].view(_array)
+        return self.n_full[::2, ::2]
 
     def _visualize(self, ax=None, n_cmap=None, cbar=True, show=True, **kwargs):
         import matplotlib.pyplot as plt  # fmt: skip
@@ -104,11 +102,3 @@ class CrossSection(BaseModel):
             plt.sca(ax)
         if show:
             plt.show()
-
-    @property
-    def _cell(self) -> Optional[Cell]:
-        """this is a hack. Don't use this property unless you know what you're doing."""
-        if "cell" in self._cache:
-            return self._cache["cell"]
-        else:
-            return None

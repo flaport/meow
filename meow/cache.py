@@ -1,8 +1,12 @@
+import os
 from collections import deque
+from typing import Type, TypeVar
 
-CACHE_SETTINGS = {"size": 1000, "enabled": True}
+CACHE_SETTINGS = {
+    "size": 10000,
+    "enabled": not os.environ.get("MEOW_DISABLE_CACHE", False),
+}
 CACHED_MODELS = {}
-CACHED_ARRAYS = {}
 
 
 def enable_cache():
@@ -17,7 +21,7 @@ def disable_cache():
 
 
 def empty_cache():
-    for cache in [CACHED_MODELS, CACHED_ARRAYS]:
+    for cache in [CACHED_MODELS]:
         for k in list(cache):
             try:
                 del cache[k]
@@ -25,27 +29,29 @@ def empty_cache():
                 pass  # sometimes in threaded apps key might already be deleted
 
 
-def cache_model(model):
-    return _cache_obj(CACHED_MODELS, model)
-
-
-def cache_array(arr):
-    return _cache_obj(CACHED_ARRAYS, arr)
-
-
-def _cache_obj(cache, obj):
+def cache_model(obj):
     if not CACHE_SETTINGS["enabled"]:
         return obj
     key = hash(obj)
-    if key in cache:
-        obj = cache[key] = cache.pop(key, obj)
+    if key in CACHED_MODELS:
+        obj = CACHED_MODELS[key]
     else:
-        cache[key] = obj
-    queue = deque(cache)
+        CACHED_MODELS[key] = obj
+    queue = deque(CACHED_MODELS)
     while len(queue) > CACHE_SETTINGS["size"]:
         key = queue.popleft()
         try:
-            del cache[key]
+            del CACHED_MODELS[key]
         except KeyError:
             pass  # sometimes in threaded apps key might already be deleted
     return obj
+
+
+T = TypeVar("T", bound=Type)
+
+
+def cached_model(cls: T) -> T:
+    def model(*args, **kwargs) -> cls:  # type: ignore
+        return cache_model(cls(*args, **kwargs))
+
+    return model  # type: ignore

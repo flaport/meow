@@ -5,10 +5,9 @@ from typing import List, Optional
 import numpy as np
 import sax
 from sax.backends import circuit_backends
-from sax.utils import get_ports
 from sax.saxtypes import scoo
+from sax.utils import get_ports
 
-from ..base_model import _array
 from ..cell import Cell
 from ..mode import Mode
 from .common import (
@@ -20,9 +19,7 @@ from .common import (
 )
 
 try:
-    import klujax
-
-
+    import klujax  # fmt: skip
 except ImportError:
     klujax = None
 
@@ -115,8 +112,8 @@ def compute_s_matrix_sax(
 
     # TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.
     net = _get_netlist(propagations, interfaces)
-    analyze_instances, analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
-    # TODO: use analyze_instances instead of manually converting to scoo
+    _, analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
+    # TODO: use analyze_instances instead of manually converting to scoo ?
     net["instances"] = {k: scoo(v) for k, v in net["instances"].items()}
     analyzed = analyze_circuit(net["instances"], net["connections"], net["ports"])
     S, port_map = sax.sdense(
@@ -125,7 +122,7 @@ def compute_s_matrix_sax(
             instances=net["instances"],
         )
     )
-    S = np.asarray(S).view(_array)
+    S = np.asarray(S)
 
     # final sorting of result:
     current_port_map = {

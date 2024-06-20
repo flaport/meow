@@ -53,12 +53,6 @@ def compute_interface_s_matrix(
     LHS = conj(O_LR) + O_RL.T
     RHS = np.diag(2 * O_LL)
 
-    # print(f"LHS: {LHS}")
-    # vis(LHS)
-
-    # print(f"RHS: {RHS}")
-    # vis(RHS)
-
     T_LR, _, _, _ = np.linalg.lstsq(LHS, RHS, rcond=None)
 
     # HACK: we don't expect gain --> invert singular values that lead to gain

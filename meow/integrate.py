@@ -18,8 +18,8 @@ def integrate_interpolate_2d(x, y, data, extent=None):
         integrable,
         extent[0][0],
         extent[0][1],
-        lambda x: extent[1][0],
-        lambda x: extent[1][1],
+        lambda _: extent[1][0],
+        lambda _: extent[1][1],
         epsabs=1,
         epsrel=0.001,
     )[0]
@@ -27,6 +27,6 @@ def integrate_interpolate_2d(x, y, data, extent=None):
 
 def integrate_2d(x, y, data) -> float:
     """much simpler integration over the full grid"""
-    int1 = simpson(data, y)
-    int2 = simpson(int1, x)
+    int1 = simpson(data, x=y)
+    int2 = simpson(int1, x=x)
     return float(int2)

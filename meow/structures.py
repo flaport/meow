@@ -1,23 +1,44 @@
 """ a Structure is a combination of a Geometry with a material (and an optional mesh order) """
 
-from typing import Dict, List, Tuple, Union, overload
+from __future__ import annotations
 
-import numpy as np
-from pydantic.v1 import Field
+from typing import overload
 
-from .base_model import BaseModel
-from .geometries import Geometry2D, Geometry3D
-from .materials import Material
+from pydantic import Field
+
+from meow.base_model import BaseModel
+from meow.geometries import Geometry2D, Geometry3D
+from meow.materials import Material
 
 DEFAULT_MESH_ORDER = 5
+
+
+@overload
+def Structure(
+    *,
+    material: Material,
+    geometry: Geometry2D,
+    mesh_order: int = DEFAULT_MESH_ORDER,
+) -> Structure2D:
+    ...
+
+
+@overload
+def Structure(
+    *,
+    material: Material,
+    geometry: Geometry3D,
+    mesh_order: int = DEFAULT_MESH_ORDER,
+) -> Structure3D:
+    ...
 
 
 def Structure(
     *,
     material: Material,
-    geometry: Union[Geometry2D, Geometry3D],
+    geometry: Geometry2D | Geometry3D,
     mesh_order: int = DEFAULT_MESH_ORDER,
-):
+) -> Structure2D | Structure3D:
     kwargs = {
         "material": material,
         "geometry": geometry,
@@ -38,7 +59,7 @@ class Structure2D(BaseModel):
         default=DEFAULT_MESH_ORDER, description="the mesh order of the structure"
     )
 
-    def _visualize(self):
+    def _visualize(self, **ignored):
         color = self.material.meta.get("color", None)
         return self.geometry._visualize(color=color)
 
@@ -52,7 +73,7 @@ class Structure3D(BaseModel):
         default=DEFAULT_MESH_ORDER, description="the mesh order of the structure"
     )
 
-    def _project(self, z) -> List[Structure2D]:
+    def _project(self, z) -> list[Structure2D]:
         geometry_2d = self.geometry._project(z)
         structs = []
         for geom in geometry_2d:
@@ -74,66 +95,23 @@ class Structure3D(BaseModel):
             scale=scale,
         )
 
-    def _visualize(self, scale=None):
+    def _visualize(self, scale=None, **ignored):
         return self._trimesh(scale=scale).show()
 
 
-def _visualize_structures(structures: List[Structure3D], scale=None):
-    """easily visualize a collection (list) of `Structure3D` objects"""
-    from trimesh.scene import Scene  # fmt: skip
-    from trimesh.transformations import rotation_matrix  # fmt: skip
-
-    scene = Scene(
-        geometry=[s._trimesh(scale=scale) for s in _sort_structures(structures)]
-    )
-    scene.apply_transform(rotation_matrix(np.pi - np.pi / 6, (0, 1, 0)))
-    return scene.show()
-
-
 @overload
-def _sort_structures(structures: List[Structure3D]) -> List[Structure3D]:
+def _sort_structures(structures: list[Structure3D]) -> list[Structure3D]:
     ...
 
 
 @overload
-def _sort_structures(structures: List[Structure2D]) -> List[Structure2D]:
+def _sort_structures(structures: list[Structure2D]) -> list[Structure2D]:
     ...
 
 
 def _sort_structures(
-    structures: Union[List[Structure3D], List[Structure2D]]
-) -> Union[List[Structure2D], List[Structure3D]]:
+    structures: list[Structure3D] | list[Structure2D],
+) -> list[Structure2D] | list[Structure3D]:
     struct_info = [(s.mesh_order, -i, s) for i, s in enumerate(structures)]
     sorted_struct_info = sorted(struct_info, key=lambda I: (I[0], I[1]), reverse=True)
     return [s for _, _, s in sorted_struct_info]  # type: ignore
-
-
-@overload
-def _classify_structures_by_mesh_order_and_material(
-    structures: List[Structure3D], materials: Dict[Material, int]
-) -> Dict[Tuple[int, int], List[Structure3D]]:
-    ...
-
-
-@overload
-def _classify_structures_by_mesh_order_and_material(
-    structures: List[Structure2D], materials: Dict[Material, int]
-) -> Dict[Tuple[int, int], List[Structure2D]]:
-    ...
-
-
-def _classify_structures_by_mesh_order_and_material(
-    structures: Union[List[Structure3D], List[Structure2D]],
-    materials: Dict[Material, int],
-) -> Union[
-    Dict[Tuple[int, int], List[Structure2D]], Dict[Tuple[int, int], List[Structure3D]]
-]:
-    structures = _sort_structures(structures)
-    structures_dict = {}
-    for structure in structures:
-        mo = structure.mesh_order
-        mat = materials[structure.material]
-        if (mo, mat) not in structures_dict:
-            structures_dict[mo, mat] = []
-        structures_dict[mo, mat].append(structure)
-    return structures_dict
