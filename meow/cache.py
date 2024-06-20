@@ -1,5 +1,6 @@
 import os
 from collections import deque
+from typing import Type, TypeVar
 
 CACHE_SETTINGS = {
     "size": 10000,
@@ -33,7 +34,7 @@ def cache_model(obj):
         return obj
     key = hash(obj)
     if key in CACHED_MODELS:
-        obj = CACHED_MODELS[key] = CACHED_MODELS.pop(key, obj)
+        obj = CACHED_MODELS[key]
     else:
         CACHED_MODELS[key] = obj
     queue = deque(CACHED_MODELS)
@@ -44,3 +45,13 @@ def cache_model(obj):
         except KeyError:
             pass  # sometimes in threaded apps key might already be deleted
     return obj
+
+
+T = TypeVar("T", bound=Type)
+
+
+def cached_model(cls: T) -> T:
+    def model(*args, **kwargs) -> cls:  # type: ignore
+        return cache_model(cls(*args, **kwargs))
+
+    return model  # type: ignore

@@ -36,12 +36,13 @@ classifiers = [
 dependencies = [
   "matplotlib",
   "numpy>=1.24",
+  "orjson",
   "packaging",
   "pydantic>=2",
-  "sax>=0.11.1",
+  "sax>=0.13.0",
   "scipy",
   "shapely",
-  "tidy3d>=2.4.0",
+  "tidy3d>=2.7.0",
   "trimesh[easy]",
 ]
 
@@ -71,3 +72,4 @@ include = '\.pyi?$'
 
 [tool.pyright]
 reportPrivateImportUsage = false
+reportUnusedVariable = false

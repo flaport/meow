@@ -41,7 +41,11 @@ class SerializedArray(BaseModel):
             arr = np.asarray(self.values, dtype="float32").view("complex64")
         else:
             arr = np.asarray(self.values, dtype=self.dtype)
-        return arr.reshape(*self.shape)
+
+        if not self.shape:
+            return arr
+        else:
+            return arr.reshape(*self.shape)
 
 
 def _validate_ndarray(x: Any):
@@ -89,14 +93,14 @@ def _assert_shape(arr: np.ndarray, shape: tuple[int, ...]):
 
 
 def _coerce_dim(arr: np.ndarray, ndim: int):
-    if ndim > arr.ndim:
+    if arr.ndim > ndim:
         if arr.shape[0] < 2:
             return _coerce_dim(arr[0], ndim)
         else:
             raise ValueError(
                 f"Can't coerce arr with shape {arr.shape} into an {ndim}D array."
             )
-    elif ndim < arr.ndim:
+    elif arr.ndim < ndim:
         return _coerce_dim(arr[None], ndim)
     else:
         return arr

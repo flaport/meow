@@ -4,19 +4,33 @@ from __future__ import annotations
 
 from functools import wraps
 from hashlib import md5
-from typing import Any
+from typing import Any, Self
 
-import black
 import numpy as np
+import orjson
 from pydantic import BaseModel as _BaseModel
-from pydantic import ConfigDict, Field, PrivateAttr, field_validator, model_validator
+from pydantic import (
+    ConfigDict,
+    Field,
+    PrivateAttr,
+    ValidationError,
+    field_validator,
+    model_validator,
+)
+from pydantic._internal._model_construction import ModelMetaclass as _ModelMetaclass
 
 from meow.cache import cache_model
 
 MODELS = {}
 
 
-class BaseModel(_BaseModel):
+class ModelMetaclass(_ModelMetaclass):
+    def __call__(cls, *args, **kwargs):
+        obj = super().__call__(*args, **kwargs)
+        return cache_model(obj)
+
+
+class BaseModel(_BaseModel, metaclass=ModelMetaclass):
     type: str = Field(default="", validate_default=True)
     _cache: dict = PrivateAttr(default_factory=dict)
 
@@ -45,10 +59,6 @@ class BaseModel(_BaseModel):
                 obj = cls.model_validate(obj)
         return obj
 
-    @model_validator(mode="after")
-    def _retrieve_cached_model(self):
-        return cache_model(self)
-
     @classmethod
     def model_validate(
         cls,
@@ -57,7 +67,7 @@ class BaseModel(_BaseModel):
         strict: bool | None = None,
         from_attributes: bool | None = None,
         context: dict[str, Any] | None = None,
-    ):
+    ) -> Self:
         """Validate a pydantic model instance.
 
         Args:
@@ -83,6 +93,19 @@ class BaseModel(_BaseModel):
         return cls.__pydantic_validator__.validate_python(
             obj, strict=strict, from_attributes=from_attributes, context=context
         )
+
+    @classmethod
+    def model_validate_json(
+        cls,
+        json_data: str | bytes | "bytearray",
+        *,
+        strict: bool | None = None,
+        context: dict[str, Any] | None = None,
+    ) -> Self:
+        if isinstance(json_data, str):
+            json_data = json_data.encode()
+        dct = orjson.loads(json_data)
+        return cls.model_validate(dct, strict=strict, context=context)
 
     def __hash__(self):
         to_hash = {}
@@ -115,32 +138,16 @@ class BaseModel(_BaseModel):
         return eq
 
     def _repr(self, indent=0, shift=2):
-        s = f"{self.__class__.__name__}("
-
-        dct: dict[str, Any] = {}
-        fields = set()
-        for k, v in self:
-            fields.add(k)
-            if isinstance(v, np.ndarray):
-                dct[k] = v.view(_compact_repr_array)
-            else:
-                dct[k] = v
-        if dct:
-            s = s + "\n"
-        for key in dct:
-            if key == "data":
-                continue
-            attr = getattr(self, key)
-            if isinstance(attr, BaseModel):
-                attr_str = attr._repr(indent=indent + shift, shift=shift)
-            else:
-                attr_str = repr(attr)
-            s += f"{' '*(indent + shift)}{key}={attr_str}\n"
-        if dct:
-            s += f"{' '*indent})"
-        else:
-            s += ")"
-        return s
+        start = f"{self.__class__.__name__}("
+        dct: dict[str, Any] = {k: v for k, v in self}
+        return _dict_repr(
+            dct,
+            indent=indent,
+            shift=shift,
+            start=start,
+            end=")",
+            eq="=",
+        )
 
     def __repr__(self):
         return self._repr()
@@ -175,24 +182,54 @@ def cached_property(method):
     return property(cache(method))
 
 
-class _compact_repr_array(np.ndarray):
-    """just an utility array class with a more compact repr"""
+def _dict_repr(dct, indent=0, shift=2, start="{", end="}", eq=": "):
+    from .array import SerializedArray
 
-    def __repr__(self):
-        if self.ndim == 0:
-            return f"{self:.3e}"
-        cls_str = (
-            f"array___7B{'x'.join(str(i) for i in self.shape)}___2C{self.dtype}___7D"
-        )
-        self = self.ravel()
-        num_els = self.shape[0]
-        if num_els == 0:
-            return f"{cls_str}([])"
-        elif num_els == 1:
-            return f"{cls_str}([{self[0]:.3e}])"
-        elif num_els == 2:
-            return f"{cls_str}([{self[0]:.3e}, {self[1]:.3e}])"
-        elif num_els == 3:
-            return f"{cls_str}([{self[0]:.3e}, {self[1]:.3e}, {self[2]:.3e}])"
+    try:
+        arr = SerializedArray.model_validate(dct).to_array()
+        return _array_repr(arr)
+    except ValidationError:
+        pass
+
+    s = f"{start}"
+    if dct:
+        s = s + "\n"
+    for key, attr in dct.items():
+        if key == "data":
+            continue
+        if isinstance(attr, BaseModel):
+            attr_str = attr._repr(indent=indent + shift, shift=shift)
+        elif isinstance(attr, dict):
+            attr_str = _dict_repr(attr, indent=indent + shift, shift=shift)
+        elif isinstance(attr, list):
+            attr_str = _dict_repr(
+                dict(enumerate(attr)), indent=indent + shift, shift=shift
+            )
+        elif isinstance(attr, np.ndarray):
+            attr_str = _array_repr(attr)
         else:
-            return f"{cls_str}([{self[0]:.3e}, {self[1]:.3e}, ..., {self[-1]:.3e}])"
+            attr_str = repr(attr)
+        s += f"{' '*(indent + shift)}{key}{eq}{attr_str}\n"
+    if dct:
+        s += f"{' '*indent}{end}"
+    else:
+        s += end
+    return s
+
+
+def _array_repr(arr):
+    if arr.ndim == 0:
+        return f"{arr:.3e}"
+    cls_str = f"array{{{'x'.join(str(i) for i in arr.shape)},{arr.dtype}}}"
+    arr = arr.ravel()
+    num_els = arr.shape[0]
+    if num_els == 0:
+        return f"{cls_str}([])"
+    elif num_els == 1:
+        return f"{cls_str}([{arr[0]:.3e}])"
+    elif num_els == 2:
+        return f"{cls_str}([{arr[0]:.3e}, {arr[1]:.3e}])"
+    elif num_els == 3:
+        return f"{cls_str}([{arr[0]:.3e}, {arr[1]:.3e}, {arr[2]:.3e}])"
+    else:
+        return f"{cls_str}([{arr[0]:.3e}, {arr[1]:.3e}, ..., {arr[-1]:.3e}])"

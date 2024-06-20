@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import overload
 
-import numpy as np
 from pydantic import Field
 
 from meow.base_model import BaseModel

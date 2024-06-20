@@ -17,7 +17,7 @@ from meow.base_model import BaseModel
 from meow.environment import Environment
 
 
-class Material(BaseModel):
+class MaterialBase(BaseModel):
     """a `Material` defines the refractive index of a `Structure3D` within an `Environment`."""
 
     name: str = Field(description="the name of the material")
@@ -54,7 +54,7 @@ class Material(BaseModel):
         return self.name
 
 
-class TidyMaterial(Material):
+class TidyMaterial(MaterialBase):
     name: str = Field(description="The material name as also used by tidy3d")
     variant: str = Field(description="The material variant as also used by tidy3d")
 
@@ -93,14 +93,14 @@ class TidyMaterial(Material):
         return np.real(np.sqrt(eps))  # TODO: implement complex n
 
 
-class IndexMaterial(Material):
+class IndexMaterial(MaterialBase):
     n: float = Field(description="the refractive index of the material")
 
     def __call__(self, _: Environment) -> np.ndarray:
         return np.squeeze(np.real(self.n))  # TODO: allow complex multi-dimensional n
 
 
-class SampledMaterial(Material):
+class SampledMaterial(MaterialBase):
     n: Annotated[NDArray, Dim(1), DType("float64")] = Field(
         description="the complex refractive index of the material"
     )
@@ -164,6 +164,7 @@ class SampledMaterial(Material):
         return np.squeeze(np.real(n))  # TODO: allow complex multi-dimensional n
 
 
+Material = IndexMaterial | SampledMaterial | TidyMaterial
 Materials = list[Material]
 MATERIALS: dict[str, Material] = {}
 

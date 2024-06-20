@@ -25,13 +25,16 @@ from .gds_structures import GdsExtrusionRule as GdsExtrusionRule
 from .gds_structures import extrude_gds as extrude_gds
 from .geometries import Box as Box
 from .geometries import Geometry2D as Geometry2D
+from .geometries import Geometry2DBase as Geometry2DBase
 from .geometries import Geometry3D as Geometry3D
+from .geometries import Geometry3DBase as Geometry3DBase
 from .geometries import Prism as Prism
 from .geometries import Rectangle as Rectangle
 from .integrate import integrate_2d as integrate_2d
 from .integrate import integrate_interpolate_2d as integrate_interpolate_2d
 from .materials import IndexMaterial as IndexMaterial
 from .materials import Material as Material
+from .materials import MaterialBase as MaterialBase
 from .materials import SampledMaterial as SampledMaterial
 from .materials import TidyMaterial as TidyMaterial
 from .materials import silicon as silicon
@@ -51,4 +54,5 @@ from .mode import zero_phase as zero_phase
 from .structures import Structure as Structure
 from .structures import Structure2D as Structure2D
 from .structures import Structure3D as Structure3D
+from .visualize import visualize as vis
 from .visualize import visualize as visualize

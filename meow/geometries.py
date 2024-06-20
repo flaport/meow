@@ -18,7 +18,7 @@ from meow.base_model import BaseModel
 AxisDirection = Literal["x", "y", "z"]
 
 
-class Geometry2D(BaseModel):
+class Geometry2DBase(BaseModel):
     def _mask(self, X, Y):
         raise NotImplementedError(f"{self.__class__.__name__!r} cannot be masked.")
 
@@ -26,7 +26,7 @@ class Geometry2D(BaseModel):
         raise NotImplementedError(f"{self.__class__.__name__!r} cannot be visualized.")
 
 
-class Rectangle(Geometry2D):
+class Rectangle(Geometry2DBase):
     """a Rectangle"""
 
     x_min: float = Field(description="the minimum x-value of the box")
@@ -66,8 +66,11 @@ class Rectangle(Geometry2D):
             plt.show()
 
 
-class Geometry3D(BaseModel):
-    def _project(self, z: float) -> list[Geometry2D]:
+Geometry2D = Rectangle  # should be a union of all 2D Geometries
+
+
+class Geometry3DBase(BaseModel):
+    def _project(self, z: float) -> list[Geometry2DBase]:
         raise NotImplementedError(
             f"{self.__class__.__name__!r} cannot be projected to 2D."
         )
@@ -90,7 +93,7 @@ class Geometry3D(BaseModel):
         raise NotImplementedError(f"{self.__class__.__name__!r} cannot be visualized.")
 
 
-class Box(Geometry3D):
+class Box(Geometry3DBase):
     """A Box is a simple rectangular cuboid"""
 
     x_min: float = Field(description="the minimum x-value of the box")
@@ -100,7 +103,7 @@ class Box(Geometry3D):
     z_min: float = Field(description="the minimum z-value of the box")
     z_max: float = Field(description="the maximum z-value of the box")
 
-    def _project(self, z: float) -> list[Geometry2D]:
+    def _project(self, z: float) -> list[Geometry2DBase]:
         if z < self.z_min or z > self.z_max:
             return []
         rect = Rectangle(
@@ -150,7 +153,7 @@ class Box(Geometry3D):
         return prism
 
 
-class Prism(Geometry3D):
+class Prism(Geometry3DBase):
     """A prism is a 2D Polygon extruded along a certain axis direction ('x', 'y', or 'z')."""
 
     poly: Annotated[NDArray, Shape(-1, 2), DType("float64")] = Field(
@@ -236,7 +239,7 @@ class Prism(Geometry3D):
         else:
             return [self.poly]
 
-    def _project(self, z: float) -> list[Geometry2D]:
+    def _project(self, z: float) -> list[Geometry2DBase]:
         if self.axis == "x":
             return self._project_axis_x(z)
         elif self.axis == "y":
@@ -315,6 +318,9 @@ class Prism(Geometry3D):
             "y": (0, 1, 0),
             "z": (0, 0, 1),
         }[self.axis]
+
+
+Geometry3D = Box | Prism
 
 
 def _to_rgba(c):
