@@ -19,6 +19,12 @@ Submodules
 ----------
 
 
+.. automodule:: meow.array
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 .. automodule:: meow.base_model
    :members:
    :undoc-members:
