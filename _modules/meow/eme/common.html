@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.eme.common &#8212; meow 0.10.0 documentation</title>
+    <title>meow.eme.common &#8212; meow 0.11.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../../_static/documentation_options.js?v=cb265169"></script>
+    <script src="../../../_static/documentation_options.js?v=37fc6485"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -140,8 +140,8 @@
       
     
     
-    <img src="../../../_static/meow.png" class="logo__image only-light" alt="meow 0.10.0 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/meow.png" class="logo__image only-dark" alt="meow 0.10.0 documentation - Home"/>`);</script>
+    <img src="../../../_static/meow.png" class="logo__image only-light" alt="meow 0.11.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -382,12 +382,6 @@ document.write(`
     <span class="c1"># transmission L-&gt;R</span>
     <span class="n">LHS</span> <span class="o">=</span> <span class="n">conj</span><span class="p">(</span><span class="n">O_LR</span><span class="p">)</span> <span class="o">+</span> <span class="n">O_RL</span><span class="o">.</span><span class="n">T</span>
     <span class="n">RHS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">O_LL</span><span class="p">)</span>
-
-    <span class="c1"># print(f&quot;LHS: {LHS}&quot;)</span>
-    <span class="c1"># vis(LHS)</span>
-
-    <span class="c1"># print(f&quot;RHS: {RHS}&quot;)</span>
-    <span class="c1"># vis(RHS)</span>
 
     <span class="n">T_LR</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">LHS</span><span class="p">,</span> <span class="n">RHS</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 

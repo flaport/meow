@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.geometries &#8212; meow 0.10.0 documentation</title>
+    <title>meow.geometries &#8212; meow 0.11.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=cb265169"></script>
+    <script src="../../_static/documentation_options.js?v=37fc6485"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -140,8 +140,8 @@
       
     
     
-    <img src="../../_static/meow.png" class="logo__image only-light" alt="meow 0.10.0 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/meow.png" class="logo__image only-dark" alt="meow 0.10.0 documentation - Home"/>`);</script>
+    <img src="../../_static/meow.png" class="logo__image only-light" alt="meow 0.11.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -326,59 +326,40 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for meow.geometries</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span></span><span class="sd">&quot;&quot;&quot; meow geometries &quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">secrets</span> <span class="kn">import</span> <span class="n">token_hex</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="k">as</span> <span class="nn">sg</span>
 <span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Rectangle</span> <span class="k">as</span> <span class="n">MplRect</span>
-<span class="kn">from</span> <span class="nn">pydantic.v1</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">validator</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
 
+<span class="kn">from</span> <span class="nn">meow.array</span> <span class="kn">import</span> <span class="n">DType</span><span class="p">,</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">Shape</span>
 <span class="kn">from</span> <span class="nn">meow.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 
-<span class="n">GEOMETRIES_3D</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">GEOMETRIES_2D</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">AxisDirection</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]]</span>
+<span class="n">AxisDirection</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="Geometry2D">
-<a class="viewcode-back" href="../../meow.html#meow.geometries.Geometry2D">[docs]</a>
-<span class="k">class</span> <span class="nc">Geometry2D</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="n">GEOMETRIES_2D</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
-
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">cls</span> <span class="o">=</span> <span class="n">GEOMETRIES_2D</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span> <span class="bp">cls</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-
-<div class="viewcode-block" id="Geometry2D.validate_type">
-<a class="viewcode-back" href="../../meow.html#meow.geometries.Geometry2D.validate_type">[docs]</a>
-    <span class="nd">@validator</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">always</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">validate_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="s2">&quot;Geometry&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">GEOMETRIES_2D</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid Geometry type. Got: </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2">. Valid types: </span><span class="si">{</span><span class="n">GEOMETRIES_2D</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">value</span></div>
-
-
+<div class="viewcode-block" id="Geometry2DBase">
+<a class="viewcode-back" href="../../meow.html#meow.geometries.Geometry2DBase">[docs]</a>
+<span class="k">class</span> <span class="nc">Geometry2DBase</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> cannot be masked.&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">ignored</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> cannot be visualized.&quot;</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="Rectangle">
 <a class="viewcode-back" href="../../meow.html#meow.geometries.Rectangle">[docs]</a>
-<span class="k">class</span> <span class="nc">Rectangle</span><span class="p">(</span><span class="n">Geometry2D</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Rectangle</span><span class="p">(</span><span class="n">Geometry2DBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;a Rectangle&quot;&quot;&quot;</span>
 
     <span class="n">x_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the minimum x-value of the box&quot;</span><span class="p">)</span>
@@ -395,7 +376,7 @@ document.write(`
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">mask</span>
 
-    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">ignored</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -419,35 +400,18 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="Geometry3D">
-<a class="viewcode-back" href="../../meow.html#meow.geometries.Geometry3D">[docs]</a>
-<span class="k">class</span> <span class="nc">Geometry3D</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="n">GEOMETRIES_3D</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
-
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">cls</span> <span class="o">=</span> <span class="n">GEOMETRIES_3D</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span> <span class="bp">cls</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-
-<div class="viewcode-block" id="Geometry3D.validate_type">
-<a class="viewcode-back" href="../../meow.html#meow.geometries.Geometry3D.validate_type">[docs]</a>
-    <span class="nd">@validator</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">pre</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">always</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">validate_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="s2">&quot;Geometry&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">GEOMETRIES_3D</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid Geometry type. Got: </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2">. Valid types: </span><span class="si">{</span><span class="n">GEOMETRIES_3D</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">value</span></div>
+<span class="n">Geometry2D</span> <span class="o">=</span> <span class="n">Rectangle</span>  <span class="c1"># should be a union of all 2D Geometries</span>
 
 
-    <span class="k">def</span> <span class="nf">_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Geometry2D</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> cannot be projected.&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Geometry3DBase">
+<a class="viewcode-back" href="../../meow.html#meow.geometries.Geometry3DBase">[docs]</a>
+<span class="k">class</span> <span class="nc">Geometry3DBase</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Geometry2DBase</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> cannot be projected to 2D.&quot;</span>
+        <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">ignored</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">trimesh.scene</span> <span class="kn">import</span> <span class="n">Scene</span>  <span class="c1"># fmt: skip</span>
         <span class="kn">from</span> <span class="nn">trimesh.transformations</span> <span class="kn">import</span> <span class="n">rotation_matrix</span>  <span class="c1"># fmt: skip</span>
 
@@ -461,14 +425,14 @@ document.write(`
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> cannot be added to Lumerical.&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_trimesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_trimesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> cannot be visualized.&quot;</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="Box">
 <a class="viewcode-back" href="../../meow.html#meow.geometries.Box">[docs]</a>
-<span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">Geometry3D</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">Geometry3DBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A Box is a simple rectangular cuboid&quot;&quot;&quot;</span>
 
     <span class="n">x_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the minimum x-value of the box&quot;</span><span class="p">)</span>
@@ -478,7 +442,7 @@ document.write(`
     <span class="n">z_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the minimum z-value of the box&quot;</span><span class="p">)</span>
     <span class="n">z_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the maximum z-value of the box&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Geometry2D</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Geometry2DBase</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">z</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_min</span> <span class="ow">or</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_max</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="n">rect</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span>
@@ -489,7 +453,7 @@ document.write(`
         <span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">rect</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_lumadd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">material_name</span><span class="p">,</span> <span class="n">mesh_order</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_lumadd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">material_name</span><span class="p">,</span> <span class="n">mesh_order</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="s2">&quot;yzx&quot;</span><span class="p">):</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">xyz</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">token_hex</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
@@ -531,10 +495,10 @@ document.write(`
 
 <div class="viewcode-block" id="Prism">
 <a class="viewcode-back" href="../../meow.html#meow.geometries.Prism">[docs]</a>
-<span class="k">class</span> <span class="nc">Prism</span><span class="p">(</span><span class="n">Geometry3D</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Prism</span><span class="p">(</span><span class="n">Geometry3DBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A prism is a 2D Polygon extruded along a certain axis direction (&#39;x&#39;, &#39;y&#39;, or &#39;z&#39;).&quot;&quot;&quot;</span>
 
-    <span class="n">poly</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+    <span class="n">poly</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">Shape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">DType</span><span class="p">(</span><span class="s2">&quot;float64&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the 2D array (Nx2) with polygon vertices&quot;</span>
     <span class="p">)</span>
     <span class="n">h_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the start height of the extrusion&quot;</span><span class="p">)</span>
@@ -558,7 +522,7 @@ document.write(`
             <span class="n">intersection_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">intersections</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">intersection_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="k">return</span> <span class="p">[]</span>
-            <span class="n">intersections</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">MultiLineString</span><span class="p">([</span><span class="n">intersections</span><span class="p">])</span>
+            <span class="n">intersections</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">MultiLineString</span><span class="p">([</span><span class="n">intersections</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
 
         <span class="n">geoms_2d</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">intersection</span> <span class="ow">in</span> <span class="n">intersections</span><span class="o">.</span><span class="n">geoms</span><span class="p">:</span>
@@ -591,7 +555,7 @@ document.write(`
             <span class="n">intersection_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">intersections</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">intersection_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="k">return</span> <span class="p">[]</span>
-            <span class="n">intersections</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">MultiLineString</span><span class="p">([</span><span class="n">intersections</span><span class="p">])</span>
+            <span class="n">intersections</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">MultiLineString</span><span class="p">([</span><span class="n">intersections</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
 
         <span class="n">geoms_2d</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">intersection</span> <span class="ow">in</span> <span class="n">intersections</span><span class="o">.</span><span class="n">geoms</span><span class="p">:</span>
@@ -617,13 +581,13 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Geometry2DBase</span><span class="p">]:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">==</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project_axis_x</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project_axis_y</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project_axis_z</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project_axis_z</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="k">def</span> <span class="nf">_lumadd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">material_name</span><span class="p">,</span> <span class="n">mesh_order</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="s2">&quot;yzx&quot;</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">token_hex</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
@@ -697,6 +661,9 @@ document.write(`
             <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
         <span class="p">}[</span><span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">]</span></div>
 
+
+
+<span class="n">Geometry3D</span> <span class="o">=</span> <span class="n">Box</span> <span class="o">|</span> <span class="n">Prism</span>
 
 
 <span class="k">def</span> <span class="nf">_to_rgba</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>

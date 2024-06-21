@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.eme.sax &#8212; meow 0.10.0 documentation</title>
+    <title>meow.eme.sax &#8212; meow 0.11.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../../_static/documentation_options.js?v=cb265169"></script>
+    <script src="../../../_static/documentation_options.js?v=37fc6485"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -140,8 +140,8 @@
       
     
     
-    <img src="../../../_static/meow.png" class="logo__image only-light" alt="meow 0.10.0 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/meow.png" class="logo__image only-dark" alt="meow 0.10.0 documentation - Home"/>`);</script>
+    <img src="../../../_static/meow.png" class="logo__image only-light" alt="meow 0.11.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -333,10 +333,9 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sax</span>
 <span class="kn">from</span> <span class="nn">sax.backends</span> <span class="kn">import</span> <span class="n">circuit_backends</span>
-<span class="kn">from</span> <span class="nn">sax.utils</span> <span class="kn">import</span> <span class="n">get_ports</span>
 <span class="kn">from</span> <span class="nn">sax.saxtypes</span> <span class="kn">import</span> <span class="n">scoo</span>
+<span class="kn">from</span> <span class="nn">sax.utils</span> <span class="kn">import</span> <span class="n">get_ports</span>
 
-<span class="kn">from</span> <span class="nn">..base_model</span> <span class="kn">import</span> <span class="n">_array</span>
 <span class="kn">from</span> <span class="nn">..cell</span> <span class="kn">import</span> <span class="n">Cell</span>
 <span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span>
 <span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="p">(</span>
@@ -348,9 +347,7 @@ document.write(`
 <span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">klujax</span>
-
-
+    <span class="kn">import</span> <span class="nn">klujax</span>  <span class="c1"># fmt: skip</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">klujax</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -445,8 +442,8 @@ document.write(`
 
     <span class="c1"># TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.</span>
     <span class="n">net</span> <span class="o">=</span> <span class="n">_get_netlist</span><span class="p">(</span><span class="n">propagations</span><span class="p">,</span> <span class="n">interfaces</span><span class="p">)</span>
-    <span class="n">analyze_instances</span><span class="p">,</span> <span class="n">analyze_circuit</span><span class="p">,</span> <span class="n">evaluate_circuit</span> <span class="o">=</span> <span class="n">circuit_backends</span><span class="p">[</span><span class="n">sax_backend</span><span class="p">]</span>
-    <span class="c1"># TODO: use analyze_instances instead of manually converting to scoo</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">analyze_circuit</span><span class="p">,</span> <span class="n">evaluate_circuit</span> <span class="o">=</span> <span class="n">circuit_backends</span><span class="p">[</span><span class="n">sax_backend</span><span class="p">]</span>
+    <span class="c1"># TODO: use analyze_instances instead of manually converting to scoo ?</span>
     <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">scoo</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="n">analyzed</span> <span class="o">=</span> <span class="n">analyze_circuit</span><span class="p">(</span><span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">],</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">],</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;ports&quot;</span><span class="p">])</span>
     <span class="n">S</span><span class="p">,</span> <span class="n">port_map</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span>
@@ -455,7 +452,7 @@ document.write(`
             <span class="n">instances</span><span class="o">=</span><span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">],</span>
         <span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">_array</span><span class="p">)</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
 
     <span class="c1"># final sorting of result:</span>
     <span class="n">current_port_map</span> <span class="o">=</span> <span class="p">{</span>

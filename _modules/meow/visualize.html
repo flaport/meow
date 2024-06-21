@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.visualize &#8212; meow 0.10.0 documentation</title>
+    <title>meow.visualize &#8212; meow 0.11.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=cb265169"></script>
+    <script src="../../_static/documentation_options.js?v=37fc6485"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -140,8 +140,8 @@
       
     
     
-    <img src="../../_static/meow.png" class="logo__image only-light" alt="meow 0.10.0 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/meow.png" class="logo__image only-dark" alt="meow 0.10.0 documentation - Home"/>`);</script>
+    <img src="../../_static/meow.png" class="logo__image only-light" alt="meow 0.11.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -333,7 +333,7 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">meow.structures</span> <span class="kn">import</span> <span class="n">_visualize_structures</span>
+<span class="kn">from</span> <span class="nn">meow.structures</span> <span class="kn">import</span> <span class="n">Structure3D</span><span class="p">,</span> <span class="n">_sort_structures</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># fmt: skip</span>
@@ -613,6 +613,18 @@ document.write(`
 
 <span class="k">def</span> <span class="nf">_is_gf_component</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">gf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">gf</span><span class="o">.</span><span class="n">Component</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_visualize_structures</span><span class="p">(</span><span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;easily visualize a collection (list) of `Structure3D` objects&quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">trimesh.scene</span> <span class="kn">import</span> <span class="n">Scene</span>  <span class="c1"># fmt: skip</span>
+    <span class="kn">from</span> <span class="nn">trimesh.transformations</span> <span class="kn">import</span> <span class="n">rotation_matrix</span>  <span class="c1"># fmt: skip</span>
+
+    <span class="n">scene</span> <span class="o">=</span> <span class="n">Scene</span><span class="p">(</span>
+        <span class="n">geometry</span><span class="o">=</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">_trimesh</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">_sort_structures</span><span class="p">(</span><span class="n">structures</span><span class="p">)]</span>
+    <span class="p">)</span>
+    <span class="n">scene</span><span class="o">.</span><span class="n">apply_transform</span><span class="p">(</span><span class="n">rotation_matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">6</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">scene</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 
 <span class="n">VISUALIZATION_MAPPING</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>

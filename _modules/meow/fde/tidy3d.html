@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.fde.tidy3d &#8212; meow 0.10.0 documentation</title>
+    <title>meow.fde.tidy3d &#8212; meow 0.11.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../../_static/documentation_options.js?v=cb265169"></script>
+    <script src="../../../_static/documentation_options.js?v=37fc6485"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -140,8 +140,8 @@
       
     
     
-    <img src="../../../_static/meow.png" class="logo__image only-light" alt="meow 0.10.0 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/meow.png" class="logo__image only-dark" alt="meow 0.10.0 documentation - Home"/>`);</script>
+    <img src="../../../_static/meow.png" class="logo__image only-light" alt="meow 0.11.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -329,7 +329,7 @@ document.write(`
 <span></span><span class="sd">&quot;&quot;&quot; FDE Tidy3d backend (default backend for MEOW) &quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">tidy3d</span>
@@ -343,13 +343,13 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">Modes</span><span class="p">,</span> <span class="n">is_pml_mode</span><span class="p">,</span> <span class="n">normalize_product</span><span class="p">,</span> <span class="n">zero_phase</span>
 
 
+<span class="c1"># @validate_arguments</span>
 <div class="viewcode-block" id="compute_modes_tidy3d">
 <a class="viewcode-back" href="../../../meow.fde.html#meow.fde.tidy3d.compute_modes_tidy3d">[docs]</a>
-<span class="nd">@validate_arguments</span>
 <span class="k">def</span> <span class="nf">compute_modes_tidy3d</span><span class="p">(</span>
     <span class="n">cs</span><span class="p">:</span> <span class="n">CrossSection</span><span class="p">,</span>
     <span class="n">num_modes</span><span class="p">:</span> <span class="n">PositiveInt</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="n">target_neff</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PositiveFloat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">target_neff</span><span class="p">:</span> <span class="n">PositiveFloat</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">precision</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;single&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;double&quot;</span><span class="p">,</span>
     <span class="n">pml_mode_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Modes</span><span class="p">:</span>
@@ -374,6 +374,13 @@ document.write(`
     <span class="k">else</span><span class="p">:</span>
         <span class="n">eps_cross</span> <span class="o">=</span> <span class="p">[</span><span class="n">cs</span><span class="o">.</span><span class="n">nx</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">cs</span><span class="o">.</span><span class="n">ny</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">cs</span><span class="o">.</span><span class="n">nz</span><span class="o">**</span><span class="mi">2</span><span class="p">]</span>
 
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">cs</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_radius</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">cs</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_radius</span><span class="p">):</span>
+        <span class="n">bend_radius</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">bend_axis</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bend_radius</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_radius</span>
+        <span class="n">bend_axis</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_axis</span>
+
     <span class="n">mode_spec</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span>  <span class="c1"># tidy3d.ModeSpec alternative (prevents type checking)</span>
         <span class="n">num_modes</span><span class="o">=</span><span class="n">num_modes</span><span class="p">,</span>
         <span class="n">target_neff</span><span class="o">=</span><span class="n">target_neff</span><span class="p">,</span>
@@ -381,9 +388,9 @@ document.write(`
         <span class="n">filter_pol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">angle_theta</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">angle_theta</span><span class="p">,</span>
         <span class="n">angle_phi</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">angle_phi</span><span class="p">,</span>
-        <span class="n">bend_radius</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_radius</span><span class="p">,</span>
+        <span class="n">bend_radius</span><span class="o">=</span><span class="n">bend_radius</span><span class="p">,</span>
         <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
-        <span class="n">bend_axis</span><span class="o">=</span><span class="n">cs</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">bend_axis</span><span class="p">,</span>
+        <span class="n">bend_axis</span><span class="o">=</span><span class="n">bend_axis</span><span class="p">,</span>
         <span class="n">track_freq</span><span class="o">=</span><span class="s2">&quot;central&quot;</span><span class="p">,</span>
         <span class="n">group_index_step</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>

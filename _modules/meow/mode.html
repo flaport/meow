@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.mode &#8212; meow 0.10.0 documentation</title>
+    <title>meow.mode &#8212; meow 0.11.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=cb265169"></script>
+    <script src="../../_static/documentation_options.js?v=37fc6485"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -140,8 +140,8 @@
       
     
     
-    <img src="../../_static/meow.png" class="logo__image only-light" alt="meow 0.10.0 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/meow.png" class="logo__image only-dark" alt="meow 0.10.0 documentation - Home"/>`);</script>
+    <img src="../../_static/meow.png" class="logo__image only-light" alt="meow 0.11.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -331,18 +331,19 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pydantic.v1</span> <span class="kn">import</span> <span class="n">Field</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">epsilon_0</span> <span class="k">as</span> <span class="n">eps0</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">mu_0</span> <span class="k">as</span> <span class="n">mu0</span>
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
 
-<span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">cached_property</span>
-<span class="kn">from</span> <span class="nn">.cross_section</span> <span class="kn">import</span> <span class="n">CrossSection</span>
-<span class="kn">from</span> <span class="nn">.integrate</span> <span class="kn">import</span> <span class="n">integrate_2d</span>
-<span class="kn">from</span> <span class="nn">.visualize</span> <span class="kn">import</span> <span class="n">_figsize_visualize_mode</span>
+<span class="kn">from</span> <span class="nn">meow.array</span> <span class="kn">import</span> <span class="n">Complex</span><span class="p">,</span> <span class="n">ComplexArray2D</span>
+<span class="kn">from</span> <span class="nn">meow.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">meow.cross_section</span> <span class="kn">import</span> <span class="n">CrossSection</span>
+<span class="kn">from</span> <span class="nn">meow.integrate</span> <span class="kn">import</span> <span class="n">integrate_2d</span>
+<span class="kn">from</span> <span class="nn">meow.visualize</span> <span class="kn">import</span> <span class="n">_figsize_visualize_mode</span>
 
 
 <div class="viewcode-block" id="Mode">
@@ -350,37 +351,25 @@ document.write(`
 <span class="k">class</span> <span class="nc">Mode</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A `Mode` contains the field information for a given `CrossSection`.&quot;&quot;&quot;</span>
 
-    <span class="n">neff</span><span class="p">:</span> <span class="nb">complex</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the effective index of the mode&quot;</span><span class="p">)</span>
+    <span class="n">neff</span><span class="p">:</span> <span class="n">Complex</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the effective index of the mode&quot;</span><span class="p">)</span>
     <span class="n">cs</span><span class="p">:</span> <span class="n">CrossSection</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the index cross section for which the mode was calculated&quot;</span>
     <span class="p">)</span>
-    <span class="n">Ex</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Ex-fields of the mode&quot;</span>
-    <span class="p">)</span>
-    <span class="n">Ey</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Ey-fields of the mode&quot;</span>
-    <span class="p">)</span>
-    <span class="n">Ez</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Ez-fields of the mode&quot;</span>
-    <span class="p">)</span>
-    <span class="n">Hx</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Hx-fields of the mode&quot;</span>
-    <span class="p">)</span>
-    <span class="n">Hy</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Hy-fields of the mode&quot;</span>
-    <span class="p">)</span>
-    <span class="n">Hz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex_</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Hz-fields of the mode&quot;</span>
-    <span class="p">)</span>
-    <span class="n">interpolation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">,</span> <span class="s2">&quot;Ey&quot;</span><span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">,</span> <span class="s2">&quot;Hz&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">Ex</span><span class="p">:</span> <span class="n">ComplexArray2D</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Ex-fields of the mode&quot;</span><span class="p">)</span>
+    <span class="n">Ey</span><span class="p">:</span> <span class="n">ComplexArray2D</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Ey-fields of the mode&quot;</span><span class="p">)</span>
+    <span class="n">Ez</span><span class="p">:</span> <span class="n">ComplexArray2D</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Ez-fields of the mode&quot;</span><span class="p">)</span>
+    <span class="n">Hx</span><span class="p">:</span> <span class="n">ComplexArray2D</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Hx-fields of the mode&quot;</span><span class="p">)</span>
+    <span class="n">Hy</span><span class="p">:</span> <span class="n">ComplexArray2D</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Hy-fields of the mode&quot;</span><span class="p">)</span>
+    <span class="n">Hz</span><span class="p">:</span> <span class="n">ComplexArray2D</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the Hz-fields of the mode&quot;</span><span class="p">)</span>
+    <span class="n">interpolation</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">,</span> <span class="s2">&quot;Ey&quot;</span><span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">,</span> <span class="s2">&quot;Hz&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;To which 2D Yee-location the fields are interpolated to.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
 <div class="viewcode-block" id="Mode.interpolate">
 <a class="viewcode-back" href="../../meow.html#meow.mode.Mode.interpolate">[docs]</a>
     <span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">,</span> <span class="s2">&quot;Ey&quot;</span><span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">,</span> <span class="s2">&quot;Hx&quot;</span><span class="p">,</span> <span class="s2">&quot;Hy&quot;</span><span class="p">,</span> <span class="s2">&quot;Hz&quot;</span><span class="p">]):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot interpolate from already interpolated mode!&quot;</span><span class="p">)</span>
         <span class="n">interpolate_funcs</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;EX&quot;</span><span class="p">:</span> <span class="n">_interpolate_Ex</span><span class="p">,</span>
@@ -453,6 +442,7 @@ document.write(`
         <span class="n">num_levels</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
         <span class="n">operation</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">ignored</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># fmt: skip</span>
         <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">colors</span>  <span class="c1"># fmt: skip</span>
@@ -569,7 +559,7 @@ document.write(`
                 <span class="sa">f</span><span class="s2">&quot;unsupported operand type(s) for +: &#39;Mode&#39; and &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
             <span class="p">)</span>
         <span class="n">new_mode</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">(</span>
-            <span class="n">neff</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">neff</span><span class="p">]),</span>
+            <span class="n">neff</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neff</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">neff</span><span class="p">),</span>
             <span class="n">cs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span>
             <span class="n">Ex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ex</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">Ex</span><span class="p">,</span>
             <span class="n">Ey</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ey</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">Ey</span><span class="p">,</span>
@@ -615,7 +605,7 @@ document.write(`
 
 
 
-<span class="n">Modes</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">]</span>
+<span class="n">Modes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mode</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="zero_phase">
@@ -718,7 +708,7 @@ document.write(`
 <a class="viewcode-back" href="../../meow.html#meow.mode.electric_energy_density">[docs]</a>
 <span class="k">def</span> <span class="nf">electric_energy_density</span><span class="p">(</span>
     <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the electric energy density contained in a `Mode`&quot;&quot;&quot;</span>
     <span class="n">epsx</span><span class="p">,</span> <span class="n">epsy</span><span class="p">,</span> <span class="n">epsz</span> <span class="o">=</span> <span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">nx</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">ny</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">nz</span><span class="o">**</span><span class="mi">2</span>
     <span class="k">return</span> <span class="p">(</span>
@@ -745,7 +735,7 @@ document.write(`
 <a class="viewcode-back" href="../../meow.html#meow.mode.magnetic_energy_density">[docs]</a>
 <span class="k">def</span> <span class="nf">magnetic_energy_density</span><span class="p">(</span>
     <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the magnetic energy density contained in a `Mode`&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="mf">0.5</span> <span class="o">*</span> <span class="n">mu0</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hx</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hy</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Hz</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
@@ -763,7 +753,7 @@ document.write(`
 
 <div class="viewcode-block" id="energy_density">
 <a class="viewcode-back" href="../../meow.html#meow.mode.energy_density">[docs]</a>
-<span class="k">def</span> <span class="nf">energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]:</span>
+<span class="k">def</span> <span class="nf">energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the energy density contained in a `Mode`&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">electric_energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span> <span class="o">+</span> <span class="n">magnetic_energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
 

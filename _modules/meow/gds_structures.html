@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.gds_structures &#8212; meow 0.10.0 documentation</title>
+    <title>meow.gds_structures &#8212; meow 0.11.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=cb265169"></script>
+    <script src="../../_static/documentation_options.js?v=37fc6485"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -140,8 +140,8 @@
       
     
     
-    <img src="../../_static/meow.png" class="logo__image only-light" alt="meow 0.10.0 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/meow.png" class="logo__image only-dark" alt="meow 0.10.0 documentation - Home"/>`);</script>
+    <img src="../../_static/meow.png" class="logo__image only-light" alt="meow 0.11.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -328,17 +328,15 @@ document.write(`
   <h1>Source code for meow.gds_structures</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; GDS Extrusions &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
-
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pkg_resources</span>
 <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="k">as</span> <span class="nn">sg</span>
-<span class="kn">from</span> <span class="nn">pydantic.v1</span> <span class="kn">import</span> <span class="n">Field</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
 
-<span class="kn">from</span> <span class="nn">.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
-<span class="kn">from</span> <span class="nn">.geometries</span> <span class="kn">import</span> <span class="n">Prism</span>
-<span class="kn">from</span> <span class="nn">.materials</span> <span class="kn">import</span> <span class="n">Material</span>
-<span class="kn">from</span> <span class="nn">.structures</span> <span class="kn">import</span> <span class="n">Structure3D</span>
+<span class="kn">from</span> <span class="nn">meow.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span> <span class="nn">meow.geometries</span> <span class="kn">import</span> <span class="n">Prism</span>
+<span class="kn">from</span> <span class="nn">meow.materials</span> <span class="kn">import</span> <span class="n">Material</span>
+<span class="kn">from</span> <span class="nn">meow.structures</span> <span class="kn">import</span> <span class="n">Structure3D</span>
 
 <span class="c1"># TODO: Maybe it makes more sense to use native GDSFactory tooling for this</span>
 
@@ -365,7 +363,7 @@ document.write(`
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">poly</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">)</span><span class="o">.</span><span class="n">boundary</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
-                <span class="kn">import</span> <span class="nn">gdspy</span>  <span class="c1"># fmt: skip</span>
+                <span class="kn">import</span> <span class="nn">gdspy</span>  <span class="c1"># fmt: skip # type: ignore</span>
 
                 <span class="n">polygonset</span> <span class="o">=</span> <span class="n">gdspy</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">gdspy</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">poly</span><span class="p">),</span> <span class="mf">0.25</span><span class="p">)</span>
                 <span class="k">assert</span> <span class="n">polygonset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
@@ -387,7 +385,7 @@ document.write(`
 <a class="viewcode-back" href="../../meow.html#meow.gds_structures.extrude_gds">[docs]</a>
 <span class="k">def</span> <span class="nf">extrude_gds</span><span class="p">(</span>
     <span class="n">cell</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
-    <span class="n">extrusions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">GdsExtrusionRule</span><span class="p">]],</span>
+    <span class="n">extrusions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">GdsExtrusionRule</span><span class="p">]],</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;extrude a gds cell given a dictionary of extruson rules</span>
 

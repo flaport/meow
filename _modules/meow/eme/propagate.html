@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>meow.eme.propagate &#8212; meow 0.10.0 documentation</title>
+    <title>meow.eme.propagate &#8212; meow 0.11.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../../_static/documentation_options.js?v=cb265169"></script>
+    <script src="../../../_static/documentation_options.js?v=37fc6485"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -140,8 +140,8 @@
       
     
     
-    <img src="../../../_static/meow.png" class="logo__image only-light" alt="meow 0.10.0 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/meow.png" class="logo__image only-dark" alt="meow 0.10.0 documentation - Home"/>`);</script>
+    <img src="../../../_static/meow.png" class="logo__image only-light" alt="meow 0.11.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.0 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -328,6 +328,8 @@ document.write(`
   <h1>Source code for meow.eme.propagate</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Propagating fields throug devices&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
 <span class="kn">import</span> <span class="nn">sax</span>
@@ -341,12 +343,12 @@ document.write(`
 <span class="kn">from</span> <span class="nn">meow.eme.sax</span> <span class="kn">import</span> <span class="n">_validate_sax_backend</span>
 
 
-<span class="k">def</span> <span class="nf">_connect_two</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">sax_backend</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_connect_two</span><span class="p">(</span><span class="n">l</span><span class="p">:</span> <span class="n">sax</span><span class="o">.</span><span class="n">SType</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="n">sax</span><span class="o">.</span><span class="n">SType</span><span class="p">,</span> <span class="n">sax_backend</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;l -&gt; left, r -&gt; right&quot;&quot;&quot;</span>
     <span class="c1"># TODO there must be an easier way to do this...</span>
-    <span class="n">s_l</span><span class="p">,</span> <span class="n">p_l</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-    <span class="n">s_r</span><span class="p">,</span> <span class="n">p_r</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-    <span class="n">instances</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="n">l</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">}</span>
+    <span class="n">_s_l</span><span class="p">,</span> <span class="n">p_l</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+    <span class="n">_s_r</span><span class="p">,</span> <span class="n">p_r</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">sdense</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">instances</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">sax</span><span class="o">.</span><span class="n">SType</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="n">l</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">}</span>
     <span class="n">p_lr</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">p_l</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;right&quot;</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>  <span class="c1"># right ports of left</span>
     <span class="n">p_rl</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">p_r</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;left&quot;</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>  <span class="c1"># left ports of right</span>
 
@@ -357,7 +359,9 @@ document.write(`
     <span class="n">p_rl</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
     <span class="n">connections</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;l,</span><span class="si">{</span><span class="n">pl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;r,</span><span class="si">{</span><span class="n">pr</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">pl</span><span class="p">,</span> <span class="n">pr</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">p_lr</span><span class="p">,</span> <span class="n">p_rl</span><span class="p">)}</span>
     <span class="n">ports</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="p">{</span><span class="n">p</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;l,</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">p_ll</span><span class="p">},</span> <span class="o">**</span><span class="p">{</span><span class="n">p</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;r,</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">p_rr</span><span class="p">}}</span>
-    <span class="n">net</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">instances</span><span class="o">=</span><span class="n">instances</span><span class="p">,</span> <span class="n">connections</span><span class="o">=</span><span class="n">connections</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="n">ports</span><span class="p">)</span>
+    <span class="n">net</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">instances</span><span class="o">=</span><span class="n">instances</span><span class="p">,</span> <span class="n">connections</span><span class="o">=</span><span class="n">connections</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="n">ports</span>
+    <span class="p">)</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">analyze_circuit</span><span class="p">,</span> <span class="n">evaluate_circuit</span> <span class="o">=</span> <span class="n">circuit_backends</span><span class="p">[</span><span class="n">sax_backend</span><span class="p">]</span>
     <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">sax</span><span class="o">.</span><span class="n">scoo</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="n">analyzed</span> <span class="o">=</span> <span class="n">analyze_circuit</span><span class="p">(</span><span class="n">net</span><span class="p">[</span><span class="s2">&quot;instances&quot;</span><span class="p">],</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">],</span> <span class="n">net</span><span class="p">[</span><span class="s2">&quot;ports&quot;</span><span class="p">])</span>
