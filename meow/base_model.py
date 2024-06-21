@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from functools import wraps
 from hashlib import md5
-from typing import Any, Self
+from typing import Any
 
 import numpy as np
 import orjson
@@ -67,7 +67,7 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
         strict: bool | None = None,
         from_attributes: bool | None = None,
         context: dict[str, Any] | None = None,
-    ) -> Self:
+    ):
         """Validate a pydantic model instance.
 
         Args:
@@ -101,7 +101,7 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
         *,
         strict: bool | None = None,
         context: dict[str, Any] | None = None,
-    ) -> Self:
+    ):
         if isinstance(json_data, str):
             json_data = json_data.encode()
         dct = orjson.loads(json_data)
