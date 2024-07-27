@@ -86,11 +86,6 @@ def _get_polygons(cell) -> dict[tuple[int, int], list[np.ndarray]]:
 
 
 def _get_major_gdsfactory_version() -> int:
-    try:
-        import gdsfactory as _
-
-        version = pkg_resources.get_distribution("gdsfactory").version
-        major_version = int(version.split(".")[0])
-        return major_version
-    except ImportError:
-        return 0
+     from gdsfactory.config import __version__
+     major_version = int(__version__.split(".")[0])
+     return major_version
