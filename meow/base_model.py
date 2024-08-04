@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from functools import wraps
 from hashlib import md5
-from typing import Any
+from typing import Any, Iterable
 
 import numpy as np
 import orjson
@@ -129,13 +129,17 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
         return abs(int.from_bytes(md5(bts[:-1]).digest(), byteorder="big") % 10**18)
 
     def __eq__(self, other):
-        eq = True
-        for k, v in self.model_dump().items():
-            if isinstance(v, np.ndarray):
-                eq &= bool(((v - getattr(other, k)) < 1e-6).all())
-            else:
-                eq &= bool(v == getattr(other, k))
-        return eq
+        if isinstance(other, dict):
+            try:
+                other = self.__class__.model_validate(other)
+            except Exception:
+                return False
+        elif isinstance(other, str):
+            try:
+                other = self.__class__.model_validate_json(other)
+            except Exception:
+                return False
+        return _eq(self, other)
 
     def _repr(self, indent=0, shift=2):
         start = f"{self.__class__.__name__}("
@@ -233,3 +237,59 @@ def _array_repr(arr):
         return f"{cls_str}([{arr[0]:.3e}, {arr[1]:.3e}, {arr[2]:.3e}])"
     else:
         return f"{cls_str}([{arr[0]:.3e}, {arr[1]:.3e}, ..., {arr[-1]:.3e}])"
+
+
+def _eq(self: Any, other: Any):
+    if isinstance(self, BaseModel):
+        if isinstance(other, dict):
+            return _eq(self.model_dump(), other)
+        elif isinstance(other, BaseModel):
+            return _eq(self.model_dump(), other.model_dump())
+        else:
+            return False
+    elif isinstance(self, dict):
+        if not isinstance(other, dict):
+            return False
+        if not _eq(list(self), list(other)):
+            return False
+        for k, v in self.items():
+            if not k in other:
+                return False
+            w = other[k]
+            if not _eq(v, w):
+                return False
+        return True
+    elif isinstance(self, np.ndarray):
+        try:
+            other = np.asarray(other)
+        except Exception:
+            return False
+        if self.dtype != other.dtype:
+            return False
+        try:
+            self, other = np.broadcast_arrays(self, other)
+        except ValueError:
+            return False
+        if self.ndim == 0:
+            return _eq(self.item(), other.item())
+        if self.dtype == object:
+            return _eq(self.tolist(), other.tolist())
+        return (abs(self - other) < 1e-6).all()
+    elif isinstance(self, str):
+        if isinstance(other, bytes):
+            other = other.decode()
+        return self == other
+    elif isinstance(self, bytes):
+        if isinstance(other, str):
+            other = other.encode()
+        return self == other
+    elif isinstance(self, Iterable):
+        if not isinstance(other, Iterable):
+            return False
+        if not isinstance(self, list) or not isinstance(other, list):
+            return _eq(list(self), list(other))
+        return all([_eq(a, b) for a, b in zip(self, other)])
+    elif isinstance(self, float) or isinstance(other, float):
+        return abs(self - other) < 1e-6
+    else:
+        return self == other
