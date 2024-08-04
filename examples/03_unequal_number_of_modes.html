@@ -11,7 +11,7 @@
 <meta content="Sphinx, MyST" name="keywords" />
 <meta content="en_US" property="og:locale" />
 
-    <title>Unequal Number of Modes &#8212; meow 0.11.0 documentation</title>
+    <title>Unequal Number of Modes &#8212; meow 0.11.1 documentation</title>
   
   
   
@@ -21,12 +21,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
@@ -40,11 +40,11 @@
     <link rel="stylesheet" type="text/css" href="../_static/_static/css/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=37fc6485"></script>
+    <script src="../_static/documentation_options.js?v=8c00e698"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -132,6 +132,8 @@
         <div class="sidebar-primary-item">
 
   
+    
+  
 
 <a class="navbar-brand logo" href="../index.html">
   
@@ -144,8 +146,8 @@
       
     
     
-    <img src="../_static/meow.png" class="logo__image only-light" alt="meow 0.11.0 documentation - Home"/>
-    <script>document.write(`<img src="../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.0 documentation - Home"/>`);</script>
+    <img src="../_static/meow.png" class="logo__image only-light" alt="meow 0.11.1 documentation - Home"/>
+    <script>document.write(`<img src="../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.1 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -153,7 +155,7 @@
 
  <script>
  document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
     <span class="search-button__default-text">Search</span>
     <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -402,10 +404,10 @@
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script>
@@ -413,7 +415,7 @@ document.write(`
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
@@ -1746,7 +1748,7 @@ return Promise.all(pending).then(function(){return scene;});};}();return GLTFLoa
 Math.pow(distanceToCamera,2)+
 Math.pow(distanceToCamera,2));camera.position.set(len,len,len);controls.update();camera.lookAt(boundingSphere.center);controls.target.set(boundingSphere.center.x,boundingSphere.center.y,boundingSphere.center.z);camera.updateProjectionMatrix();}
 function centerControls(obj,camera,controls){const boundingBox=new THREE.Box3().setFromObject(obj);const boundingSphere=new THREE.Sphere();boundingBox.getBoundingSphere((target=boundingSphere));controls.update();controls.target.set(boundingSphere.center.x,boundingSphere.center.y,boundingSphere.center.z);}
-function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);tracklight=new THREE.DirectionalLight(0xffffff,1.75);scene.add(tracklight);base64_data=&quot;Z2xURgIAAABoCQAAvAcAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjEsImNvdW50Ijo4LCJtYXgiOlsyLjA5OTk5OTkwNDYzMjU2ODQsMC4wLDEwLjBdLCJtaW4iOlstMi4wOTk5OTk5MDQ2MzI1Njg0LC0zLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjIsImNvdW50Ijo4LCJtYXgiOlsyMzAsMjMwLDIzMCwyMzBdLCJtaW4iOlsyMzAsMjMwLDIzMCwyMzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MywiY291bnQiOjgsIm1heCI6WzAuMjUsMC4yMTk5OTk5OTg4MDc5MDcxLDEwLjBdLCJtaW4iOlstMC4yNSwwLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjQsImNvdW50Ijo4LCJtYXgiOlsyMzAsMCwwLDIzMF0sIm1pbiI6WzIzMCwwLDAsMjMwXX1dLCJtZXNoZXMiOlt7Im5hbWUiOiJnZW9tZXRyeV8wIiwiZXh0cmFzIjp7InByb2Nlc3NlZCI6dHJ1ZX0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEsIkNPTE9SXzAiOjJ9LCJpbmRpY2VzIjowLCJtb2RlIjo0fV19LHsibmFtZSI6Imdlb21ldHJ5XzEiLCJleHRyYXMiOnsicHJvY2Vzc2VkIjp0cnVlfSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MywiQ09MT1JfMCI6NH0sImluZGljZXMiOjAsIm1vZGUiOjR9XX1dLCJjYW1lcmFzIjpbeyJuYW1lIjoiY2FtZXJhX0VBOEE3OCIsInR5cGUiOiJwZXJzcGVjdGl2ZSIsInBlcnNwZWN0aXZlIjp7ImFzcGVjdFJhdGlvIjoxLjMzMzMzMzMzMzMzMzMzMzMsInlmb3YiOjAuNzg1Mzk4MTYzMzk3NDQ4Mywiem5lYXIiOjAuMDF9fV0sIm5vZGVzIjpbeyJuYW1lIjoid29ybGQiLCJjaGlsZHJlbiI6WzEsMiwzXX0seyJuYW1lIjoiZ2VvbWV0cnlfMCIsIm1lc2giOjAsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiZ2VvbWV0cnlfMSIsIm1lc2giOjEsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiY2FtZXJhX0VBOEE3OCIsImNhbWVyYSI6MCwibWF0cml4IjpbMS4wLDAuMCwtMC4wLDAuMCwwLjAsMS4wLDAuMCwwLjAsMC4wLDAuMCwxLjAsMC4wLDIuNSwtMS4zOSw4LjUzMDEyNzAxODkyMjE5MiwxLjBdfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjQwMH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoxNDR9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoxNDQsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MjQwLCJieXRlTGVuZ3RoIjozMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI3MiwiYnl0ZUxlbmd0aCI6OTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjozNjgsImJ5dGVMZW5ndGgiOjMyfV19ICCQAQAAQklOAAEAAAAAAAAAAwAAAAMAAAACAAAAAQAAAAcAAAAEAAAABQAAAAUAAAAGAAAABwAAAAUAAAAEAAAAAQAAAAEAAAAEAAAAAAAAAAYAAAAFAAAAAgAAAAIAAAAFAAAAAQAAAAQAAAAHAAAAAAAAAAAAAAAHAAAAAwAAAAcAAAAGAAAAAwAAAAMAAAAGAAAAAgAAAGZmBsAAAEDAAAAAAGZmBsAAAEDAAAAgQWZmBkAAAEDAAAAgQWZmBkAAAEDAAAAAAGZmBsAAAAAAAAAAAGZmBsAAAAAAAAAgQWZmBkAAAAAAAAAgQWZmBkAAAAAAAAAAAObm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubmZmZmvgAAAAAAAAAAAACAvgAAAAAAACBBAACAPgAAAAAAACBBZmZmPgAAAAAAAAAAZmZmvq5HYT4AAAAAAACAvq5HYT4AACBBAACAPq5HYT4AACBBZmZmPq5HYT4AAAAA5gAA5uYAAObmAADm5gAA5uYAAObmAADm5gAA5uYAAOY=&quot;;;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(window.devicePixelRatio);renderer.setSize(window.innerWidth,window.innerHeight);document.body.appendChild(renderer.domElement);loader=new THREE.GLTFLoader();loader.load(&quot;data:text/plain;base64,&quot;+base64_data,function(gltf){scene.add(gltf.scene);camera=gltf.cameras[0];controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=1.0;controls.zoomSpeed=1.2;controls.panSpeed=0.8;controls.noZoom=false;controls.noPan=false;controls.staticMoving=true;controls.dynamicDampingFactor=0.3;controls.keys=[65,83,68];controls.addEventListener(&quot;change&quot;,render);centerControls(scene,camera,controls);render();window.addEventListener(&quot;resize&quot;,onWindowResize,false);animate();onWindowResize();});}
+function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);tracklight=new THREE.DirectionalLight(0xffffff,1.75);scene.add(tracklight);base64_data=&quot;Z2xURgIAAABoCQAAvAcAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjEsImNvdW50Ijo4LCJtYXgiOlsyLjA5OTk5OTkwNDYzMjU2ODQsMC4wLDEwLjBdLCJtaW4iOlstMi4wOTk5OTk5MDQ2MzI1Njg0LC0zLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjIsImNvdW50Ijo4LCJtYXgiOlsyMzAsMjMwLDIzMCwyMzBdLCJtaW4iOlsyMzAsMjMwLDIzMCwyMzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MywiY291bnQiOjgsIm1heCI6WzAuMjUsMC4yMTk5OTk5OTg4MDc5MDcxLDEwLjBdLCJtaW4iOlstMC4yNSwwLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjQsImNvdW50Ijo4LCJtYXgiOlsyMzAsMCwwLDIzMF0sIm1pbiI6WzIzMCwwLDAsMjMwXX1dLCJtZXNoZXMiOlt7Im5hbWUiOiJnZW9tZXRyeV8wIiwiZXh0cmFzIjp7InByb2Nlc3NlZCI6dHJ1ZX0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEsIkNPTE9SXzAiOjJ9LCJpbmRpY2VzIjowLCJtb2RlIjo0fV19LHsibmFtZSI6Imdlb21ldHJ5XzEiLCJleHRyYXMiOnsicHJvY2Vzc2VkIjp0cnVlfSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MywiQ09MT1JfMCI6NH0sImluZGljZXMiOjAsIm1vZGUiOjR9XX1dLCJjYW1lcmFzIjpbeyJuYW1lIjoiY2FtZXJhX0Q4QUE4QyIsInR5cGUiOiJwZXJzcGVjdGl2ZSIsInBlcnNwZWN0aXZlIjp7ImFzcGVjdFJhdGlvIjoxLjMzMzMzMzMzMzMzMzMzMzMsInlmb3YiOjAuNzg1Mzk4MTYzMzk3NDQ4Mywiem5lYXIiOjAuMDF9fV0sIm5vZGVzIjpbeyJuYW1lIjoid29ybGQiLCJjaGlsZHJlbiI6WzEsMiwzXX0seyJuYW1lIjoiZ2VvbWV0cnlfMCIsIm1lc2giOjAsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiZ2VvbWV0cnlfMSIsIm1lc2giOjEsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiY2FtZXJhX0Q4QUE4QyIsImNhbWVyYSI6MCwibWF0cml4IjpbMS4wLDAuMCwtMC4wLDAuMCwwLjAsMS4wLDAuMCwwLjAsMC4wLDAuMCwxLjAsMC4wLDIuNSwtMS4zOSw4LjUzMDEyNzAxODkyMjE5MiwxLjBdfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjQwMH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoxNDR9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoxNDQsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MjQwLCJieXRlTGVuZ3RoIjozMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI3MiwiYnl0ZUxlbmd0aCI6OTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjozNjgsImJ5dGVMZW5ndGgiOjMyfV19ICCQAQAAQklOAAEAAAAAAAAAAwAAAAMAAAACAAAAAQAAAAcAAAAEAAAABQAAAAUAAAAGAAAABwAAAAUAAAAEAAAAAQAAAAEAAAAEAAAAAAAAAAYAAAAFAAAAAgAAAAIAAAAFAAAAAQAAAAQAAAAHAAAAAAAAAAAAAAAHAAAAAwAAAAcAAAAGAAAAAwAAAAMAAAAGAAAAAgAAAGZmBsAAAEDAAAAAAGZmBsAAAEDAAAAgQWZmBkAAAEDAAAAgQWZmBkAAAEDAAAAAAGZmBsAAAAAAAAAAAGZmBsAAAAAAAAAgQWZmBkAAAAAAAAAgQWZmBkAAAAAAAAAAAObm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubmZmZmvgAAAAAAAAAAAACAvgAAAAAAACBBAACAPgAAAAAAACBBZmZmPgAAAAAAAAAAZmZmvq5HYT4AAAAAAACAvq5HYT4AACBBAACAPq5HYT4AACBBZmZmPq5HYT4AAAAA5gAA5uYAAObmAADm5gAA5uYAAObmAADm5gAA5uYAAOY=&quot;;;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(window.devicePixelRatio);renderer.setSize(window.innerWidth,window.innerHeight);document.body.appendChild(renderer.domElement);loader=new THREE.GLTFLoader();loader.load(&quot;data:text/plain;base64,&quot;+base64_data,function(gltf){scene.add(gltf.scene);camera=gltf.cameras[0];controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=1.0;controls.zoomSpeed=1.2;controls.panSpeed=0.8;controls.noZoom=false;controls.noPan=false;controls.staticMoving=true;controls.dynamicDampingFactor=0.3;controls.keys=[65,83,68];controls.addEventListener(&quot;change&quot;,render);centerControls(scene,camera,controls);render();window.addEventListener(&quot;resize&quot;,onWindowResize,false);animate();onWindowResize();});}
 function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);controls.handleResize();render();}
 function animate(){requestAnimationFrame(animate);controls.update();}
 function render(){tracklight.position.copy(camera.position);renderer.render(scene,camera);}
@@ -1814,14 +1816,14 @@ init();</script></body>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5898f627fa35277e7ec72affc6a4d0248977882c409c05162a1e05e53b4d640a.png" src="../_images/5898f627fa35277e7ec72affc6a4d0248977882c409c05162a1e05e53b4d640a.png" />
-<img alt="../_images/0877e6226ecd0a4a00b6ff7742137ce043429d1b4651092b5a7a1e9cc7826e7a.png" src="../_images/0877e6226ecd0a4a00b6ff7742137ce043429d1b4651092b5a7a1e9cc7826e7a.png" />
-<img alt="../_images/6ef73b3b40f3be8d88d52f857b7e37a8caba78d94593aa3115ba38fb33d94622.png" src="../_images/6ef73b3b40f3be8d88d52f857b7e37a8caba78d94593aa3115ba38fb33d94622.png" />
-<img alt="../_images/585e7d6291dbf24144069116f9e19911bdc7f9b26bc3a33c1ea821f865ac1d6b.png" src="../_images/585e7d6291dbf24144069116f9e19911bdc7f9b26bc3a33c1ea821f865ac1d6b.png" />
-<img alt="../_images/f2d11652b8a1fd863be0c99268dd820a506bfdca873a40221745880af80228a1.png" src="../_images/f2d11652b8a1fd863be0c99268dd820a506bfdca873a40221745880af80228a1.png" />
-<img alt="../_images/f10180b478fe6af105f9be5d44d81cf28fb66fd9ac06849485aca0f8fc4dd8a8.png" src="../_images/f10180b478fe6af105f9be5d44d81cf28fb66fd9ac06849485aca0f8fc4dd8a8.png" />
-<img alt="../_images/8469177a55b1367e434e7ad7fabe7e627f1c4a71c538d351670812723abb961f.png" src="../_images/8469177a55b1367e434e7ad7fabe7e627f1c4a71c538d351670812723abb961f.png" />
-<img alt="../_images/cb362af67438a7ef1236f7fae836e655b2e5ded5abd24f83dd3933cf5467561c.png" src="../_images/cb362af67438a7ef1236f7fae836e655b2e5ded5abd24f83dd3933cf5467561c.png" />
+<img alt="../_images/6e8f0e38727f027c5cef655179f801cfaaa062dafe2353a07fae780db47a1ea1.png" src="../_images/6e8f0e38727f027c5cef655179f801cfaaa062dafe2353a07fae780db47a1ea1.png" />
+<img alt="../_images/29d4d31cd0347cc5e1fb376a52356c3bd951c447f1116c2faedcb685b9e1edd7.png" src="../_images/29d4d31cd0347cc5e1fb376a52356c3bd951c447f1116c2faedcb685b9e1edd7.png" />
+<img alt="../_images/a7fc91f0e2ac83413ccf69bc7d368ef3325ffa977e38fddb267c1d8f89585e8c.png" src="../_images/a7fc91f0e2ac83413ccf69bc7d368ef3325ffa977e38fddb267c1d8f89585e8c.png" />
+<img alt="../_images/5573b1973df543c711073ee7ee8a977b841ca54d9e4c346d740cbd33f0e04c97.png" src="../_images/5573b1973df543c711073ee7ee8a977b841ca54d9e4c346d740cbd33f0e04c97.png" />
+<img alt="../_images/19183748c960cf766bb9d9dda1082be9f5e03fccbc69c955b9b53ac023a2316b.png" src="../_images/19183748c960cf766bb9d9dda1082be9f5e03fccbc69c955b9b53ac023a2316b.png" />
+<img alt="../_images/deb30e8bd86fdf25d67e41ffcacf7d393089cb8309222a060d431796cf4a2f1a.png" src="../_images/deb30e8bd86fdf25d67e41ffcacf7d393089cb8309222a060d431796cf4a2f1a.png" />
+<img alt="../_images/db885fd437504f582171b959505dbab0453e96e72e2e8886add7878facd669f3.png" src="../_images/db885fd437504f582171b959505dbab0453e96e72e2e8886add7878facd669f3.png" />
+<img alt="../_images/c7af280fc5a2d442585a3f1649ab2752cb82f5078bdce305351ce99c46e1bc9e.png" src="../_images/c7af280fc5a2d442585a3f1649ab2752cb82f5078bdce305351ce99c46e1bc9e.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1832,7 +1834,7 @@ init();</script></body>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2b01ce5ecd25188be562c2d67c07f81bf8d8b1ddc5a5f60c1c87237611c6aba7.png" src="../_images/2b01ce5ecd25188be562c2d67c07f81bf8d8b1ddc5a5f60c1c87237611c6aba7.png" />
+<img alt="../_images/628d70a921f45ced0d5a121a67572028867835d0506bd1f6a98aed361375479e.png" src="../_images/628d70a921f45ced0d5a121a67572028867835d0506bd1f6a98aed361375479e.png" />
 </div>
 </div>
 </section>
@@ -1868,7 +1870,7 @@ init();</script></body>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/cebf6425be57c62d20c0be5ca560124dbb0ed152badc4b0dcfd98f5318f8e8eb.png" src="../_images/cebf6425be57c62d20c0be5ca560124dbb0ed152badc4b0dcfd98f5318f8e8eb.png" />
+<img alt="../_images/68b5ba894ad10b43ef6f7acf53e2a53cc99c54a04ef2694c14ddb8c3b59f2e0b.png" src="../_images/68b5ba894ad10b43ef6f7acf53e2a53cc99c54a04ef2694c14ddb8c3b59f2e0b.png" />
 </div>
 </div>
 </section>
@@ -1969,8 +1971,8 @@ By Floris Laporte
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
