@@ -838,7 +838,7 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.base_model.BaseModel.model_validate_json">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model_validate_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/base_model.html#BaseModel.model_validate_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.base_model.BaseModel.model_validate_json" title="Link to this definition">#</a></dt>
-<dd><p>Usage docs: <a class="reference external" href="https://docs.pydantic.dev/2.8/concepts/json/#json-parsing">https://docs.pydantic.dev/2.8/concepts/json/#json-parsing</a></p>
+<dd><p>Usage docs: <a class="reference external" href="https://docs.pydantic.dev/2.9/concepts/json/#json-parsing">https://docs.pydantic.dev/2.9/concepts/json/#json-parsing</a></p>
 <p>Validate the given JSON data against the Pydantic model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -852,7 +852,7 @@ document.write(`
 <dd class="field-even"><p>The validated Pydantic model.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If <cite>json_data</cite> is not a JSON string.</p>
+<dd class="field-odd"><p><strong>ValidationError</strong> – If <cite>json_data</cite> is not a JSON string or the object could not be validated.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -948,11 +948,7 @@ a given mesh at the center of the Cell</p>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;mesh&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">         </span><span class="nt">&quot;allOf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">            </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Mesh2D&quot;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">         </span><span class="p">],</span>
+<span class="w">         </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Mesh2D&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the mesh to discretize the structures with&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;z_min&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -1531,7 +1527,7 @@ method.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>structures</strong> (<em>list</em><em>[</em><a class="reference internal" href="#meow.structures.Structure3D" title="meow.structures.Structure3D"><em>Structure3D</em></a><em>]</em>)</p></li>
 <li><p><strong>mesh</strong> (<a class="reference internal" href="#meow.mesh.Mesh2D" title="meow.mesh.Mesh2D"><em>Mesh2D</em></a><em> | </em><em>list</em><em>[</em><a class="reference internal" href="#meow.mesh.Mesh2D" title="meow.mesh.Mesh2D"><em>Mesh2D</em></a><em>]</em>)</p></li>
-<li><p><strong>Ls</strong> (<em>Annotated</em><em>[</em><em>ndarray</em><em>, </em><em>GetPydanticSchema</em><em>(</em><em>get_pydantic_core_schema=~meow.array._get_ndarray_core_schema</em><em>, </em><em>get_pydantic_json_schema=~meow.array._get_ndarray_json_schema</em><em>)</em><em>, </em><em>PlainSerializer</em><em>(</em><em>func=~meow.array._serialize_ndarray</em><em>, </em><em>return_type=PydanticUndefined</em><em>, </em><em>when_used=always</em><em>)</em><em>, </em><em>BeforeValidator</em><em>(</em><em>func=~meow.array._validate_ndarray</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=~meow.array._coerce_immutable</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=functools.partial</em><em>(</em><em>&lt;function _coerce_dim at 0x7f6151b10b80&gt;</em><em>, </em><em>ndim=1</em><em>)</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=functools.partial</em><em>(</em><em>&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;</em><em>, </em><em>dtype='float64'</em><em>)</em><em>)</em><em>]</em>)</p></li>
+<li><p><strong>Ls</strong> (<em>Annotated</em><em>[</em><em>ndarray</em><em>, </em><em>GetPydanticSchema</em><em>(</em><em>get_pydantic_core_schema=~meow.array._get_ndarray_core_schema</em><em>, </em><em>get_pydantic_json_schema=~meow.array._get_ndarray_json_schema</em><em>)</em><em>, </em><em>PlainSerializer</em><em>(</em><em>func=~meow.array._serialize_ndarray</em><em>, </em><em>return_type=PydanticUndefined</em><em>, </em><em>when_used=always</em><em>)</em><em>, </em><em>BeforeValidator</em><em>(</em><em>func=~meow.array._validate_ndarray</em><em>, </em><em>json_schema_input_type=PydanticUndefined</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=~meow.array._coerce_immutable</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=functools.partial</em><em>(</em><em>&lt;function _coerce_dim at 0x7f496dedf4c0&gt;</em><em>, </em><em>ndim=1</em><em>)</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=functools.partial</em><em>(</em><em>&lt;function _coerce_dtype at 0x7f496dedf600&gt;</em><em>, </em><em>dtype='float64'</em><em>)</em><em>)</em><em>]</em>)</p></li>
 <li><p><strong>z_min</strong> (<em>float</em>)</p></li>
 </ul>
 </dd>
@@ -1568,19 +1564,11 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;mesh&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">         </span><span class="nt">&quot;allOf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">            </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Mesh2D&quot;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">         </span><span class="p">],</span>
+<span class="w">         </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Mesh2D&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the mesh to discretize the structures with&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">         </span><span class="nt">&quot;allOf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">            </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Environment&quot;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">         </span><span class="p">],</span>
+<span class="w">         </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Environment&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the environment for which the cross section was calculated&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">   </span><span class="p">},</span>
@@ -1914,11 +1902,7 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Material&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;geometry&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;allOf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">                  </span><span class="p">{</span>
-<span class="w">                     </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Rectangle&quot;</span>
-<span class="w">                  </span><span class="p">}</span>
-<span class="w">               </span><span class="p">],</span>
+<span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Rectangle&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the geometry of the structure&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;mesh_order&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -3006,11 +2990,12 @@ method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’float64’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’float64’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -3465,25 +3450,26 @@ method.</p>
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">meta</span> <span class="pre">()</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">n</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">n</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span> <span class="pre">()</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">params</span> <span class="pre">(dict[str,</span> <span class="pre">Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">params</span> <span class="pre">(dict[str,</span> <span class="pre">Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">()</span></code></p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.materials.SampledMaterial.n">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f6151b10ca0&gt;,</span> <span class="pre">dtype='float64'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.materials.SampledMaterial.n" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f496dedf600&gt;,</span> <span class="pre">dtype='float64'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.materials.SampledMaterial.n" title="Link to this definition">#</a></dt>
 <dd><p>the complex refractive index of the material</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’float64’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’float64’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -3497,7 +3483,7 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.materials.SampledMaterial.params">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">~numpy.Annotated[~numpy.ndarray,</span> <span class="pre">~pydantic.types.GetPydanticSchema(get_pydantic_core_schema=~meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=~meow.array._get_ndarray_json_schema),</span> <span class="pre">~pydantic.functional_serializers.PlainSerializer(func=~meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">~pydantic.functional_validators.BeforeValidator(func=~meow.array._validate_ndarray),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=~meow.array._coerce_immutable),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=functools.partial(&lt;function</span> <span class="pre">_coerce_dim</span> <span class="pre">at</span> <span class="pre">0x7f6151b10b80&gt;,</span> <span class="pre">ndim=1)),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=functools.partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f6151b10ca0&gt;,</span> <span class="pre">dtype='float64'))]]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.materials.SampledMaterial.params" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">~typing.Annotated[~numpy.ndarray,</span> <span class="pre">~pydantic.types.GetPydanticSchema(get_pydantic_core_schema=~meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=~meow.array._get_ndarray_json_schema),</span> <span class="pre">~pydantic.functional_serializers.PlainSerializer(func=~meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">~pydantic.functional_validators.BeforeValidator(func=~meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=~meow.array._coerce_immutable),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=functools.partial(&lt;function</span> <span class="pre">_coerce_dim</span> <span class="pre">at</span> <span class="pre">0x7f496dedf4c0&gt;,</span> <span class="pre">ndim=1)),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=functools.partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f496dedf600&gt;,</span> <span class="pre">dtype='float64'))]]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.materials.SampledMaterial.params" title="Link to this definition">#</a></dt>
 <dd><p>the wavelength over which the refractive index is defined.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Validated by<span class="colon">:</span></dt>
@@ -3697,11 +3683,12 @@ method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’float64’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’float64’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -3719,11 +3706,12 @@ method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’float64’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’float64’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -3767,7 +3755,8 @@ method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> = &lt;function &lt;lambda&gt; at 0x7f6139a85f30&gt;</p></li>
+<li><p><strong>func</strong> = &lt;function &lt;lambda&gt; at 0x7f4955e932e0&gt;</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -3985,11 +3974,7 @@ method.</p>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;cs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">         </span><span class="nt">&quot;allOf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">            </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/CrossSection&quot;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">         </span><span class="p">],</span>
+<span class="w">         </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/CrossSection&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the index cross section for which the mode was calculated&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;Ex&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -4192,19 +4177,11 @@ method.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;mesh&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;allOf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">                  </span><span class="p">{</span>
-<span class="w">                     </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Mesh2D&quot;</span>
-<span class="w">                  </span><span class="p">}</span>
-<span class="w">               </span><span class="p">],</span>
+<span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Mesh2D&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the mesh to discretize the structures with&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;allOf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">                  </span><span class="p">{</span>
-<span class="w">                     </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Environment&quot;</span>
-<span class="w">                  </span><span class="p">}</span>
-<span class="w">               </span><span class="p">],</span>
+<span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Environment&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the environment for which the cross section was calculated&quot;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">         </span><span class="p">},</span>
@@ -4545,11 +4522,7 @@ method.</p>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Material&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;geometry&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;allOf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">                  </span><span class="p">{</span>
-<span class="w">                     </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Rectangle&quot;</span>
-<span class="w">                  </span><span class="p">}</span>
-<span class="w">               </span><span class="p">],</span>
+<span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Rectangle&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the geometry of the structure&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;mesh_order&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -4613,31 +4586,32 @@ method.</p>
 </details></p><dl class="field-list simple">
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ex</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ey</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ez</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Hx</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Hy</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Hz</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ex</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ey</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ez</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Hx</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Hy</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Hz</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
 <li><p><a class="reference internal" href="#meow.mode.Mode.cs" title="meow.mode.Mode.cs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cs</span> <span class="pre">(meow.cross_section.CrossSection)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#meow.mode.Mode.interpolation" title="meow.mode.Mode.interpolation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolation</span> <span class="pre">(Literal['Ex',</span> <span class="pre">'Ey',</span> <span class="pre">'Ez',</span> <span class="pre">'Hz',</span> <span class="pre">''])</span></code></a></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">neff</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">neff</span> <span class="pre">(Annotated[numpy.ndarray,</span> <span class="pre">pydantic.types.GetPydanticSchema(get_pydantic_core_schema=meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=meow.array._get_ndarray_json_schema),</span> <span class="pre">pydantic.functional_serializers.PlainSerializer(func=meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">pydantic.functional_validators.BeforeValidator(func=meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=meow.array._coerce_immutable),</span> <span class="pre">pydantic.functional_validators.AfterValidator(func=functools.partial(</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">()</span></code></p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.neff">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">neff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f6151b10ca0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.neff" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">neff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f496dedf600&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.neff" title="Link to this definition">#</a></dt>
 <dd><p>the effective index of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -4663,16 +4637,17 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Ex">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ex</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f6151b10ca0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ex" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ex</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f496dedf600&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ex" title="Link to this definition">#</a></dt>
 <dd><p>the Ex-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -4685,16 +4660,17 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Ey">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f6151b10ca0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ey" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f496dedf600&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ey" title="Link to this definition">#</a></dt>
 <dd><p>the Ey-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -4707,16 +4683,17 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Ez">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ez</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f6151b10ca0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ez" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ez</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f496dedf600&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ez" title="Link to this definition">#</a></dt>
 <dd><p>the Ez-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -4729,16 +4706,17 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Hx">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f6151b10ca0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hx" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f496dedf600&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hx" title="Link to this definition">#</a></dt>
 <dd><p>the Hx-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -4751,16 +4729,17 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Hy">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f6151b10ca0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hy" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f496dedf600&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hy" title="Link to this definition">#</a></dt>
 <dd><p>the Hy-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -4773,16 +4752,17 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Hz">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f6151b10ca0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hz" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f496dedf600&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hz" title="Link to this definition">#</a></dt>
 <dd><p>the Hz-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f6151b10f70&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f6151b11000&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f6151b10ca0&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f496dedf920&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f496dedf9c0&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f496dedf600&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
+<li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
 <dt class="field-even">Validated by<span class="colon">:</span></dt>
@@ -5132,11 +5112,7 @@ energy in the PML, it will be removed.</p></li>
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Material&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;geometry&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">         </span><span class="nt">&quot;allOf&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">            </span><span class="p">{</span>
-<span class="w">               </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Rectangle&quot;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">         </span><span class="p">],</span>
+<span class="w">         </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/$defs/Rectangle&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;the geometry of the structure&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;mesh_order&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
