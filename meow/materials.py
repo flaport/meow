@@ -142,7 +142,7 @@ class SampledMaterial(MaterialBase):
         n = nr + 1j * ni
 
         columns = [c for c in df.columns if c not in ["nr", "ni"]]
-        params = {c: np.asarray(df[c].values, dtype=np.float_) for c in columns}
+        params = {c: np.asarray(df[c].values, dtype=np.float64) for c in columns}
 
         # TODO: support complex n
         return cls(name=name, params=params, n=np.real(n), meta=meta)

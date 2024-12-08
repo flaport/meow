@@ -88,7 +88,7 @@ class Mode(BaseModel):
         E_qu = E_sq**2
         x = self.cs.mesh.x_
         y = self.cs.mesh.y_
-        return np.float_(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
+        return np.float64(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
 
     @property
     def env(self):
@@ -351,7 +351,7 @@ def normalize_product(mode: Mode) -> Mode:
 
 def electric_energy_density(
     mode: Mode,
-) -> np.ndarray[tuple[int, int], np.dtype[np.float_]]:
+) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
     """get the electric energy density contained in a `Mode`"""
     epsx, epsy, epsz = mode.cs.nx**2, mode.cs.ny**2, mode.cs.nz**2
     return (
@@ -372,7 +372,7 @@ def electric_energy(mode: Mode) -> float:
 
 def magnetic_energy_density(
     mode: Mode,
-) -> np.ndarray[tuple[int, int], np.dtype[np.float_]]:
+) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
     """get the magnetic energy density contained in a `Mode`"""
     return (
         0.5 * mu0 * (np.abs(mode.Hx) ** 2 + np.abs(mode.Hy) ** 2 + np.abs(mode.Hz) ** 2)
@@ -384,7 +384,7 @@ def magnetic_energy(mode: Mode) -> float:
     return magnetic_energy_density(mode).sum()
 
 
-def energy_density(mode: Mode) -> np.ndarray[tuple[int, int], np.dtype[np.float_]]:
+def energy_density(mode: Mode) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
     """get the energy density contained in a `Mode`"""
     return electric_energy_density(mode) + magnetic_energy_density(mode)
 
