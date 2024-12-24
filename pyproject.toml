@@ -34,7 +34,7 @@ classifiers = [
 ]
 dependencies = [
   "matplotlib",
-  "numpy>=1.24",
+  "numpy>=2.0",
   "orjson",
   "packaging",
   "pydantic>=2",
