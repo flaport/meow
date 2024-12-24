@@ -4,7 +4,7 @@ requires = ["build", "pip", "setuptools", "wheel", "pybind11"]
 
 [project]
 name = "meow-sim"
-version = "0.11.2"
+version = "0.12.0"
 authors = [
 { name = "Floris Laporte", email = "floris.laporte@gmail.com" },
 ]
