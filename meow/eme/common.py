@@ -160,7 +160,7 @@ def compute_propagation_s_matrices(
 
 
 def select_ports(
-    S: np.ndarray[Any, np.dtype[np.float_]], port_map: Dict[str, int], ports: List[str]
+    S: np.ndarray[Any, np.dtype[np.float64]], port_map: Dict[str, int], ports: List[str]
 ):
     """Keep subset of an S-matrix
 
