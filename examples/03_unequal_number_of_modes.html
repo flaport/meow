@@ -19,17 +19,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
@@ -39,10 +41,11 @@
     <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
     <link rel="stylesheet" type="text/css" href="../_static/_static/css/custom.css" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=9b7466fe"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -57,6 +60,7 @@
     <link rel="prev" title="Sweep Taper Length" href="02_taper_length_sweep.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -72,19 +76,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -92,7 +85,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -100,8 +92,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -117,7 +109,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -147,21 +140,17 @@
     
     
     <img src="../_static/meow.png" class="logo__image only-light" alt="meow 0.11.2 documentation - Home"/>
-    <script>document.write(`<img src="../_static/meow.png" class="logo__image only-dark" alt="meow 0.11.2 documentation - Home"/>`);</script>
+    <img src="../_static/meow.png" class="logo__image only-dark pst-js-only" alt="meow 0.11.2 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Home</span></p>
@@ -190,9 +179,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -402,24 +396,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -1748,7 +1734,7 @@ return Promise.all(pending).then(function(){return scene;});};}();return GLTFLoa
 Math.pow(distanceToCamera,2)+
 Math.pow(distanceToCamera,2));camera.position.set(len,len,len);controls.update();camera.lookAt(boundingSphere.center);controls.target.set(boundingSphere.center.x,boundingSphere.center.y,boundingSphere.center.z);camera.updateProjectionMatrix();}
 function centerControls(obj,camera,controls){const boundingBox=new THREE.Box3().setFromObject(obj);const boundingSphere=new THREE.Sphere();boundingBox.getBoundingSphere((target=boundingSphere));controls.update();controls.target.set(boundingSphere.center.x,boundingSphere.center.y,boundingSphere.center.z);}
-function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);tracklight=new THREE.DirectionalLight(0xffffff,1.75);scene.add(tracklight);base64_data=&quot;Z2xURgIAAABoCQAAvAcAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjEsImNvdW50Ijo4LCJtYXgiOlsyLjA5OTk5OTkwNDYzMjU2ODQsMC4wLDEwLjBdLCJtaW4iOlstMi4wOTk5OTk5MDQ2MzI1Njg0LC0zLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjIsImNvdW50Ijo4LCJtYXgiOlsyMzAsMjMwLDIzMCwyMzBdLCJtaW4iOlsyMzAsMjMwLDIzMCwyMzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MywiY291bnQiOjgsIm1heCI6WzAuMjUsMC4yMTk5OTk5OTg4MDc5MDcxLDEwLjBdLCJtaW4iOlstMC4yNSwwLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjQsImNvdW50Ijo4LCJtYXgiOlsyMzAsMCwwLDIzMF0sIm1pbiI6WzIzMCwwLDAsMjMwXX1dLCJtZXNoZXMiOlt7Im5hbWUiOiJnZW9tZXRyeV8wIiwiZXh0cmFzIjp7InByb2Nlc3NlZCI6dHJ1ZX0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEsIkNPTE9SXzAiOjJ9LCJpbmRpY2VzIjowLCJtb2RlIjo0fV19LHsibmFtZSI6Imdlb21ldHJ5XzEiLCJleHRyYXMiOnsicHJvY2Vzc2VkIjp0cnVlfSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MywiQ09MT1JfMCI6NH0sImluZGljZXMiOjAsIm1vZGUiOjR9XX1dLCJjYW1lcmFzIjpbeyJuYW1lIjoiY2FtZXJhXzlDQjJFNCIsInR5cGUiOiJwZXJzcGVjdGl2ZSIsInBlcnNwZWN0aXZlIjp7ImFzcGVjdFJhdGlvIjoxLjMzMzMzMzMzMzMzMzMzMzMsInlmb3YiOjAuNzg1Mzk4MTYzMzk3NDQ4Mywiem5lYXIiOjAuMDF9fV0sIm5vZGVzIjpbeyJuYW1lIjoid29ybGQiLCJjaGlsZHJlbiI6WzEsMiwzXX0seyJuYW1lIjoiZ2VvbWV0cnlfMCIsIm1lc2giOjAsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiZ2VvbWV0cnlfMSIsIm1lc2giOjEsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiY2FtZXJhXzlDQjJFNCIsImNhbWVyYSI6MCwibWF0cml4IjpbMS4wLDAuMCwtMC4wLDAuMCwwLjAsMS4wLDAuMCwwLjAsMC4wLDAuMCwxLjAsMC4wLDIuNSwtMS4zOSw4LjUzMDEyNzAxODkyMjE5MiwxLjBdfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjQwMH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoxNDR9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoxNDQsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MjQwLCJieXRlTGVuZ3RoIjozMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI3MiwiYnl0ZUxlbmd0aCI6OTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjozNjgsImJ5dGVMZW5ndGgiOjMyfV19ICCQAQAAQklOAAEAAAAAAAAAAwAAAAMAAAACAAAAAQAAAAcAAAAEAAAABQAAAAUAAAAGAAAABwAAAAUAAAAEAAAAAQAAAAEAAAAEAAAAAAAAAAYAAAAFAAAAAgAAAAIAAAAFAAAAAQAAAAQAAAAHAAAAAAAAAAAAAAAHAAAAAwAAAAcAAAAGAAAAAwAAAAMAAAAGAAAAAgAAAGZmBsAAAEDAAAAAAGZmBsAAAEDAAAAgQWZmBkAAAEDAAAAgQWZmBkAAAEDAAAAAAGZmBsAAAAAAAAAAAGZmBsAAAAAAAAAgQWZmBkAAAAAAAAAgQWZmBkAAAAAAAAAAAObm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubmZmZmvgAAAAAAAAAAAACAvgAAAAAAACBBAACAPgAAAAAAACBBZmZmPgAAAAAAAAAAZmZmvq5HYT4AAAAAAACAvq5HYT4AACBBAACAPq5HYT4AACBBZmZmPq5HYT4AAAAA5gAA5uYAAObmAADm5gAA5uYAAObmAADm5gAA5uYAAOY=&quot;;;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(window.devicePixelRatio);renderer.setSize(window.innerWidth,window.innerHeight);document.body.appendChild(renderer.domElement);loader=new THREE.GLTFLoader();loader.load(&quot;data:text/plain;base64,&quot;+base64_data,function(gltf){scene.add(gltf.scene);camera=gltf.cameras[0];controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=1.0;controls.zoomSpeed=1.2;controls.panSpeed=0.8;controls.noZoom=false;controls.noPan=false;controls.staticMoving=true;controls.dynamicDampingFactor=0.3;controls.keys=[65,83,68];controls.addEventListener(&quot;change&quot;,render);centerControls(scene,camera,controls);render();window.addEventListener(&quot;resize&quot;,onWindowResize,false);animate();onWindowResize();});}
+function init(){scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);tracklight=new THREE.DirectionalLight(0xffffff,1.75);scene.add(tracklight);base64_data=&quot;Z2xURgIAAABoCQAAvAcAAEpTT057InNjZW5lIjowLCJzY2VuZXMiOlt7Im5vZGVzIjpbMF19XSwiYXNzZXQiOnsidmVyc2lvbiI6IjIuMCIsImdlbmVyYXRvciI6Imh0dHBzOi8vZ2l0aHViLmNvbS9taWtlZGgvdHJpbWVzaCJ9LCJhY2Nlc3NvcnMiOlt7ImNvbXBvbmVudFR5cGUiOjUxMjUsInR5cGUiOiJTQ0FMQVIiLCJidWZmZXJWaWV3IjowLCJjb3VudCI6MzYsIm1heCI6WzddLCJtaW4iOlswXX0seyJjb21wb25lbnRUeXBlIjo1MTI2LCJ0eXBlIjoiVkVDMyIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjEsImNvdW50Ijo4LCJtYXgiOlsyLjA5OTk5OTkwNDYzMjU2ODQsMC4wLDEwLjBdLCJtaW4iOlstMi4wOTk5OTk5MDQ2MzI1Njg0LC0zLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjIsImNvdW50Ijo4LCJtYXgiOlsyMzAsMjMwLDIzMCwyMzBdLCJtaW4iOlsyMzAsMjMwLDIzMCwyMzBdfSx7ImNvbXBvbmVudFR5cGUiOjUxMjYsInR5cGUiOiJWRUMzIiwiYnl0ZU9mZnNldCI6MCwiYnVmZmVyVmlldyI6MywiY291bnQiOjgsIm1heCI6WzAuMjUsMC4yMTk5OTk5OTg4MDc5MDcxLDEwLjBdLCJtaW4iOlstMC4yNSwwLjAsMC4wXX0seyJjb21wb25lbnRUeXBlIjo1MTIxLCJub3JtYWxpemVkIjp0cnVlLCJ0eXBlIjoiVkVDNCIsImJ5dGVPZmZzZXQiOjAsImJ1ZmZlclZpZXciOjQsImNvdW50Ijo4LCJtYXgiOlsyMzAsMCwwLDIzMF0sIm1pbiI6WzIzMCwwLDAsMjMwXX1dLCJtZXNoZXMiOlt7Im5hbWUiOiJnZW9tZXRyeV8wIiwiZXh0cmFzIjp7InByb2Nlc3NlZCI6dHJ1ZX0sInByaW1pdGl2ZXMiOlt7ImF0dHJpYnV0ZXMiOnsiUE9TSVRJT04iOjEsIkNPTE9SXzAiOjJ9LCJpbmRpY2VzIjowLCJtb2RlIjo0fV19LHsibmFtZSI6Imdlb21ldHJ5XzEiLCJleHRyYXMiOnsicHJvY2Vzc2VkIjp0cnVlfSwicHJpbWl0aXZlcyI6W3siYXR0cmlidXRlcyI6eyJQT1NJVElPTiI6MywiQ09MT1JfMCI6NH0sImluZGljZXMiOjAsIm1vZGUiOjR9XX1dLCJjYW1lcmFzIjpbeyJuYW1lIjoiY2FtZXJhX0EyNTk5QyIsInR5cGUiOiJwZXJzcGVjdGl2ZSIsInBlcnNwZWN0aXZlIjp7ImFzcGVjdFJhdGlvIjoxLjMzMzMzMzMzMzMzMzMzMzMsInlmb3YiOjAuNzg1Mzk4MTYzMzk3NDQ4Mywiem5lYXIiOjAuMDF9fV0sIm5vZGVzIjpbeyJuYW1lIjoid29ybGQiLCJjaGlsZHJlbiI6WzEsMiwzXX0seyJuYW1lIjoiZ2VvbWV0cnlfMCIsIm1lc2giOjAsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiZ2VvbWV0cnlfMSIsIm1lc2giOjEsIm1hdHJpeCI6Wy0wLjg2NjAyNTQwMzc4NDQzODcsMC4wLC0wLjQ5OTk5OTk5OTk5OTk5OTk0LDAuMCwwLjAsMS4wLDAuMCwwLjAsMC40OTk5OTk5OTk5OTk5OTk5NCwwLjAsLTAuODY2MDI1NDAzNzg0NDM4NywwLjAsMC4wLDAuMCwwLjAsMS4wXX0seyJuYW1lIjoiY2FtZXJhX0EyNTk5QyIsImNhbWVyYSI6MCwibWF0cml4IjpbMS4wLDAuMCwtMC4wLDAuMCwwLjAsMS4wLDAuMCwwLjAsMC4wLDAuMCwxLjAsMC4wLDIuNSwtMS4zOSw4LjUzMDEyNzAxODkyMjE5MiwxLjBdfV0sImJ1ZmZlcnMiOlt7ImJ5dGVMZW5ndGgiOjQwMH1dLCJidWZmZXJWaWV3cyI6W3siYnVmZmVyIjowLCJieXRlT2Zmc2V0IjowLCJieXRlTGVuZ3RoIjoxNDR9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjoxNDQsImJ5dGVMZW5ndGgiOjk2fSx7ImJ1ZmZlciI6MCwiYnl0ZU9mZnNldCI6MjQwLCJieXRlTGVuZ3RoIjozMn0seyJidWZmZXIiOjAsImJ5dGVPZmZzZXQiOjI3MiwiYnl0ZUxlbmd0aCI6OTZ9LHsiYnVmZmVyIjowLCJieXRlT2Zmc2V0IjozNjgsImJ5dGVMZW5ndGgiOjMyfV19ICCQAQAAQklOAAEAAAAAAAAAAwAAAAMAAAACAAAAAQAAAAcAAAAEAAAABQAAAAUAAAAGAAAABwAAAAUAAAAEAAAAAQAAAAEAAAAEAAAAAAAAAAYAAAAFAAAAAgAAAAIAAAAFAAAAAQAAAAQAAAAHAAAAAAAAAAAAAAAHAAAAAwAAAAcAAAAGAAAAAwAAAAMAAAAGAAAAAgAAAGZmBsAAAEDAAAAAAGZmBsAAAEDAAAAgQWZmBkAAAEDAAAAgQWZmBkAAAEDAAAAAAGZmBsAAAAAAAAAAAGZmBsAAAAAAAAAgQWZmBkAAAAAAAAAgQWZmBkAAAAAAAAAAAObm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubm5ubmZmZmvgAAAAAAAAAAAACAvgAAAAAAACBBAACAPgAAAAAAACBBZmZmPgAAAAAAAAAAZmZmvq5HYT4AAAAAAACAvq5HYT4AACBBAACAPq5HYT4AACBBZmZmPq5HYT4AAAAA5gAA5uYAAObmAADm5gAA5uYAAObmAADm5gAA5uYAAOY=&quot;;;renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(window.devicePixelRatio);renderer.setSize(window.innerWidth,window.innerHeight);document.body.appendChild(renderer.domElement);loader=new THREE.GLTFLoader();loader.load(&quot;data:text/plain;base64,&quot;+base64_data,function(gltf){scene.add(gltf.scene);camera=gltf.cameras[0];controls=new THREE.TrackballControls(camera,renderer.domElement);controls.rotateSpeed=1.0;controls.zoomSpeed=1.2;controls.panSpeed=0.8;controls.noZoom=false;controls.noPan=false;controls.staticMoving=true;controls.dynamicDampingFactor=0.3;controls.keys=[65,83,68];controls.addEventListener(&quot;change&quot;,render);centerControls(scene,camera,controls);render();window.addEventListener(&quot;resize&quot;,onWindowResize,false);animate();onWindowResize();});}
 function onWindowResize(){camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);controls.handleResize();render();}
 function animate(){requestAnimationFrame(animate);controls.update();}
 function render(){tracklight.position.copy(camera.position);renderer.render(scene,camera);}
@@ -1816,14 +1802,14 @@ init();</script></body>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6d9901460887b1f68a889a148534aba58efc1c64ac68cd85320021574edf8aba.png" src="../_images/6d9901460887b1f68a889a148534aba58efc1c64ac68cd85320021574edf8aba.png" />
-<img alt="../_images/adda66ae26376b800062226cad9e05262d108b0da80dc60aeeb0d70bfa1166d2.png" src="../_images/adda66ae26376b800062226cad9e05262d108b0da80dc60aeeb0d70bfa1166d2.png" />
-<img alt="../_images/ed658a00ae864668f4c84599bd521d863f16b1d7c521785570b602ed1b6cb1a0.png" src="../_images/ed658a00ae864668f4c84599bd521d863f16b1d7c521785570b602ed1b6cb1a0.png" />
-<img alt="../_images/9b5b98666ad49ee69b9be5f0b3f4ef6b255e89ed6b9a00d84dc00d6d8b70000d.png" src="../_images/9b5b98666ad49ee69b9be5f0b3f4ef6b255e89ed6b9a00d84dc00d6d8b70000d.png" />
-<img alt="../_images/574a06ca1d1ba7d5dd9bacaceb0d698d785d4bcca4887ba62f3c528323fba2d2.png" src="../_images/574a06ca1d1ba7d5dd9bacaceb0d698d785d4bcca4887ba62f3c528323fba2d2.png" />
-<img alt="../_images/dc9491bfa39b56a3cf80955ad2b9388363c2f104f06722d72fac6591af741d1b.png" src="../_images/dc9491bfa39b56a3cf80955ad2b9388363c2f104f06722d72fac6591af741d1b.png" />
-<img alt="../_images/6fc4f47993a36cd1f4a108ff8691232f211f671b977f9fa1068f5ee7b2874648.png" src="../_images/6fc4f47993a36cd1f4a108ff8691232f211f671b977f9fa1068f5ee7b2874648.png" />
-<img alt="../_images/30b65d0c5cecd3b689e9bc20aa596697e5877cd20be20866f4e0c81632e3ce38.png" src="../_images/30b65d0c5cecd3b689e9bc20aa596697e5877cd20be20866f4e0c81632e3ce38.png" />
+<img alt="../_images/54253004beaa03d88b4a3915f01cae6badcb3f9ed1ff270a032b65d8cf6730d0.png" src="../_images/54253004beaa03d88b4a3915f01cae6badcb3f9ed1ff270a032b65d8cf6730d0.png" />
+<img alt="../_images/81fe4a2544d51ecad43b7a07e4b602b9d5015e71a269bd4acc7cf8436bb9a5e2.png" src="../_images/81fe4a2544d51ecad43b7a07e4b602b9d5015e71a269bd4acc7cf8436bb9a5e2.png" />
+<img alt="../_images/cc13dccc8e5a74421d2ba7ba816665d061d0e20d681234babc45b2da13287dc7.png" src="../_images/cc13dccc8e5a74421d2ba7ba816665d061d0e20d681234babc45b2da13287dc7.png" />
+<img alt="../_images/01ab4f4538ef334176415a1eb7b5514e56f09510d425300bab81430237a690ba.png" src="../_images/01ab4f4538ef334176415a1eb7b5514e56f09510d425300bab81430237a690ba.png" />
+<img alt="../_images/022e6264205af56c856aec7eb8ac28c228d41cc39cb9db994dd802b32653b145.png" src="../_images/022e6264205af56c856aec7eb8ac28c228d41cc39cb9db994dd802b32653b145.png" />
+<img alt="../_images/9b6897a11927cf4192170c0733af13e493cccbc04553904aec73e3b6122d05f4.png" src="../_images/9b6897a11927cf4192170c0733af13e493cccbc04553904aec73e3b6122d05f4.png" />
+<img alt="../_images/7b7861aa31e940e3f44480d5d874ffe0f481cc14d3016362dc5d948c93a4ccfe.png" src="../_images/7b7861aa31e940e3f44480d5d874ffe0f481cc14d3016362dc5d948c93a4ccfe.png" />
+<img alt="../_images/5f9d2f8184775f02d37ea40037c3317cc02b284b1f0963f9d367213d7c3ce7d8.png" src="../_images/5f9d2f8184775f02d37ea40037c3317cc02b284b1f0963f9d367213d7c3ce7d8.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1834,7 +1820,7 @@ init();</script></body>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/656d099c844c4d43e5e08062e893f27d5279e52ee31580a3ec58a3711ccc321d.png" src="../_images/656d099c844c4d43e5e08062e893f27d5279e52ee31580a3ec58a3711ccc321d.png" />
+<img alt="../_images/ffded44d7cee51e5ebac133d78b15c1b4786ffdf53bf2d295c70d727cca497f9.png" src="../_images/ffded44d7cee51e5ebac133d78b15c1b4786ffdf53bf2d295c70d727cca497f9.png" />
 </div>
 </div>
 </section>
@@ -1870,7 +1856,7 @@ init();</script></body>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/358b13cd44c078cb6c956f567086ad34672aee8d15884e72e496de8e8e9ab4b5.png" src="../_images/358b13cd44c078cb6c956f567086ad34672aee8d15884e72e496de8e8e9ab4b5.png" />
+<img alt="../_images/28b2bf7f0b162886744dbf77312b90c89817f0f4843d3df4a959bfcfa6ad900a.png" src="../_images/28b2bf7f0b162886744dbf77312b90c89817f0f4843d3df4a959bfcfa6ad900a.png" />
 </div>
 </div>
 </section>
@@ -1912,7 +1898,8 @@ init();</script></body>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1971,8 +1958,8 @@ By Floris Laporte
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
