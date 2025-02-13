@@ -19,10 +19,10 @@ jobs:
       - name: Run notebooks
         run: find examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | xargs parallel uv run papermill {} {} -k python3 ':::'
       - name: Upload Artifacts
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
           name: examples
-          path: /github/workspace/examples
+          path: ./examples
 
   docs:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download Artifacts
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v4
         with:
           name: examples
           path: ./examples
@@ -47,7 +47,7 @@ jobs:
       - name: Patch colab links
         run: find docs/build/html -name "*.html" | xargs sed -i 's|/blob/main/docs/|/blob/main/|g'
       - name: Upload Artifacts
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
           name: docs
           path: docs/build/html
