@@ -29,7 +29,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -316,25 +316,25 @@
   <h1>Source code for meow.cell</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; an EME Cell &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">overload</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">overload</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
-<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">convolve</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.ndimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">convolve</span>
 
-<span class="kn">from</span> <span class="nn">meow.array</span> <span class="kn">import</span> <span class="n">Dim</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="n">NDArray</span>
-<span class="kn">from</span> <span class="nn">meow.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">cached_property</span>
-<span class="kn">from</span> <span class="nn">meow.materials</span> <span class="kn">import</span> <span class="n">Material</span>
-<span class="kn">from</span> <span class="nn">meow.mesh</span> <span class="kn">import</span> <span class="n">Mesh2D</span>
-<span class="kn">from</span> <span class="nn">meow.structures</span> <span class="kn">import</span> <span class="n">Structure2D</span><span class="p">,</span> <span class="n">Structure3D</span><span class="p">,</span> <span class="n">_sort_structures</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.array</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dim</span><span class="p">,</span> <span class="n">DType</span><span class="p">,</span> <span class="n">NDArray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">cached_property</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">Material</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh2D</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.structures</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure2D</span><span class="p">,</span> <span class="n">Structure3D</span><span class="p">,</span> <span class="n">_sort_structures</span>
 
 
 <div class="viewcode-block" id="Cell">
 <a class="viewcode-back" href="../../meow.html#meow.cell.Cell">[docs]</a>
-<span class="k">class</span> <span class="nc">Cell</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Cell</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A Cell defines an interval in z (the direction of propagation) within</span>
 <span class="sd">    the simulation domain. The intersecting Structure3Ds are discretized by</span>
 <span class="sd">    a given mesh at the center of the Cell&quot;&quot;&quot;</span>
@@ -347,15 +347,15 @@
     <span class="n">z_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the ending z-coordinate of the cell&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z_min</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_max</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z_max</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_min</span><span class="p">)</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">materials</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">structure</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_sort_structures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">structure</span><span class="o">.</span><span class="n">material</span> <span class="ow">in</span> <span class="n">materials</span><span class="p">:</span>
@@ -363,24 +363,24 @@
         <span class="k">return</span> <span class="n">materials</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">structures_2d</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">structures_2d</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">]:</span>
         <span class="n">z</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z_min</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_max</span><span class="p">)</span>
         <span class="n">list_of_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">_project</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">structures</span><span class="p">]</span>
         <span class="n">structures</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">ss</span> <span class="ow">in</span> <span class="n">list_of_list</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ss</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">structures</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">m_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">m_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">_create_full_material_array</span><span class="p">(</span>
             <span class="n">mesh</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span>
             <span class="n">structures</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">structures_2d</span><span class="p">,</span>
             <span class="n">materials</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">materials</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">ignored</span><span class="p">):</span>
-        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># fmt: skip</span>
-        <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span><span class="p">,</span> <span class="n">to_rgba</span>  <span class="c1"># fmt: skip</span>
-        <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>  <span class="c1"># fmt: skip</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">ignored</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>  <span class="c1"># fmt: skip</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">ListedColormap</span><span class="p">,</span> <span class="n">to_rgba</span>  <span class="c1"># fmt: skip</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_axes_locatable</span>  <span class="c1"># fmt: skip</span>
 
         <span class="n">colors</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span>
             <span class="n">to_rgba</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">materials</span>
@@ -419,7 +419,7 @@
 
 <div class="viewcode-block" id="create_cells">
 <a class="viewcode-back" href="../../meow.html#meow.cell.create_cells">[docs]</a>
-<span class="k">def</span> <span class="nf">create_cells</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_cells</span><span class="p">(</span>
     <span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">],</span>
     <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh2D</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mesh2D</span><span class="p">],</span>
     <span class="n">Ls</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">NDArray</span><span class="p">,</span> <span class="n">Dim</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">DType</span><span class="p">(</span><span class="s2">&quot;float64&quot;</span><span class="p">)],</span>
@@ -458,7 +458,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_create_full_material_array</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_full_material_array</span><span class="p">(</span>
     <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh2D</span><span class="p">,</span>
     <span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">],</span>
     <span class="n">materials</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Material</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
@@ -477,7 +477,7 @@
     <span class="k">return</span> <span class="n">m_full</span>
 
 
-<span class="k">def</span> <span class="nf">_create_material_array</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_material_array</span><span class="p">(</span>
     <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh2D</span><span class="p">,</span>
     <span class="n">materials</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Material</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
     <span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">],</span>
@@ -522,14 +522,14 @@
     <span class="k">return</span> <span class="n">m_full</span>
 
 
-<span class="k">def</span> <span class="nf">_fill_corner_left_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_fill_corner_left_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">convolve</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">+</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="o">+</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">]]))</span>
         <span class="o">&gt;</span> <span class="mf">1.0</span>
     <span class="p">)</span>  <span class="c1"># type: ignore</span>
 
 
-<span class="k">def</span> <span class="nf">_fill_corner_right_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_fill_corner_right_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">convolve</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
@@ -539,7 +539,7 @@
     <span class="p">)</span>  <span class="c1"># type: ignore</span>
 
 
-<span class="k">def</span> <span class="nf">_get_boundary_mask_horizontal</span><span class="p">(</span><span class="n">m_full</span><span class="p">,</span> <span class="n">negate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_boundary_mask_horizontal</span><span class="p">(</span><span class="n">m_full</span><span class="p">,</span> <span class="n">negate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">m_full</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">m_full</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
     <span class="n">mask</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_full</span> <span class="o">&gt;</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">negate</span><span class="p">:</span>
@@ -562,11 +562,11 @@
     <span class="k">return</span> <span class="n">mask</span>
 
 
-<span class="k">def</span> <span class="nf">_get_boundary_mask_vertical</span><span class="p">(</span><span class="n">m_full</span><span class="p">,</span> <span class="n">negate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_boundary_mask_vertical</span><span class="p">(</span><span class="n">m_full</span><span class="p">,</span> <span class="n">negate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">_get_boundary_mask_horizontal</span><span class="p">(</span><span class="n">m_full</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">negate</span><span class="o">=</span><span class="n">negate</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
 
 
-<span class="k">def</span> <span class="nf">_fill_single_pixel_gaps</span><span class="p">(</span><span class="n">m_full</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_fill_single_pixel_gaps</span><span class="p">(</span><span class="n">m_full</span><span class="p">):</span>
     <span class="n">mat_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">m_full</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
         <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">m_full</span><span class="p">,</span> <span class="n">shift</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
@@ -590,20 +590,20 @@
 
 
 <span class="nd">@overload</span>
-<span class="k">def</span> <span class="nf">_classify_structures_by_mesh_order_and_material</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_classify_structures_by_mesh_order_and_material</span><span class="p">(</span>
     <span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">],</span> <span class="n">materials</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Material</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">]]:</span>
     <span class="o">...</span>
 
 
 <span class="nd">@overload</span>
-<span class="k">def</span> <span class="nf">_classify_structures_by_mesh_order_and_material</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_classify_structures_by_mesh_order_and_material</span><span class="p">(</span>
     <span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">],</span> <span class="n">materials</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Material</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">]]:</span>
     <span class="o">...</span>
 
 
-<span class="k">def</span> <span class="nf">_classify_structures_by_mesh_order_and_material</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_classify_structures_by_mesh_order_and_material</span><span class="p">(</span>
     <span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">],</span>
     <span class="n">materials</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Material</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span>

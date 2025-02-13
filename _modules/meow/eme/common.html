@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -316,14 +316,14 @@
   <h1>Source code for meow.eme.common</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; SAX backend for EME (default backend) &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..cell</span> <span class="kn">import</span> <span class="n">Cell</span>
-<span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span>
-<span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">inner_product</span> <span class="k">as</span> <span class="n">inner_product_normal</span>
-<span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">inner_product_conj</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..cell</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cell</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..mode</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..mode</span><span class="w"> </span><span class="kn">import</span> <span class="n">inner_product</span> <span class="k">as</span> <span class="n">inner_product_normal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..mode</span><span class="w"> </span><span class="kn">import</span> <span class="n">inner_product_conj</span>
 
 <span class="n">DEFAULT_CONJUGATE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">DEFAULT_ENFORCE_RECIPROCITY</span> <span class="o">=</span> <span class="kc">False</span>
@@ -332,7 +332,7 @@
 
 <div class="viewcode-block" id="compute_interface_s_matrix">
 <a class="viewcode-back" href="../../../meow.eme.html#meow.eme.common.compute_interface_s_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_interface_s_matrix</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_interface_s_matrix</span><span class="p">(</span>
     <span class="n">modes1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">],</span>
     <span class="n">modes2</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">],</span>
     <span class="n">conjugate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_CONJUGATE</span><span class="p">,</span>
@@ -422,7 +422,7 @@
 
 <div class="viewcode-block" id="compute_interface_s_matrices">
 <a class="viewcode-back" href="../../../meow.eme.html#meow.eme.common.compute_interface_s_matrices">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_interface_s_matrices</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_interface_s_matrices</span><span class="p">(</span>
     <span class="n">modes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">]],</span>
     <span class="n">conjugate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_CONJUGATE</span><span class="p">,</span>
     <span class="n">enforce_reciprocity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_ENFORCE_RECIPROCITY</span><span class="p">,</span>
@@ -444,7 +444,7 @@
 
 <div class="viewcode-block" id="compute_propagation_s_matrix">
 <a class="viewcode-back" href="../../../meow.eme.html#meow.eme.common.compute_propagation_s_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_propagation_s_matrix</span><span class="p">(</span><span class="n">modes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">],</span> <span class="n">cell_length</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_propagation_s_matrix</span><span class="p">(</span><span class="n">modes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">],</span> <span class="n">cell_length</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the propagation S-matrix of each `Mode` belonging to a `CrossSection` in a `Cell` with a certain length.&quot;&quot;&quot;</span>
     <span class="n">s_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;left@</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;right@</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
@@ -459,7 +459,7 @@
 
 <div class="viewcode-block" id="compute_propagation_s_matrices">
 <a class="viewcode-back" href="../../../meow.eme.html#meow.eme.common.compute_propagation_s_matrices">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_propagation_s_matrices</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_propagation_s_matrices</span><span class="p">(</span>
     <span class="n">modes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Mode</span><span class="p">]],</span>
     <span class="n">cells</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Cell</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">cell_lengths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -489,7 +489,7 @@
 
 <div class="viewcode-block" id="select_ports">
 <a class="viewcode-back" href="../../../meow.eme.html#meow.eme.common.select_ports">[docs]</a>
-<span class="k">def</span> <span class="nf">select_ports</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">select_ports</span><span class="p">(</span>
     <span class="n">S</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]],</span> <span class="n">port_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">ports</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Keep subset of an S-matrix</span>

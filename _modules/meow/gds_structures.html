@@ -29,7 +29,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -316,22 +316,22 @@
   <h1>Source code for meow.gds_structures</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; GDS Extrusions &quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pkg_resources</span>
-<span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="k">as</span> <span class="nn">sg</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pkg_resources</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span>
 
-<span class="kn">from</span> <span class="nn">meow.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
-<span class="kn">from</span> <span class="nn">meow.geometries</span> <span class="kn">import</span> <span class="n">Prism</span>
-<span class="kn">from</span> <span class="nn">meow.materials</span> <span class="kn">import</span> <span class="n">Material</span>
-<span class="kn">from</span> <span class="nn">meow.structures</span> <span class="kn">import</span> <span class="n">Structure3D</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.geometries</span><span class="w"> </span><span class="kn">import</span> <span class="n">Prism</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">Material</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.structures</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure3D</span>
 
 <span class="c1"># TODO: Maybe it makes more sense to use native GDSFactory tooling for this</span>
 
 
 <div class="viewcode-block" id="GdsExtrusionRule">
 <a class="viewcode-back" href="../../meow.html#meow.gds_structures.GdsExtrusionRule">[docs]</a>
-<span class="k">class</span> <span class="nc">GdsExtrusionRule</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GdsExtrusionRule</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;a `GdsExtrusionRule` describes a single extrusion rule.</span>
 <span class="sd">    Multiple of such rules can later be associated with a gds layer tuple.&quot;&quot;&quot;</span>
 
@@ -346,12 +346,12 @@
         <span class="n">default</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the mesh order of the resulting `Structure3D`&quot;</span>
     <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Structure3D</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Structure3D</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">poly</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">)</span><span class="o">.</span><span class="n">boundary</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
-                <span class="kn">import</span> <span class="nn">gdspy</span>  <span class="c1"># fmt: skip # type: ignore</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">gdspy</span>  <span class="c1"># fmt: skip # type: ignore</span>
 
                 <span class="n">polygonset</span> <span class="o">=</span> <span class="n">gdspy</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">gdspy</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">poly</span><span class="p">),</span> <span class="mf">0.25</span><span class="p">)</span>
                 <span class="k">assert</span> <span class="n">polygonset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
@@ -371,7 +371,7 @@
 
 <div class="viewcode-block" id="extrude_gds">
 <a class="viewcode-back" href="../../meow.html#meow.gds_structures.extrude_gds">[docs]</a>
-<span class="k">def</span> <span class="nf">extrude_gds</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extrude_gds</span><span class="p">(</span>
     <span class="n">cell</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
     <span class="n">extrusions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">GdsExtrusionRule</span><span class="p">]],</span>
 <span class="p">):</span>
@@ -391,7 +391,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_get_polygons</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_polygons</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
     <span class="k">if</span> <span class="n">_get_major_gdsfactory_version</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">cell</span><span class="o">.</span><span class="n">get_polygons</span><span class="p">(</span><span class="n">by_spec</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -407,8 +407,8 @@
         <span class="p">}</span>
 
 
-<span class="k">def</span> <span class="nf">_get_major_gdsfactory_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-     <span class="kn">from</span> <span class="nn">gdsfactory.config</span> <span class="kn">import</span> <span class="n">__version__</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_major_gdsfactory_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+     <span class="kn">from</span><span class="w"> </span><span class="nn">gdsfactory.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
      <span class="n">major_version</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">__version__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
      <span class="k">return</span> <span class="n">major_version</span>
 </pre></div>

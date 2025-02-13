@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -316,20 +316,20 @@
   <h1>Source code for meow.fde.lumerical</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; FDE Lumerical Backend &quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pydantic.v1.types</span> <span class="kn">import</span> <span class="n">PositiveInt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic.v1.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">PositiveInt</span>
 
-<span class="kn">from</span> <span class="nn">..cross_section</span> <span class="kn">import</span> <span class="n">CrossSection</span>
-<span class="kn">from</span> <span class="nn">..environment</span> <span class="kn">import</span> <span class="n">Environment</span>
-<span class="kn">from</span> <span class="nn">..mode</span> <span class="kn">import</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">normalize_product</span><span class="p">,</span> <span class="n">zero_phase</span>
-<span class="kn">from</span> <span class="nn">..structures</span> <span class="kn">import</span> <span class="n">Structure3D</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..cross_section</span><span class="w"> </span><span class="kn">import</span> <span class="n">CrossSection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..environment</span><span class="w"> </span><span class="kn">import</span> <span class="n">Environment</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..mode</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">normalize_product</span><span class="p">,</span> <span class="n">zero_phase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..structures</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure3D</span>
 
 <span class="n">_global</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sim&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="get_sim">
 <a class="viewcode-back" href="../../../meow.fde.html#meow.fde.lumerical.get_sim">[docs]</a>
-<span class="k">def</span> <span class="nf">get_sim</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_sim</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">sim</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sim&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">sim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">sim</span>
@@ -346,7 +346,7 @@
 
 <div class="viewcode-block" id="create_lumerical_geometries">
 <a class="viewcode-back" href="../../../meow.fde.html#meow.fde.lumerical.create_lumerical_geometries">[docs]</a>
-<span class="k">def</span> <span class="nf">create_lumerical_geometries</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_lumerical_geometries</span><span class="p">(</span>
     <span class="n">sim</span><span class="p">,</span> <span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">],</span> <span class="n">env</span><span class="p">:</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">unit</span><span class="p">:</span> <span class="nb">float</span>
 <span class="p">):</span>
     <span class="n">sim</span> <span class="o">=</span> <span class="n">get_sim</span><span class="p">(</span><span class="n">sim</span><span class="o">=</span><span class="n">sim</span><span class="p">)</span>
@@ -360,7 +360,7 @@
 <span class="c1"># @validate_arguments</span>
 <div class="viewcode-block" id="compute_modes_lumerical">
 <a class="viewcode-back" href="../../../meow.fde.html#meow.fde.lumerical.compute_modes_lumerical">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_modes_lumerical</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_modes_lumerical</span><span class="p">(</span>
     <span class="n">cs</span><span class="p">:</span> <span class="n">CrossSection</span><span class="p">,</span>
     <span class="n">num_modes</span><span class="p">:</span> <span class="n">PositiveInt</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">sim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -373,7 +373,7 @@
 <span class="sd">        spec: The FDE simulation specification</span>
 <span class="sd">        unit: Conversion factor between MEOW unit (probably um) and Lumerical unit (probably m).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">lumapi</span> <span class="kn">import</span> <span class="n">LumApiError</span>  <span class="c1"># fmt: skip # type: ignore</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">lumapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">LumApiError</span>  <span class="c1"># fmt: skip # type: ignore</span>
 
     <span class="n">sim</span> <span class="o">=</span> <span class="n">get_sim</span><span class="p">(</span><span class="n">sim</span><span class="o">=</span><span class="n">sim</span><span class="p">)</span>
     <span class="n">cell</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">_cell</span>
@@ -452,7 +452,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_lumerical_fields_to_mode</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">lneff</span><span class="p">,</span> <span class="n">lEx</span><span class="p">,</span> <span class="n">lEy</span><span class="p">,</span> <span class="n">lEz</span><span class="p">,</span> <span class="n">lHx</span><span class="p">,</span> <span class="n">lHy</span><span class="p">,</span> <span class="n">lHz</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_lumerical_fields_to_mode</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">lneff</span><span class="p">,</span> <span class="n">lEx</span><span class="p">,</span> <span class="n">lEy</span><span class="p">,</span> <span class="n">lEz</span><span class="p">,</span> <span class="n">lHx</span><span class="p">,</span> <span class="n">lHy</span><span class="p">,</span> <span class="n">lHz</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
         <span class="n">cs</span><span class="o">=</span><span class="n">cs</span><span class="p">,</span>
         <span class="n">neff</span><span class="o">=</span><span class="n">lneff</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
@@ -465,7 +465,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_assert_default_mesh_setting</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">param_name</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_assert_default_mesh_setting</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">param_name</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">condition</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Setting mesh.</span><span class="si">{</span><span class="n">param_name</span><span class="si">}</span><span class="s2"> is currently not supported in the Lumerical Backend. &quot;</span>
@@ -476,7 +476,7 @@
 
 <div class="viewcode-block" id="set_sim">
 <a class="viewcode-back" href="../../../meow.fde.html#meow.fde.lumerical.set_sim">[docs]</a>
-<span class="k">def</span> <span class="nf">set_sim</span><span class="p">(</span><span class="n">sim</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_sim</span><span class="p">(</span><span class="n">sim</span><span class="p">):</span>
     <span class="n">_global</span><span class="p">[</span><span class="s2">&quot;sim&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span></div>
 
 </pre></div>

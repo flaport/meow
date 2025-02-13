@@ -29,7 +29,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -314,9 +314,9 @@
                 <article class="bd-article">
                   
   <h1>Source code for meow.cache</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 <span class="n">CACHE_SETTINGS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
@@ -327,7 +327,7 @@
 
 <div class="viewcode-block" id="enable_cache">
 <a class="viewcode-back" href="../../meow.html#meow.cache.enable_cache">[docs]</a>
-<span class="k">def</span> <span class="nf">enable_cache</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">enable_cache</span><span class="p">():</span>
     <span class="n">CACHE_SETTINGS</span><span class="p">[</span><span class="s2">&quot;enabled&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="n">CACHE_SETTINGS</span><span class="p">[</span><span class="s2">&quot;enabled&quot;</span><span class="p">]</span></div>
 
@@ -335,7 +335,7 @@
 
 <div class="viewcode-block" id="disable_cache">
 <a class="viewcode-back" href="../../meow.html#meow.cache.disable_cache">[docs]</a>
-<span class="k">def</span> <span class="nf">disable_cache</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">disable_cache</span><span class="p">():</span>
     <span class="n">empty_cache</span><span class="p">()</span>
     <span class="n">CACHE_SETTINGS</span><span class="p">[</span><span class="s2">&quot;enabled&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="n">CACHE_SETTINGS</span><span class="p">[</span><span class="s2">&quot;enabled&quot;</span><span class="p">]</span></div>
@@ -344,7 +344,7 @@
 
 <div class="viewcode-block" id="empty_cache">
 <a class="viewcode-back" href="../../meow.html#meow.cache.empty_cache">[docs]</a>
-<span class="k">def</span> <span class="nf">empty_cache</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">empty_cache</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">cache</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CACHED_MODELS</span><span class="p">]:</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">cache</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
@@ -356,7 +356,7 @@
 
 <div class="viewcode-block" id="cache_model">
 <a class="viewcode-back" href="../../meow.html#meow.cache.cache_model">[docs]</a>
-<span class="k">def</span> <span class="nf">cache_model</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cache_model</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">CACHE_SETTINGS</span><span class="p">[</span><span class="s2">&quot;enabled&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">obj</span>
     <span class="n">key</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
@@ -380,8 +380,8 @@
 
 <div class="viewcode-block" id="cached_model">
 <a class="viewcode-back" href="../../meow.html#meow.cache.cached_model">[docs]</a>
-<span class="k">def</span> <span class="nf">cached_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">cls</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cached_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">cls</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
         <span class="k">return</span> <span class="n">cache_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">model</span>  <span class="c1"># type: ignore</span></div>

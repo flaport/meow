@@ -29,7 +29,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -316,21 +316,21 @@
   <h1>Source code for meow.structures</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; a Structure is a combination of a Geometry with a material (and an optional mesh order) &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">overload</span>
 
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span>
 
-<span class="kn">from</span> <span class="nn">meow.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span>
-<span class="kn">from</span> <span class="nn">meow.geometries</span> <span class="kn">import</span> <span class="n">Geometry2D</span><span class="p">,</span> <span class="n">Geometry3D</span>
-<span class="kn">from</span> <span class="nn">meow.materials</span> <span class="kn">import</span> <span class="n">Material</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.geometries</span><span class="w"> </span><span class="kn">import</span> <span class="n">Geometry2D</span><span class="p">,</span> <span class="n">Geometry3D</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">Material</span>
 
 <span class="n">DEFAULT_MESH_ORDER</span> <span class="o">=</span> <span class="mi">5</span>
 
 
 <span class="nd">@overload</span>
-<span class="k">def</span> <span class="nf">Structure</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Structure</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">material</span><span class="p">:</span> <span class="n">Material</span><span class="p">,</span>
     <span class="n">geometry</span><span class="p">:</span> <span class="n">Geometry2D</span><span class="p">,</span>
@@ -340,7 +340,7 @@
 
 
 <span class="nd">@overload</span>
-<span class="k">def</span> <span class="nf">Structure</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Structure</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">material</span><span class="p">:</span> <span class="n">Material</span><span class="p">,</span>
     <span class="n">geometry</span><span class="p">:</span> <span class="n">Geometry3D</span><span class="p">,</span>
@@ -351,7 +351,7 @@
 
 <div class="viewcode-block" id="Structure">
 <a class="viewcode-back" href="../../meow.html#meow.structures.Structure">[docs]</a>
-<span class="k">def</span> <span class="nf">Structure</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Structure</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">material</span><span class="p">:</span> <span class="n">Material</span><span class="p">,</span>
     <span class="n">geometry</span><span class="p">:</span> <span class="n">Geometry2D</span> <span class="o">|</span> <span class="n">Geometry3D</span><span class="p">,</span>
@@ -371,7 +371,7 @@
 
 <div class="viewcode-block" id="Structure2D">
 <a class="viewcode-back" href="../../meow.html#meow.structures.Structure2D">[docs]</a>
-<span class="k">class</span> <span class="nc">Structure2D</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Structure2D</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;a `Structure2D` is an association between a `Geometry2D` and a `Material`&quot;&quot;&quot;</span>
 
     <span class="n">material</span><span class="p">:</span> <span class="n">Material</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the material of the structure&quot;</span><span class="p">)</span>
@@ -380,7 +380,7 @@
         <span class="n">default</span><span class="o">=</span><span class="n">DEFAULT_MESH_ORDER</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the mesh order of the structure&quot;</span>
     <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">ignored</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">ignored</span><span class="p">):</span>
         <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">_visualize</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span></div>
 
@@ -388,7 +388,7 @@
 
 <div class="viewcode-block" id="Structure3D">
 <a class="viewcode-back" href="../../meow.html#meow.structures.Structure3D">[docs]</a>
-<span class="k">class</span> <span class="nc">Structure3D</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Structure3D</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;a `Structure3D` is an association between a `Geometry3D` and a `Material`&quot;&quot;&quot;</span>
 
     <span class="n">material</span><span class="p">:</span> <span class="n">Material</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the material of the structure&quot;</span><span class="p">)</span>
@@ -397,7 +397,7 @@
         <span class="n">default</span><span class="o">=</span><span class="n">DEFAULT_MESH_ORDER</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;the mesh order of the structure&quot;</span>
     <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">]:</span>
         <span class="n">geometry_2d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">_project</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
         <span class="n">structs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">geometry_2d</span><span class="p">:</span>
@@ -409,32 +409,32 @@
             <span class="n">structs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">struct</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">structs</span>
 
-    <span class="k">def</span> <span class="nf">_lumadd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="s2">&quot;yzx&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_lumadd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="s2">&quot;yzx&quot;</span><span class="p">):</span>
         <span class="n">material_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">_lumadd</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">_lumadd</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">material_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh_order</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">xyz</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_trimesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_trimesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">_trimesh</span><span class="p">(</span>
             <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="n">color</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">)),</span>
             <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">ignored</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">ignored</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trimesh</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
 
 <span class="nd">@overload</span>
-<span class="k">def</span> <span class="nf">_sort_structures</span><span class="p">(</span><span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_sort_structures</span><span class="p">(</span><span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">]:</span>
     <span class="o">...</span>
 
 
 <span class="nd">@overload</span>
-<span class="k">def</span> <span class="nf">_sort_structures</span><span class="p">(</span><span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_sort_structures</span><span class="p">(</span><span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">]:</span>
     <span class="o">...</span>
 
 
-<span class="k">def</span> <span class="nf">_sort_structures</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_sort_structures</span><span class="p">(</span>
     <span class="n">structures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure2D</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Structure3D</span><span class="p">]:</span>
     <span class="n">struct_info</span> <span class="o">=</span> <span class="p">[(</span><span class="n">s</span><span class="o">.</span><span class="n">mesh_order</span><span class="p">,</span> <span class="o">-</span><span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">structures</span><span class="p">)]</span>

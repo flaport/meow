@@ -29,7 +29,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -316,27 +316,27 @@
   <h1>Source code for meow.mode</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; An EigenMode &quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">epsilon_0</span> <span class="k">as</span> <span class="n">eps0</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">mu_0</span> <span class="k">as</span> <span class="n">mu0</span>
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">epsilon_0</span> <span class="k">as</span> <span class="n">eps0</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">mu_0</span> <span class="k">as</span> <span class="n">mu0</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span>
 
-<span class="kn">from</span> <span class="nn">meow.array</span> <span class="kn">import</span> <span class="n">Complex</span><span class="p">,</span> <span class="n">ComplexArray2D</span>
-<span class="kn">from</span> <span class="nn">meow.base_model</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">cached_property</span>
-<span class="kn">from</span> <span class="nn">meow.cross_section</span> <span class="kn">import</span> <span class="n">CrossSection</span>
-<span class="kn">from</span> <span class="nn">meow.integrate</span> <span class="kn">import</span> <span class="n">integrate_2d</span>
-<span class="kn">from</span> <span class="nn">meow.visualize</span> <span class="kn">import</span> <span class="n">_figsize_visualize_mode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.array</span><span class="w"> </span><span class="kn">import</span> <span class="n">Complex</span><span class="p">,</span> <span class="n">ComplexArray2D</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">cached_property</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.cross_section</span><span class="w"> </span><span class="kn">import</span> <span class="n">CrossSection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.integrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">integrate_2d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">meow.visualize</span><span class="w"> </span><span class="kn">import</span> <span class="n">_figsize_visualize_mode</span>
 
 
 <div class="viewcode-block" id="Mode">
 <a class="viewcode-back" href="../../meow.html#meow.mode.Mode">[docs]</a>
-<span class="k">class</span> <span class="nc">Mode</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Mode</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A `Mode` contains the field information for a given `CrossSection`.&quot;&quot;&quot;</span>
 
     <span class="n">neff</span><span class="p">:</span> <span class="n">Complex</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;the effective index of the mode&quot;</span><span class="p">)</span>
@@ -356,7 +356,7 @@
 
 <div class="viewcode-block" id="Mode.interpolate">
 <a class="viewcode-back" href="../../meow.html#meow.mode.Mode.interpolate">[docs]</a>
-    <span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">,</span> <span class="s2">&quot;Ey&quot;</span><span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">,</span> <span class="s2">&quot;Hx&quot;</span><span class="p">,</span> <span class="s2">&quot;Hy&quot;</span><span class="p">,</span> <span class="s2">&quot;Hz&quot;</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">interpolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Ex&quot;</span><span class="p">,</span> <span class="s2">&quot;Ey&quot;</span><span class="p">,</span> <span class="s2">&quot;Ez&quot;</span><span class="p">,</span> <span class="s2">&quot;Hx&quot;</span><span class="p">,</span> <span class="s2">&quot;Hy&quot;</span><span class="p">,</span> <span class="s2">&quot;Hz&quot;</span><span class="p">]):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot interpolate from already interpolated mode!&quot;</span><span class="p">)</span>
         <span class="n">interpolate_funcs</span> <span class="o">=</span> <span class="p">{</span>
@@ -372,12 +372,12 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">te_fraction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">te_fraction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;the TE polarization fraction of the mode.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">te_fraction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">_pointing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_pointing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate and cache the poynting vector&quot;&quot;&quot;</span>
         <span class="n">vecE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">Ex</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ez</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">vecH</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">Hx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Hz</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
@@ -390,19 +390,19 @@
         <span class="p">}</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">Px</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">Px</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pointing</span><span class="p">[</span><span class="s2">&quot;Px&quot;</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">Py</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">Py</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pointing</span><span class="p">[</span><span class="s2">&quot;Py&quot;</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">Pz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">Pz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pointing</span><span class="p">[</span><span class="s2">&quot;Pz&quot;</span><span class="p">]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">A</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">A</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;mode area&quot;&quot;&quot;</span>
         <span class="n">vecE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">Ex</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ez</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">E_sq</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">vecE</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -412,14 +412,14 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">integrate_2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">E_sq</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">integrate_2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">E_qu</span><span class="p">))</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">env</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">env</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">mesh</span>
 
-    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_visualize</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">title_prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -432,9 +432,9 @@
         <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">ignored</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># fmt: skip</span>
-        <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">colors</span>  <span class="c1"># fmt: skip</span>
-        <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>  <span class="c1"># fmt: skip</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>  <span class="c1"># fmt: skip</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">colors</span>  <span class="c1"># fmt: skip</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_axes_locatable</span>  <span class="c1"># fmt: skip</span>
         <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">_figsize_visualize_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span> <span class="mf">6.4</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">fields</span><span class="p">:</span>
@@ -528,7 +528,7 @@
 
 <div class="viewcode-block" id="Mode.save">
 <a class="viewcode-back" href="../../meow.html#meow.mode.Mode.save">[docs]</a>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span></div>
 
@@ -536,12 +536,12 @@
 <div class="viewcode-block" id="Mode.load">
 <a class="viewcode-back" href="../../meow.html#meow.mode.Mode.load">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Mode</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;unsupported operand type(s) for +: &#39;Mode&#39; and &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
@@ -558,7 +558,7 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">new_mode</span>
 
-    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">,</span> <span class="nb">complex</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;unsupported operand type(s) for *: &#39;Mode&#39; and &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
@@ -577,14 +577,14 @@
 
     <span class="fm">__rmul__</span> <span class="o">=</span> <span class="fm">__mul__</span>
 
-    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">,</span> <span class="nb">complex</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;unsupported operand type(s) for /: &#39;Mode&#39; and &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">other</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Mode</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;unsupported operand type(s) for -: &#39;Mode&#39; and &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
@@ -598,7 +598,7 @@
 
 <div class="viewcode-block" id="zero_phase">
 <a class="viewcode-back" href="../../meow.html#meow.mode.zero_phase">[docs]</a>
-<span class="k">def</span> <span class="nf">zero_phase</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">zero_phase</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;normalize (zero out) the phase of a `Mode`&quot;&quot;&quot;</span>
     <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
     <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">e</span> <span class="o">==</span> <span class="n">e</span><span class="o">.</span><span class="n">max</span><span class="p">()))[:,</span> <span class="mi">0</span><span class="p">]</span>
@@ -625,7 +625,7 @@
 <span class="c1">#    return round(float(centroid_x)), round(float(centroid_y))</span>
 
 
-<span class="k">def</span> <span class="nf">_sum_around</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_sum_around</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
     <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">idxs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">r</span><span class="p">,</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">idx_tups</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">idxs</span><span class="p">)</span>
@@ -639,7 +639,7 @@
 
 <div class="viewcode-block" id="invert_mode">
 <a class="viewcode-back" href="../../meow.html#meow.mode.invert_mode">[docs]</a>
-<span class="k">def</span> <span class="nf">invert_mode</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">invert_mode</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;invert a `Mode`&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
         <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
@@ -656,7 +656,7 @@
 
 <div class="viewcode-block" id="inner_product">
 <a class="viewcode-back" href="../../meow.html#meow.mode.inner_product">[docs]</a>
-<span class="k">def</span> <span class="nf">inner_product</span><span class="p">(</span><span class="n">mode1</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">mode2</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">inner_product</span><span class="p">(</span><span class="n">mode1</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">mode2</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;the inner product of a `Mode` with another `Mode` is uniquely defined.&quot;&quot;&quot;</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">mode1</span><span class="o">.</span><span class="n">mesh</span>
     <span class="n">cross</span> <span class="o">=</span> <span class="n">mode1</span><span class="o">.</span><span class="n">Ex</span> <span class="o">*</span> <span class="n">mode2</span><span class="o">.</span><span class="n">Hy</span> <span class="o">-</span> <span class="n">mode1</span><span class="o">.</span><span class="n">Ey</span> <span class="o">*</span> <span class="n">mode2</span><span class="o">.</span><span class="n">Hx</span>
@@ -666,7 +666,7 @@
 
 <div class="viewcode-block" id="inner_product_conj">
 <a class="viewcode-back" href="../../meow.html#meow.mode.inner_product_conj">[docs]</a>
-<span class="k">def</span> <span class="nf">inner_product_conj</span><span class="p">(</span><span class="n">mode1</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">mode2</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">inner_product_conj</span><span class="p">(</span><span class="n">mode1</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span> <span class="n">mode2</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;the inner product of a `Mode` with another `Mode` is uniquely defined.&quot;&quot;&quot;</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">mode1</span><span class="o">.</span><span class="n">mesh</span>
     <span class="n">cross</span> <span class="o">=</span> <span class="n">mode1</span><span class="o">.</span><span class="n">Ex</span> <span class="o">*</span> <span class="n">mode2</span><span class="o">.</span><span class="n">Hy</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="o">-</span> <span class="n">mode1</span><span class="o">.</span><span class="n">Ey</span> <span class="o">*</span> <span class="n">mode2</span><span class="o">.</span><span class="n">Hx</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
@@ -676,7 +676,7 @@
 
 <div class="viewcode-block" id="normalize_product">
 <a class="viewcode-back" href="../../meow.html#meow.mode.normalize_product">[docs]</a>
-<span class="k">def</span> <span class="nf">normalize_product</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize_product</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;normalize a `Mode` according to the `inner_product` with itself&quot;&quot;&quot;</span>
     <span class="n">factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">inner_product</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">mode</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
@@ -694,7 +694,7 @@
 
 <div class="viewcode-block" id="electric_energy_density">
 <a class="viewcode-back" href="../../meow.html#meow.mode.electric_energy_density">[docs]</a>
-<span class="k">def</span> <span class="nf">electric_energy_density</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">electric_energy_density</span><span class="p">(</span>
     <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the electric energy density contained in a `Mode`&quot;&quot;&quot;</span>
@@ -713,7 +713,7 @@
 
 <div class="viewcode-block" id="electric_energy">
 <a class="viewcode-back" href="../../meow.html#meow.mode.electric_energy">[docs]</a>
-<span class="k">def</span> <span class="nf">electric_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">electric_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the electric energy contained in a `Mode`&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">electric_energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
 
@@ -721,7 +721,7 @@
 
 <div class="viewcode-block" id="magnetic_energy_density">
 <a class="viewcode-back" href="../../meow.html#meow.mode.magnetic_energy_density">[docs]</a>
-<span class="k">def</span> <span class="nf">magnetic_energy_density</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">magnetic_energy_density</span><span class="p">(</span>
     <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the magnetic energy density contained in a `Mode`&quot;&quot;&quot;</span>
@@ -733,7 +733,7 @@
 
 <div class="viewcode-block" id="magnetic_energy">
 <a class="viewcode-back" href="../../meow.html#meow.mode.magnetic_energy">[docs]</a>
-<span class="k">def</span> <span class="nf">magnetic_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">magnetic_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the magnetic energy contained in a `Mode`&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">magnetic_energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
 
@@ -741,7 +741,7 @@
 
 <div class="viewcode-block" id="energy_density">
 <a class="viewcode-back" href="../../meow.html#meow.mode.energy_density">[docs]</a>
-<span class="k">def</span> <span class="nf">energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the energy density contained in a `Mode`&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">electric_energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span> <span class="o">+</span> <span class="n">magnetic_energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
 
@@ -749,7 +749,7 @@
 
 <div class="viewcode-block" id="energy">
 <a class="viewcode-back" href="../../meow.html#meow.mode.energy">[docs]</a>
-<span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;get the energy contained in a `Mode`&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">energy_density</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
 
@@ -757,7 +757,7 @@
 
 <div class="viewcode-block" id="normalize_energy">
 <a class="viewcode-back" href="../../meow.html#meow.mode.normalize_energy">[docs]</a>
-<span class="k">def</span> <span class="nf">normalize_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;normalize a mode according to the energy it contains&quot;&quot;&quot;</span>
     <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">electric_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
     <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">magnetic_energy</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
@@ -777,7 +777,7 @@
 
 <div class="viewcode-block" id="is_pml_mode">
 <a class="viewcode-back" href="../../meow.html#meow.mode.is_pml_mode">[docs]</a>
-<span class="k">def</span> <span class="nf">is_pml_mode</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_pml_mode</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;check whether a mode can be considered a PML mode.</span>
 
 <span class="sd">    Args:</span>
@@ -810,7 +810,7 @@
 
 <div class="viewcode-block" id="te_fraction">
 <a class="viewcode-back" href="../../meow.html#meow.mode.te_fraction">[docs]</a>
-<span class="k">def</span> <span class="nf">te_fraction</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">te_fraction</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;the TE polarization fraction of the `Mode`&quot;&quot;&quot;</span>
     <span class="n">epsx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">nx</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">eps0</span> <span class="o">*</span> <span class="n">epsx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
@@ -819,7 +819,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_average</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_average</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="s2">&quot;backward&quot;</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;direction should be &#39;forward&#39; or backward&quot;</span><span class="p">)</span>
@@ -835,7 +835,7 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">average</span><span class="p">,</span> <span class="n">zero</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_interpolate_Ex</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_Ex</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
     <span class="c1"># TODO: take grid spacing into account</span>
     <span class="n">Ey_at_Ez</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ey</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">Ey_at_Ex</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">Ey_at_Ez</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -855,7 +855,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_interpolate_Ey</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_Ey</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
     <span class="c1"># TODO: take grid spacing into account</span>
     <span class="n">Ex_at_Ez</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">Ex</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">Ex_at_Ey</span> <span class="o">=</span> <span class="n">_average</span><span class="p">(</span><span class="n">Ex_at_Ez</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -875,7 +875,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_interpolate_Ez</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_Ez</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
     <span class="c1"># TODO: take grid spacing into account</span>
     <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
         <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
@@ -893,7 +893,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_interpolate_Hz</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_Hz</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mode</span><span class="p">:</span>
     <span class="c1"># TODO: take grid spacing into account</span>
     <span class="k">return</span> <span class="n">Mode</span><span class="p">(</span>
         <span class="n">neff</span><span class="o">=</span><span class="n">mode</span><span class="o">.</span><span class="n">neff</span><span class="p">,</span>
