@@ -10,6 +10,7 @@ temp
 sandbox
 tests/nbs_fail
 
+uv.lock
 log.txt
 # nbdev
 *.bak
