@@ -1,4 +1,4 @@
-name: publish
+name: Release
 on:
   push:
     tags:
@@ -20,18 +20,20 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: dist
+          path: ./dist
 
   release:
     runs-on: ubuntu-latest
     needs:
       - build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Download Wheels
         uses: actions/download-artifact@v4
         with:
-          name: wheels-ubuntu-latest
-          path: dist
+          name: dist
+          path: ./dist
       - name: PyPI Release
         uses: pypa/gh-action-pypi-publish@release/v1
         with:

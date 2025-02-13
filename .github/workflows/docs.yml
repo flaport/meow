@@ -1,4 +1,4 @@
-name: main
+name: Docs
 on:
   workflow_dispatch:
   pull_request:
