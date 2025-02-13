@@ -5,32 +5,20 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - ".github/**"
-      - "!.github/workflows/main.yml"
-      - "!.github/workflows/publish.yml"
-      - "docs/**"
-      - "*.md"
-      - ".git*"
 
 jobs:
   run:
     runs-on: ubuntu-latest
-    container:
-      image: condaforge/mambaforge
-      volumes:
-        - ${{ github.workspace }}:/github/workspace
     steps:
       - name: Checkout
-        uses: actions/checkout@master
-      - name: Install dependencies
-        run: |
-          mamba install make papermill parallel ipyevents ipytree gdspy gdstk
-      - name: Install meow
-        run: pip install .[vis,jax,klu,ipy,gds,dev]
+        uses: actions/checkout@v3
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+      - name: Create Venv
+        run: uv sync --all-extras
       - name: Run notebooks
-        run: find examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | xargs parallel papermill {} {} -k python3 ':::'
-      - name: Expose 'examples' as artifact
+        run: find examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | xargs parallel uv run papermill {} {} -k python3 ':::'
+      - name: Upload Artifacts
         uses: actions/upload-artifact@master
         with:
           name: examples
@@ -40,29 +28,25 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - run
-    container:
-      image: condaforge/mambaforge
-      volumes:
-        - ${{ github.workspace }}:/github/workspace
     steps:
       - name: Checkout
-        uses: actions/checkout@master
-      - name: Install dependencies
-        run: mamba install make
-      - name: Download 'examples' artifact
+        uses: actions/checkout@v3
+      - name: Download Artifacts
         uses: actions/download-artifact@master
         with:
           name: examples
           path: ./examples
-      - name: Install meow
-        run: pip install .[vis,jax,klu,ipy,gds,dev]
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+      - name: Create Venv
+        run: uv sync --all-extras
       - name: Build docs
         run: make docs && touch docs/build/html/.nojekyll
       - name: Patch binder links
         run: find docs/build/html -name "*.html" | xargs sed -i 's|urlpath=tree/docs|urlpath=tree|g'
       - name: Patch colab links
         run: find docs/build/html -name "*.html" | xargs sed -i 's|/blob/main/docs/|/blob/main/|g'
-      - name: Store artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@master
         with:
           name: docs
@@ -74,7 +58,7 @@ jobs:
       - docs
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
       - name: Download 'docs' artifact
         uses: actions/download-artifact@master
         with:
