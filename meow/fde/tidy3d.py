@@ -9,7 +9,7 @@ from packaging import version
 from pydantic.v1 import validate_arguments
 from pydantic.v1.types import PositiveFloat, PositiveInt
 from scipy.constants import c
-from tidy3d.plugins.mode.solver import compute_modes as _compute_modes
+from tidy3d.components.mode.solver import compute_modes as _compute_modes
 
 from ..cross_section import CrossSection
 from ..mode import Mode, Modes, is_pml_mode, normalize_product, zero_phase
@@ -72,6 +72,7 @@ def compute_modes_tidy3d(
             coords=[cs.mesh.x, cs.mesh.y],
             freq=c / (cs.env.wl * 1e-6),
             mode_spec=mode_spec,
+            precision=precision,
         )[:2]
     )
 

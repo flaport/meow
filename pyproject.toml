@@ -9,7 +9,7 @@ authors = [
 { name = "Floris Laporte", email = "floris.laporte@gmail.com" },
 ]
 description = "Modeling of Eigenmodes and Overlaps in Waveguide Structures"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = [
   "eigenmodes",
   "eme",
@@ -41,7 +41,7 @@ dependencies = [
   "sax>=0.14.1",
   "scipy",
   "shapely",
-  "tidy3d>=2.7.0",
+  "tidy3d>=2.8.0,<2.9.0",
   "trimesh[easy]",
 ]
 
@@ -51,7 +51,7 @@ vis = ["matplotlib", "trimesh[easy]"]
 jax = ["jax", "jaxlib"]
 klu = ["klujax>0.1.2"]
 ipy = ["ipykernel", "ipywidgets", "ipympl", "nbstripout", "tqdm"]
-gds = ["gdsfactory>=8.0.0", "klayout>0.28.2", "kweb", "kfactory"]
+gds = ["gdsfactory~=9.3"]
 dev = ["build", "bump2version", "nbstripout", "pre-commit", "black[jupyter]", "autoimport", "isort", "sphinx", "autodoc-pydantic", "myst-nb>0.17.1", "jupyter-book", "papermill"]
 full = ["meow-sim[vis,klu,jax,ipy,gds]"]
 
