@@ -51,7 +51,7 @@ vis = ["matplotlib", "trimesh[easy]"]
 jax = ["jax", "jaxlib"]
 klu = ["klujax>0.1.2"]
 ipy = ["ipykernel", "ipywidgets", "ipympl", "nbstripout", "tqdm"]
-gds = ["gdsfactory>=8.0.0", "klayout>0.28.2", "kweb", "kfactory"]
+gds = ["gdsfactory~=9.3"]
 dev = ["build", "bump2version", "nbstripout", "pre-commit", "black[jupyter]", "autoimport", "isort", "sphinx", "autodoc-pydantic", "myst-nb>0.17.1", "jupyter-book", "papermill"]
 full = ["meow-sim[vis,klu,jax,ipy,gds]"]
 
