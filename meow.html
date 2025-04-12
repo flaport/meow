@@ -16,33 +16,30 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
     <link rel="stylesheet" type="text/css" href="_static/_static/css/custom.css" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=e9e33cf0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -57,7 +54,6 @@
     <link rel="prev" title="Unequal Number of Modes" href="examples/03_unequal_number_of_modes.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -73,8 +69,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -82,6 +89,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -89,8 +97,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -106,8 +114,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -137,17 +144,21 @@
     
     
     <img src="_static/meow.png" class="logo__image only-light" alt="meow 0.12.0 documentation - Home"/>
-    <img src="_static/meow.png" class="logo__image only-dark pst-js-only" alt="meow 0.12.0 documentation - Home"/>
+    <script>document.write(`<img src="_static/meow.png" class="logo__image only-dark" alt="meow 0.12.0 documentation - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Home</span></p>
@@ -176,14 +187,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -344,16 +350,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -824,7 +838,10 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.base_model.BaseModel.model_validate_json">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model_validate_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/meow/base_model.html#BaseModel.model_validate_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#meow.base_model.BaseModel.model_validate_json" title="Link to this definition">#</a></dt>
-<dd><p>Usage docs: <a class="reference external" href="https://docs.pydantic.dev/2.10/concepts/json/#json-parsing">https://docs.pydantic.dev/2.10/concepts/json/#json-parsing</a></p>
+<dd><dl class="simple">
+<dt>!!! abstract “Usage Documentation”</dt><dd><p>[JSON Parsing](../concepts/json.md#json-parsing)</p>
+</dd>
+</dl>
 <p>Validate the given JSON data against the Pydantic model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -832,6 +849,8 @@
 <li><p><strong>json_data</strong> (<em>str</em><em> | </em><em>bytes</em><em> | </em><em>'bytearray'</em>) – The JSON data to validate.</p></li>
 <li><p><strong>strict</strong> (<em>bool</em><em> | </em><em>None</em>) – Whether to enforce types strictly.</p></li>
 <li><p><strong>context</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>) – Extra variables to pass to the validator.</p></li>
+<li><p><strong>by_alias</strong> – Whether to use the field’s alias when validating against the provided input data.</p></li>
+<li><p><strong>by_name</strong> – Whether to use the field’s name when validating against the provided input data.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1012,6 +1031,7 @@ a given mesh at the center of the Cell</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -1235,6 +1255,7 @@ a given mesh at the center of the Cell</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -1369,6 +1390,7 @@ a given mesh at the center of the Cell</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -1487,13 +1509,13 @@ a given mesh at the center of the Cell</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.cell.Cell.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.cell.Cell.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -1513,7 +1535,7 @@ method.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>structures</strong> (<em>list</em><em>[</em><a class="reference internal" href="#meow.structures.Structure3D" title="meow.structures.Structure3D"><em>Structure3D</em></a><em>]</em>)</p></li>
 <li><p><strong>mesh</strong> (<a class="reference internal" href="#meow.mesh.Mesh2D" title="meow.mesh.Mesh2D"><em>Mesh2D</em></a><em> | </em><em>list</em><em>[</em><a class="reference internal" href="#meow.mesh.Mesh2D" title="meow.mesh.Mesh2D"><em>Mesh2D</em></a><em>]</em>)</p></li>
-<li><p><strong>Ls</strong> (<em>Annotated</em><em>[</em><em>ndarray</em><em>, </em><em>GetPydanticSchema</em><em>(</em><em>get_pydantic_core_schema=~meow.array._get_ndarray_core_schema</em><em>, </em><em>get_pydantic_json_schema=~meow.array._get_ndarray_json_schema</em><em>)</em><em>, </em><em>PlainSerializer</em><em>(</em><em>func=~meow.array._serialize_ndarray</em><em>, </em><em>return_type=PydanticUndefined</em><em>, </em><em>when_used=always</em><em>)</em><em>, </em><em>BeforeValidator</em><em>(</em><em>func=~meow.array._validate_ndarray</em><em>, </em><em>json_schema_input_type=PydanticUndefined</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=~meow.array._coerce_immutable</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=functools.partial</em><em>(</em><em>&lt;function _coerce_dim at 0x7ff3b0651b20&gt;</em><em>, </em><em>ndim=1</em><em>)</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=functools.partial</em><em>(</em><em>&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;</em><em>, </em><em>dtype='float64'</em><em>)</em><em>)</em><em>]</em>)</p></li>
+<li><p><strong>Ls</strong> (<em>Annotated</em><em>[</em><em>ndarray</em><em>, </em><em>GetPydanticSchema</em><em>(</em><em>get_pydantic_core_schema=~meow.array._get_ndarray_core_schema</em><em>, </em><em>get_pydantic_json_schema=~meow.array._get_ndarray_json_schema</em><em>)</em><em>, </em><em>PlainSerializer</em><em>(</em><em>func=~meow.array._serialize_ndarray</em><em>, </em><em>return_type=PydanticUndefined</em><em>, </em><em>when_used=always</em><em>)</em><em>, </em><em>BeforeValidator</em><em>(</em><em>func=~meow.array._validate_ndarray</em><em>, </em><em>json_schema_input_type=PydanticUndefined</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=~meow.array._coerce_immutable</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=functools.partial</em><em>(</em><em>&lt;function _coerce_dim at 0x7f05b91ae160&gt;</em><em>, </em><em>ndim=1</em><em>)</em><em>)</em><em>, </em><em>AfterValidator</em><em>(</em><em>func=functools.partial</em><em>(</em><em>&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;</em><em>, </em><em>dtype='float64'</em><em>)</em><em>)</em><em>]</em>)</p></li>
 <li><p><strong>z_min</strong> (<em>float</em>)</p></li>
 </ul>
 </dd>
@@ -1597,6 +1619,7 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -1792,6 +1815,7 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -1918,6 +1942,7 @@ which uniquely defines the refractive index everywhere.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -2034,13 +2059,13 @@ which uniquely defines the refractive index everywhere.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.cross_section.CrossSection.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.cross_section.CrossSection.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -2124,13 +2149,13 @@ geometry/structure itself such as most commonly wavelength and temperature.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.environment.Environment.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.environment.Environment.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -2211,6 +2236,7 @@ Multiple of such rules can later be associated with a gds layer tuple.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -2241,6 +2267,7 @@ Multiple of such rules can later be associated with a gds layer tuple.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -2326,6 +2353,7 @@ Multiple of such rules can later be associated with a gds layer tuple.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -2432,13 +2460,13 @@ Multiple of such rules can later be associated with a gds layer tuple.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.gds_structures.GdsExtrusionRule.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.gds_structures.GdsExtrusionRule.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -2492,13 +2520,13 @@ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.geometries.Geometry2DBase.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.geometries.Geometry2DBase.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -2634,13 +2662,13 @@ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.geometries.Rectangle.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.geometries.Rectangle.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -2685,13 +2713,13 @@ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.geometries.Geometry3DBase.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.geometries.Geometry3DBase.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -2867,13 +2895,13 @@ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.geometries.Box.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.geometries.Box.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -2976,9 +3004,9 @@ method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’float64’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’float64’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -3034,13 +3062,13 @@ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.geometries.Prism.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.geometries.Prism.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -3092,6 +3120,7 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -3141,13 +3170,13 @@ This procedure is best suited if one wants to integrate over a (small) region of
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.materials.MaterialBase.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.materials.MaterialBase.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -3178,6 +3207,7 @@ method.</p>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -3243,13 +3273,13 @@ validated to form a valid model.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.materials.TidyMaterial.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.materials.TidyMaterial.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -3280,6 +3310,7 @@ method.</p>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -3323,13 +3354,13 @@ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.materials.IndexMaterial.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.materials.IndexMaterial.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -3360,6 +3391,7 @@ method.</p>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -3445,14 +3477,14 @@ method.</p>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.materials.SampledMaterial.n">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7ff3b0651c60&gt;,</span> <span class="pre">dtype='float64'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.materials.SampledMaterial.n" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f05b91ae2a0&gt;,</span> <span class="pre">dtype='float64'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.materials.SampledMaterial.n" title="Link to this definition">#</a></dt>
 <dd><p>the complex refractive index of the material</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’float64’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’float64’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -3469,7 +3501,7 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.materials.SampledMaterial.params">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">~typing.Annotated[~numpy.ndarray,</span> <span class="pre">~pydantic.types.GetPydanticSchema(get_pydantic_core_schema=~meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=~meow.array._get_ndarray_json_schema),</span> <span class="pre">~pydantic.functional_serializers.PlainSerializer(func=~meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">~pydantic.functional_validators.BeforeValidator(func=~meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=~meow.array._coerce_immutable),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=functools.partial(&lt;function</span> <span class="pre">_coerce_dim</span> <span class="pre">at</span> <span class="pre">0x7ff3b0651b20&gt;,</span> <span class="pre">ndim=1)),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=functools.partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7ff3b0651c60&gt;,</span> <span class="pre">dtype='float64'))]]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.materials.SampledMaterial.params" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict[str,</span> <span class="pre">~typing.Annotated[~numpy.ndarray,</span> <span class="pre">~pydantic.types.GetPydanticSchema(get_pydantic_core_schema=~meow.array._get_ndarray_core_schema,</span> <span class="pre">get_pydantic_json_schema=~meow.array._get_ndarray_json_schema),</span> <span class="pre">~pydantic.functional_serializers.PlainSerializer(func=~meow.array._serialize_ndarray,</span> <span class="pre">return_type=PydanticUndefined,</span> <span class="pre">when_used=always),</span> <span class="pre">~pydantic.functional_validators.BeforeValidator(func=~meow.array._validate_ndarray,</span> <span class="pre">json_schema_input_type=PydanticUndefined),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=~meow.array._coerce_immutable),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=functools.partial(&lt;function</span> <span class="pre">_coerce_dim</span> <span class="pre">at</span> <span class="pre">0x7f05b91ae160&gt;,</span> <span class="pre">ndim=1)),</span> <span class="pre">~pydantic.functional_validators.AfterValidator(func=functools.partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f05b91ae2a0&gt;,</span> <span class="pre">dtype='float64'))]]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.materials.SampledMaterial.params" title="Link to this definition">#</a></dt>
 <dd><p>the wavelength over which the refractive index is defined.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Validated by<span class="colon">:</span></dt>
@@ -3494,13 +3526,13 @@ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.materials.SampledMaterial.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.materials.SampledMaterial.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -3669,9 +3701,9 @@ method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’float64’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’float64’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -3692,9 +3724,9 @@ method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’float64’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’float64’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -3741,7 +3773,7 @@ method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> = &lt;function &lt;lambda&gt; at 0x7ff398cc5300&gt;</p></li>
+<li><p><strong>func</strong> = &lt;function &lt;lambda&gt; at 0x7f05a01af560&gt;</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
 </ul>
 </dd>
@@ -3897,13 +3929,13 @@ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.mesh.Mesh2D.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.mesh.Mesh2D.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -4217,6 +4249,7 @@ method.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -4412,6 +4445,7 @@ method.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -4538,6 +4572,7 @@ method.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -4587,14 +4622,14 @@ method.</p>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.neff">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">neff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7ff3b0651c60&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.neff" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">neff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f05b91ae2a0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.neff" title="Link to this definition">#</a></dt>
 <dd><p>the effective index of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -4623,14 +4658,14 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Ex">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ex</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7ff3b0651c60&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ex" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ex</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f05b91ae2a0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ex" title="Link to this definition">#</a></dt>
 <dd><p>the Ex-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -4646,14 +4681,14 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Ey">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7ff3b0651c60&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ey" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f05b91ae2a0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ey" title="Link to this definition">#</a></dt>
 <dd><p>the Ey-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -4669,14 +4704,14 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Ez">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ez</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7ff3b0651c60&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ez" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ez</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f05b91ae2a0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Ez" title="Link to this definition">#</a></dt>
 <dd><p>the Ez-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -4692,14 +4727,14 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Hx">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7ff3b0651c60&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hx" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f05b91ae2a0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hx" title="Link to this definition">#</a></dt>
 <dd><p>the Hx-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -4715,14 +4750,14 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Hy">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7ff3b0651c60&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hy" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f05b91ae2a0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hy" title="Link to this definition">#</a></dt>
 <dd><p>the Hy-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -4738,14 +4773,14 @@ method.</p>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="meow.mode.Mode.Hz">
-<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7ff3b0651c60&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hz" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">attribute</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Hz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">partial(&lt;function</span> <span class="pre">_coerce_dtype</span> <span class="pre">at</span> <span class="pre">0x7f05b91ae2a0&gt;,</span> <span class="pre">dtype='complex128'))]</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#meow.mode.Mode.Hz" title="Link to this definition">#</a></dt>
 <dd><p>the Hz-fields of the mode</p>
 <dl class="field-list simple">
 <dt class="field-odd">Constraints<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7ff3b0651f80&gt;</p></li>
-<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7ff3b0652020&gt;</p></li>
-<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7ff3b0651c60&gt;, dtype=’complex128’)</p></li>
+<li><p><strong>get_pydantic_core_schema</strong> = &lt;function _get_ndarray_core_schema at 0x7f05b91ae5c0&gt;</p></li>
+<li><p><strong>get_pydantic_json_schema</strong> = &lt;function _get_ndarray_json_schema at 0x7f05b91ae660&gt;</p></li>
+<li><p><strong>func</strong> = functools.partial(&lt;function _coerce_dtype at 0x7f05b91ae2a0&gt;, dtype=’complex128’)</p></li>
 <li><p><strong>return_type</strong> = PydanticUndefined</p></li>
 <li><p><strong>when_used</strong> = always</p></li>
 <li><p><strong>json_schema_input_type</strong> = PydanticUndefined</p></li>
@@ -4832,13 +4867,13 @@ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.mode.Mode.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.mode.Mode.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -5122,6 +5157,7 @@ energy in the PML, it will be removed.</p></li>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -5190,6 +5226,7 @@ energy in the PML, it will be removed.</p></li>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -5275,6 +5312,7 @@ energy in the PML, it will be removed.</p></li>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -5352,13 +5390,13 @@ energy in the PML, it will be removed.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.structures.Structure2D.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.structures.Structure2D.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -5483,6 +5521,7 @@ method.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -5579,6 +5618,7 @@ method.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -5664,6 +5704,7 @@ method.</p>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">            </span><span class="p">},</span>
 <span class="w">            </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">               </span><span class="nt">&quot;additionalProperties&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;metadata for the material&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Meta&quot;</span><span class="p">,</span>
 <span class="w">               </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span>
@@ -5741,13 +5782,13 @@ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="meow.structures.Structure3D.model_post_init">
 <span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#meow.structures.Structure3D.model_post_init" title="Link to this definition">#</a></dt>
-<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
-method.</p>
+<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
+<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>)</p></li>
-<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#meow.base_model.BaseModel" title="meow.base_model.BaseModel"><em>BaseModel</em></a>) – The BaseModel instance.</p></li>
+<li><p><strong>context</strong> (<em>Any</em>) – The context.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -5836,8 +5877,7 @@ Check out its help to see which kwargs are accepted.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -6115,8 +6155,8 @@ By Floris Laporte
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
