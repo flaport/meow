@@ -72,6 +72,7 @@ def compute_modes_tidy3d(
             coords=[cs.mesh.x, cs.mesh.y],
             freq=c / (cs.env.wl * 1e-6),
             mode_spec=mode_spec,
+            precision=precision,
         )[:2]
     )
 
