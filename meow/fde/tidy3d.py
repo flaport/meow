@@ -9,7 +9,7 @@ from packaging import version
 from pydantic.v1 import validate_arguments
 from pydantic.v1.types import PositiveFloat, PositiveInt
 from scipy.constants import c
-from tidy3d.plugins.mode.solver import compute_modes as _compute_modes
+from tidy3d.components.mode.solver import compute_modes as _compute_modes
 
 from ..cross_section import CrossSection
 from ..mode import Mode, Modes, is_pml_mode, normalize_product, zero_phase

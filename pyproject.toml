@@ -41,7 +41,7 @@ dependencies = [
   "sax>=0.14.1",
   "scipy",
   "shapely",
-  "tidy3d>=2.7.0",
+  "tidy3d>=2.8.0,<2.9.0",
   "trimesh[easy]",
 ]
 
