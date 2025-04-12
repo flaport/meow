@@ -9,7 +9,7 @@ authors = [
 { name = "Floris Laporte", email = "floris.laporte@gmail.com" },
 ]
 description = "Modeling of Eigenmodes and Overlaps in Waveguide Structures"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = [
   "eigenmodes",
   "eme",
