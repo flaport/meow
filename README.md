@@ -2,7 +2,8 @@
 
 > **M**odeling of **E**igenmodes and **O**verlaps in **W**aveguides
 
-![meow](docs/source/_static/img/meow.png)
+<img src="docs/source/_static/img/meow.png" alt="meow" width="300"/>
+
 
 [![PyPI version](https://badge.fury.io/py/meow-sim.svg)](https://badge.fury.io/py/meow-sim)
 
