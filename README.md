@@ -2,7 +2,9 @@
 
 > **M**odeling of **E**igenmodes and **O**verlaps in **W**aveguides
 
-![meow](https://flaport.github.io/meow/_static/meow.png)
+![meow](docs/source/_static/img/meow.png)
+
+[![PyPI version](https://badge.fury.io/py/meow-sim.svg)](https://badge.fury.io/py/meow-sim)
 
 A simple electromagnetic [EigenMode Expansion (EME)](https://en.wikipedia.org/wiki/Eigenmode_expansion) tool for Python.
 
