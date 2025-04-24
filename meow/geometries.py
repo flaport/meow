@@ -93,8 +93,8 @@ class Polygon2D(Geometry2DBase):
 
         ax.add_patch(patch)
 
-        min_x, max_x = min(self.poly[:, 0]) - 0.5, max(self.poly[:, 0]) + 0.5
-        min_y, max_y = min(self.poly[:, 1]) - 0.5, max(self.poly[:, 1]) + 0.5
+        min_x, max_x = min(self.poly[:, 0]), max(self.poly[:, 0])
+        min_y, max_y = min(self.poly[:, 1]), max(self.poly[:, 1])
 
         extent_x = max_x - min_x
         extent_y = max_y - min_y
