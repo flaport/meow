@@ -1,4 +1,4 @@
-""" MEOW: Modeling of Eigenmodes and Overlaps in Waveguides """
+"""MEOW: Modeling of Eigenmodes and Overlaps in Waveguides"""
 
 __author__ = "Floris Laporte"
 __version__ = "0.13.0"
@@ -28,6 +28,7 @@ from .geometries import Geometry2D as Geometry2D
 from .geometries import Geometry2DBase as Geometry2DBase
 from .geometries import Geometry3D as Geometry3D
 from .geometries import Geometry3DBase as Geometry3DBase
+from .geometries import Polygon2D as Polygon2D
 from .geometries import Prism as Prism
 from .geometries import Rectangle as Rectangle
 from .integrate import integrate_2d as integrate_2d

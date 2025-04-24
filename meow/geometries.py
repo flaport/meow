@@ -1,14 +1,16 @@
-""" meow geometries """
+"""meow geometries"""
 
 from __future__ import annotations
 
 import warnings
 from secrets import token_hex
-from typing import Annotated, Literal, cast
+from typing import Annotated, Literal, Union, cast
 
 import matplotlib.pyplot as plt
 import numpy as np
+import shapely
 import shapely.geometry as sg
+from matplotlib.patches import Polygon as MplPolygon
 from matplotlib.patches import Rectangle as MplRect
 from pydantic import Field
 
@@ -66,7 +68,47 @@ class Rectangle(Geometry2DBase):
             plt.show()
 
 
-Geometry2D = Rectangle  # should be a union of all 2D Geometries
+class Polygon2D(Geometry2DBase):
+    """A 2D polygon defined by a list of vertices."""
+
+    poly: Annotated[NDArray, Shape(-1, 2), DType("float64")] = Field(
+        description="the 2D array (Nx2) with polygon vertices"
+    )
+
+    def _mask(self, X, Y):
+        poly = sg.Polygon(self.poly)
+
+        points = shapely.points(X, Y)
+        mask = poly.covers(points)
+
+        return mask
+
+    def _visualize(self, *, ax=None, show=True, color=None, **ignored):
+        if ax is None:
+            ax = plt.gca()
+        if color is None:
+            color = "grey"
+
+        patch = MplPolygon(self.poly, closed=True, color=color)
+
+        ax.add_patch(patch)
+
+        min_x, max_x = min(self.poly[:, 0]) - 0.5, max(self.poly[:, 0]) + 0.5
+        min_y, max_y = min(self.poly[:, 1]) - 0.5, max(self.poly[:, 1]) + 0.5
+
+        extent_x = max_x - min_x
+        extent_y = max_y - min_y
+
+        ax.set_xlim(min_x - 0.1 * extent_x, max_x + 0.1 * extent_x)
+        ax.set_ylim(min_y - 0.1 * extent_y, max_y + 0.1 * extent_y)
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        plt.grid(True)
+        if show:
+            plt.show()
+
+
+Geometry2D = Union[Rectangle, Polygon2D]  # should be a union of all 2D Geometries
 
 
 class Geometry3DBase(BaseModel):
@@ -325,6 +367,7 @@ Geometry3D = Box | Prism
 
 def _to_rgba(c):
     from matplotlib.colors import to_rgba as _to_rgba_mpl  # fmt: skip
+
     r, g, b, a = _to_rgba_mpl(c)
     a = min(max(a, 0.1), 0.9)
     return float(r), float(g), float(b), float(a)
