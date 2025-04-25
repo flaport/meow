@@ -73,6 +73,7 @@ def compute_modes_tidy3d(
             freq=c / (cs.env.wl * 1e-6),
             mode_spec=mode_spec,
             precision=precision,
+            plane_center=(0.0, 0.0),
         )[:2]
     )
 
