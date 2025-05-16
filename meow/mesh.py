@@ -50,6 +50,14 @@ class Mesh2D(BaseModel):
             "always 1 (the global z axis)."
         ),
     )
+    plane_center: tuple[float, float] = Field(
+        default=(0.0, 0.0),
+        description=(
+            "If ``bend_radius`` is not ``None``, "
+            "the position of the plane corresponding along the circonference of the circle"
+        ),
+    )
+
     num_pml: tuple[NonNegativeInt, NonNegativeInt] = Field(
         default=(0, 0),
         description="Number of standard pml layers to add in the two tangential axes.",
