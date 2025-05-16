@@ -382,6 +382,14 @@ document.write(`
             <span class="s2">&quot;always 1 (the global z axis).&quot;</span>
         <span class="p">),</span>
     <span class="p">)</span>
+    <span class="n">plane_center</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;If ``bend_radius`` is not ``None``, &quot;</span>
+            <span class="s2">&quot;the position of the plane corresponding along the circonference of the circle&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
     <span class="n">num_pml</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">NonNegativeInt</span><span class="p">,</span> <span class="n">NonNegativeInt</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Number of standard pml layers to add in the two tangential axes.&quot;</span><span class="p">,</span>
