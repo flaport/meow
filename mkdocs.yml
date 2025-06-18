@@ -1,0 +1,104 @@
+site_name: meow
+repo_url: https://github.com/flaport/meow
+site_url: https://flaport.github.io/meow
+site_description: Autograd and XLA for S-parameters
+site_author: Floris Laporte
+repo_name: flaport/meow
+copyright: Copyright © 2025, Floris Laporte, Apache-2.0
+
+theme:
+  name: material
+  font:
+    text: Merriweather Sans
+    code: Merriweather Mono
+  # icon:
+  #   logo: simple/materialformkdocs # https://squidfunk.github.io/mkdocs-material/reference/icons-emojis
+  logo: assets/logo.png
+  favicon: assets/favicon.ico
+  features:
+    - navigation.footer
+  search: true
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: switch to dark mode
+      primary: blue
+      accent: deep purple
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: switch to system default
+      primary: blue
+      accent: deep purple
+
+nav:
+  - home: index.md
+  - examples:
+    - quick start: 00_introduction.ipynb
+    - gds taper: 01_gds_taper.ipynb
+    - length sweep: 02_taper_length_sweep.ipynb
+    - unequal \# modes: 03_unequal_number_of_modes.ipynb
+  - changelog: changelog.md
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - src
+          inventories:
+            - https://docs.python.org/3/objects.inv
+            - https://www.mkdocs.org/objects.inv
+            - https://python-markdown.github.io/objects.inv
+          options:
+            docstring_style: google
+            docstring_options:
+              ignore_init_summary: true
+            docstring_section_style: table # table | list | spacy
+            filters: ["!^_"]
+            heading_level: 1
+            inherited_members: true
+            merge_init_into_class: true
+            separate_signature: true
+            show_root_heading: true
+            show_root_full_path: false
+            show_signature_annotations: true
+            show_source: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            signature_crossrefs: true
+            summary: true
+
+markdown_extensions:
+  - attr_list
+  - toc:
+      permalink: true
+  - pymdownx.emoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.magiclink
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/flaport
