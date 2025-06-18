@@ -29,7 +29,7 @@ MODELS = {}
 class ModelMetaclass(_ModelMetaclass):
     """Metaclass for all models."""
 
-    def __call__(cls, *args: Any, **kwargs: Any) -> type:  # noqa: N805,ANN401,D102
+    def __call__(cls, *args: Any, **kwargs: Any) -> type:  # noqa: N805,D102
         obj = super().__call__(*args, **kwargs)
         return cache_model(obj)
 
@@ -56,7 +56,7 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
 
     @model_validator(mode="before")
     @classmethod
-    def _validate_model(cls, obj: Any) -> Any:  # noqa: ANN401
+    def _validate_model(cls, obj: Any) -> Any:
         if isinstance(obj, dict):
             tpe = obj.get("type", cls.__name__)
             if tpe != cls.__name__:
@@ -66,9 +66,9 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
         return obj
 
     @classmethod
-    def model_validate(
+    def model_validate(  # type: ignore[reportIncompatibleMethodOverride]
         cls,
-        obj: Any,  # noqa: ANN401
+        obj: Any,
         *,
         strict: bool | None = None,
         from_attributes: bool | None = None,
@@ -101,7 +101,7 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
         )
 
     @classmethod
-    def model_validate_json(
+    def model_validate_json(  # type: ignore[reportIncompatibleMethodOverride]
         cls,
         json_data: str | bytes | bytearray,
         *,
@@ -177,7 +177,7 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
     def __str__(self) -> str:
         return self._repr()
 
-    def _visualize(self, **kwargs: Any) -> None:  # noqa: ANN401
+    def _visualize(self, **kwargs: Any) -> None:
         msg = f"visualization for {self.__class__.__name__!r} not (yet) implemented."
         raise NotImplementedError(msg)
 
@@ -214,7 +214,7 @@ def _dict_repr(
     end: str = "}",
     eq: str = ": ",
 ) -> str:
-    from .array import SerializedArray
+    from .arrays import SerializedArray
 
     try:
         arr = SerializedArray.model_validate(dct).to_array()
@@ -229,7 +229,7 @@ def _dict_repr(
         if key == "data":
             continue
         if isinstance(attr, BaseModel):
-            attr_str = attr._repr(indent=indent + shift, shift=shift)  # noqa: SLF001
+            attr_str = attr._repr(indent=indent + shift, shift=shift)
         elif isinstance(attr, dict):
             attr_str = _dict_repr(attr, indent=indent + shift, shift=shift)
         elif isinstance(attr, list):

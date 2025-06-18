@@ -63,7 +63,7 @@ def cached_model(cls: type[T]) -> type[T]:
     """Decorator to cache a model class instance."""
 
     @wraps(cls)  # type: ignore[reportArgumentType]
-    def model(*args: Any, **kwargs: Any) -> T:  # noqa: ANN401
+    def model(*args: Any, **kwargs: Any) -> T:
         return cache_model(cls(*args, **kwargs))
 
     return cast(type[T], model)

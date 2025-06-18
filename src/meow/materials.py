@@ -36,7 +36,7 @@ class MaterialBase(BaseModel):
         msg = "Please use one of the Material child classes"
         raise NotImplementedError(msg)
 
-    def _lumadd(self, sim: Any, env: Environment, unit: float) -> str:  # noqa: ANN401
+    def _lumadd(self, sim: Any, env: Environment, unit: float) -> str:
         from matplotlib.cm import get_cmap
 
         n = self(env)
@@ -62,7 +62,7 @@ class TidyMaterial(MaterialBase):
     name: str = Field(description="The material name as also used by tidy3d")
     variant: str = Field(description="The material variant as also used by tidy3d")
 
-    def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
+    def __init__(self, **kwargs: Any) -> None:
         """Initialize the TidyMaterial."""
         super().__init__(**kwargs)
 
@@ -225,11 +225,11 @@ def _to_ndgrid(df: pd.DataFrame, wl_key: str = "wl") -> tuple[Any, Any, Any]:
 
 
 def _evaluate_general_corner_model(
-    data: Any,  # noqa: ANN401
-    params: Any,  # noqa: ANN401
-    strings: Any,  # noqa: ANN401
+    data: Any,
+    params: Any,
+    strings: Any,
     /,
-    **kwargs: Any,  # noqa: ANN401
+    **kwargs: Any,
 ) -> tuple[np.ndarray, dict[str, int], dict[str, dict[str, int]]]:
     given_params = {k: kwargs.get(k, np.asarray(v).mean()) for k, v in params.items()}
     given_strings = {
@@ -267,7 +267,7 @@ def _evaluate_general_corner_model(
     return result.reshape(*string_shape, *result.shape[1:]), axs, pos
 
 
-def _downselect(data: np.ndarray, idxs_list: Any) -> np.ndarray:  # noqa: ANN401
+def _downselect(data: np.ndarray, idxs_list: Any) -> np.ndarray:
     for i, idxs in enumerate(reversed(idxs_list), start=1):
         data = data.take(np.asarray(idxs, dtype=int), axis=-i)
     return data
@@ -278,7 +278,7 @@ def _downselect(data: np.ndarray, idxs_list: Any) -> np.ndarray:  # noqa: ANN401
 #    return jax.scipy.ndimage.map_coordinates(input, coordinates, 1, mode="nearest")
 
 
-def _map_coordinates(data: np.ndarray, coordinates: Any) -> np.ndarray:  # noqa: ANN401
+def _map_coordinates(data: np.ndarray, coordinates: Any) -> np.ndarray:
     result = []
     for i in range(data.shape[-1]):
         current_result = map_coordinates(
