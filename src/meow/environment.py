@@ -1,4 +1,4 @@
-""" one place to gather your environment settings """
+"""One place to gather your environment settings."""
 
 from __future__ import annotations
 
@@ -8,8 +8,7 @@ from meow.base_model import BaseModel
 
 
 class Environment(BaseModel):
-    """An environment contains all variables that don't depend on the
-    geometry/structure itself such as most commonly wavelength and temperature."""
+    """An environment contains all variables that don't depend on the structure."""
 
     wl: float = Field(default=1.5, description="the wavelength of the environment")
     T: float = Field(default=25.0, description="the temperature of the environment")

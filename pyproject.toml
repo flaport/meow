@@ -26,7 +26,8 @@ dependencies = [
   "trimesh[easy]",
   "jax>=0.6.0",
   "klujax>=0.4.1",
-  "tqdm"
+  "tqdm",
+  "pyyaml>=6.0.2"
 ]
 description = "Modeling of Eigenmodes and Overlaps in Waveguides"
 keywords = [
@@ -103,6 +104,7 @@ ignore = [
   "N806",  # non-lowercase-variable-in-function
   "PD901",  # pandas-df-variable-name
   "PLC0414",  # useless-import-alias
+  "PLC0415",  # import-outside-top-level
   "PLR0911",  # too-many-return-statements
   "PLR0912",  # too-many-branches
   "PLR0913",  # too-many-arguments
