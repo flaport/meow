@@ -1,12 +1,13 @@
-""" a Structure is a combination of a Geometry with a material (and an optional mesh order) """
+"""A Structure is a combination of a Geometry with a material."""
 
 from __future__ import annotations
 
-from typing import overload
+from typing import Any, overload
 
 from pydantic import Field
 
 from meow.base_model import BaseModel
+from meow.environment import Environment
 from meow.geometries import Geometry2D, Geometry3D
 from meow.materials import Material
 
@@ -19,8 +20,7 @@ def Structure(
     material: Material,
     geometry: Geometry2D,
     mesh_order: int = DEFAULT_MESH_ORDER,
-) -> Structure2D:
-    ...
+) -> Structure2D: ...
 
 
 @overload
@@ -29,16 +29,16 @@ def Structure(
     material: Material,
     geometry: Geometry3D,
     mesh_order: int = DEFAULT_MESH_ORDER,
-) -> Structure3D:
-    ...
+) -> Structure3D: ...
 
 
-def Structure(
+def Structure(  # noqa: N802
     *,
     material: Material,
     geometry: Geometry2D | Geometry3D,
     mesh_order: int = DEFAULT_MESH_ORDER,
 ) -> Structure2D | Structure3D:
+    """Create a Structure from a Material and Geometry."""
     kwargs = {
         "material": material,
         "geometry": geometry,
@@ -46,12 +46,11 @@ def Structure(
     }
     if isinstance(geometry, Geometry2D):
         return Structure2D(**kwargs)
-    else:
-        return Structure3D(**kwargs)
+    return Structure3D(**kwargs)
 
 
 class Structure2D(BaseModel):
-    """a `Structure2D` is an association between a `Geometry2D` and a `Material`"""
+    """A `Structure2D` is an association between a `Geometry2D` and a `Material`."""
 
     material: Material = Field(description="the material of the structure")
     geometry: Geometry2D = Field(description="the geometry of the structure")
@@ -59,13 +58,13 @@ class Structure2D(BaseModel):
         default=DEFAULT_MESH_ORDER, description="the mesh order of the structure"
     )
 
-    def _visualize(self, **ignored):
+    def _visualize(self, **ignored: Any) -> None:  # noqa: ARG002
         color = self.material.meta.get("color", None)
         return self.geometry._visualize(color=color)
 
 
 class Structure3D(BaseModel):
-    """a `Structure3D` is an association between a `Geometry3D` and a `Material`"""
+    """A `Structure3D` is an association between a `Geometry3D` and a `Material`."""
 
     material: Material = Field(description="the material of the structure")
     geometry: Geometry3D = Field(description="the geometry of the structure")
@@ -73,7 +72,7 @@ class Structure3D(BaseModel):
         default=DEFAULT_MESH_ORDER, description="the mesh order of the structure"
     )
 
-    def _project(self, z) -> list[Structure2D]:
+    def _project(self, z: float) -> list[Structure2D]:
         geometry_2d = self.geometry._project(z)
         structs = []
         for geom in geometry_2d:
@@ -85,28 +84,34 @@ class Structure3D(BaseModel):
             structs.append(struct)
         return structs
 
-    def _lumadd(self, sim, env, unit=1e-6, xyz="yzx"):
+    def _lumadd(
+        self, sim: Any, env: Environment, unit: float = 1e-6, xyz: str = "yzx"
+    ) -> None:
         material_name = self.material._lumadd(sim, env, unit)
         self.geometry._lumadd(sim, material_name, self.mesh_order, unit, xyz)
 
-    def _trimesh(self, color=None, scale=None):
+    def _trimesh(
+        self, color: str | None = None, scale: tuple[float, float, float] | None = None
+    ) -> Any:
         return self.geometry._trimesh(
             color=(color or self.material.meta.get("color")),
             scale=scale,
         )
 
-    def _visualize(self, scale=None, **ignored):
+    def _visualize(
+        self,
+        scale: tuple[float, float, float] | None = None,
+        **ignored: Any,  # noqa: ARG002
+    ) -> None:
         return self._trimesh(scale=scale).show()
 
 
 @overload
-def _sort_structures(structures: list[Structure3D]) -> list[Structure3D]:
-    ...
+def _sort_structures(structures: list[Structure3D]) -> list[Structure3D]: ...
 
 
 @overload
-def _sort_structures(structures: list[Structure2D]) -> list[Structure2D]:
-    ...
+def _sort_structures(structures: list[Structure2D]) -> list[Structure2D]: ...
 
 
 def _sort_structures(
@@ -114,4 +119,4 @@ def _sort_structures(
 ) -> list[Structure2D] | list[Structure3D]:
     struct_info = [(s.mesh_order, -i, s) for i, s in enumerate(structures)]
     sorted_struct_info = sorted(struct_info, key=lambda I: (I[0], I[1]), reverse=True)
-    return [s for _, _, s in sorted_struct_info]  # type: ignore
+    return [s for _, _, s in sorted_struct_info]  # type: ignore[reportReturnType]
