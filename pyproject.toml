@@ -92,6 +92,7 @@ docstring-code-format = true
 
 [tool.ruff.lint]  # see https://docs.astral.sh/ruff/rules
 ignore = [
+  "ANN401",  # any-type
   "C901",  # complex-structure
   "COM812",  # missing-trailing-comma
   "D105",  # undocumented-magic-method
@@ -111,6 +112,7 @@ ignore = [
   "PLR2004",  # magic-value-comparison
   "PLW2901",  # redefined-loop-name
   "RET504",  # unnecessary-assign
+  "SIM300",  # yoda-conditions
   "TC001",  # typing-only-first-party-import
   "TC002",  # typing-only-third-party-import
   "TC003",  # typing-only-standard-library-import

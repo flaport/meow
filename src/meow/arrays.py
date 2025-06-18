@@ -51,7 +51,7 @@ class SerializedArray(BaseModel):
         return arr.reshape(*self.shape)
 
 
-def _validate_ndarray(x: Any) -> np.ndarray:  # noqa: ANN401
+def _validate_ndarray(x: Any) -> np.ndarray:
     if isinstance(x, dict):
         return SerializedArray.model_validate(x).to_array()
 
@@ -167,5 +167,7 @@ NDArray = Annotated[
 ]
 
 ComplexArray2D = Annotated[NDArray, Dim(2), DType("complex128")]
+FloatArray2D = Annotated[NDArray, Dim(2), DType("float64")]
+BoolArray2D = Annotated[NDArray, Dim(2), DType("bool")]
 
 Complex = Annotated[NDArray, Dim(0), DType("complex128")]
