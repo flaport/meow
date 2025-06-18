@@ -1,11 +1,12 @@
-# meow
+# MEOW (0.13.0)
 
 > **M**odeling of **E**igenmodes and **O**verlaps in **W**aveguides
 
-<img src="docs/source/_static/img/meow.png" alt="meow" width="300"/>
-
-
 [![PyPI version](https://badge.fury.io/py/meow-sim.svg)](https://badge.fury.io/py/meow-sim)
+
+![MEOW LOGO](docs/assets/logo-small.png)
+
+
 
 A simple electromagnetic [EigenMode Expansion (EME)](https://en.wikipedia.org/wiki/Eigenmode_expansion) tool for Python.
 
@@ -13,7 +14,7 @@ A simple electromagnetic [EigenMode Expansion (EME)](https://en.wikipedia.org/wi
 
 ### Minimal installation
 ```sh
-pip install meow-sim[min]
+pip install meow-sim
 ```
 
 ### Full installation
@@ -21,28 +22,14 @@ pip install meow-sim[min]
 pip install meow-sim[full]
 ```
 
-### Selecting features
-You can select which features to enable during installation as follows:
-```sh
-pip install meow-sim[feature1,feature2,...]
-```
-
-#### Available features
-* `min`: minimal installation (equivalent to not specifying any features)
-* `vis`: explicitly installs matplotlib and trimesh.
-* `jax`: use JAX in stead of numpy to calculate the S-matrices
-* `klu`: use `klujax` to speed up S-matric calculations (implies `jax`). Note: you need
-the SuiteSparse headers on your computer for this to work.
-* `gds`: enable GDS creation with GDSFactory (see GDS Taper example).
-* `ipy`: install useful jupyter/ipython packages.
-* `dev`: install dev dependencies
-* `full`: enable all the above features.
+This will include [gdsfactory](https://github.com/gdsfactory/gdsfactory) dependencies.
 
 
 ## Documentation
 
-- [Examples](https://flaport.github.io/meow/examples.html)
-- [API Docs](https://flaport.github.io/meow/meow.html)
+The documentation is available at
+[flaport.github.io/meow](https://flaport.github.io/meow/).
+
 
 ## Contributors
 
@@ -51,7 +38,6 @@ the SuiteSparse headers on your computer for this to work.
 
 ## Credits
 
-- [DALL-E](https://labs.openai.com): _“a drawing of a kitten with laser eyes walking towards me”_ (logo)
 - [Tidy3D](https://github.com/flexcompute/tidy3d): meow uses the free FDE mode solver from Tidy3D.
 - [SAX](https://github.com/flaport/sax): meow uses SAX as its circuit simulator when cascading the overlap S-matrices.
 - [klujax](https://github.com/flaport/sax): Although technically an optional backend for SAX, klujax will significantly speed up the final S-matrix calculation of your structures.

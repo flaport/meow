@@ -3,22 +3,7 @@ build-backend = "setuptools.build_meta"
 requires = ["setuptools>=61", "uv", "build", "wheel"]
 
 [project]
-name = "meow-sim"
-version = "0.13.0"
-authors = [{ name = "Floris Laporte", email = "floris.laporte@gmail.com" }]
-description = "Modeling of Eigenmodes and Overlaps in Waveguides"
-requires-python = ">=3.11"
-keywords = [
-  "eigenmodes",
-  "eme",
-  "fde",
-  "modeling",
-  "overlaps",
-  "photonics",
-  "waveguides",
-]
-license = { text = "Apache Software License" }
-readme = "README.md"
+authors = [{name = "Floris Laporte", email = "floris.laporte@gmail.com"}]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",
@@ -28,10 +13,10 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Topic :: Scientific/Engineering",
-  "Topic :: Scientific/Engineering :: Physics",
+  "Topic :: Scientific/Engineering :: Physics"
 ]
 dependencies = [
-  "sax", # >= 0.15.0
+  "sax",  # >= 0.15.0
   "matplotlib>=3.0.0",
   "numpy>=2.2.0",
   "orjson>=3.0.0",
@@ -41,8 +26,23 @@ dependencies = [
   "trimesh[easy]",
   "jax>=0.6.0",
   "klujax>=0.4.1",
-  "tqdm",
+  "tqdm"
 ]
+description = "Modeling of Eigenmodes and Overlaps in Waveguides"
+keywords = [
+  "eigenmodes",
+  "eme",
+  "fde",
+  "modeling",
+  "overlaps",
+  "photonics",
+  "waveguides"
+]
+license = {text = "Apache Software License"}
+name = "meow-sim"
+readme = "README.md"
+requires-python = ">=3.11"
+version = "0.13.0"
 
 [project.optional-dependencies]
 dev = [
@@ -67,21 +67,15 @@ docs = [
   "mkdocs-material>=9.6.0",
   "mkdocs>=1.6.1",
   "mkdocstrings[python]>=0.27.0",
-  "papermill>=2.6.0"
-  "nbconvert>=7.16.6",
-]
-gf = [
-  "gdsfactory>=9.0"
+  "papermill>=2.6.0",
+  "nbconvert>=7.16.6"
 ]
 full = [
   "gdsfactory>=9.0"
 ]
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-data]
-"*" = ["*.csv"]
+gf = [
+  "gdsfactory>=9.0"
+]
 
 [tool.pytest.ini_options]
 addopts = '--tb=short'
@@ -138,9 +132,6 @@ select = ["ALL"]
   "S101",  # assert
   "SLF001"  # private-member-access
 ]
-"src/sax/saxtypes/*.py" = [
-  "ANN401"  # any-type
-]
 "src/tests/*" = [
   "D",  # pydocstyle
   "PT011",  # pytest-raises-too-broad
@@ -150,6 +141,12 @@ select = ["ALL"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.setuptools.package-data]
+"*" = ["*.csv"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.tbump]
 
@@ -167,7 +164,7 @@ message_template = "Bump to {new_version}"
 tag_template = "{new_version}"
 
 [tool.tbump.version]
-current = "0.14.7"
+current = "0.13.0"
 regex = '''
   (?P<major>\d+)
   \.

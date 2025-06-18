@@ -41,10 +41,10 @@ theme:
 nav:
   - home: index.md
   - examples:
-    - quick start: 00_introduction.ipynb
-    - gds taper: 01_gds_taper.ipynb
-    - length sweep: 02_taper_length_sweep.ipynb
-    - unequal \# modes: 03_unequal_number_of_modes.ipynb
+    - quick start: nbs/00_introduction.md
+    - gds taper: nbs/01_gds_taper.md
+    - length sweep: nbs/02_taper_length_sweep.md
+    - unequal \# modes: nbs/03_unequal_number_of_modes.md
   - changelog: changelog.md
 
 plugins:
