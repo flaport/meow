@@ -1,15 +1,16 @@
-""" an EME Cell """
+"""an EME Cell."""
 
 from __future__ import annotations
 
 import warnings
-from typing import Annotated, cast, overload
+from itertools import pairwise
+from typing import Annotated, Any, cast, overload
 
 import numpy as np
 from pydantic import Field
 from scipy.ndimage import convolve
 
-from meow.array import Dim, DType, NDArray
+from meow.arrays import BoolArray2D, Dim, DType, IntArray2D, NDArray
 from meow.base_model import BaseModel, cached_property
 from meow.materials import Material
 from meow.mesh import Mesh2D
@@ -17,9 +18,13 @@ from meow.structures import Structure2D, Structure3D, _sort_structures
 
 
 class Cell(BaseModel):
-    """A Cell defines an interval in z (the direction of propagation) within
+    """An EME Cell.
+
+    This defines an interval in z (the direction of propagation) within
     the simulation domain. The intersecting Structure3Ds are discretized by
-    a given mesh at the center of the Cell"""
+    a given mesh at the center of the Cell
+
+    """
 
     structures: list[Structure3D] = Field(
         description="the 3D structures which will be sliced by the cell"
@@ -29,45 +34,57 @@ class Cell(BaseModel):
     z_max: float = Field(description="the ending z-coordinate of the cell")
 
     @property
-    def z(self):
+    def z(self) -> float:
+        """The z-position of the center of the cell."""
         return 0.5 * (self.z_min + self.z_max)
 
     @property
-    def length(self):
+    def length(self) -> float:
+        """The length of the cell."""
         return np.abs(self.z_max - self.z_min)
 
     @cached_property
-    def materials(self):
+    def materials(self) -> dict[Material, int]:
+        """A mapping of the materials in the cell to their indices."""
         materials = {}
         for i, structure in enumerate(_sort_structures(self.structures), start=1):
-            if not structure.material in materials:
+            if structure.material not in materials:
                 materials[structure.material] = i
         return materials
 
     @cached_property
     def structures_2d(self) -> list[Structure2D]:
+        """The 2D structures in the cell."""
         z = 0.5 * (self.z_min + self.z_max)
         list_of_list = [s._project(z) for s in self.structures]
         structures = [s for ss in list_of_list for s in ss]
         return structures
 
     @cached_property
-    def m_full(self):
+    def m_full(self) -> IntArray2D:
+        """The full material mask for the cell."""
         return _create_full_material_array(
             mesh=self.mesh,
             structures=self.structures_2d,
             materials=self.materials,
         )
 
-    def _visualize(self, ax=None, cbar=True, show=True, **ignored):
-        import matplotlib.pyplot as plt  # fmt: skip
-        from matplotlib.colors import ListedColormap, to_rgba  # fmt: skip
-        from mpl_toolkits.axes_grid1 import make_axes_locatable  # fmt: skip
+    def _visualize(
+        self,
+        *,
+        ax: Any = None,
+        cbar: bool = True,
+        show: bool = True,
+        **ignored: Any,  # noqa: ARG002
+    ) -> None:
+        import matplotlib.pyplot as plt
+        from matplotlib.colors import ListedColormap, to_rgba
+        from mpl_toolkits.axes_grid1 import make_axes_locatable
 
         colors = [(0, 0, 0, 0)] + [
             to_rgba(m.meta.get("color", (0, 0, 0, 0))) for m in self.materials
         ]
-        cmap = ListedColormap(colors=colors)  # type: ignore
+        cmap = ListedColormap(colors=colors)
         if ax is not None:
             plt.sca(ax)
         else:
@@ -81,7 +98,7 @@ class Cell(BaseModel):
             vmax=len(self.materials) + 1,
         )
         plt.axis("scaled")
-        plt.grid(True)
+        plt.grid(visible=True)
         if cbar:
             divider = make_axes_locatable(ax)
             cax = divider.append_axes("right", size="5%", pad=0.05)
@@ -104,23 +121,28 @@ def create_cells(
     Ls: Annotated[NDArray, Dim(1), DType("float64")],
     z_min: float = 0.0,
 ) -> list[Cell]:
-    """easily create multiple `Cell` objects given a `Mesh` and a collection of cell lengths"""
-    warnings.warn(
-        "create_cells will be removed in a future version. Please create your cells in a loop instead.",
-        DeprecationWarning,
+    """Create multiple `Cell` objects with a `Mesh` and a collection of cell lengths."""
+    msg = (
+        "create_cells will be removed in a future version. "
+        "Please create your cells in a loop instead."
     )
+    warnings.warn(message=msg, category=DeprecationWarning, stacklevel=2)
 
     Ls = np.asarray(Ls, float)
     if Ls.ndim != 1:
-        raise ValueError(f"Ls should be 1D. Got shape: {Ls.shape}.")
+        msg = f"Ls should be 1D. Got shape: {Ls.shape}."
+        raise ValueError(msg)
     if Ls.shape[0] < 0:
-        raise ValueError(f"length of Ls array should be nonzero. Got: {Ls}.")
+        msg = f"length of Ls array should be nonzero. Got: {Ls}."
+        raise ValueError(msg)
 
     meshes = [mesh] * Ls.shape[0] if isinstance(mesh, Mesh2D) else mesh
     if len(Ls) != len(meshes):
-        raise ValueError(
-            f"Number of meshes should correspond to number of lengths (length of Ls). Got {len(meshes)} != {len(Ls)}."
+        msg = (
+            "Number of meshes should correspond to number of lengths (length of Ls). "
+            f"Got {len(meshes)} != {len(Ls)}."
         )
+        raise ValueError(msg)
 
     z = np.cumsum(np.concatenate([np.asarray([z_min], float), Ls]))
     cells = [
@@ -130,7 +152,7 @@ def create_cells(
             z_min=z_min,
             z_max=z_max,
         )
-        for mesh, (z_min, z_max) in zip(meshes, zip(z[:-1], z[1:]))
+        for mesh, (z_min, z_max) in zip(meshes, pairwise(z), strict=False)
     ]
 
     return cells
@@ -140,13 +162,13 @@ def _create_full_material_array(
     mesh: Mesh2D,
     structures: list[Structure2D],
     materials: dict[Material, int],
-):
+) -> IntArray2D:
     m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
     structures_dict = _classify_structures_by_mesh_order_and_material(
         structures, materials
     )
-    for structures in structures_dict.values():
-        _m_full = _create_material_array(mesh, materials, structures)
+    for structs in structures_dict.values():
+        _m_full = _create_material_array(mesh, materials, structs)
         mask = _m_full > 0
         m_full[mask] = _m_full[mask]
 
@@ -200,24 +222,26 @@ def _create_material_array(
     return m_full
 
 
-def _fill_corner_left_mask(mask):
+def _fill_corner_left_mask(mask: BoolArray2D) -> BoolArray2D:
     return (
         convolve(np.asarray(mask, dtype=float), np.array([[-1.0, +1.0], [+1.0, -1.0]]))
         > 1.0
-    )  # type: ignore
+    )
 
 
-def _fill_corner_right_mask(mask):
+def _fill_corner_right_mask(mask: BoolArray2D) -> BoolArray2D:
     return (
         convolve(
             np.asarray(mask, dtype=float),
             np.array([[0.0, 0.0], [+1.0, -1.0], [-1.0, +1.0]]),
         )
         > 1
-    )  # type: ignore
+    )
 
 
-def _get_boundary_mask_horizontal(m_full, negate=False):
+def _get_boundary_mask_horizontal(
+    m_full: IntArray2D, *, negate: bool = False
+) -> BoolArray2D:
     mask = np.zeros((m_full.shape[0] + 2, m_full.shape[1] + 2), dtype=bool)
     mask[1:-1, 1:-1] = m_full > 0
     if negate:
@@ -240,11 +264,13 @@ def _get_boundary_mask_horizontal(m_full, negate=False):
     return mask
 
 
-def _get_boundary_mask_vertical(m_full, negate=False):
+def _get_boundary_mask_vertical(
+    m_full: IntArray2D, *, negate: bool = False
+) -> BoolArray2D:
     return _get_boundary_mask_horizontal(m_full.T, negate=negate).T
 
 
-def _fill_single_pixel_gaps(m_full):
+def _fill_single_pixel_gaps(m_full: IntArray2D) -> IntArray2D:
     mat_x = np.maximum(
         np.roll(m_full, shift=1, axis=0),
         np.roll(m_full, shift=-1, axis=0),
@@ -270,15 +296,13 @@ def _fill_single_pixel_gaps(m_full):
 @overload
 def _classify_structures_by_mesh_order_and_material(
     structures: list[Structure3D], materials: dict[Material, int]
-) -> dict[tuple[int, int], list[Structure3D]]:
-    ...
+) -> dict[tuple[int, int], list[Structure3D]]: ...
 
 
 @overload
 def _classify_structures_by_mesh_order_and_material(
     structures: list[Structure2D], materials: dict[Material, int]
-) -> dict[tuple[int, int], list[Structure2D]]:
-    ...
+) -> dict[tuple[int, int], list[Structure2D]]: ...
 
 
 def _classify_structures_by_mesh_order_and_material(

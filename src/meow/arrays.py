@@ -169,5 +169,6 @@ NDArray = Annotated[
 ComplexArray2D = Annotated[NDArray, Dim(2), DType("complex128")]
 FloatArray2D = Annotated[NDArray, Dim(2), DType("float64")]
 BoolArray2D = Annotated[NDArray, Dim(2), DType("bool")]
+IntArray2D = Annotated[NDArray, Dim(2), DType("int64")]
 
 Complex = Annotated[NDArray, Dim(0), DType("complex128")]
