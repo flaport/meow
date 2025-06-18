@@ -1,9 +1,9 @@
-""" meow array tools for pydantic models """
+"""MEOW array tools for pydantic models."""
 
 from __future__ import annotations
 
 from functools import partial
-from typing import Annotated, Any
+from typing import Annotated, Any, Self
 
 import numpy as np
 from pydantic import (
@@ -17,12 +17,15 @@ from pydantic import (
 
 
 class SerializedArray(BaseModel):
+    """A serialized representation of a numpy array."""
+
     values: list[Any]
     shape: tuple[int, ...]
     dtype: str
 
     @classmethod
-    def from_array(cls, x: np.ndarray):
+    def from_array(cls, x: np.ndarray) -> Self:
+        """Create a SerializedArray from a numpy array."""
         x = np.asarray(x)
         shape = x.shape
         dtype = str(x.dtype)
@@ -34,7 +37,8 @@ class SerializedArray(BaseModel):
             _x = x.ravel()
         return cls(shape=shape, dtype=dtype, values=_x.tolist())
 
-    def to_array(self):
+    def to_array(self) -> np.ndarray:
+        """Convert the SerializedArray back to a numpy array."""
         if self.dtype == "complex128":
             arr = np.asarray(self.values, dtype="float64").view("complex128")
         elif self.dtype == "complex64":
@@ -44,32 +48,33 @@ class SerializedArray(BaseModel):
 
         if not self.shape:
             return arr
-        else:
-            return arr.reshape(*self.shape)
+        return arr.reshape(*self.shape)
 
 
-def _validate_ndarray(x: Any):
+def _validate_ndarray(x: Any) -> np.ndarray:  # noqa: ANN401
     if isinstance(x, dict):
         return SerializedArray.model_validate(x).to_array()
-    elif isinstance(x, SerializedArray):
+
+    if isinstance(x, SerializedArray):
         return x.to_array()
-    else:
-        try:
-            return np.asarray(x)
-        except Exception:
-            raise ValueError(f"Could not validate {x} as an array")
+
+    try:
+        return np.asarray(x)
+    except Exception as e:
+        msg = f"Could not validate {x} as an array"
+        raise ValueError(msg) from e
 
 
-def _serialize_ndarray(x: np.ndarray):
+def _serialize_ndarray(x: np.ndarray) -> dict:
     return SerializedArray.from_array(x).model_dump()
 
 
-def _coerce_immutable(x: np.ndarray):
+def _coerce_immutable(x: np.ndarray) -> np.ndarray:
     x.setflags(write=False)
     return x
 
 
-def _coerce_shape(arr: np.ndarray, shape: tuple[int, ...]):
+def _coerce_shape(arr: np.ndarray, shape: tuple[int, ...]) -> np.ndarray:
     shape_to_coerce = []
     for i in range(len(shape)):
         n = shape[-i - 1]
@@ -79,7 +84,7 @@ def _coerce_shape(arr: np.ndarray, shape: tuple[int, ...]):
     return np.broadcast_to(arr, tuple(shape_to_coerce))
 
 
-def _assert_shape(arr: np.ndarray, shape: tuple[int, ...]):
+def _assert_shape(arr: np.ndarray, shape: tuple[int, ...]) -> np.ndarray:
     shape_to_assert = []
     for i in range(len(shape)):
         n = shape[-i - 1]
@@ -87,63 +92,67 @@ def _assert_shape(arr: np.ndarray, shape: tuple[int, ...]):
             n = arr.shape[-i - 1]
         shape_to_assert.insert(0, n)
     shape = tuple(shape_to_assert)
-    if not arr.shape == shape:
-        raise ValueError(f"Expected an array of shape {shape}. Got {arr.shape}.")
+    if arr.shape != shape:
+        msg = f"Expected an array of shape {shape}. Got {arr.shape}."
+        raise ValueError(msg)
     return arr
 
 
-def _coerce_dim(arr: np.ndarray, ndim: int):
+def _coerce_dim(arr: np.ndarray, ndim: int) -> np.ndarray:
     if arr.ndim > ndim:
         if arr.shape[0] < 2:
             return _coerce_dim(arr[0], ndim)
-        else:
-            raise ValueError(
-                f"Can't coerce arr with shape {arr.shape} into an {ndim}D array."
-            )
-    elif arr.ndim < ndim:
+        msg = f"Can't coerce arr with shape {arr.shape} into an {ndim}D array."
+        raise ValueError(msg)
+    if arr.ndim < ndim:
         return _coerce_dim(arr[None], ndim)
-    else:
-        return arr
-
-
-def _assert_dim(arr: np.ndarray, ndim: int):
-    if not arr.ndim == ndim:
-        raise ValueError(f"Expected a {ndim}D array. Got a {arr.ndim}D array.")
     return arr
 
 
-def _coerce_dtype(arr: np.ndarray, dtype: str):
+def _assert_dim(arr: np.ndarray, ndim: int) -> np.ndarray:
+    if arr.ndim != ndim:
+        msg = f"Expected a {ndim}D array. Got a {arr.ndim}D array."
+        raise ValueError(msg)
+    return arr
+
+
+def _coerce_dtype(arr: np.ndarray, dtype: str) -> np.ndarray:
     return np.asarray(arr, dtype=dtype)
 
 
-def _assert_dtype(arr: np.ndarray, dtype: str):
+def _assert_dtype(arr: np.ndarray, dtype: str) -> np.ndarray:
     if not str(arr.dtype).startswith(dtype):
-        raise ValueError(
-            f"Expected an array with dtype {dtype!r}. Got an array with dtype {str(arr.dtype)!r}."
+        msg = (
+            f"Expected an array with dtype {dtype!r}. "
+            f"Got an array with dtype {str(arr.dtype)!r}."
         )
+        raise ValueError(msg)
     return arr
 
 
-def Dim(ndim: int, coerce: bool = True):
+def Dim(ndim: int, *, coerce: bool = True) -> AfterValidator:  # noqa: N802
+    """Validator to ensure the array has a specific number of dimensions."""
     f = _coerce_dim if coerce else _assert_dim
     return AfterValidator(partial(f, ndim=ndim))
 
 
-def DType(dtype: str, coerce: bool = True):
+def DType(dtype: str, *, coerce: bool = True) -> AfterValidator:  # noqa: N802
+    """Validator to ensure the array has a specific dtype."""
     f = _coerce_dtype if coerce else _assert_dtype
     return AfterValidator(partial(f, dtype=dtype))
 
 
-def Shape(*shape: int, coerce: bool = True):
+def Shape(*shape: int, coerce: bool = True) -> AfterValidator:  # noqa: N802
+    """Validator to ensure the array has a specific shape."""
     f = _coerce_shape if coerce else _assert_shape
     return AfterValidator(partial(f, shape=shape))
 
 
-def _get_ndarray_core_schema(_t, h):
+def _get_ndarray_core_schema(_t, h):  # noqa: ANN001,ANN202
     return h(InstanceOf[np.ndarray])
 
 
-def _get_ndarray_json_schema(_t, _h):
+def _get_ndarray_json_schema(_t, _h):  # noqa: ANN001,ANN202
     return SerializedArray.model_json_schema()
 
 
