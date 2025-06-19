@@ -153,10 +153,11 @@ select = ["ALL"]
   "N802"  # invalid-function-name
 ]
 "src/tests/*" = [
+  "ANN201",  # missing-return-type-undocumented-public-function
   "D",  # pydocstyle
+  "INP001",  # implicit-namespace-package
   "PT011",  # pytest-raises-too-broad
-  "S101",  # assert
-  "INP001"  # implicit-namespace-package
+  "S101"  # assert
 ]
 
 [tool.ruff.lint.pydocstyle]

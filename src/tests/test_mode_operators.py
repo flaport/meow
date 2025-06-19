@@ -1,4 +1,5 @@
-from mode_data import MODE_DATA
+import pytest
+from mode_data import MODE_DATA  # type: ignore[reportMissingImports]
 
 from meow import Mode
 
@@ -9,8 +10,8 @@ mode2 = Mode.model_validate(MODE_DATA)
 def test_multiply_modes():
     """multiplying two modes objects is not supported and should raise a TypeError"""
     try:
-        mode1 * mode2
-        assert False
+        mode1 * mode2  # type: ignore[reportOperatorIssue]
+        pytest.fail("Expected TypeError when multiplying two modes objects")
     except TypeError:
         pass
 
@@ -29,9 +30,3 @@ def test_substract_modes():
 
 def test_divide_scalar():
     assert (mode1 / 2).Ex[0, 0] == 1 / 2
-
-
-if __name__ == "__main__":
-    import pytest  # fmt: skip
-
-    pytest.main([__file__])

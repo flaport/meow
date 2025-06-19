@@ -1,9 +1,6 @@
 import json
-import os
+from pathlib import Path
 
-MODE_DATA = json.load(
-    open(os.path.join(os.path.dirname(__file__), "assets", "model.json"))
+MODE_DATA = json.loads(
+    (Path(__file__).resolve().parent / "assets" / "model.json").read_text()
 )
-
-if __name__ == "__main__":
-    print(MODE_DATA["neff"])
