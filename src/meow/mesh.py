@@ -1,4 +1,4 @@
-""" a 2D Mesh """
+"""A 2D Mesh."""
 
 from __future__ import annotations
 
@@ -8,24 +8,26 @@ import numpy as np
 from pydantic import BeforeValidator, Field
 from pydantic.types import NonNegativeInt
 
-from meow.array import Dim, DType, NDArray
+from meow.arrays import Dim, DType, FloatArray1D, FloatArray2D, NDArray
 from meow.base_model import BaseModel, cached_property
 
 
 class Mesh2D(BaseModel):
-    """a ``Mesh2D`` describes how a ``Structure3D`` is discritized into a ``Cell`` or ``CrossSection``"""
+    """A ``Mesh2D`` describes how a ``Structure3D`` is discritized into a ``Cell``."""
 
     x: Annotated[NDArray, Dim(1), DType("float64")] = Field(
-        description="x-coordinates of the mesh (Ez locations, i.e. corners of the 2D cell)"
+        description="x-coords of the mesh (Ez locations, i.e. corners of the 2D cell)"
     )
 
     y: Annotated[NDArray, Dim(1), DType("float64")] = Field(
-        description="y-coordinates of the mesh (Ez locations, i.e. corners of the 2D cell)"
+        description="y-coords of the mesh (Ez locations, i.e. corners of the 2D cell)"
     )
 
     angle_phi: float = Field(
         default=0.0,
-        description="Azimuth angle of the propagation axis in the plane orthogonal to the mesh.",
+        description=(
+            "Azimuth angle of the propagation axis in the plane orthogonal to the mesh."
+        ),
     )
     angle_theta: float = Field(
         default=0.0,
@@ -36,25 +38,26 @@ class Mesh2D(BaseModel):
     ] = Field(
         default=np.nan,
         description=(
-            "A curvature radius for simulation of waveguide bends. "
-            "Tidy3D: Can be negative, in which case the mode plane center has a smaller value than "
-            "the curvature center along the tangential axis perpendicular to the bend axis."
+            "A curvature radius for simulation of waveguide bends. Can be negative, "
+            "in which case the mode plane center has a smaller value than the "
+            "curvature center along the tangential axis perpendicular to the bend axis."
         ),
     )
     bend_axis: Literal[0, 1] = Field(
         default=0,
         description=(
-            "Index into the two tangential axes defining the normal to the plane in which the bend lies. "
-            "This must be provided if ``bend_radius`` is not ``None``. For example, for a ring in the "
-            "global xy-plane, and a mode plane in either the xz or the yz plane, the ``bend_axis`` is "
-            "always 1 (the global z axis)."
+            "Index into the two tangential axes defining the normal to the plane in "
+            "which the bend lies. This must be provided if ``bend_radius`` is not "
+            "``None``. For example, for a ring in the global xy-plane, and a mode "
+            "plane in either the xz or the yz plane, the ``bend_axis`` is always 1 "
+            "(the global z axis)."
         ),
     )
     plane_center: tuple[float, float] = Field(
         default=(0.0, 0.0),
         description=(
-            "If ``bend_radius`` is not ``None``, "
-            "the position of the plane corresponding along the circonference of the circle"
+            "If ``bend_radius`` is not ``None``, the position of the plane "
+            "corresponding along the circonference of the circle"
         ),
     )
 
@@ -73,87 +76,87 @@ class Mesh2D(BaseModel):
     )
 
     @cached_property
-    def dx(self):
-        """dx at Hz locations, i.e. center of the 2D cell"""
+    def dx(self) -> FloatArray1D:
+        """dx at Hz locations, i.e. center of the 2D cell."""
         return self.x[1:] - self.x[:-1]
 
     @cached_property
-    def dy(self):
-        """dy at Hz locations, i.e. center of the 2D cell"""
+    def dy(self) -> FloatArray1D:
+        """dy at Hz locations, i.e. center of the 2D cell."""
         return self.y[1:] - self.y[:-1]
 
     @cached_property
-    def x_(self):
-        """x at Hz locations, i.e. center of the 2D cell"""
+    def x_(self) -> FloatArray1D:
+        """x at Hz locations, i.e. center of the 2D cell."""
         return 0.5 * (self.x[1:] + self.x[:-1])
 
     @cached_property
-    def y_(self):
-        """y at Hz locations, i.e. center of the 2D cell"""
+    def y_(self) -> FloatArray1D:
+        """y at Hz locations, i.e. center of the 2D cell."""
         return 0.5 * (self.y[1:] + self.y[:-1])
 
     @cached_property
-    def x_full(self):
-        """x at half-integer locations"""
+    def x_full(self) -> FloatArray1D:
+        """x at half-integer locations."""
         return np.stack([self.x[:-1], self.x[:-1] + self.dx / 2], 1).ravel()
 
     @cached_property
-    def y_full(self):
-        """y at half-integer locations"""
+    def y_full(self) -> FloatArray1D:
+        """y at half-integer locations."""
         return np.stack([self.y[:-1], self.y[:-1] + self.dy / 2], 1).ravel()
 
     @cached_property
-    def XY_full(self):
-        """X and Y at half-integer locations"""
+    def XY_full(self) -> tuple[FloatArray2D, FloatArray2D]:
+        """X and Y at half-integer locations."""
         Y_full, X_full = np.meshgrid(self.y_full, self.x_full)
         return X_full, Y_full
 
     @property
-    def X_full(self):
-        """X at half-integer locations"""
+    def X_full(self) -> FloatArray2D:
+        """X at half-integer locations."""
         return self.XY_full[0]
 
     @property
-    def Y_full(self):
-        """Y at half-integer locations"""
+    def Y_full(self) -> FloatArray2D:
+        """Y at half-integer locations."""
         return self.XY_full[1]
 
     @property
-    def Xx(self):
-        """X at Ex locations"""
+    def Xx(self) -> FloatArray2D:
+        """X at Ex locations."""
         return self.X_full[1::2, ::2]
 
     @property
-    def Yx(self):
-        """Y at Ex locations"""
+    def Yx(self) -> FloatArray2D:
+        """Y at Ex locations."""
         return self.Y_full[1::2, ::2]
 
     @property
-    def Xy(self):
-        """X at Ey locations"""
+    def Xy(self) -> FloatArray2D:
+        """X at Ey locations."""
         return self.X_full[::2, 1::2]
 
     @property
-    def Yy(self):
-        """Y at Ey locations"""
+    def Yy(self) -> FloatArray2D:
+        """Y at Ey locations."""
         return self.Y_full[::2, 1::2]
 
     @property
-    def Xz(self):
-        """X at Ez locations"""
+    def Xz(self) -> FloatArray2D:
+        """X at Ez locations."""
         return self.X_full[::2, ::2]
 
     @property
-    def Yz(self):
-        """Y at Ez locations"""
+    def Yz(self) -> FloatArray2D:
+        """Y at Ez locations."""
         return self.Y_full[::2, ::2]
 
     @property
-    def Xz_(self):
-        """X at Hz locations"""
+    def Xz_(self) -> FloatArray2D:
+        """X at Hz locations."""
         return self.X_full[1::2, 1::2]
 
     @property
-    def Yz_(self):
-        """Y at Hz locations"""
+    def Yz_(self) -> FloatArray2D:
+        """Y at Hz locations."""
         return self.Y_full[1::2, 1::2]

@@ -16,18 +16,18 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Physics"
 ]
 dependencies = [
-  "sax",  # >= 0.15.0
+  "jax>=0.6.0",
+  "klujax>=0.4.1",
   "matplotlib>=3.0.0",
   "numpy>=2.2.0",
   "orjson>=3.0.0",
   "pydantic>=2.10.0",
-  "shapely",
+  "pyyaml>=6.0.2",
+  "sax",  # >= 0.15.0
+  "shapely>=2.1.0",
   "tidy3d>=2.8.0,<2.9.0",
-  "trimesh[easy]",
-  "jax>=0.6.0",
-  "klujax>=0.4.1",
-  "tqdm",
-  "pyyaml>=6.0.2"
+  "tqdm>=4.67.0",
+  "trimesh[easy]>=4.6.0"
 ]
 description = "Modeling of Eigenmodes and Overlaps in Waveguides"
 keywords = [
@@ -47,13 +47,13 @@ version = "0.13.0"
 
 [project.optional-dependencies]
 dev = [
-  "ipywidgets",
-  "ipympl",
-  "nbstripout",
   "build>=1.2.0",
   "gdsfactory>=9.7.0",
   "ipykernel>=6.29.5",
+  "ipympl>=0.9.0",
+  "ipywidgets>=8.0.0",
   "mkinit>=1.1.0",
+  "nbstripout>=0.8.0",
   "pre-commit>=4.1.0",
   "pyright>=1.1.0",
   "ruff>=0.9.0",
@@ -68,14 +68,16 @@ docs = [
   "mkdocs-material>=9.6.0",
   "mkdocs>=1.6.1",
   "mkdocstrings[python]>=0.27.0",
-  "papermill>=2.6.0",
-  "nbconvert>=7.16.6"
+  "nbconvert>=7.16.6",
+  "papermill>=2.6.0"
 ]
 full = [
-  "gdsfactory>=9.0"
+  "gdsfactory>=9.0",
+  "gdspy>=1.6.13"
 ]
 gf = [
-  "gdsfactory>=9.0"
+  "gdsfactory>=9.0",
+  "gdspy>=1.6.13"
 ]
 
 [tool.pytest.ini_options]
@@ -139,6 +141,10 @@ select = ["ALL"]
   "PLC2401",  # non-ascii-name
   "S101",  # assert
   "SLF001"  # private-member-access
+]
+"src/meow/mesh.py" = [
+  "D403",  # first-word-uncapitalized
+  "N802"  # invalid-function-name
 ]
 "src/tests/*" = [
   "D",  # pydocstyle
