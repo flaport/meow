@@ -1,5 +1,7 @@
 """A CrossSection."""
 
+from __future__ import annotations
+
 from typing import Any, Self
 
 import numpy as np

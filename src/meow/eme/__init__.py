@@ -1,5 +1,7 @@
 """EME Implementations & Backends."""
 
+from __future__ import annotations
+
 from .common import compute_interface_s_matrices as compute_interface_s_matrices
 from .common import compute_interface_s_matrix as compute_interface_s_matrix
 from .common import compute_propagation_s_matrices as compute_propagation_s_matrices

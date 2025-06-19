@@ -1,5 +1,7 @@
 """Cache management for models in the Meow framework."""
 
+from __future__ import annotations
+
 import os
 from collections import deque
 from contextlib import suppress

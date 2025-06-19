@@ -1,5 +1,7 @@
 """FDE Tidy3d backend (default backend for MEOW)."""
 
+from __future__ import annotations
+
 import warnings
 from types import SimpleNamespace
 from typing import Literal

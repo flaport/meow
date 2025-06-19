@@ -1,5 +1,7 @@
 """SAX backend for EME (default backend)."""
 
+from __future__ import annotations
+
 import warnings
 from itertools import pairwise
 from typing import Any, cast

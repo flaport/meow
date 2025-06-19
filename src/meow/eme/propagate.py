@@ -1,5 +1,7 @@
 """Propagating fields throug devices."""
 
+from __future__ import annotations
+
 import numpy as np
 import sax
 from sax.backends import circuit_backends

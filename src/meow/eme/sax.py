@@ -1,5 +1,7 @@
 """SAX backend for EME (default backend)."""
 
+from __future__ import annotations
+
 from typing import Any, cast
 
 import numpy as np
