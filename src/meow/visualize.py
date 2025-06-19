@@ -1,36 +1,38 @@
-""" Visualizations for common meow-datatypes """
+"""Visualizations for common meow-datatypes."""
 
-from collections.abc import Iterable
-from typing import Any, Callable
+import sys
+from collections.abc import Callable, Iterable
+from typing import Any
 
+import matplotlib.pyplot as plt
 import numpy as np
+import sax
+from trimesh.scene import Scene
+from trimesh.transformations import rotation_matrix
 
+from meow.arrays import ComplexArray2D
+from meow.base_model import BaseModel
+from meow.cross_section import CrossSection
 from meow.structures import Structure3D, _sort_structures
 
-try:
-    import matplotlib.pyplot as plt  # fmt: skip
-
-
-except ImportError:
-    plt = None
+from .mode import Mode  # fmt: skip
 
 try:
-    import gdsfactory as gf  # fmt: skip
+    import gdsfactory as gf
 except ImportError:
     gf = None
 
-try:
-    from jaxlib.xla_extension import DeviceArray  # fmt: skip # type: ignore
-except ImportError:
-    DeviceArray = None
 
-
-def _visualize_s_matrix(S, fmt=None, title=None, show=True, phase=False, ax=None):
-    import matplotlib.pyplot as plt  # fmt: skip
-    if phase:
-        fmt = ".0f"
-    else:
-        fmt = ".3f"
+def _visualize_s_matrix(
+    S: ComplexArray2D,
+    *,
+    fmt: str | None = None,
+    title: str | None = None,
+    show: bool = True,
+    phase: bool = False,
+    ax: Any = None,
+) -> None:
+    fmt = ".0f" if phase else ".3f"
 
     Z = np.abs(S)
     y, x = np.arange(Z.shape[0])[::-1], np.arange(Z.shape[1])
@@ -57,13 +59,13 @@ def _visualize_s_matrix(S, fmt=None, title=None, show=True, phase=False, ax=None
     labels = ["" for _ in coords_]
     plt.yticks(coords_ + 0.5, labels)
     plt.ylim(coords_[-1] - 0.5, coords_[0] + 0.5)
-    plt.grid(True)
+    plt.grid(visible=True)
 
-    for x, y, z in zip(X.ravel(), Y.ravel(), S[::-1].T.ravel()):
+    for x, y, z in zip(X.ravel(), Y.ravel(), S[::-1].T.ravel(), strict=False):
         if np.abs(z) > 0.0005:
             if phase:
                 z = np.angle(z) * 180 / np.pi
-            text = eval(f"f'{{z:{fmt}}}'")  # 😅
+            text = f"{z:{fmt}}"
             text = text.replace("+", "\n+")
             text = text.replace("-", "\n-")
             if text[0] == "\n":
@@ -77,11 +79,19 @@ def _visualize_s_matrix(S, fmt=None, title=None, show=True, phase=False, ax=None
         plt.show()
 
 
-def _visualize_s_pm_matrix(Spm, fmt=None, title=None, show=True, phase=False, ax=None):
-    import matplotlib.pyplot as plt  # fmt: skip
-
+def _visualize_s_pm_matrix(
+    Spm: sax.SDense,
+    *,
+    fmt: str | None = None,
+    title: str | None = None,
+    show: bool = True,
+    phase: bool = False,
+    ax: Any = None,
+) -> None:
     S, pm = Spm
-    _visualize_s_matrix(S, fmt=fmt, title=title, show=False, phase=phase, ax=ax)
+    _visualize_s_matrix(
+        np.asarray(S), fmt=fmt, title=title, show=False, phase=phase, ax=ax
+    )
     num_left = len([p for p in pm if "left" in p])
     Z = np.abs(S)
     _, x = np.arange(Z.shape[0])[::-1], np.arange(Z.shape[1])
@@ -94,20 +104,17 @@ def _visualize_s_pm_matrix(Spm, fmt=None, title=None, show=True, phase=False, ax
 
 
 def _visualize_overlap_density(
-    two_modes,
-    conjugated=True,
-    x_symmetry=False,
-    y_symmetry=False,
-    ax=None,
-    n_cmap=None,
-    mode_cmap=None,
-    num_levels=8,
-    show=True,
-):
-    import matplotlib.pyplot as plt  # fmt: skip
-
-    from .mode import Mode  # fmt: skip
-
+    two_modes: tuple[Mode, Mode],
+    *,
+    conjugated: bool = True,
+    x_symmetry: bool = False,
+    y_symmetry: bool = False,
+    ax: Any = None,
+    n_cmap: str | None = None,
+    mode_cmap: str | None = None,
+    num_levels: int = 8,
+    show: bool = True,
+) -> None:
     mode1, mode2 = two_modes
     if conjugated:
         cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
@@ -135,7 +142,7 @@ def _visualize_overlap_density(
     field = "Ex" if mode1.te_fraction > 0.5 else "Hx"
     mode1._visualize(
         title=f"mode 1: {field}",
-        fields=[field],
+        fields=(field,),
         ax=ax[0],
         n_cmap=n_cmap,
         mode_cmap=mode_cmap,
@@ -146,7 +153,7 @@ def _visualize_overlap_density(
     field = "Ex" if mode2.te_fraction > 0.5 else "Hx"
     mode2._visualize(
         title=f"mode 2: {field}",
-        fields=[field],
+        fields=(field,),
         ax=ax[1],
         n_cmap=n_cmap,
         mode_cmap=mode_cmap,
@@ -157,7 +164,7 @@ def _visualize_overlap_density(
     title = "overlap density" + ("" if conjugated else " (no conjugations)")
     p = overlap._visualize(
         title=title,
-        fields=["Ex"],
+        fields=("Ex",),
         ax=ax[2],
         n_cmap=n_cmap,
         mode_cmap=mode_cmap,
@@ -171,23 +178,18 @@ def _visualize_overlap_density(
     return p
 
 
-def _visualize_gf_component(comp):
-    import gdsfactory as gf  # fmt: skip
+def _visualize_gf_component(comp: Any) -> None:
+    if gf is not None:
+        comp.plot()
 
-    gf.plot(comp)  # type: ignore
 
-
-def _is_two_tuple(obj):
+def _is_two_tuple(obj: Any) -> bool:
     if not isinstance(obj, tuple):
         return False
-    try:
-        x, y = obj  # type: ignore
-        return True
-    except Exception:
-        return False
+    return len(obj) == 2
 
 
-def _figsize_visualize_mode(cs, W0):
+def _figsize_visualize_mode(cs: CrossSection, W0: float) -> tuple[float, float]:
     x_min, x_max = cs.mesh.x.min(), cs.mesh.x.max()
     y_min, y_max = cs.mesh.y.min(), cs.mesh.y.max()
     delta_x = x_max - x_min
@@ -197,19 +199,22 @@ def _figsize_visualize_mode(cs, W0):
     return W, H
 
 
-def _visualize_modes(
-    modes,
-    n_cmap=None,
-    mode_cmap=None,
-    num_levels=8,
-    operation=lambda x: np.abs(x) ** 2,
-    show=True,
-    plot_width=6.4,
-    fields=("Ex", "Hx"),
-    ax=None,
-):
-    import matplotlib.pyplot as plt  # fmt: skip
+def _power(amp: np.ndarray) -> np.ndarray:
+    return abs(amp) ** 2
 
+
+def _visualize_modes(
+    modes: list[Mode],
+    *,
+    n_cmap: str | None = None,
+    mode_cmap: str | None = None,
+    num_levels: int = 8,
+    operation: Callable = _power,
+    show: bool = True,
+    plot_width: float = 6.4,
+    fields: tuple[str, ...] = ("Ex", "Hx"),
+    ax: Any = None,
+) -> None:
     num_modes = len(modes)
     cs = modes[0].cs
     W, H = _figsize_visualize_mode(cs, plot_width)
@@ -229,7 +234,7 @@ def _visualize_modes(
         m._visualize(
             title=None,
             title_prefix=f"m{i}: ",
-            fields=list(fields),
+            fields=tuple(fields),
             ax=ax[i],
             n_cmap=n_cmap,
             mode_cmap=mode_cmap,
@@ -243,60 +248,62 @@ def _visualize_modes(
         plt.show()
 
 
-def _visualize_base_model(obj, **kwargs):
+def _visualize_base_model(obj: BaseModel, **kwargs: Any) -> None:
     return obj._visualize(**kwargs)
 
 
 def _is_mode_list(obj: Any) -> bool:
-    from .mode import Mode  # fmt: skip
     return isinstance(obj, Iterable) and all(isinstance(o, Mode) for o in obj)
 
 
 def _is_structure_3d_list(obj: Any) -> bool:
-    from .structures import Structure3D  # fmt: skip
     return isinstance(obj, Iterable) and all(isinstance(o, Structure3D) for o in obj)
 
 
 def _is_base_model(obj: Any) -> bool:
-    from .base_model import BaseModel  # fmt: skip
     return isinstance(obj, BaseModel)
 
 
 def _is_mode_overlap(obj: Any) -> bool:
-    from .mode import Mode  # fmt: skip
     return _is_two_tuple(obj) and all(isinstance(o, Mode) for o in obj)
 
 
-def _is_s_matrix(obj: Any):
-    return (
-        (
-            isinstance(obj, np.ndarray)
-            or (DeviceArray is not None and isinstance(obj, DeviceArray))
-        )
-        and obj.ndim == 2
-        and obj.shape[0] > 1
-        and obj.shape[1] > 1
-    )
+def _is_s_matrix(obj: Any) -> bool:
+    arr = np.asarray(obj)
+    return arr.ndim == 2 and arr.shape[0] > 1 and arr.shape[1] > 1
 
 
-def _is_s_pm_matrix(obj):
+def _is_s_pm_matrix(obj: Any) -> bool:
     return _is_two_tuple(obj) and _is_s_matrix(obj[0]) and isinstance(obj[1], dict)
 
 
-def _is_gf_component(obj):
+def _is_gf_component(obj: Any) -> bool:
     return gf is not None and isinstance(obj, gf.Component)
 
 
-def _visualize_structures(structures: list[Structure3D], scale=None):
-    """easily visualize a collection (list) of `Structure3D` objects"""
-    from trimesh.scene import Scene  # fmt: skip
-    from trimesh.transformations import rotation_matrix  # fmt: skip
-
+def _visualize_structures(
+    structures: list[Structure3D],
+    scale: tuple[float, float, float] | None = None,
+) -> Any:
+    """Easily visualize a collection (list) of `Structure3D` objects."""
     scene = Scene(
         geometry=[s._trimesh(scale=scale) for s in _sort_structures(structures)]
     )
     scene.apply_transform(rotation_matrix(np.pi - np.pi / 6, (0, 1, 0)))
     return scene.show()
+
+
+def _get_vis_func(obj: Any) -> Callable:
+    """Get the visualization function for the given object."""
+    for check_func, vis_func in VISUALIZATION_MAPPING.items():
+        if check_func(obj):
+            return vis_func
+    return _print_obj
+
+
+def _print_obj(obj: Any) -> None:
+    """Print the object representation."""
+    sys.stdout.write(f"{obj}\n")
 
 
 VISUALIZATION_MAPPING: dict[Callable, Callable] = {
@@ -310,8 +317,8 @@ VISUALIZATION_MAPPING: dict[Callable, Callable] = {
 }
 
 
-def visualize(obj: Any, **kwargs: Any):
-    """visualize any meow object
+def visualize(obj: Any, **kwargs: Any) -> Any:
+    """Visualize any meow object.
 
     Args:
         obj: the meow object to visualize
@@ -324,22 +331,14 @@ def visualize(obj: Any, **kwargs: Any):
     try:
         is_empty = bool(not obj)
     except ValueError:
-        if isinstance(obj, np.ndarray):
-            is_empty = obj.size == 0
-        else:
-            is_empty = False
+        is_empty = isinstance(obj, np.ndarray) and obj.size == 0
 
     if is_empty:
-        raise ValueError("Nothing to visualize!")
+        msg = "Nothing to visualize!"
+        raise ValueError(msg)
 
-    if plt is None:
-        print(obj)
-        return
-
-    for check_func, vis_func in VISUALIZATION_MAPPING.items():
-        if check_func(obj):
-            return vis_func(obj, **kwargs)
-    print(obj)
+    vis_func = _get_vis_func(obj)
+    vis_func(obj, **kwargs)
 
 
 vis = visualize  # shorthand for visualize

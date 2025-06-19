@@ -114,6 +114,7 @@ ignore = [
   "PLR2004",  # magic-value-comparison
   "PLW2901",  # redefined-loop-name
   "RET504",  # unnecessary-assign
+  "S301",  # suspicious-pickle-usage
   "SIM300",  # yoda-conditions
   "SLF001",  # private-member-access
   "TC001",  # typing-only-first-party-import
@@ -144,6 +145,9 @@ select = ["ALL"]
 ]
 "src/meow/mesh.py" = [
   "D403",  # first-word-uncapitalized
+  "N802"  # invalid-function-name
+]
+"src/meow/mode.py" = [
   "N802"  # invalid-function-name
 ]
 "src/tests/*" = [

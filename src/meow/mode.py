@@ -1,21 +1,34 @@
-""" An EigenMode """
+"""An EigenMode."""
+
+from __future__ import annotations
 
 import pickle
 import warnings
+from collections.abc import Callable
 from itertools import product
-from typing import Literal
+from pathlib import Path
+from typing import Any, Literal, cast
 
+import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import colors
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 from pydantic import Field
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
 from scipy.linalg import norm
 
-from meow.array import Complex, ComplexArray2D
+from meow.arrays import Complex, ComplexArray2D, FloatArray2D
 from meow.base_model import BaseModel, cached_property
 from meow.cross_section import CrossSection
+from meow.environment import Environment
 from meow.integrate import integrate_2d
-from meow.visualize import _figsize_visualize_mode
+from meow.mesh import Mesh2D
+
+
+def _power(amp: np.ndarray) -> np.ndarray:
+    """Calculate the power from the amplitude."""
+    return np.abs(amp) ** 2
 
 
 class Mode(BaseModel):
@@ -36,9 +49,13 @@ class Mode(BaseModel):
         description="To which 2D Yee-location the fields are interpolated to.",
     )
 
-    def interpolate(self, location: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]):
+    def interpolate(
+        self, location: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]
+    ) -> Mode:
+        """Interpolate the mode to the given location."""
         if self.interpolation != "":
-            raise RuntimeError("Cannot interpolate from already interpolated mode!")
+            msg = "Cannot interpolate from already interpolated mode!"
+            raise RuntimeError(msg)
         interpolate_funcs = {
             "EX": _interpolate_Ex,
             "EY": _interpolate_Ey,
@@ -51,73 +68,74 @@ class Mode(BaseModel):
         return interpolate_func(self)
 
     @property
-    def te_fraction(self):
-        """the TE polarization fraction of the mode."""
+    def te_fraction(self) -> float:
+        """The TE polarization fraction of the mode."""
         return te_fraction(self)
 
     @cached_property
-    def _pointing(self):
-        """calculate and cache the poynting vector"""
+    def _pointing(self) -> tuple[ComplexArray2D, ComplexArray2D, ComplexArray2D]:
+        """Calculate and cache the poynting vector."""
         vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
         vecH = np.stack([self.Hx, self.Hy, self.Hz], axis=-1)
         vecP = np.cross(vecE, vecH)
         Px, Py, Pz = np.rollaxis(vecP, -1)
-        return {
-            "Px": Px,
-            "Py": Py,
-            "Pz": Pz,
-        }
+        return Px, Py, Pz
 
     @property
-    def Px(self):
-        return self._pointing["Px"]
+    def Px(self) -> ComplexArray2D:
+        """The x-component of the Poynting vector."""
+        return self._pointing[0]
 
     @property
-    def Py(self):
-        return self._pointing["Py"]
+    def Py(self) -> ComplexArray2D:
+        """The y-component of the Poynting vector."""
+        return self._pointing[1]
 
     @property
-    def Pz(self):
-        return self._pointing["Pz"]
+    def Pz(self) -> ComplexArray2D:
+        """The z-component of the Poynting vector."""
+        return self._pointing[2]
 
     @cached_property
-    def A(self):
-        """mode area"""
+    def A(self) -> float:
+        """Mode area."""
         vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
-        E_sq = norm(vecE, axis=-1, ord=2)
+        E_sq = np.asarray(norm(vecE, axis=-1, ord=2))
         E_qu = E_sq**2
         x = self.cs.mesh.x_
         y = self.cs.mesh.y_
-        return np.float64(integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu))
+        return integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu)
 
     @property
-    def env(self):
+    def env(self) -> Environment:
+        """The environment of the mode."""
         return self.cs.env
 
     @property
-    def mesh(self):
+    def mesh(self) -> Mesh2D:
+        """The mesh of the mode."""
         return self.cs.mesh
 
-    def _visualize(
+    def _visualize(  # noqa: PLR0915
         self,
-        title=None,
-        title_prefix="",
-        fields=None,
-        ax=None,
-        n_cmap=None,
-        mode_cmap=None,
-        num_levels=8,
-        operation=lambda x: np.abs(x) ** 2,
-        show=True,
-        **ignored,
-    ):
-        import matplotlib.pyplot as plt  # fmt: skip
-        from matplotlib import colors  # fmt: skip
-        from mpl_toolkits.axes_grid1 import make_axes_locatable  # fmt: skip
+        *,
+        title: str | None = None,
+        title_prefix: str = "",
+        fields: tuple[str, ...] = ("Ex",),
+        ax: Any = None,
+        n_cmap: str | colors.LinearSegmentedColormap | None = None,
+        mode_cmap: str | None = None,
+        num_levels: int = 8,
+        operation: Callable = _power,
+        show: bool = True,
+        **ignored: Any,  # noqa: ARG002
+    ) -> None:
+        from meow.visualize import _figsize_visualize_mode
+
         W, H = _figsize_visualize_mode(self.cs, 6.4)
 
         if not fields:
-            fields = ["Ex"]
+            fields = ("Ex",)
 
         if len(fields) > 1:
             if len(fields) > 2:
@@ -127,15 +145,16 @@ class Mode(BaseModel):
             if ax is None:
                 _, ax = plt.subplots(1, len(fields), figsize=(len(fields) * W, H))
             if len(ax) < len(fields):
-                raise ValueError(
+                msg = (
                     f"Not enough axes supplied for the number of fields "
                     f"to plot! {len(ax)} < {len(fields)}."
                 )
-            for field, ax_ in zip(fields, ax):
+                raise ValueError(msg)
+            for field, ax_ in zip(fields, ax, strict=False):
                 self._visualize(
                     title=title,
                     title_prefix=title_prefix,
-                    fields=[field],
+                    fields=(field,),
                     ax=ax_,
                     n_cmap=n_cmap,
                     mode_cmap=mode_cmap,
@@ -147,12 +166,11 @@ class Mode(BaseModel):
                 plt.show()
             return
 
-        field = fields[0]
+        field = "Ex" if not fields else fields[0]
         valid_fields = ["Ex", "Ey", "Ez", "Hx", "Hy", "Hz", "Px", "Py", "Pz"]
         if field not in valid_fields:
-            raise ValueError(
-                f"Invalid field {field!r}. Valid fields: {', '.join(valid_fields)}."
-            )
+            msg = f"Invalid field {field!r}. Valid fields: {', '.join(valid_fields)}."
+            raise ValueError(msg)
 
         if ax is None:
             ax = plt.gca()
@@ -185,8 +203,8 @@ class Mode(BaseModel):
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=UserWarning)
             levels = np.linspace(mode.min(), mode.max(), num_levels + 1)[1:]
-            plt.contour(X, Y, mode, cmap=mode_cmap, levels=levels)  # fmt: skip
-            # plt.pcolormesh(X, Y, mode, cmap=mode_cmap, alpha=0.5) #, levels=levels)  # fmt: skip
+            plt.contour(X, Y, mode, cmap=mode_cmap, levels=levels)
+            # plt.pcolormesh(X, Y, mode, cmap=mode_cmap, alpha=0.5) #, levels=levels)
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
         plt.colorbar(cax=cax)
@@ -194,7 +212,7 @@ class Mode(BaseModel):
 
         plt.xlabel(x)
         plt.ylabel(y)
-        plt.grid(True, alpha=0.4)
+        plt.grid(visible=True, alpha=0.4)
         if title is None:
             plt.title(f"{title_prefix}{field} [neff={float(np.real(self.neff)):.6f}]")
         else:
@@ -205,20 +223,24 @@ class Mode(BaseModel):
         if show:
             plt.show()
 
-    def save(self, filename):
-        with open(filename, "wb") as file:
-            pickle.dump(self, file)
+    def save(self, filename: str | Path) -> None:
+        """Save the mode to a file."""
+        path = Path(filename)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(pickle.dumps(self))
 
     @classmethod
-    def load(cls, filename):
-        with open(filename, "rb") as file:
-            return pickle.load(file)
+    def load(cls, filename: str | Path) -> Mode:
+        """Load a mode from a file."""
+        return cast(Mode, pickle.loads(Path(filename).read_bytes()))
 
-    def __add__(self, other):
+    def __add__(self, other: Mode) -> Mode:
         if not isinstance(other, Mode):
-            raise TypeError(
-                f"unsupported operand type(s) for +: 'Mode' and '{type(other).__name__}'"
+            msg = (
+                "unsupported operand type(s) for +: "
+                f"'Mode' and '{type(other).__name__}'"
             )
+            raise TypeError(msg)
         new_mode = Mode(
             neff=0.5 * (self.neff + other.neff),
             cs=self.cs,
@@ -231,11 +253,15 @@ class Mode(BaseModel):
         )
         return new_mode
 
-    def __mul__(self, other):
-        if not isinstance(other, (float, np.floating, complex, int, np.integer)):
-            raise TypeError(
-                f"unsupported operand type(s) for *: 'Mode' and '{type(other).__name__}'"
+    def __mul__(self, other: np.complexfloating | complex) -> Mode:
+        if not isinstance(
+            other, float | np.complexfloating | np.floating | complex | int | np.integer
+        ):
+            msg = (
+                "unsupported operand type(s) for *: "
+                f"'Mode' and '{type(other).__name__}'"
             )
+            raise TypeError(msg)
         new_mode = Mode(
             neff=self.neff,
             cs=self.cs,
@@ -248,20 +274,28 @@ class Mode(BaseModel):
         )
         return new_mode
 
-    __rmul__ = __mul__
+    def __rmul__(self, other: np.complexfloating | complex) -> Mode:
+        return self.__mul__(other)
 
-    def __truediv__(self, other):
-        if not isinstance(other, (float, np.floating, complex, int, np.integer)):
-            raise TypeError(
-                f"unsupported operand type(s) for /: 'Mode' and '{type(other).__name__}'"
+    def __truediv__(self, other: np.complexfloating | complex) -> Mode:
+        if not isinstance(
+            other,
+            float | np.complexfloating | np.floating | complex | int | np.integer,
+        ):
+            msg = (
+                "unsupported operand type(s) for /: "
+                f"'Mode' and '{type(other).__name__}'"
             )
+            raise TypeError(msg)
         return self * (1 / other)
 
-    def __sub__(self, other):
+    def __sub__(self, other: Mode) -> Mode:
         if not isinstance(other, Mode):
-            raise TypeError(
-                f"unsupported operand type(s) for -: 'Mode' and '{type(other).__name__}'"
+            msg = (
+                "unsupported operand type(s) for -: "
+                f"'Mode' and '{type(other).__name__}'"
             )
+            raise TypeError(msg)
         return self + other * (-1.0)
 
 
@@ -269,7 +303,7 @@ Modes = list[Mode]
 
 
 def zero_phase(mode: Mode) -> Mode:
-    """normalize (zero out) the phase of a `Mode`"""
+    """Normalize (zero out) the phase of a `Mode`."""
     e = np.abs(energy_density(mode))
     m, n = np.array(np.where(e == e.max()))[:, 0]
     phase = np.exp(-1j * np.angle(np.array(mode.Hx))[m][n])
@@ -283,7 +317,7 @@ def zero_phase(mode: Mode) -> Mode:
         Hy=mode.Hy * phase,
         Hz=mode.Hz * phase,
     )
-    if _sum_around(np.real(new_mode.Hx), m, n) < 0:
+    if _sum_around(np.real(new_mode.Hx), int(m), int(n)) < 0:
         new_mode = invert_mode(new_mode)
     return new_mode
 
@@ -294,7 +328,7 @@ def zero_phase(mode: Mode) -> Mode:
 #    return round(float(centroid_x)), round(float(centroid_y))
 
 
-def _sum_around(field, m, n, r=2):
+def _sum_around(field: FloatArray2D, m: int, n: int, r: int = 2) -> float:
     total = 0
     idxs = range(-r, r + 1)
     idx_tups = product(idxs, idxs)
@@ -307,7 +341,7 @@ def _sum_around(field, m, n, r=2):
 
 
 def invert_mode(mode: Mode) -> Mode:
-    """invert a `Mode`"""
+    """Invert a `Mode`."""
     return Mode(
         neff=mode.neff,
         cs=mode.cs,
@@ -321,21 +355,21 @@ def invert_mode(mode: Mode) -> Mode:
 
 
 def inner_product(mode1: Mode, mode2: Mode) -> float:
-    """the inner product of a `Mode` with another `Mode` is uniquely defined."""
+    """The inner product of a `Mode` with another `Mode` is uniquely defined."""
     mesh = mode1.mesh
     cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx
-    return np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
+    return np.trapezoid(np.trapezoid(cross, mesh.y_), mesh.x_)
 
 
 def inner_product_conj(mode1: Mode, mode2: Mode) -> float:
-    """the inner product of a `Mode` with another `Mode` is uniquely defined."""
+    """The inner product of a `Mode` with another `Mode` is uniquely defined."""
     mesh = mode1.mesh
     cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
-    return np.trapz(np.trapz(cross, mesh.y_), mesh.x_)
+    return np.trapezoid(np.trapezoid(cross, mesh.y_), mesh.x_)
 
 
 def normalize_product(mode: Mode) -> Mode:
-    """normalize a `Mode` according to the `inner_product` with itself"""
+    """Normalize a `Mode` according to the `inner_product` with itself."""
     factor = np.sqrt(inner_product(mode, mode))
     return Mode(
         neff=mode.neff,
@@ -352,7 +386,7 @@ def normalize_product(mode: Mode) -> Mode:
 def electric_energy_density(
     mode: Mode,
 ) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
-    """get the electric energy density contained in a `Mode`"""
+    """Get the electric energy density contained in a `Mode`."""
     epsx, epsy, epsz = mode.cs.nx**2, mode.cs.ny**2, mode.cs.nz**2
     return (
         0.5
@@ -366,36 +400,36 @@ def electric_energy_density(
 
 
 def electric_energy(mode: Mode) -> float:
-    """get the electric energy contained in a `Mode`"""
+    """Get the electric energy contained in a `Mode`."""
     return electric_energy_density(mode).sum()
 
 
 def magnetic_energy_density(
     mode: Mode,
 ) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
-    """get the magnetic energy density contained in a `Mode`"""
+    """Get the magnetic energy density contained in a `Mode`."""
     return (
         0.5 * mu0 * (np.abs(mode.Hx) ** 2 + np.abs(mode.Hy) ** 2 + np.abs(mode.Hz) ** 2)
     )
 
 
 def magnetic_energy(mode: Mode) -> float:
-    """get the magnetic energy contained in a `Mode`"""
+    """Get the magnetic energy contained in a `Mode`."""
     return magnetic_energy_density(mode).sum()
 
 
 def energy_density(mode: Mode) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
-    """get the energy density contained in a `Mode`"""
+    """Get the energy density contained in a `Mode`."""
     return electric_energy_density(mode) + magnetic_energy_density(mode)
 
 
 def energy(mode: Mode) -> float:
-    """get the energy contained in a `Mode`"""
+    """Get the energy contained in a `Mode`."""
     return energy_density(mode).sum()
 
 
 def normalize_energy(mode: Mode) -> Mode:
-    """normalize a mode according to the energy it contains"""
+    """Normalize a mode according to the energy it contains."""
     e = np.sqrt(2 * electric_energy(mode))
     h = np.sqrt(2 * magnetic_energy(mode))
 
@@ -411,17 +445,8 @@ def normalize_energy(mode: Mode) -> Mode:
     )
 
 
-def is_pml_mode(mode, threshold):
-    """check whether a mode can be considered a PML mode.
-
-    Args:
-        mode: the mode to classify as PML mode or not.
-        pml_mode_threshold: If the mode has more than `pml_mode_threshold` part of its
-            energy in the PML, it will be removed.
-
-    Returns:
-        bool: whether the mode is a PML mode or not
-    """
+def is_pml_mode(mode: Mode, threshold: float) -> bool:
+    """Check whether a mode can be considered a PML mode."""
     threshold = min(max(threshold, 0.0), 1.0)
     if threshold > 0.999:
         return False
@@ -442,27 +467,36 @@ def is_pml_mode(mode, threshold):
 
 
 def te_fraction(mode: Mode) -> float:
-    """the TE polarization fraction of the `Mode`"""
+    """The TE polarization fraction of the `Mode`."""
     epsx = np.real(mode.cs.nx**2)
     e = np.sum(0.5 * eps0 * epsx * np.abs(mode.Ex) ** 2)
     h = np.sum(0.5 * mu0 * np.abs(mode.Hx) ** 2)
     return float(e / (e + h))
 
 
-def _average(field, direction="forward", axis=0):
-    direction = direction.lower()
-    if not direction in ["forward", "backward"]:
-        raise ValueError("direction should be 'forward' or backward")
-    if not axis in [0, 1]:
-        raise ValueError("axis should be zero or 1")
-    elif axis == 1:
+def _average(
+    field: ComplexArray2D,
+    direction: Literal["forward", "backward"] = "forward",
+    axis: int = 0,
+) -> ComplexArray2D:
+    if axis == 1:
         return _average(field.T, direction=direction, axis=0).T
+    if axis != 0:
+        msg = "axis should be 0 or 1"
+        raise ValueError(msg)
+
     average = 0.5 * (field[1:] + field[:-1])
     zero = np.zeros_like(average[:1])
-    if direction == "forward":
+
+    _direction = str(direction).lower()
+    if _direction == "forward":
         return np.concatenate([zero, average], axis=0)
-    else:
-        return np.concatenate([average, zero], axis=0)
+
+    if _direction != "backward":
+        msg = "direction should be 'forward' or backward"
+        raise ValueError(msg)
+
+    return np.concatenate([average, zero], axis=0)
 
 
 def _interpolate_Ex(mode: Mode) -> Mode:

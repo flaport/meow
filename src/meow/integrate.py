@@ -6,7 +6,7 @@ import numpy as np
 from scipy.integrate import dblquad, simpson
 from scipy.interpolate import RegularGridInterpolator
 
-from .arrays import FloatArray2D
+from .arrays import FloatArray1D, FloatArray2D
 
 
 def integrate_interpolate_2d(
@@ -42,7 +42,7 @@ def integrate_interpolate_2d(
     )[0]
 
 
-def integrate_2d(x: np.ndarray, y: np.ndarray, data: FloatArray2D) -> float:
+def integrate_2d(x: np.ndarray, y: np.ndarray, data: FloatArray1D) -> float:
     """Simple 2D integration of data on a grid."""
     int1 = simpson(data, x=y)
     int2 = simpson(int1, x=x)
