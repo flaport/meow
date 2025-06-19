@@ -44,7 +44,7 @@ nav:
     - quick start: nbs/00_introduction.md
     - gds taper: nbs/01_gds_taper.md
     - length sweep: nbs/02_taper_length_sweep.md
-    - unequal \# modes: nbs/03_unequal_number_of_modes.md
+    - unequal modes: nbs/03_unequal_number_of_modes.md
   - changelog: changelog.md
 
 plugins:
