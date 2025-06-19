@@ -1,13 +1,14 @@
-""" SAX backend for EME (default backend) """
+"""SAX backend for EME (default backend)."""
 
-from typing import Any, Dict, List, Optional
+from itertools import pairwise
+from typing import Any, cast
 
 import numpy as np
+import sax
 
 from ..cell import Cell
-from ..mode import Mode
+from ..mode import Mode, inner_product_conj
 from ..mode import inner_product as inner_product_normal
-from ..mode import inner_product_conj
 
 DEFAULT_CONJUGATE = True
 DEFAULT_ENFORCE_RECIPROCITY = False
@@ -15,13 +16,14 @@ DEFAULT_ENFORCE_LOSSY_UNITARITY = False
 
 
 def compute_interface_s_matrix(
-    modes1: List[Mode],
-    modes2: List[Mode],
+    modes1: list[Mode],
+    modes2: list[Mode],
+    *,
     conjugate: bool = DEFAULT_CONJUGATE,
     enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
     enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
-):
-    """get the S-matrix of the interface between two `CrossSection`s"""
+) -> sax.SDenseMM:
+    """Get the S-matrix of the interface between two `CrossSection` objects."""
     # overlap matrices
     inner_product = inner_product_conj if conjugate else inner_product_normal
     conj = np.conj if conjugate else lambda a: a
@@ -29,8 +31,12 @@ def compute_interface_s_matrix(
     NL, NR = len(modes1), len(modes2)
     O_LL = np.array([inner_product(modes1[m], modes1[m]) for m in range(NL)])
     O_RR = np.array([inner_product(modes2[n], modes2[n]) for n in range(NR)])
-    O_LR = np.array([[inner_product(modes1[m], modes2[n]) for n in range(NR)] for m in range(NL)])  # fmt: skip
-    O_RL = np.array([[inner_product(modes2[m], modes1[n]) for n in range(NL)] for m in range(NR)])  # fmt: skip
+    O_LR = np.array(
+        [[inner_product(modes1[m], modes2[n]) for n in range(NR)] for m in range(NL)]
+    )
+    O_RL = np.array(
+        [[inner_product(modes2[m], modes1[n]) for n in range(NL)] for m in range(NR)]
+    )
 
     # additional phase correction (disabled?).
 
@@ -72,8 +78,8 @@ def compute_interface_s_matrix(
     T_RL = U @ np.diag(t) @ V
 
     # reflection
-    R_LR = np.diag(1 / (2 * O_LL)) @ (O_RL.T - conj(O_LR)) @ T_LR  # type: ignore
-    R_RL = np.diag(1 / (2 * O_RR)) @ (O_LR.T - conj(O_RL)) @ T_RL  # type: ignore
+    R_LR = np.diag(1 / (2 * O_LL)) @ (O_RL.T - conj(O_LR)) @ T_LR
+    R_RL = np.diag(1 / (2 * O_RR)) @ (O_LR.T - conj(O_RL)) @ T_RL
 
     # s-matrix
     S = np.concatenate(
@@ -98,16 +104,17 @@ def compute_interface_s_matrix(
     out_ports = [f"right@{i}" for i in range(len(modes2))]
     port_map = {p: i for i, p in enumerate(in_ports + out_ports)}
 
-    return S, port_map
+    return cast(sax.SDenseMM, (S, port_map))
 
 
 def compute_interface_s_matrices(
-    modes: List[List[Mode]],
+    modes: list[list[Mode]],
+    *,
     conjugate: bool = DEFAULT_CONJUGATE,
     enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
     enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
-):
-    """get all the S-matrices of all the interfaces in a collection of `CrossSections`"""
+) -> dict[str, sax.SDenseMM]:
+    """Get all the S-matrices of all the interfaces between `CrossSection` objects."""
     return {
         f"i_{i}_{i + 1}": compute_interface_s_matrix(
             modes1=modes1,
@@ -116,12 +123,12 @@ def compute_interface_s_matrices(
             enforce_reciprocity=enforce_reciprocity,
             enforce_lossy_unitarity=enforce_lossy_unitarity,
         )
-        for i, (modes1, modes2) in enumerate(zip(modes[:-1], modes[1:]))
+        for i, (modes1, modes2) in enumerate(pairwise(modes))
     }
 
 
-def compute_propagation_s_matrix(modes: List[Mode], cell_length: float):
-    """get the propagation S-matrix of each `Mode` belonging to a `CrossSection` in a `Cell` with a certain length."""
+def compute_propagation_s_matrix(modes: list[Mode], cell_length: float) -> sax.SDictMM:
+    """Get the propagation S-matrix of each `Mode`."""
     s_dict = {
         (f"left@{i}", f"right@{i}"): np.exp(
             2j * np.pi * mode.neff / mode.env.wl * cell_length
@@ -129,50 +136,51 @@ def compute_propagation_s_matrix(modes: List[Mode], cell_length: float):
         for i, mode in enumerate(modes)
     }
     s_dict = {**s_dict, **{(p2, p1): v for (p1, p2), v in s_dict.items()}}
-    return s_dict
+    return cast(sax.SDictMM, s_dict)
 
 
 def compute_propagation_s_matrices(
-    modes: List[List[Mode]],
-    cells: Optional[List[Cell]] = None,
-    cell_lengths: Optional[List[float]] = None,
-):
-    """get all the propagation S-matrices of all the `Modes` belonging to each `CrossSection`"""
+    modes: list[list[Mode]],
+    cells: list[Cell] | None = None,
+    cell_lengths: list[float] | None = None,
+) -> dict[str, sax.SDictMM]:
+    """Get all the propagation S-matrices of all the `Modes`."""
     if cells is None and cell_lengths is None:
-        raise ValueError(
-            "Please specify one of both when calculating the S-matrix: `cells` or `cell_lengths`."
+        msg = (
+            "Please specify one of both when calculating the S-matrix: "
+            "`cells` or `cell_lengths`."
         )
+        raise ValueError(msg)
     if cells is not None and cell_lengths is not None:
-        raise ValueError("Please specify EITHER `cells` OR `cell_lengths` (not both).")
+        msg = "Please specify EITHER `cells` OR `cell_lengths` (not both)."
+        raise ValueError(msg)
 
     if cells:
         cell_lengths = [cell.length for cell in cells]
 
-    assert cell_lengths is not None
-    if not len(cell_lengths) == len(modes):
-        raise ValueError(
-            f"len(cell_lengths) != len(modes): {len(cell_lengths)} != {len(modes)}"
+    if cell_lengths is None:
+        msg = (
+            "The given cells do not have a length attribute: "
+            "Please specify `cell_lengths`."
         )
+        raise ValueError(msg)
+
+    if len(cell_lengths) != len(modes):
+        msg = f"len(cell_lengths) != len(modes): {len(cell_lengths)} != {len(modes)}"
+        raise ValueError(msg)
     return {
         f"p_{i}": compute_propagation_s_matrix(modes_, cell_length=cell_length)
-        for i, (modes_, cell_length) in enumerate(zip(modes, cell_lengths))
+        for i, (modes_, cell_length) in enumerate(zip(modes, cell_lengths, strict=True))
     }
 
 
 def select_ports(
-    S: np.ndarray[Any, np.dtype[np.float64]], port_map: Dict[str, int], ports: List[str]
-):
-    """Keep subset of an S-matrix
-
-    Args:
-        S: the S-matrix to downselect from
-        port_map: a port name to s-matrix index mapping
-        ports: the port names to keep
-
-    Returns:
-        the downselected s-matrix and port map
-    """
+    S: np.ndarray[Any, np.dtype[np.float64]],
+    port_map: dict[str, int],
+    ports: list[str],
+) -> sax.SDenseMM:
+    """Keep subset of an S-matrix."""
     idxs = np.array([port_map[port] for port in ports], dtype=np.int_)
     s = S[idxs, :][:, idxs]
     new_port_map = {p: i for i, p in enumerate(ports)}
-    return s, new_port_map
+    return cast(sax.SDenseMM, (s, new_port_map))

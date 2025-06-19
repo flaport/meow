@@ -8,18 +8,18 @@ import numpy as np
 from pydantic import BeforeValidator, Field
 from pydantic.types import NonNegativeInt
 
-from meow.arrays import Dim, DType, FloatArray1D, FloatArray2D, NDArray
+from meow.arrays import FloatArray1D, FloatArray2D
 from meow.base_model import BaseModel, cached_property
 
 
 class Mesh2D(BaseModel):
     """A ``Mesh2D`` describes how a ``Structure3D`` is discritized into a ``Cell``."""
 
-    x: Annotated[NDArray, Dim(1), DType("float64")] = Field(
+    x: FloatArray1D = Field(
         description="x-coords of the mesh (Ez locations, i.e. corners of the 2D cell)"
     )
 
-    y: Annotated[NDArray, Dim(1), DType("float64")] = Field(
+    y: FloatArray1D = Field(
         description="y-coords of the mesh (Ez locations, i.e. corners of the 2D cell)"
     )
 
