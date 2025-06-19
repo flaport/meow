@@ -1,4 +1,4 @@
-""" FDE Tidy3d backend (default backend for MEOW) """
+"""FDE Tidy3d backend (default backend for MEOW)."""
 
 from types import SimpleNamespace
 from typing import Literal
@@ -6,8 +6,7 @@ from typing import Literal
 import numpy as np
 import tidy3d
 from packaging import version
-from pydantic.v1 import validate_arguments
-from pydantic.v1.types import PositiveFloat, PositiveInt
+from pydantic import PositiveFloat, PositiveInt
 from scipy.constants import c
 from tidy3d.components.mode.solver import compute_modes as _compute_modes
 
@@ -15,7 +14,6 @@ from ..cross_section import CrossSection
 from ..mode import Mode, Modes, is_pml_mode, normalize_product, zero_phase
 
 
-# @validate_arguments
 def compute_modes_tidy3d(
     cs: CrossSection,
     num_modes: PositiveInt = 10,
@@ -23,19 +21,10 @@ def compute_modes_tidy3d(
     precision: Literal["single", "double"] = "double",
     pml_mode_threshold: float = 1.0,
 ) -> Modes:
-    """compute ``Modes`` for a given ``CrossSection``
-
-    Args:
-        cs: The ``CrossSection`` to calculate the modes for
-        num_modes: Number of modes returned by mode solver.
-        target_neff: Guess for initial effective index of the mode.
-        pml_mode_threshold: If the mode has more than `pml_mode_threshold` part of its
-            energy in the PML, it will be removed.
-            default: 1.0 = 100% = no fitering.
-    """
-
+    """Compute ``Modes`` for a given ``CrossSection``."""
     if num_modes < 1:
-        raise ValueError("You need to request at least 1 mode.")
+        msg = "You need to request at least 1 mode."
+        raise ValueError(msg)
 
     od = np.zeros_like(cs.nx)  # off diagonal entry
     new_tidy3d = version.parse(tidy3d.__version__) >= version.parse("2.2.0")

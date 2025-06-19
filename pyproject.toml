@@ -116,6 +116,7 @@ ignore = [
   "RET504",  # unnecessary-assign
   "S301",  # suspicious-pickle-usage
   "SIM300",  # yoda-conditions
+  "SIM910",  # dict-get-with-none-default
   "SLF001",  # private-member-access
   "TC001",  # typing-only-first-party-import
   "TC002",  # typing-only-third-party-import
