@@ -3,7 +3,6 @@
 import numpy as np
 import sax
 from sax.backends import circuit_backends
-from sax.saxtypes import STypeMM
 
 from meow.arrays import ComplexArray1D, ComplexArray2D, FloatArray1D
 from meow.cell import Cell
@@ -102,14 +101,14 @@ def split_square_matrix(
 
 def propagate(
     l2rs: list[sax.STypeMM],
-    r2ls: list[STypeMM],
+    r2ls: list[sax.STypeMM],
     excitation_l: ComplexArray1D,
     excitation_r: ComplexArray1D,
 ) -> tuple[list[ComplexArray1D], list[ComplexArray1D]]:
     """Propagate the modes through the S-matrices."""
     forwards = []
     backwards = []
-    for l2r, r2l in zip(l2rs, r2ls, strict=True):
+    for l2r, r2l in zip(l2rs, r2ls, strict=False):
         s_l2r, p = sax.sdense(l2r)
         s_r2l, _ = sax.sdense(r2l)
         m = len([k for k in p if "right" in k])

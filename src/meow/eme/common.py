@@ -1,5 +1,6 @@
 """SAX backend for EME (default backend)."""
 
+import warnings
 from itertools import pairwise
 from typing import Any, cast
 
@@ -22,8 +23,23 @@ def compute_interface_s_matrix(
     conjugate: bool = DEFAULT_CONJUGATE,
     enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
     enforce_lossy_unitarity: bool = DEFAULT_ENFORCE_LOSSY_UNITARITY,
+    ignore_warnings: bool = True,
 ) -> sax.SDenseMM:
     """Get the S-matrix of the interface between two `CrossSection` objects."""
+    if ignore_warnings:
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", message=".*divide by zero.*")
+            warnings.filterwarnings("ignore", message=".*overflow encountered.*")
+            warnings.filterwarnings("ignore", message=".*invalid value.*")
+            return compute_interface_s_matrix(
+                modes1=modes1,
+                modes2=modes2,
+                conjugate=conjugate,
+                enforce_reciprocity=enforce_reciprocity,
+                enforce_lossy_unitarity=enforce_lossy_unitarity,
+                ignore_warnings=False,
+            )
+
     # overlap matrices
     inner_product = inner_product_conj if conjugate else inner_product_normal
     conj = np.conj if conjugate else lambda a: a
