@@ -1,12 +1,12 @@
-"""MEOW: Modeling of Eigenmodes and Overlaps in Waveguides"""
+"""MEOW: Modeling of Eigenmodes and Overlaps in Waveguides."""
 
 __author__ = "Floris Laporte"
 __version__ = "0.13.0"
 
-from .array import Dim as Dim
-from .array import DType as DType
-from .array import NDArray as NDArray
-from .array import Shape as Shape
+from .arrays import Dim as Dim
+from .arrays import DType as DType
+from .arrays import NDArray as NDArray
+from .arrays import Shape as Shape
 from .base_model import BaseModel as BaseModel
 from .cell import Cell as Cell
 from .cell import create_cells as create_cells
@@ -55,5 +55,5 @@ from .mode import zero_phase as zero_phase
 from .structures import Structure as Structure
 from .structures import Structure2D as Structure2D
 from .structures import Structure3D as Structure3D
-from .visualize import visualize as vis
+from .visualize import vis as vis
 from .visualize import visualize as visualize

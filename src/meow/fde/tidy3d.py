@@ -1,5 +1,6 @@
 """FDE Tidy3d backend (default backend for MEOW)."""
 
+import warnings
 from types import SimpleNamespace
 from typing import Literal
 
@@ -54,17 +55,21 @@ def compute_modes_tidy3d(
         group_index_step=False,
     )
 
-    ((Ex, Ey, Ez), (Hx, Hy, Hz)), neffs = (
-        x.squeeze()
-        for x in _compute_modes(
-            eps_cross=eps_cross,
-            coords=[cs.mesh.x, cs.mesh.y],
-            freq=c / (cs.env.wl * 1e-6),
-            mode_spec=mode_spec,
-            precision=precision,
-            plane_center=cs.mesh.plane_center,
-        )[:2]
-    )
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", message=".*divide by zero.*")
+        warnings.filterwarnings("ignore", message=".*overflow encountered.*")
+        warnings.filterwarnings("ignore", message=".*invalid value.*")
+        ((Ex, Ey, Ez), (Hx, Hy, Hz)), neffs = (
+            x.squeeze()
+            for x in _compute_modes(
+                eps_cross=eps_cross,
+                coords=[cs.mesh.x, cs.mesh.y],
+                freq=c / (cs.env.wl * 1e-6),
+                mode_spec=mode_spec,
+                precision=precision,
+                plane_center=cs.mesh.plane_center,
+            )[:2]
+        )
 
     if num_modes == 1:
         modes = [

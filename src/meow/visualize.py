@@ -311,8 +311,8 @@ VISUALIZATION_MAPPING: dict[Callable, Callable] = {
     _is_mode_list: _visualize_modes,
     _is_structure_3d_list: _visualize_structures,
     _is_mode_overlap: _visualize_overlap_density,
-    _is_s_matrix: _visualize_s_matrix,
     _is_s_pm_matrix: _visualize_s_pm_matrix,
+    _is_s_matrix: _visualize_s_matrix,
     _is_gf_component: _visualize_gf_component,
 }
 

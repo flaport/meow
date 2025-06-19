@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import warnings
 from itertools import pairwise
 from typing import Annotated, Any, cast, overload
 
@@ -122,12 +121,6 @@ def create_cells(
     z_min: float = 0.0,
 ) -> list[Cell]:
     """Create multiple `Cell` objects with a `Mesh` and a collection of cell lengths."""
-    msg = (
-        "create_cells will be removed in a future version. "
-        "Please create your cells in a loop instead."
-    )
-    warnings.warn(message=msg, category=DeprecationWarning, stacklevel=2)
-
     Ls = np.asarray(Ls, float)
     if Ls.ndim != 1:
         msg = f"Ls should be 1D. Got shape: {Ls.shape}."

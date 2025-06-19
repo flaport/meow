@@ -331,7 +331,7 @@ def _validate_path(path: str) -> str:
     if not Path(path).exists():
         msg = f"Material file {path!r} not found."
         raise FileNotFoundError(msg)
-    return str(Path(path).relative_to(Path.cwd()))
+    return os.path.relpath(path, start=Path.cwd())
 
 
 silicon = SampledMaterial.from_path(
