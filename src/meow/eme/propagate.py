@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import jax.numpy as jnp
 import numpy as np
 import sax
 from sax.backends import circuit_backends
@@ -146,7 +147,7 @@ def plot_fields(
     cells: list[Cell],
     forwards: list[ComplexArray1D],
     backwards: list[ComplexArray2D],
-    y: FloatArray1D,
+    y: float,
     z: FloatArray1D,
 ) -> tuple[ComplexArray2D, FloatArray1D]:
     """Plot the fields of the propagated modes."""
@@ -168,12 +169,12 @@ def plot_fields(
         for mode, f, b in zip(mode_set, forward, backward, strict=False):
             E_slice = mode.Ex[:, i_y]
 
-            Ex += np.outer(
-                f * E_slice.T, np.exp(2j * np.pi * mode.neff / mode.env.wl * z_local)
+            Ex += jnp.outer(
+                f * E_slice.T, jnp.exp(2j * np.pi * mode.neff / mode.env.wl * z_local)
             )
 
-            Ex += np.outer(
-                b * E_slice.T, np.exp(-2j * np.pi * mode.neff / mode.env.wl * z_local)
+            Ex += jnp.outer(
+                b * E_slice.T, jnp.exp(-2j * np.pi * mode.neff / mode.env.wl * z_local)
             )
 
         if i_max == 0:
@@ -192,7 +193,7 @@ def propagate_modes(
     cells: list[Cell],
     ex_l: ComplexArray1D,
     ex_r: ComplexArray1D,
-    y: FloatArray1D,
+    y: float,
     z: FloatArray1D,
     sax_backend: sax.BackendOrDefault = "default",
 ) -> tuple[ComplexArray2D, FloatArray1D]:
