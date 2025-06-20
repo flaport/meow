@@ -180,7 +180,7 @@ src = "README.md"
 src = "pyproject.toml"
 
 [[tool.tbump.file]]
-src = "src/sax/__init__.py"
+src = "src/meow/__init__.py"
 
 [tool.tbump.git]
 message_template = "Bump to {new_version}"
