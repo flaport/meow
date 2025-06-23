@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 __author__ = "Floris Laporte"
-__version__ = "0.14.0"
+__version__ = "0.14.1"
 
 from .arrays import Dim as Dim
 from .arrays import DType as DType

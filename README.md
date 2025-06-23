@@ -1,4 +1,4 @@
-# MEOW (0.14.0)
+# MEOW (0.14.1)
 
 > **M**odeling of **E**igenmodes and **O**verlaps in **W**aveguides
 
