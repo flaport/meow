@@ -34,11 +34,21 @@ nbdocs:
   rm -rf docs/nbs/*.ipynb
   find nbs -maxdepth 1 -mindepth 1 -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" -not -path "./.venv/*" | xargs parallel -j `nproc --all` uv run jupyter nbconvert --to markdown --embed-images {} --output-dir docs/nbs ':::'
 
+nbclean-all:
+  find . -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" -not -path "./.venv/*" | xargs just nbclean
+
+nbclean +filenames:
+  for filename in {{filenames}}; do \
+    uv run --no-sync nbstripout "$filename"; \
+    uv run --no-sync nb-clean clean --remove-empty-cells "$filename"; \
+    uv run --no-sync jq --indent 1 'del(.metadata.papermill)' "$filename" > "$filename.tmp" && mv "$filename.tmp" "$filename"; \
+  done
+
 tree:
   @tree -a -I .git --gitignore
 
 clean:
-  find . -name "*.ipynb" | xargs uv run nb-clean clean
+  find . -name "*.ipynb" | xargs just nbclean
   rm -rf .venv
   rm -rf docs/nbs/*
   rm -rf site
