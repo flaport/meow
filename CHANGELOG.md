@@ -1,3 +1,17 @@
+<a id="0.14.1"></a>
+# [0.14.1](https://github.com/flaport/meow/releases/tag/0.14.1) - 2025-06-23
+
+# What's Changed
+
+## Dependency Updates
+
+- bump sax [#50](https://github.com/$OWNER/$REPOSITORY/pull/50)
+
+**Full Changelog**: https://github.com/flaport/meow/compare/0.14.0...0.14.1
+
+[Changes][0.14.1]
+
+
 <a id="0.14.0"></a>
 # [0.14.0](https://github.com/flaport/meow/releases/tag/0.14.0) - 2025-06-20
 
@@ -1081,6 +1095,7 @@
 [Changes][0.0.1]
 
 
+[0.14.1]: https://github.com/flaport/meow/compare/0.14.0...0.14.1
 [0.14.0]: https://github.com/flaport/meow/compare/0.13.0...0.14.0
 [0.13.0]: https://github.com/flaport/meow/compare/0.12.0...0.13.0
 [0.12.0]: https://github.com/flaport/meow/compare/0.11.2...0.12.0
