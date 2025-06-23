@@ -67,7 +67,7 @@ def compute_s_matrix_sax(
     modes: list[list[Mode]],
     cells: list[Cell] | None = None,
     cell_lengths: list[float] | None = None,
-    sax_backend: sax.BackendOrDefault = "default",
+    sax_backend: sax.BackendLike = "default",
     *,
     conjugate: bool = DEFAULT_CONJUGATE,
     enforce_reciprocity: bool = DEFAULT_ENFORCE_RECIPROCITY,
@@ -75,7 +75,7 @@ def compute_s_matrix_sax(
     **kwargs: Any,
 ) -> sax.SDenseMM:
     """Calculate the S-matrix for given sets of modes."""
-    sax_backend = sax.validate_circuit_backend(sax_backend)
+    actual_sax_backend = sax.into[sax.Backend](sax_backend)
     _compute_propagation_s_matrices = kwargs.pop(
         "compute_propagation_s_matrices", compute_propagation_s_matrices
     )
@@ -95,7 +95,7 @@ def compute_s_matrix_sax(
 
     # TODO: fix SAX Multimode to reduce this ad-hoc SAX-hacking.
     net = _get_netlist(propagations, interfaces)
-    _, analyze_circuit, evaluate_circuit = circuit_backends[sax_backend]
+    _, analyze_circuit, evaluate_circuit = circuit_backends[actual_sax_backend]
     # TODO: use analyze_instances instead of manually converting to scoo ?
     net["instances"] = {k: sax.scoo(v) for k, v in net["instances"].items()}
     analyzed = analyze_circuit(net["instances"], net["connections"], net["ports"])

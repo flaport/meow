@@ -195,10 +195,10 @@ def propagate_modes(
     ex_r: ComplexArray1D,
     y: float,
     z: FloatArray1D,
-    sax_backend: sax.BackendOrDefault = "default",
+    sax_backend: sax.BackendLike = "default",
 ) -> tuple[ComplexArray2D, FloatArray1D]:
     """Propagate the modes through the cells."""
-    sax_backend = sax.validate_circuit_backend(sax_backend)
+    actual_sax_backend = sax.into[sax.Backend](sax_backend)
     propagations = compute_propagation_s_matrices(modes, cells)
     interfaces = compute_interface_s_matrices(
         modes,
@@ -210,9 +210,9 @@ def propagate_modes(
         enforce_reciprocity=False,
     )
 
-    pairs = pi_pairs(propagations, interfaces, sax_backend)
-    l2rs = l2r_matrices(pairs, identity, sax_backend)
-    r2ls = r2l_matrices(pairs, sax_backend)
+    pairs = pi_pairs(propagations, interfaces, actual_sax_backend)
+    l2rs = l2r_matrices(pairs, identity, actual_sax_backend)
+    r2ls = r2l_matrices(pairs, actual_sax_backend)
 
     forwards, backwards = propagate(l2rs, r2ls, ex_l, ex_r)
     return plot_fields(modes, cells, forwards, backwards, y, z)
