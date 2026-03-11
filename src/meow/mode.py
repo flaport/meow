@@ -450,13 +450,9 @@ def normalize_product(mode: Mode) -> Mode:
 
 def orthonormalize(
     modes: Modes,
-    *,
-    symmetric: bool = True,
-    conjugate: bool = False,
-    ignore_pml: bool = True,
-    interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None = None,
+    inner_product: Callable[[Mode, Mode], complex] = inner_product,
 ) -> Modes:
-    """Orthogonalize and normalize modes with configured inner-product flags."""
+    """Orthogonalize and normalize modes with a user-defined inner product."""
     if not modes:
         return []
 
@@ -465,38 +461,14 @@ def orthonormalize(
     for mode in modes:
         current = mode
         for basis in orthogonalized:
-            basis_norm = inner_product(
-                basis,
-                basis,
-                symmetric=symmetric,
-                conjugate=conjugate,
-                ignore_pml=ignore_pml,
-                interpolation=interpolation,
-            )
+            basis_norm = inner_product(basis, basis)
             if np.abs(basis_norm) < tol:
                 msg = "Encountered near-zero norm basis mode during orthogonalization."
                 raise ValueError(msg)
-            coeff = (
-                inner_product(
-                    basis,
-                    current,
-                    symmetric=symmetric,
-                    conjugate=conjugate,
-                    ignore_pml=ignore_pml,
-                    interpolation=interpolation,
-                )
-                / basis_norm
-            )
+            coeff = inner_product(basis, current) / basis_norm
             current = current - coeff * basis
 
-        current_norm = inner_product(
-            current,
-            current,
-            symmetric=symmetric,
-            conjugate=conjugate,
-            ignore_pml=ignore_pml,
-            interpolation=interpolation,
-        )
+        current_norm = inner_product(current, current)
         if np.abs(current_norm) < tol:
             warnings.warn(
                 "Skipping near-linearly-dependent mode during orthogonalization.",
@@ -511,20 +483,10 @@ def orthonormalize(
 
 def orthogonalize(
     modes: Modes,
-    *,
-    symmetric: bool = True,
-    conjugate: bool = False,
-    ignore_pml: bool = True,
-    interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None = None,
+    inner_product: Callable[[Mode, Mode], complex] = inner_product,
 ) -> Modes:
     """Backward-compatible alias for orthonormalize."""
-    return orthonormalize(
-        modes,
-        symmetric=symmetric,
-        conjugate=conjugate,
-        ignore_pml=ignore_pml,
-        interpolation=interpolation,
-    )
+    return orthonormalize(modes, inner_product=inner_product)
 
 
 def electric_energy_density(
