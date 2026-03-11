@@ -9,6 +9,6 @@ from meow.eme.common import (
 )
 from meow.eme.common import compute_propagation_s_matrix as compute_propagation_s_matrix
 from meow.eme.common import select_ports as select_ports
-from meow.eme.sax import compute_s_matrix_sax as compute_s_matrix_sax
+from meow.eme.saxify import compute_s_matrix_sax as compute_s_matrix_sax
 
 compute_s_matrix = compute_s_matrix_sax
