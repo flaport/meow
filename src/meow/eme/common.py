@@ -110,8 +110,10 @@ def compute_interface_s_matrix(
 
     # enforce S@S.H is diagonal: HACK!
     if enforce_lossy_unitarity:
-        U, s, V = np.linalg.svd(S)
-        S = np.diag(s) @ U @ V
+        # Project to a contractive matrix by clipping singular values to <= 1.
+        U, s, Vh = np.linalg.svd(S, full_matrices=False)
+        s_clipped = np.minimum(s, 1.0)
+        S = U @ np.diag(s_clipped) @ Vh
 
     # ensure reciprocity: HACK?
     if enforce_reciprocity:

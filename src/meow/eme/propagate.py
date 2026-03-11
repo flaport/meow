@@ -81,7 +81,8 @@ def r2l_matrices(
     """Right to left S-matrices."""
     Ss = [pairs[-1]]
 
-    for p in pairs[-1::-1]:
+    # Already seeded with the rightmost pair; only prepend remaining pairs.
+    for p in pairs[-2::-1]:
         Ss.append(_connect_two(p, Ss[-1], sax_backend))
 
     return Ss[::-1]
