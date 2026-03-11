@@ -356,6 +356,39 @@ def _crop_non_pml(
     return arr[xs, ys], x[xs], y[ys]
 
 
+def _canonical_interpolation(
+    interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None,
+) -> Literal["Ex", "Ey", "Ez", "Hz"] | None:
+    if interpolation is None:
+        return None
+    return {
+        "Ex": "Ex",
+        "Ey": "Ey",
+        "Ez": "Ez",
+        "Hz": "Hz",
+        "Hx": "Ey",
+        "Hy": "Ex",
+    }[interpolation]
+
+
+def _mode_for_inner_product(
+    mode: Mode,
+    interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None,
+) -> Mode:
+    canonical = _canonical_interpolation(interpolation)
+    if canonical is None:
+        return mode
+    if mode.interpolation == "":
+        return mode.interpolate(interpolation)
+    if mode.interpolation != canonical:
+        msg = (
+            f"Mode is already interpolated to {mode.interpolation!r}, "
+            f"cannot use requested interpolation {interpolation!r}."
+        )
+        raise ValueError(msg)
+    return mode
+
+
 def inner_product(
     mode1: Mode,
     mode2: Mode,
@@ -363,6 +396,7 @@ def inner_product(
     symmetric: bool = True,
     conjugate: bool = False,
     ignore_pml: bool = True,
+    interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None = None,
 ) -> complex:
     """The modal inner product for z-normal mode planes.
 
@@ -372,20 +406,23 @@ def inner_product(
     ``symmetric=True`` corresponds to the Tidy3D-style symmetric product:
     ``0.25 * ((E1 x H2)_z - (H1 x E2)_z)``.
     """
-    mesh = mode1.mesh
+    mode1_ = _mode_for_inner_product(mode1, interpolation)
+    mode2_ = _mode_for_inner_product(mode2, interpolation)
+
+    mesh = mode1_.mesh
     x = np.asarray(mesh.x_)
     y = np.asarray(mesh.y_)
 
     if conjugate:
-        ex1, ey1 = mode1.Ex.conj(), mode1.Ey.conj()
-        hx1, hy1 = mode1.Hx.conj(), mode1.Hy.conj()
+        ex1, ey1 = mode1_.Ex.conj(), mode1_.Ey.conj()
+        hx1, hy1 = mode1_.Hx.conj(), mode1_.Hy.conj()
     else:
-        ex1, ey1 = mode1.Ex, mode1.Ey
-        hx1, hy1 = mode1.Hx, mode1.Hy
+        ex1, ey1 = mode1_.Ex, mode1_.Ey
+        hx1, hy1 = mode1_.Hx, mode1_.Hy
 
-    e1_cross_h2 = ex1 * mode2.Hy - ey1 * mode2.Hx
+    e1_cross_h2 = ex1 * mode2_.Hy - ey1 * mode2_.Hx
     if symmetric:
-        h1_cross_e2 = hx1 * mode2.Ey - hy1 * mode2.Ex
+        h1_cross_e2 = hx1 * mode2_.Ey - hy1 * mode2_.Ex
         integrand = 0.25 * (e1_cross_h2 - h1_cross_e2)
     else:
         integrand = e1_cross_h2
@@ -417,6 +454,7 @@ def orthonormalize(
     symmetric: bool = True,
     conjugate: bool = False,
     ignore_pml: bool = True,
+    interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None = None,
 ) -> Modes:
     """Orthogonalize and normalize modes with configured inner-product flags."""
     if not modes:
@@ -433,6 +471,7 @@ def orthonormalize(
                 symmetric=symmetric,
                 conjugate=conjugate,
                 ignore_pml=ignore_pml,
+                interpolation=interpolation,
             )
             if np.abs(basis_norm) < tol:
                 msg = "Encountered near-zero norm basis mode during orthogonalization."
@@ -444,6 +483,7 @@ def orthonormalize(
                     symmetric=symmetric,
                     conjugate=conjugate,
                     ignore_pml=ignore_pml,
+                    interpolation=interpolation,
                 )
                 / basis_norm
             )
@@ -455,6 +495,7 @@ def orthonormalize(
             symmetric=symmetric,
             conjugate=conjugate,
             ignore_pml=ignore_pml,
+            interpolation=interpolation,
         )
         if np.abs(current_norm) < tol:
             warnings.warn(
@@ -474,6 +515,7 @@ def orthogonalize(
     symmetric: bool = True,
     conjugate: bool = False,
     ignore_pml: bool = True,
+    interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None = None,
 ) -> Modes:
     """Backward-compatible alias for orthonormalize."""
     return orthonormalize(
@@ -481,6 +523,7 @@ def orthogonalize(
         symmetric=symmetric,
         conjugate=conjugate,
         ignore_pml=ignore_pml,
+        interpolation=interpolation,
     )
 
 
@@ -617,6 +660,7 @@ def _interpolate_Ex(mode: Mode) -> Mode:
         Hx=Hx_at_Ex,
         Hy=mode.Hy,
         Hz=Hz_at_Ex,
+        interpolation="Ex",
     )
 
 
@@ -637,6 +681,7 @@ def _interpolate_Ey(mode: Mode) -> Mode:
         Hx=mode.Hx,
         Hy=Hy_at_Ey,
         Hz=Hz_at_Ey,
+        interpolation="Ey",
     )
 
 
@@ -655,6 +700,7 @@ def _interpolate_Ez(mode: Mode) -> Mode:
             direction="backward",
             axis=1,
         ),
+        interpolation="Ez",
     )
 
 
@@ -671,4 +717,5 @@ def _interpolate_Hz(mode: Mode) -> Mode:
         Hx=_average(mode.Hx, direction="forward", axis=0),
         Hy=_average(mode.Hy, direction="forward", axis=1),
         Hz=mode.Hz,
+        interpolation="Hz",
     )
