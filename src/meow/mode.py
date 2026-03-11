@@ -455,7 +455,7 @@ def is_pml_mode(mode: Mode, threshold: float) -> bool:
     m, n = ed.shape
     lft = ed[:numx, :]
     rgt = ed[m - numx :, :]
-    top = ed[numx : m - numx, n:numy]
+    top = ed[numx : m - numx, :numy]
     btm = ed[numx : m - numx, n - numy :]
     rest = ed[numx : m - numx, numy : n - numy]
     pml_sum = lft.sum() + rgt.sum() + top.sum() + btm.sum()
