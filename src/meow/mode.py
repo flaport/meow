@@ -371,7 +371,7 @@ def normalize_product(mode: Mode) -> Mode:
     )
 
 
-def orthogonalize(
+def orthonormalize(
     modes: Modes,
     inner_product: Callable[[Mode, Mode], complex],
 ) -> Modes:
@@ -402,6 +402,14 @@ def orthogonalize(
         orthogonalized.append(current / np.sqrt(current_norm))
 
     return orthogonalized
+
+
+def orthogonalize(
+    modes: Modes,
+    inner_product: Callable[[Mode, Mode], complex],
+) -> Modes:
+    """Backward-compatible alias for orthonormalize."""
+    return orthonormalize(modes, inner_product=inner_product)
 
 
 def electric_energy_density(
