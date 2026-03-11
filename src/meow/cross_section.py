@@ -8,7 +8,7 @@ import numpy as np
 from pydantic import Field
 from pydantic.v1 import PrivateAttr
 
-from meow.arrays import FloatArray2D
+from meow.arrays import ComplexArray2D
 from meow.base_model import BaseModel, cached_property
 from meow.cell import Cell, _create_full_material_array, sort_structures
 from meow.environment import Environment
@@ -46,26 +46,26 @@ class CrossSection(BaseModel):
         return materials
 
     @cached_property
-    def n_full(self) -> FloatArray2D:
+    def n_full(self) -> ComplexArray2D:
         """Return the refractive index array for the full mesh."""
         m_full = _create_full_material_array(self.mesh, self.structures, self.materials)
-        n_full = np.ones_like(self.mesh.X_full)
+        n_full = np.ones_like(self.mesh.X_full, dtype=np.complex128)
         for material, idx in self.materials.items():
             n_full = np.where(m_full == idx, material(self.env), n_full)
         return n_full
 
     @property
-    def nx(self) -> FloatArray2D:
+    def nx(self) -> ComplexArray2D:
         """Return the refractive index on the Ex positions."""
         return self.n_full[1::2, ::2]
 
     @property
-    def ny(self) -> FloatArray2D:
+    def ny(self) -> ComplexArray2D:
         """Return the refractive index on the Ey positions."""
         return self.n_full[::2, 1::2]
 
     @property
-    def nz(self) -> FloatArray2D:
+    def nz(self) -> ComplexArray2D:
         """Return the refractive index on the Ez positions."""
         return self.n_full[::2, ::2]
 
@@ -115,7 +115,7 @@ class CrossSection(BaseModel):
         if cbar:
             divider = make_axes_locatable(ax)
             cax = divider.append_axes("right", size="5%", pad=0.05)
-            values = np.unique(self.n_full)
+            values = np.unique(np.real(self.n_full))
             _cbar = plt.colorbar(ticks=values, cax=cax)
             # material_names = ['air'] + [mat.name for mat in self.cell.materials]
             # labels = [f"\n{n}\n{v:.3f}" for n, v in zip(material_names, values)]

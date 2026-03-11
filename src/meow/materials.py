@@ -102,17 +102,17 @@ class TidyMaterial(MaterialBase):
             )
             raise ValueError(msg)
         eps = eps_comp(0, 0, td.C_0 / env.wl)
-        return np.real(np.sqrt(eps))  # TODO: implement complex n
+        return np.sqrt(eps)
 
 
 class IndexMaterial(MaterialBase):
     """A material with a constant refractive index."""
 
-    n: float = Field(description="the refractive index of the material")
+    n: complex = Field(description="the refractive index of the material")
 
     def __call__(self, env: Environment) -> np.ndarray:  # noqa: ARG002
         """Get the refractive index of the material for the given environment."""
-        return np.squeeze(np.real(self.n))  # TODO: allow complex multi-dimensional n
+        return np.squeeze(np.asarray(self.n, dtype=np.complex128))
 
 
 class SampledMaterial(MaterialBase):
@@ -120,7 +120,7 @@ class SampledMaterial(MaterialBase):
 
     # TODO: use the new sax xarray interpolation
 
-    n: Annotated[NDArray, Dim(1), DType("float64")] = Field(
+    n: Annotated[NDArray, Dim(1), DType("complex128")] = Field(
         description="the complex refractive index of the material"
     )
     params: dict[str, Annotated[NDArray, Dim(1), DType("float64")]] = Field(
@@ -167,8 +167,7 @@ class SampledMaterial(MaterialBase):
         columns = [c for c in df.columns if c not in ["nr", "ni"]]
         params = {c: np.asarray(df[c].values, dtype=np.float64) for c in columns}
 
-        # TODO: support complex n
-        return cls(name=name, params=params, n=np.real(n), meta=meta)
+        return cls(name=name, params=params, n=n, meta=meta)
 
     def __call__(self, env: Environment) -> np.ndarray:
         """Get the refractive index of the material for the given environment."""
@@ -185,7 +184,7 @@ class SampledMaterial(MaterialBase):
         nr = result.take(pos["targets"]["nr"], axs["targets"])
         ni = result.take(pos["targets"]["ni"], axs["targets"])
         n = nr + 1j * ni
-        return np.squeeze(np.real(n))  # TODO: allow complex multi-dimensional n
+        return np.squeeze(n)
 
 
 Material = IndexMaterial | SampledMaterial | TidyMaterial
