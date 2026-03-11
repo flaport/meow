@@ -7,8 +7,6 @@ from types import SimpleNamespace
 from typing import Literal
 
 import numpy as np
-import tidy3d
-from packaging import version
 from pydantic import PositiveFloat, PositiveInt
 from scipy.constants import c
 from tidy3d.components.mode.solver import compute_modes as _compute_modes
@@ -30,12 +28,7 @@ def compute_modes_tidy3d(
         raise ValueError(msg)
 
     od = np.zeros_like(cs.nx)  # off diagonal entry
-    tidy3d_version = getattr(tidy3d, "__version__", "2.8.0")
-    new_tidy3d = version.parse(tidy3d_version) >= version.parse("2.2.0")
-    if new_tidy3d:
-        eps_cross = [cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2]
-    else:
-        eps_cross = [cs.nx**2, cs.ny**2, cs.nz**2]
+    eps_cross = [cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2]
 
     if np.isinf(cs.mesh.bend_radius) or np.isnan(cs.mesh.bend_radius):
         bend_radius = None
