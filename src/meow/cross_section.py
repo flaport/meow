@@ -10,7 +10,7 @@ from pydantic.v1 import PrivateAttr
 
 from meow.arrays import FloatArray2D
 from meow.base_model import BaseModel, cached_property
-from meow.cell import Cell, _create_full_material_array, _sort_structures
+from meow.cell import Cell, _create_full_material_array, sort_structures
 from meow.environment import Environment
 from meow.mesh import Mesh2D
 from meow.structures import Structure2D
@@ -40,7 +40,7 @@ class CrossSection(BaseModel):
     def materials(self) -> dict[Structure2D, int]:
         """Return a dictionary mapping materials to their indices."""
         materials = {}
-        for i, structure in enumerate(_sort_structures(self.structures), start=1):
+        for i, structure in enumerate(sort_structures(self.structures), start=1):
             if structure.material not in materials:
                 materials[structure.material] = i
         return materials

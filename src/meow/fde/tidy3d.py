@@ -13,8 +13,8 @@ from pydantic import PositiveFloat, PositiveInt
 from scipy.constants import c
 from tidy3d.components.mode.solver import compute_modes as _compute_modes
 
-from ..cross_section import CrossSection
-from ..mode import Mode, Modes, is_pml_mode, normalize_product, zero_phase
+from meow.cross_section import CrossSection
+from meow.mode import Mode, Modes, is_pml_mode, normalize_product, zero_phase
 
 
 def compute_modes_tidy3d(
@@ -30,7 +30,8 @@ def compute_modes_tidy3d(
         raise ValueError(msg)
 
     od = np.zeros_like(cs.nx)  # off diagonal entry
-    new_tidy3d = version.parse(tidy3d.__version__) >= version.parse("2.2.0")
+    tidy3d_version = getattr(tidy3d, "__version__", "2.8.0")
+    new_tidy3d = version.parse(tidy3d_version) >= version.parse("2.2.0")
     if new_tidy3d:
         eps_cross = [cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2]
     else:

@@ -8,20 +8,15 @@ import numpy as np
 import sax
 from sax.backends import circuit_backends
 
-from ..cell import Cell
-from ..mode import Mode
-from .common import (
+from meow.cell import Cell
+from meow.eme.common import (
     DEFAULT_CONJUGATE,
     DEFAULT_ENFORCE_LOSSY_UNITARITY,
     DEFAULT_ENFORCE_RECIPROCITY,
     compute_interface_s_matrices,
     compute_propagation_s_matrices,
 )
-
-try:
-    import klujax  # fmt: skip
-except ImportError:
-    klujax = None
+from meow.mode import Mode
 
 
 def _get_netlist(

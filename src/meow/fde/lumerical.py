@@ -8,11 +8,10 @@ import numpy as np
 from pydantic import PositiveInt
 
 from meow.arrays import ComplexArray2D
-
-from ..cross_section import CrossSection
-from ..environment import Environment
-from ..mode import Mode, normalize_product, zero_phase
-from ..structures import Structure3D
+from meow.cross_section import CrossSection
+from meow.environment import Environment
+from meow.mode import Mode, normalize_product, zero_phase
+from meow.structures import Structure3D
 
 _global = {"sim": None}
 Sim = Any

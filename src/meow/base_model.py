@@ -6,7 +6,7 @@ from collections.abc import Callable, Iterable
 from contextlib import suppress
 from functools import wraps
 from hashlib import md5
-from typing import Any, Self
+from typing import Any, Self, cast
 
 import numpy as np
 import orjson
@@ -21,8 +21,6 @@ from pydantic import (
 )
 from pydantic._internal._model_construction import ModelMetaclass as _ModelMetaclass
 
-from meow.cache import cache_model
-
 MODELS = {}
 
 
@@ -31,7 +29,7 @@ class ModelMetaclass(_ModelMetaclass):
 
     def __call__(cls, *args: Any, **kwargs: Any) -> type:  # noqa: N805,D102
         obj = super().__call__(*args, **kwargs)
-        return cache_model(obj)
+        return obj
 
 
 class BaseModel(_BaseModel, metaclass=ModelMetaclass):
@@ -177,14 +175,16 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
     def __str__(self) -> str:
         return self._repr()
 
-    def _visualize(self, **kwargs: Any) -> None:
+    def _visualize(self, **_: Any) -> None:
         msg = f"visualization for {self.__class__.__name__!r} not (yet) implemented."
         raise NotImplementedError(msg)
 
 
 def cache(prop: Callable) -> Callable:
     """Decorator to cache the result of a property method."""
-    prop_name = prop.__name__
+    prop_name = getattr(prop, "__name__", "")
+    if not prop_name:
+        return prop
 
     @wraps(prop)
     def getter(self):  # noqa: ANN001,ANN202
@@ -214,7 +214,7 @@ def _dict_repr(
     end: str = "}",
     eq: str = ": ",
 ) -> str:
-    from .arrays import SerializedArray
+    from meow.arrays import SerializedArray
 
     try:
         arr = SerializedArray.model_validate(dct).to_array()
@@ -280,7 +280,7 @@ def _eq(self: object, other: object) -> bool:
         for k, v in self.items():
             if k not in other:
                 return False
-            w = other[k]
+            w = cast(dict, other)[k]
             if not _eq(v, w):
                 return False
         return True

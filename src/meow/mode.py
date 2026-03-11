@@ -16,13 +16,11 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from pydantic import Field
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
-from scipy.linalg import norm
 
 from meow.arrays import Complex, ComplexArray2D, FloatArray2D
 from meow.base_model import BaseModel, cached_property
 from meow.cross_section import CrossSection
 from meow.environment import Environment
-from meow.integrate import integrate_2d
 from meow.mesh import Mesh2D
 
 
@@ -95,16 +93,6 @@ class Mode(BaseModel):
     def Pz(self) -> ComplexArray2D:
         """The z-component of the Poynting vector."""
         return self._pointing[2]
-
-    @cached_property
-    def A(self) -> float:
-        """Mode area."""
-        vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
-        E_sq = np.asarray(norm(vecE, axis=-1, ord=2))
-        E_qu = E_sq**2
-        x = self.cs.mesh.x_
-        y = self.cs.mesh.y_
-        return integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu)
 
     @property
     def env(self) -> Environment:

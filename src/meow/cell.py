@@ -13,7 +13,7 @@ from meow.arrays import BoolArray2D, Dim, DType, IntArray2D, NDArray
 from meow.base_model import BaseModel, cached_property
 from meow.materials import Material
 from meow.mesh import Mesh2D
-from meow.structures import Structure2D, Structure3D, _sort_structures
+from meow.structures import Structure2D, Structure3D, sort_structures
 
 
 class Cell(BaseModel):
@@ -46,7 +46,7 @@ class Cell(BaseModel):
     def materials(self) -> dict[Material, int]:
         """A mapping of the materials in the cell to their indices."""
         materials = {}
-        for i, structure in enumerate(_sort_structures(self.structures), start=1):
+        for i, structure in enumerate(sort_structures(self.structures), start=1):
             if structure.material not in materials:
                 materials[structure.material] = i
         return materials
@@ -74,7 +74,7 @@ class Cell(BaseModel):
         ax: Any = None,
         cbar: bool = True,
         show: bool = True,
-        **ignored: Any,  # noqa: ARG002
+        **_: Any,
     ) -> None:
         import matplotlib.pyplot as plt
         from matplotlib.colors import ListedColormap, to_rgba
@@ -304,7 +304,7 @@ def _classify_structures_by_mesh_order_and_material(
 ) -> (
     dict[tuple[int, int], list[Structure2D]] | dict[tuple[int, int], list[Structure3D]]
 ):
-    structures = _sort_structures(structures)
+    structures = sort_structures(structures)
     structures_dict = {}
     for structure in structures:
         mo = structure.mesh_order

@@ -9,9 +9,9 @@ from typing import Any, cast
 import numpy as np
 import sax
 
-from ..cell import Cell
-from ..mode import Mode, inner_product_conj
-from ..mode import inner_product as inner_product_normal
+from meow.cell import Cell
+from meow.mode import Mode, inner_product_conj
+from meow.mode import inner_product as inner_product_normal
 
 DEFAULT_CONJUGATE = True
 DEFAULT_ENFORCE_RECIPROCITY = False

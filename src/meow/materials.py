@@ -110,7 +110,7 @@ class IndexMaterial(MaterialBase):
 
     n: float = Field(description="the refractive index of the material")
 
-    def __call__(self, _: Environment) -> np.ndarray:
+    def __call__(self, env: Environment) -> np.ndarray:  # noqa: ARG002
         """Get the refractive index of the material for the given environment."""
         return np.squeeze(np.real(self.n))  # TODO: allow complex multi-dimensional n
 
