@@ -375,24 +375,6 @@ def _canonical_interpolation(
     )
 
 
-def _mode_for_inner_product(
-    mode: Mode,
-    interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None,
-) -> Mode:
-    canonical = _canonical_interpolation(interpolation)
-    if canonical is None:
-        return mode
-    if mode.interpolation == "":
-        return mode.interpolate(interpolation)
-    if mode.interpolation != canonical:
-        msg = (
-            f"Mode is already interpolated to {mode.interpolation!r}, "
-            f"cannot use requested interpolation {interpolation!r}."
-        )
-        raise ValueError(msg)
-    return mode
-
-
 def inner_product(
     mode1: Mode,
     mode2: Mode,
@@ -405,31 +387,31 @@ def inner_product(
     """The modal inner product for z-normal mode planes.
 
     ``symmetric=False`` corresponds to the historical MEOW product:
-    ``(E1 x H2)_z``.
+    ``0.5 * (E1 x H2)_z``.
 
     ``symmetric=True`` corresponds to the Tidy3D-style symmetric product:
     ``0.25 * ((E1 x H2)_z - (H1 x E2)_z)``.
     """
-    mode1_ = _mode_for_inner_product(mode1, interpolation)
-    mode2_ = _mode_for_inner_product(mode2, interpolation)
+    mode1 = mode1.interpolate(interpolation)
+    mode2 = mode2.interpolate(interpolation)
 
-    mesh = mode1_.mesh
+    mesh = mode1.mesh
     x = np.asarray(mesh.x_)
     y = np.asarray(mesh.y_)
 
     if conjugate:
-        ex1, ey1 = mode1_.Ex.conj(), mode1_.Ey.conj()
-        hx1, hy1 = mode1_.Hx.conj(), mode1_.Hy.conj()
+        ex1, ey1 = mode1.Ex.conj(), mode1.Ey.conj()
+        hx1, hy1 = mode1.Hx.conj(), mode1.Hy.conj()
     else:
-        ex1, ey1 = mode1_.Ex, mode1_.Ey
-        hx1, hy1 = mode1_.Hx, mode1_.Hy
+        ex1, ey1 = mode1.Ex, mode1.Ey
+        hx1, hy1 = mode1.Hx, mode1.Hy
 
-    e1_cross_h2 = ex1 * mode2_.Hy - ey1 * mode2_.Hx
+    e1_cross_h2 = ex1 * mode2.Hy - ey1 * mode2.Hx
     if symmetric:
-        h1_cross_e2 = hx1 * mode2_.Ey - hy1 * mode2_.Ex
+        h1_cross_e2 = hx1 * mode2.Ey - hy1 * mode2.Ex
         integrand = 0.25 * (e1_cross_h2 - h1_cross_e2)
     else:
-        integrand = e1_cross_h2
+        integrand = 0.5 * e1_cross_h2
 
     if ignore_pml:
         integrand, x, y = _crop_non_pml(mesh, integrand, x, y)
@@ -438,7 +420,7 @@ def inner_product(
     return float(np.real(arr)) + float(np.imag(arr)) * 1j
 
 
-def normalize_product(mode: Mode) -> Mode:
+def normalize(mode: Mode, inner_product: Callable) -> Mode:
     """Normalize a `Mode` according to the `inner_product` with itself."""
     factor = np.sqrt(inner_product(mode, mode))
     return Mode(
@@ -484,14 +466,6 @@ def orthonormalize(
         orthogonalized.append(current / np.sqrt(current_norm))
 
     return orthogonalized
-
-
-def orthogonalize(
-    modes: Modes,
-    inner_product: Callable[[Mode, Mode], complex] = inner_product,
-) -> Modes:
-    """Backward-compatible alias for orthonormalize."""
-    return orthonormalize(modes, inner_product=inner_product)
 
 
 def electric_energy_density(

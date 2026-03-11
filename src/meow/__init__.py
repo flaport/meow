@@ -43,8 +43,7 @@ from meow.mode import inner_product as inner_product
 from meow.mode import invert_mode as invert_mode
 from meow.mode import magnetic_energy as magnetic_energy
 from meow.mode import magnetic_energy_density as magnetic_energy_density
-from meow.mode import normalize_product as normalize_product
-from meow.mode import orthogonalize as orthogonalize
+from meow.mode import normalize as normalize
 from meow.mode import orthonormalize as orthonormalize
 from meow.mode import zero_phase as zero_phase
 from meow.structures import Structure as Structure
