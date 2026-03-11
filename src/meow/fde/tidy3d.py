@@ -52,6 +52,7 @@ def compute_modes_tidy3d(
     )
 
     with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", message=".*Input has data type int64.*")
         warnings.filterwarnings("ignore", message=".*divide by zero.*")
         warnings.filterwarnings("ignore", message=".*overflow encountered.*")
         warnings.filterwarnings("ignore", message=".*invalid value.*")

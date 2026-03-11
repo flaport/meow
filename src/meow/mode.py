@@ -48,9 +48,12 @@ class Mode(BaseModel):
     )
 
     def interpolate(
-        self, location: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]
+        self,
+        location: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None,
     ) -> Mode:
         """Interpolate the mode to the given location."""
+        if location is None or location == self.interpolation:
+            return self
         if self.interpolation != "":
             msg = "Cannot interpolate from already interpolated mode!"
             raise RuntimeError(msg)
@@ -359,16 +362,17 @@ def _crop_non_pml(
 def _canonical_interpolation(
     interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None,
 ) -> Literal["Ex", "Ey", "Ez", "Hz"] | None:
-    if interpolation is None:
-        return None
-    return {
-        "Ex": "Ex",
-        "Ey": "Ey",
-        "Ez": "Ez",
-        "Hz": "Hz",
-        "Hx": "Ey",
-        "Hy": "Ex",
-    }[interpolation]
+    return cast(
+        Literal["Ex", "Ey", "Ez", "Hz"],
+        {
+            "Ex": "Ex",
+            "Ey": "Ey",
+            "Ez": "Ez",
+            "Hx": "Ey",
+            "Hy": "Ex",
+            "Hz": "Hz",
+        }.get(str(interpolation)),
+    )
 
 
 def _mode_for_inner_product(
@@ -430,7 +434,8 @@ def inner_product(
     if ignore_pml:
         integrand, x, y = _crop_non_pml(mesh, integrand, x, y)
 
-    return np.trapezoid(np.trapezoid(integrand, y), x)
+    arr = np.trapezoid(np.trapezoid(integrand, y), x)
+    return float(np.real(arr)) + float(np.imag(arr)) * 1j
 
 
 def normalize_product(mode: Mode) -> Mode:

@@ -101,7 +101,6 @@ ignore = [
   "FIX004",  # line-contains-hack
   "N803",  # invalid-argument-name
   "N806",  # non-lowercase-variable-in-function
-  "PD901",  # pandas-df-variable-name
   "PLC0414",  # useless-import-alias
   "PLC0415",  # import-outside-top-level
   "PLR0911",  # too-many-return-statements
@@ -129,6 +128,7 @@ select = ["ALL"]
 [tool.ruff.lint.per-file-ignores]
 "*.ipynb" = [
   "ANN",  # flake8-annotations
+  "EM101",  # raw-string-in-exception
   "ARG001",  # unused-function-argument
   "D",  # pydocstyle
   "E402",  # module-import-not-at-top-of-file
@@ -138,7 +138,8 @@ select = ["ALL"]
   "N816",  # mixed-case-variable-in-global-scope
   "PLC2401",  # non-ascii-name
   "S101",  # assert
-  "SLF001"  # private-member-access
+  "SLF001",  # private-member-access
+  "T201"  # print
 ]
 "src/meow/mesh.py" = [
   "D403",  # first-word-uncapitalized
