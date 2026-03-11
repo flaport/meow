@@ -1,30 +1,39 @@
+from typing import Any, cast
+
 import numpy as np
+import pytest
+import sax
 
 import meow.eme.common as eme_common
 import meow.eme.propagate as eme_propagate
+from meow.mode import Mode
 
 
-def test_r2l_matrices_does_not_duplicate_last_pair(monkeypatch):
+def test_r2l_matrices_does_not_duplicate_last_pair(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     calls: list[tuple[str, str]] = []
 
-    def fake_connect_two(l, r, sax_backend):  # noqa: ANN001,ARG001
+    def fake_connect_two(l: Any, r: Any, sax_backend: sax.Backend) -> str:  # noqa: ARG001
         calls.append((l, r))
         return f"({l}>{r})"
 
     monkeypatch.setattr(eme_propagate, "_connect_two", fake_connect_two)
 
-    pairs = ["p0", "p1", "p2"]
-    matrices = eme_propagate.r2l_matrices(pairs, sax_backend="default")
+    pairs = cast(list[sax.STypeMM], ["p0", "p1", "p2"])
+    matrices = eme_propagate.r2l_matrices(pairs, sax_backend="klu")
 
     assert calls == [("p1", "p2"), ("p0", "(p1>p2)")]
     assert matrices == ["(p0>(p1>p2))", "(p1>p2)", "p2"]
 
 
-def test_enforce_lossy_unitarity_projects_to_contractive_matrix(monkeypatch):
-    left = object()
-    right = object()
+def test_enforce_lossy_unitarity_projects_to_contractive_matrix(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    left = cast(Mode, object())
+    right = cast(Mode, object())
 
-    def fake_inner_product_conj(a, b):  # noqa: ANN001
+    def fake_inner_product_conj(a: Any, b: Any) -> float:
         if a is left and b is left:
             return 1.0
         if a is right and b is right:
