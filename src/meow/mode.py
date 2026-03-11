@@ -371,6 +371,39 @@ def normalize_product(mode: Mode) -> Mode:
     )
 
 
+def orthogonalize(
+    modes: Modes,
+    inner_product: Callable[[Mode, Mode], complex],
+) -> Modes:
+    """Orthogonalize and normalize modes with a user-defined inner product."""
+    if not modes:
+        return []
+
+    tol = 1e-12
+    orthogonalized: Modes = []
+    for mode in modes:
+        current = mode
+        for basis in orthogonalized:
+            basis_norm = inner_product(basis, basis)
+            if np.abs(basis_norm) < tol:
+                msg = "Encountered near-zero norm basis mode during orthogonalization."
+                raise ValueError(msg)
+            coeff = inner_product(basis, current) / basis_norm
+            current = current - coeff * basis
+
+        current_norm = inner_product(current, current)
+        if np.abs(current_norm) < tol:
+            warnings.warn(
+                "Skipping near-linearly-dependent mode during orthogonalization.",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            continue
+        orthogonalized.append(current / np.sqrt(current_norm))
+
+    return orthogonalized
+
+
 def electric_energy_density(
     mode: Mode,
 ) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
