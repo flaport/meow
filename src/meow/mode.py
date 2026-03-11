@@ -356,26 +356,44 @@ def _crop_non_pml(
     return arr[xs, ys], x[xs], y[ys]
 
 
-def inner_product(mode1: Mode, mode2: Mode, *, ignore_pml: bool = True) -> float:
-    """The inner product of a `Mode` with another `Mode` is uniquely defined."""
+def inner_product(
+    mode1: Mode,
+    mode2: Mode,
+    *,
+    symmetric: bool = False,
+    conjugate: bool = False,
+    ignore_pml: bool = True,
+) -> complex:
+    """The modal inner product for z-normal mode planes.
+
+    ``symmetric=False`` corresponds to the historical MEOW product:
+    ``(E1 x H2)_z``.
+
+    ``symmetric=True`` corresponds to the Tidy3D-style symmetric product:
+    ``0.25 * ((E1 x H2)_z - (H1 x E2)_z)``.
+    """
     mesh = mode1.mesh
     x = np.asarray(mesh.x_)
     y = np.asarray(mesh.y_)
-    cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx
-    if ignore_pml:
-        cross, x, y = _crop_non_pml(mesh, cross, x, y)
-    return float(np.trapezoid(np.trapezoid(cross, y), x))
 
+    if conjugate:
+        ex1, ey1 = mode1.Ex.conj(), mode1.Ey.conj()
+        hx1, hy1 = mode1.Hx.conj(), mode1.Hy.conj()
+    else:
+        ex1, ey1 = mode1.Ex, mode1.Ey
+        hx1, hy1 = mode1.Hx, mode1.Hy
 
-def inner_product_conj(mode1: Mode, mode2: Mode, *, ignore_pml: bool = True) -> float:
-    """The inner product of a `Mode` with another `Mode` is uniquely defined."""
-    mesh = mode1.mesh
-    x = np.asarray(mesh.x_)
-    y = np.asarray(mesh.y_)
-    cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
+    e1_cross_h2 = ex1 * mode2.Hy - ey1 * mode2.Hx
+    if symmetric:
+        h1_cross_e2 = hx1 * mode2.Ey - hy1 * mode2.Ex
+        integrand = 0.25 * (e1_cross_h2 - h1_cross_e2)
+    else:
+        integrand = e1_cross_h2
+
     if ignore_pml:
-        cross, x, y = _crop_non_pml(mesh, cross, x, y)
-    return float(np.trapezoid(np.trapezoid(cross, y), x))
+        integrand, x, y = _crop_non_pml(mesh, integrand, x, y)
+
+    return np.trapezoid(np.trapezoid(integrand, y), x)
 
 
 def normalize_product(mode: Mode) -> Mode:
@@ -395,9 +413,12 @@ def normalize_product(mode: Mode) -> Mode:
 
 def orthonormalize(
     modes: Modes,
-    inner_product: Callable[[Mode, Mode], complex],
+    *,
+    symmetric: bool = False,
+    conjugate: bool = False,
+    ignore_pml: bool = True,
 ) -> Modes:
-    """Orthogonalize and normalize modes with a user-defined inner product."""
+    """Orthogonalize and normalize modes with configured inner-product flags."""
     if not modes:
         return []
 
@@ -406,14 +427,35 @@ def orthonormalize(
     for mode in modes:
         current = mode
         for basis in orthogonalized:
-            basis_norm = inner_product(basis, basis)
+            basis_norm = inner_product(
+                basis,
+                basis,
+                symmetric=symmetric,
+                conjugate=conjugate,
+                ignore_pml=ignore_pml,
+            )
             if np.abs(basis_norm) < tol:
                 msg = "Encountered near-zero norm basis mode during orthogonalization."
                 raise ValueError(msg)
-            coeff = inner_product(basis, current) / basis_norm
+            coeff = (
+                inner_product(
+                    basis,
+                    current,
+                    symmetric=symmetric,
+                    conjugate=conjugate,
+                    ignore_pml=ignore_pml,
+                )
+                / basis_norm
+            )
             current = current - coeff * basis
 
-        current_norm = inner_product(current, current)
+        current_norm = inner_product(
+            current,
+            current,
+            symmetric=symmetric,
+            conjugate=conjugate,
+            ignore_pml=ignore_pml,
+        )
         if np.abs(current_norm) < tol:
             warnings.warn(
                 "Skipping near-linearly-dependent mode during orthogonalization.",
@@ -428,10 +470,18 @@ def orthonormalize(
 
 def orthogonalize(
     modes: Modes,
-    inner_product: Callable[[Mode, Mode], complex],
+    *,
+    symmetric: bool = False,
+    conjugate: bool = False,
+    ignore_pml: bool = True,
 ) -> Modes:
     """Backward-compatible alias for orthonormalize."""
-    return orthonormalize(modes, inner_product=inner_product)
+    return orthonormalize(
+        modes,
+        symmetric=symmetric,
+        conjugate=conjugate,
+        ignore_pml=ignore_pml,
+    )
 
 
 def electric_energy_density(

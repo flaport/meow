@@ -40,7 +40,6 @@ from meow.mode import Mode as Mode
 from meow.mode import electric_energy as electric_energy
 from meow.mode import electric_energy_density as electric_energy_density
 from meow.mode import inner_product as inner_product
-from meow.mode import inner_product_conj as inner_product_conj
 from meow.mode import invert_mode as invert_mode
 from meow.mode import magnetic_energy as magnetic_energy
 from meow.mode import magnetic_energy_density as magnetic_energy_density
