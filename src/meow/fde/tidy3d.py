@@ -80,7 +80,7 @@ def compute_modes_tidy3d(
                 Hx=Hx,
                 Hy=Hy,
                 Hz=Hz,
-                neff=float(neffs.real) + 1j * float(neffs.imag),
+                neff=np.asarray(neffs, dtype=np.complex128).item(),
             )
             for _ in range(num_modes)
         ]
