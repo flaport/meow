@@ -116,7 +116,7 @@ class Mode(BaseModel):
         num_levels: int = 8,
         operation: Callable = _power,
         show: bool = True,
-        **ignored: Any,  # noqa: ARG002
+        **_: Any,
     ) -> None:
         from meow.visualize import _figsize_visualize_mode
 
@@ -131,7 +131,7 @@ class Mode(BaseModel):
                 current_width = len(fields) * W
                 W, H = _figsize_visualize_mode(self.cs, 6.4 * max_width / current_width)
             if ax is None:
-                _, ax = plt.subplots(1, len(fields), figsize=(len(fields) * W, H))
+                _fig, ax = plt.subplots(1, len(fields), figsize=(len(fields) * W, H))
             if len(ax) < len(fields):
                 msg = (
                     f"Not enough axes supplied for the number of fields "
@@ -342,18 +342,40 @@ def invert_mode(mode: Mode) -> Mode:
     )
 
 
-def inner_product(mode1: Mode, mode2: Mode) -> float:
+def _crop_non_pml(
+    mesh: Mesh2D,
+    arr: ComplexArray2D,
+    x: np.ndarray,
+    y: np.ndarray,
+) -> tuple[ComplexArray2D, np.ndarray, np.ndarray]:
+    numx, numy = mesh.num_pml
+
+    xs = slice(numx, -numx if numx > 0 else None)
+    ys = slice(numy, -numy if numy > 0 else None)
+
+    return arr[xs, ys], x[xs], y[ys]
+
+
+def inner_product(mode1: Mode, mode2: Mode, *, ignore_pml: bool = True) -> float:
     """The inner product of a `Mode` with another `Mode` is uniquely defined."""
     mesh = mode1.mesh
+    x = np.asarray(mesh.x_)
+    y = np.asarray(mesh.y_)
     cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx
-    return np.trapezoid(np.trapezoid(cross, mesh.y_), mesh.x_)
+    if ignore_pml:
+        cross, x, y = _crop_non_pml(mesh, cross, x, y)
+    return float(np.trapezoid(np.trapezoid(cross, y), x))
 
 
-def inner_product_conj(mode1: Mode, mode2: Mode) -> float:
+def inner_product_conj(mode1: Mode, mode2: Mode, *, ignore_pml: bool = True) -> float:
     """The inner product of a `Mode` with another `Mode` is uniquely defined."""
     mesh = mode1.mesh
+    x = np.asarray(mesh.x_)
+    y = np.asarray(mesh.y_)
     cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
-    return np.trapezoid(np.trapezoid(cross, mesh.y_), mesh.x_)
+    if ignore_pml:
+        cross, x, y = _crop_non_pml(mesh, cross, x, y)
+    return float(np.trapezoid(np.trapezoid(cross, y), x))
 
 
 def normalize_product(mode: Mode) -> Mode:
