@@ -360,7 +360,7 @@ def inner_product(
     mode1: Mode,
     mode2: Mode,
     *,
-    symmetric: bool = False,
+    symmetric: bool = True,
     conjugate: bool = False,
     ignore_pml: bool = True,
 ) -> complex:
@@ -414,7 +414,7 @@ def normalize_product(mode: Mode) -> Mode:
 def orthonormalize(
     modes: Modes,
     *,
-    symmetric: bool = False,
+    symmetric: bool = True,
     conjugate: bool = False,
     ignore_pml: bool = True,
 ) -> Modes:
@@ -471,7 +471,7 @@ def orthonormalize(
 def orthogonalize(
     modes: Modes,
     *,
-    symmetric: bool = False,
+    symmetric: bool = True,
     conjugate: bool = False,
     ignore_pml: bool = True,
 ) -> Modes:
