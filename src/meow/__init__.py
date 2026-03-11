@@ -13,12 +13,6 @@ from meow.base_model import BaseModel as BaseModel
 from meow.cell import Cell as Cell
 from meow.cell import create_cells as create_cells
 from meow.cross_section import CrossSection as CrossSection
-from meow.eme import compute_interface_s_matrices as compute_interface_s_matrices
-from meow.eme import compute_interface_s_matrix as compute_interface_s_matrix
-from meow.eme import compute_propagation_s_matrices as compute_propagation_s_matrices
-from meow.eme import compute_propagation_s_matrix as compute_propagation_s_matrix
-from meow.eme import compute_s_matrix as compute_s_matrix
-from meow.eme import select_ports as select_ports
 from meow.environment import Environment as Environment
 from meow.fde import compute_modes as compute_modes
 from meow.fde import compute_modes_lumerical as compute_modes_lumerical
