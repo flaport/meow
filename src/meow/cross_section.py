@@ -12,7 +12,12 @@ from shapely.ops import unary_union
 
 from meow.arrays import ComplexArray2D, IntArray2D
 from meow.base_model import BaseModel, cached_property
-from meow.cell import Cell, _create_full_material_array, sort_structures
+from meow.cell import (
+    Cell,
+    _classify_structures_by_mesh_order_and_material,
+    _create_full_material_array,
+    sort_structures,
+)
 from meow.environment import Environment
 from meow.materials import Material
 from meow.mesh import Mesh2D
@@ -181,11 +186,11 @@ def _dual_cell_bounds(
             if idx > 0:
                 lo[k] = vals[idx - 1]
             else:
-                lo[k] = vals[0] - (vals[1] - vals[0])
+                lo[k] = vals[0]
             if idx < len(vals) - 1:
                 hi[k] = vals[idx + 1]
             else:
-                hi[k] = vals[-1] + (vals[-1] - vals[-2])
+                hi[k] = vals[-1]
         return lo, hi
 
     x_lo, x_hi = _bounds(xf, fi)
@@ -244,27 +249,25 @@ def _compute_smoothed_n(
     dual_boxes = shapely.box(x_lo[ii], y_lo[jj], x_hi[ii], y_hi[jj])
     dual_areas = shapely.area(dual_boxes)
 
-    # Compute area fractions per material for each interface pixel
-    # Group structures by material index
-    mat_to_polys: dict[int, list] = {}
-    for structure in structures:
-        idx = materials[structure.material]
-        if idx not in mat_to_polys:
-            mat_to_polys[idx] = []
-        mat_to_polys[idx].append(structure.geometry._shapely_polygon())
+    # Compute area fractions per material for each interface pixel using
+    # effective (non-overlapping) polygons that respect mesh-order overwrite.
+    effective_polys = _effective_material_polygons(structures, materials)
 
-    # Area fractions: shape (n_interface_pixels,) per material
+    # Area fractions: shape (n_interface_pixels,) per material, guaranteed
+    # to be non-overlapping by construction.
     fractions: dict[int, np.ndarray] = {}
-    total_struct_fraction = np.zeros(len(ii))
-    for idx, polys in mat_to_polys.items():
-        poly = unary_union(polys)
+    total_struct_fraction = np.zeros(len(ii), dtype=float)
+    for idx, poly in effective_polys.items():
         intersections = shapely.intersection(poly, dual_boxes)
         areas = shapely.area(intersections)
         frac = areas / dual_areas
         fractions[idx] = frac
         total_struct_fraction += frac
 
-    # Background (air) gets the remainder
+    # Clip accumulated area to avoid tiny numerical overshoots > 1.
+    total_struct_fraction = np.clip(total_struct_fraction, 0.0, 1.0)
+
+    # Background (air) gets the remainder.
     fractions[0] = np.maximum(1.0 - total_struct_fraction, 0.0)
 
     # Determine interface orientation
@@ -316,3 +319,32 @@ def _compute_smoothed_n(
     eps[ii, jj] = eps_eff
 
     return np.sqrt(eps)
+
+
+def _effective_material_polygons(
+    structures: list[Structure2D],
+    materials: dict[Material, int],
+) -> dict[int, shapely.Geometry]:
+    """Create non-overlapping effective polygons per material.
+
+    The effective polygons follow the same overwrite precedence as
+    `_create_full_material_array`: later groups overwrite earlier groups.
+    """
+    grouped = _classify_structures_by_mesh_order_and_material(structures, materials)
+    ordered_groups: list[tuple[int, shapely.Geometry]] = []
+    for group_structs in grouped.values():
+        mat_idx = materials[group_structs[0].material]
+        poly = unary_union([s.geometry._shapely_polygon() for s in group_structs])
+        ordered_groups.append((mat_idx, poly))
+
+    effective_by_mat: dict[int, shapely.Geometry] = {}
+    occupied = shapely.GeometryCollection()
+    for mat_idx, poly in reversed(ordered_groups):
+        eff = poly.difference(occupied)
+        if not eff.is_empty:
+            if mat_idx in effective_by_mat:
+                effective_by_mat[mat_idx] = unary_union([effective_by_mat[mat_idx], eff])
+            else:
+                effective_by_mat[mat_idx] = eff
+        occupied = unary_union([occupied, poly])
+    return effective_by_mat

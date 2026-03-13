@@ -180,17 +180,18 @@ def _compute_pixel_cell_bounds(
     x_mid = 0.5 * (x[:-1] + x[1:])
     x_lo = np.empty_like(x)
     x_hi = np.empty_like(x)
-    x_lo[0] = x[0] - (x[1] - x[0]) * 0.5
+    # Clamp edge dual-cell bounds to the simulation domain.
+    x_lo[0] = x[0]
     x_lo[1:] = x_mid
-    x_hi[-1] = x[-1] + (x[-1] - x[-2]) * 0.5
+    x_hi[-1] = x[-1]
     x_hi[:-1] = x_mid
 
     y_mid = 0.5 * (y[:-1] + y[1:])
     y_lo = np.empty_like(y)
     y_hi = np.empty_like(y)
-    y_lo[0] = y[0] - (y[1] - y[0]) * 0.5
+    y_lo[0] = y[0]
     y_lo[1:] = y_mid
-    y_hi[-1] = y[-1] + (y[-1] - y[-2]) * 0.5
+    y_hi[-1] = y[-1]
     y_hi[:-1] = y_mid
 
     return (x_lo, x_hi), (y_lo, y_hi)
@@ -228,7 +229,9 @@ def _rasterize_structure_group(
 
     ci, cj = np.where(candidates)
     pixel_boxes = shapely.box(x_lo[ci], y_lo[cj], x_hi[ci], y_hi[cj])
-    hits = shapely.intersects(poly, pixel_boxes)
+    # Do not fill pixels that only touch the polygon boundary with zero area.
+    overlap_area = shapely.area(shapely.intersection(poly, pixel_boxes))
+    hits = overlap_area > 0.0
     m_full[ci[hits], cj[hits]] = mat_idx
 
     return m_full
