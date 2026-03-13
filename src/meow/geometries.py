@@ -27,6 +27,10 @@ class Geometry2DBase(BaseModel):
         msg = f"{self.__class__.__name__!r} cannot be masked."
         raise NotImplementedError(msg)
 
+    def _shapely_polygon(self) -> sg.Polygon:
+        msg = f"{self.__class__.__name__!r} has no shapely polygon."
+        raise NotImplementedError(msg)
+
     def _visualize(
         self,
         *,
@@ -55,6 +59,9 @@ class Rectangle(Geometry2DBase):
             & (Y <= self.y_max)
         )
         return mask
+
+    def _shapely_polygon(self) -> sg.Polygon:
+        return sg.box(self.x_min, self.y_min, self.x_max, self.y_max)
 
     def _visualize(
         self,
@@ -100,6 +107,9 @@ class Polygon2D(Geometry2DBase):
         mask = poly.covers(points)
 
         return np.asarray(mask)
+
+    def _shapely_polygon(self) -> sg.Polygon:
+        return sg.Polygon(self.poly)
 
     def _visualize(
         self,

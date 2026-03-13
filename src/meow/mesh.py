@@ -66,15 +66,6 @@ class Mesh2D(BaseModel):
         description="Number of standard pml layers to add in the two tangential axes.",
     )
 
-    ez_interfaces: bool = Field(
-        default=False,
-        description=(
-            "when enabled, the meshing algorithm will throw away any index values "
-            "at the interfaces which are not on even (Ez) half-grid locations. "
-            "Enabling this should result in more symmetric modes."
-        ),
-    )
-
     @cached_property
     def dx(self) -> FloatArray1D:
         """dx at Hz locations, i.e. center of the 2D cell."""
