@@ -1,9 +1,13 @@
 """Interface S-matrix between two sets of modes."""
 
+import warnings
 from collections.abc import Callable
+from itertools import pairwise
 from typing import Literal, TypeAlias
 
+import jax.numpy as jnp
 import numpy as np
+import sax
 
 from meow.eme.solve import tsvd_solve
 from meow.mode import Modes
@@ -22,15 +26,31 @@ def overlap_matrix(
     return M
 
 
-def interface_smatrix(
+def compute_interface_s_matrix(
     modes1: Modes,
     modes2: Modes,
     inner_product: Callable,
     *,
     tsvd_rcond: float = 1e-3,
     passivity_method: PassivityMethod = "invert",
-) -> np.ndarray:
+    enforce_reciprocity: bool = True,
+    ignore_warnings: bool = True,
+) -> sax.SDenseMM:
     """Get the interface S-matrix."""
+    if ignore_warnings:
+        warnings.filterwarnings("ignore", message=".*divide by zero.*")
+        warnings.filterwarnings("ignore", message=".*overflow encountered.*")
+        warnings.filterwarnings("ignore", message=".*invalid value.*")
+        return compute_interface_s_matrix(
+            modes1=modes1,
+            modes2=modes2,
+            inner_product=inner_product,
+            tsvd_rcond=tsvd_rcond,
+            passivity_method=passivity_method,
+            enforce_reciprocity=enforce_reciprocity,
+            ignore_warnings=False,
+        )
+
     # TODO: this should work mL != mR too, no?
     N = min(len(modes1), len(modes2))
     mL = modes1[:N]
@@ -63,7 +83,37 @@ def interface_smatrix(
             [T_LR, R_RR],
         ]
     )
-    return enforce_passivity(S, method=passivity_method)
+    S = enforce_passivity(S, method=passivity_method)
+    if enforce_reciprocity:
+        S = 0.5 * (S + S.T)
+    in_ports = [f"left@{i}" for i in range(len(modes1))]
+    out_ports = [f"right@{i}" for i in range(len(modes2))]
+    port_map = {p: i for i, p in enumerate(in_ports + out_ports)}
+    return jnp.asarray(S), port_map
+
+
+def compute_interface_s_matrices(
+    modes: list[Modes],
+    inner_product: Callable,
+    *,
+    tsvd_rcond: float = 1e-3,
+    passivity_method: PassivityMethod = "invert",
+    enforce_reciprocity: bool = True,
+    ignore_warnings: bool = True,
+) -> dict[str, sax.SDenseMM]:
+    """Get all the S-matrices of all the interfaces between `CrossSection` objects."""
+    return {
+        f"i_{i}_{i + 1}": compute_interface_s_matrix(
+            modes1=modes1,
+            modes2=modes2,
+            inner_product=inner_product,
+            tsvd_rcond=tsvd_rcond,
+            passivity_method=passivity_method,
+            enforce_reciprocity=enforce_reciprocity,
+            ignore_warnings=ignore_warnings,
+        )
+        for i, (modes1, modes2) in enumerate(pairwise(modes))
+    }
 
 
 def enforce_passivity(

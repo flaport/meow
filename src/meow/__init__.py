@@ -44,10 +44,12 @@ from meow.mode import invert_mode as invert_mode
 from meow.mode import magnetic_energy as magnetic_energy
 from meow.mode import magnetic_energy_density as magnetic_energy_density
 from meow.mode import normalize as normalize
-from meow.mode import orthonormalize as orthonormalize
 from meow.mode import zero_phase as zero_phase
 from meow.structures import Structure as Structure
 from meow.structures import Structure2D as Structure2D
 from meow.structures import Structure3D as Structure3D
 from meow.visualize import vis as vis
 from meow.visualize import visualize as visualize
+
+from . import eme as eme
+from . import fde as fde
