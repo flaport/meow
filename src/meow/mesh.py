@@ -34,7 +34,7 @@ class Mesh2D(BaseModel):
         description="Polar angle of the propagation axis from the injection axis.",
     )
     bend_radius: Annotated[
-        float, BeforeValidator(lambda x: (np.nan if x is None else x))
+        float, BeforeValidator(lambda x: np.nan if x is None else x)
     ] = Field(
         default=np.nan,
         description=(

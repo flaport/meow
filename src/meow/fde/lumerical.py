@@ -15,47 +15,16 @@ from meow.fde.post_process import post_process_modes
 from meow.mode import Mode
 from meow.structures import Structure3D
 
-_global = {"sim": None}
 Sim = Any
-
-
-def get_sim(**kwargs: Any) -> Sim:
-    """Get the Lumerical simulation object."""
-    sim = kwargs.get("sim", None)
-    if sim is not None:
-        return sim
-    sim = _global["sim"]
-    if sim is None:
-        msg = (
-            "Could not start Lumerical simulation. Please either pass the "
-            "`lumapi.MODE` simulation object as an argument to "
-            "`compute_modes_lumerical` or use `set_sim(sim)` to globally "
-            "set the lumapi.MODE simulation object."
-        )
-        raise ValueError(msg)
-    return sim
-
-
-def create_lumerical_geometries(
-    sim: Sim,
-    structures: list[Structure3D],
-    env: Environment,
-    unit: float,
-) -> None:
-    """Create Lumerical geometries from a list of structures."""
-    sim = get_sim(sim=sim)
-    sim.switchtolayout()
-    sim.deleteall()
-    for s in structures:
-        s._lumadd(sim, env, unit, "yzx")
+_sim: Sim | None = None
 
 
 def compute_modes_lumerical(
     cs: CrossSection,
     num_modes: PositiveInt = 10,
-    sim: Sim | None = None,
     unit: float = 1e-6,
     post_process: Callable = post_process_modes,
+    sim: Sim | None = None,
 ) -> list[Mode]:
     """Compute ``Modes` for a given ``FdeSpec` (Lumerical backend)."""
     from lumapi import LumApiError  # type: ignore[reportMissingImports]
@@ -146,6 +115,39 @@ def compute_modes_lumerical(
     return post_process(modes)
 
 
+def create_lumerical_geometries(
+    sim: Sim,
+    structures: list[Structure3D],
+    env: Environment,
+    unit: float,
+) -> None:
+    """Create Lumerical geometries from a list of structures."""
+    sim = get_sim(sim=sim)
+    sim.switchtolayout()
+    sim.deleteall()
+    for s in structures:
+        s._lumadd(sim, env, unit, "yzx")
+
+
+def get_sim(**kwargs: Any) -> Sim:
+    """Get the Lumerical simulation object."""
+    global _sim  # noqa: PLW0603
+    sim = kwargs.get("sim", None)
+    if sim is not None:
+        _sim = sim
+        return sim
+    sim = _sim
+    if sim is None:
+        msg = (
+            "Could not start Lumerical simulation. Please either pass the "
+            "`lumapi.MODE` simulation object as an argument to "
+            "`compute_modes_lumerical` to globally "
+            "set the lumapi.MODE simulation object."
+        )
+        raise ValueError(msg)
+    return sim
+
+
 def _lumerical_fields_to_mode(
     cs: CrossSection,
     lneff: ComplexArray2D,
@@ -176,8 +178,3 @@ def _assert_default_mesh_setting(condition: bool, param_name: str) -> None:  # n
             "to fix this: https://github.com/flaport/meow",
         )
         raise NotImplementedError(msg)
-
-
-def set_sim(sim: Sim) -> None:
-    """Sets the global Lumerical simulation object."""
-    _global["sim"] = sim

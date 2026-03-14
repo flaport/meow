@@ -11,7 +11,11 @@ uv:
   curl -LsSf https://astral.sh/uv/install.sh | sh
 
 inits:
-  cd src/meow && uv run mkinit --relative --recursive --write && uv run ruff format __init__.py
+  cd src/meow/fde && uv run mkinit --nomods --write
+  cd src/meow/eme && uv run mkinit --nomods --write
+  cd src/meow && uv run mkinit --write
+  uv run ruff check --fix || true
+  uv run ruff format
 
 ipykernel:
   uv run python -m ipykernel install --user --name meow --display-name meow
