@@ -40,7 +40,7 @@ class GdsExtrusionRule(BaseModel):
             try:
                 poly = np.asarray(sg.Polygon(poly).buffer(self.buffer).boundary.coords)
             except NotImplementedError as e:
-                import gdspy
+                import gdspy  # type: ignore[reportMissingImports]
 
                 polygonset = gdspy.offset(gdspy.Polygon(poly), 0.25)
                 if polygonset is None:

@@ -288,7 +288,7 @@ class Prism(Geometry3DBase):
             intersection = np.asarray(intersection.coords)
             if not intersection.shape[0]:
                 continue
-            (y_min, _), (y_max, _) = intersection
+            (y_min, _), (y_max, _) = intersection  # type: ignore[reportGeneralTypingIssues]
             y_min, y_max = min(y_min, y_max), max(y_min, y_max)
             x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
             rect = Rectangle(
@@ -321,7 +321,7 @@ class Prism(Geometry3DBase):
             intersection = np.asarray(intersection.coords)
             if not intersection.shape[0]:
                 continue
-            (_, x_min), (_, x_max) = intersection
+            (_, x_min), (_, x_max) = intersection  # type: ignore[reportGeneralTypingIssues]
             x_min, x_max = min(x_min, x_max), max(x_min, x_max)
             y_min, y_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
             rect = Rectangle(

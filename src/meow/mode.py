@@ -121,7 +121,7 @@ class Mode(BaseModel):
         show: bool = True,
         **_: Any,
     ) -> None:
-        from meow.visualize import _figsize_visualize_mode
+        from meow.visualization import _figsize_visualize_mode
 
         W, H = _figsize_visualize_mode(self.cs, 6.4)
 
