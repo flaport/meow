@@ -37,12 +37,28 @@ class CrossSection(BaseModel):
     env: Environment = Field(
         description="the environment for which the cross section was calculated"
     )
+    subpixel_smoothing: bool = Field(
+        default=True,
+        description="use subpixel smoothing at interfaces; if False: winner-takes-all",
+    )
     _cell: Cell | None = PrivateAttr(default=None)
 
     @classmethod
-    def from_cell(cls, *, cell: Cell, env: Environment) -> Self:
+    def from_cell(
+        cls,
+        *,
+        cell: Cell,
+        env: Environment,
+        subpixel_smoothing: bool = True,
+    ) -> Self:
         """Create a CrossSection from a Cell and Environment."""
-        return cls(structures=cell.structures_2d, mesh=cell.mesh, env=env, _cell=cell)
+        return cls(
+            structures=cell.structures_2d,
+            mesh=cell.mesh,
+            env=env,
+            subpixel_smoothing=subpixel_smoothing,
+            _cell=cell,
+        )
 
     @cached_property
     def materials(self) -> dict[Material, int]:
@@ -69,21 +85,33 @@ class CrossSection(BaseModel):
     @cached_property
     def nx(self) -> ComplexArray2D:
         """Return the smoothed refractive index on the Ex positions."""
-        return _compute_smoothed_n(
+        if self.subpixel_smoothing:
+            return _compute_smoothed_n(
+                self.mesh, self._m_full, self.materials, self.env, self.structures, "x"
+            )
+        return _compute_winner_takes_all_n(
             self.mesh, self._m_full, self.materials, self.env, self.structures, "x"
         )
 
     @cached_property
     def ny(self) -> ComplexArray2D:
         """Return the smoothed refractive index on the Ey positions."""
-        return _compute_smoothed_n(
+        if self.subpixel_smoothing:
+            return _compute_smoothed_n(
+                self.mesh, self._m_full, self.materials, self.env, self.structures, "y"
+            )
+        return _compute_winner_takes_all_n(
             self.mesh, self._m_full, self.materials, self.env, self.structures, "y"
         )
 
     @cached_property
     def nz(self) -> ComplexArray2D:
         """Return the smoothed refractive index on the Ez positions."""
-        return _compute_smoothed_n(
+        if self.subpixel_smoothing:
+            return _compute_smoothed_n(
+                self.mesh, self._m_full, self.materials, self.env, self.structures, "z"
+            )
+        return _compute_winner_takes_all_n(
             self.mesh, self._m_full, self.materials, self.env, self.structures, "z"
         )
 
@@ -163,17 +191,20 @@ def _dual_cell_bounds(
     cell is the area over which the effective permittivity should be averaged.
 
     Full-grid indices (in x_full/y_full):
-      Ex at (2i+1, 2j): dual cell x=[x_full[2i], x_full[2i+2]], y=[y_full[2j-1], y_full[2j+1]]
-      Ey at (2i, 2j+1): dual cell x=[x_full[2i-1], x_full[2i+1]], y=[y_full[2j], y_full[2j+2]]
-      Ez at (2i, 2j):   dual cell x=[x_full[2i-1], x_full[2i+1]], y=[y_full[2j-1], y_full[2j+1]]
+      Ex at (2i+1, 2j):
+        dual cell x=[x_full[2i], x_full[2i+2]], y=[y_full[2j-1], y_full[2j+1]]
+      Ey at (2i, 2j+1):
+        dual cell x=[x_full[2i-1], x_full[2i+1]], y=[y_full[2j], y_full[2j+2]]
+      Ez at (2i, 2j):
+        dual cell x=[x_full[2i-1], x_full[2i+1]], y=[y_full[2j-1], y_full[2j+1]]
     """
     xf = mesh.x_full
     yf = mesh.y_full
 
     si, sj = _COMPONENT_SLICES[component]
     # Number of component grid points
-    ni = len(range(*si.indices(len(xf))))
-    nj = len(range(*sj.indices(len(yf))))
+    len(range(*si.indices(len(xf))))
+    len(range(*sj.indices(len(yf))))
 
     # Full-grid indices for this component
     fi = np.arange(len(xf))[si]  # shape (ni,)
@@ -199,7 +230,7 @@ def _dual_cell_bounds(
     return x_lo, x_hi, y_lo, y_hi
 
 
-def _compute_smoothed_n(
+def _compute_smoothed_n(  # noqa: PLR0915
     mesh: Mesh2D,
     m_full: IntArray2D,
     materials: dict[Material, int],
@@ -277,7 +308,7 @@ def _compute_smoothed_n(
 
     normal_x = diff_x & ~diff_y  # vertical interface, normal along x
     normal_y = ~diff_x & diff_y  # horizontal interface, normal along y
-    corner = ~normal_x & ~normal_y  # corner or ambiguous -> arithmetic avg
+    # ~normal_x & ~normal_y  # corner or ambiguous -> arithmetic avg
 
     # Determine which averaging to use for this component at each pixel
     # harmonic when E is perpendicular to interface (E component == normal direction)
@@ -321,6 +352,101 @@ def _compute_smoothed_n(
     return np.sqrt(eps)
 
 
+def _compute_winner_takes_all_n(
+    mesh: Mesh2D,
+    m_full: IntArray2D,
+    materials: dict[Material, int],
+    env: Environment,
+    structures: list[Structure2D],
+    component: Literal["x", "y", "z"],
+) -> ComplexArray2D:
+    """Compute refractive index using winner-takes-all (no subpixel smoothing).
+
+    For each dual cell:
+      1. Compute overlap fraction of each material polygon with the cell.
+      2. If no single material covers >= 50%, assign background index.
+      3. Otherwise, pick the material with the highest overlap.
+      4. Ties are broken by mesh order (higher wins).
+    """
+    si, sj = _COMPONENT_SLICES[component]
+    m_comp = m_full[si, sj]
+
+    # Build eps array from material indices (start with non-interface values)
+    env_eps = np.complex128(1.0) ** 2
+    eps = np.full_like(m_comp, env_eps, dtype=np.complex128)
+    mat_eps: dict[int, complex] = {0: env_eps}
+    for material, idx in materials.items():
+        n_val = material(env)
+        e = np.complex128(n_val) ** 2
+        eps[m_comp == idx] = e
+        mat_eps[idx] = e
+
+    # Identify interface pixels
+    padded = np.pad(m_comp, 1, mode="edge")
+    is_interface = (
+        (m_comp != padded[:-2, 1:-1])
+        | (m_comp != padded[2:, 1:-1])
+        | (m_comp != padded[1:-1, :-2])
+        | (m_comp != padded[1:-1, 2:])
+    )
+
+    if not np.any(is_interface):
+        return np.sqrt(eps)
+
+    # Compute dual cell bounds and interface pixel indices
+    x_lo, x_hi, y_lo, y_hi = _dual_cell_bounds(mesh, component)
+    ii, jj = np.where(is_interface)
+    dual_boxes = shapely.box(x_lo[ii], y_lo[jj], x_hi[ii], y_hi[jj])
+    dual_areas = shapely.area(dual_boxes)
+
+    # Compute area fractions per material
+    effective_polys = _effective_material_polygons(structures, materials)
+
+    # Build mesh-order lookup: mat_idx -> max mesh_order among its structures
+    mat_mesh_order: dict[int, int] = {0: -1}  # background has lowest priority
+    for s in structures:
+        idx = materials[s.material]
+        mat_mesh_order[idx] = max(mat_mesh_order.get(idx, -1), s.mesh_order)
+
+    fractions: dict[int, np.ndarray] = {}
+    total_struct_fraction = np.zeros(len(ii), dtype=float)
+    for idx, poly in effective_polys.items():
+        intersections = shapely.intersection(poly, dual_boxes)
+        areas = shapely.area(intersections)
+        frac = areas / dual_areas
+        fractions[idx] = frac
+        total_struct_fraction += frac
+
+    total_struct_fraction = np.clip(total_struct_fraction, 0.0, 1.0)
+    fractions[0] = np.maximum(1.0 - total_struct_fraction, 0.0)
+
+    # Winner-takes-all: pick material with highest overlap per pixel
+    n_pixels = len(ii)
+    best_idx = np.zeros(n_pixels, dtype=int)  # 0 = background
+    best_frac = fractions[0].copy()
+    best_mesh_order = np.full(n_pixels, mat_mesh_order[0])
+
+    for idx, frac in fractions.items():
+        if idx == 0:
+            continue
+        mo = mat_mesh_order.get(idx, -1)
+        # Win if: higher fraction, or same fraction but higher mesh order
+        wins = (frac > best_frac) | ((frac == best_frac) & (mo > best_mesh_order))
+        best_idx[wins] = idx
+        best_frac[wins] = frac[wins]
+        best_mesh_order[wins] = mo
+
+    # If no material covers >= 50%, fall back to background
+    below_threshold = best_frac < 0.5
+    best_idx[below_threshold] = 0
+
+    # Assign eps from winner
+    winner_eps = np.array([mat_eps[idx] for idx in best_idx])
+    eps[ii, jj] = winner_eps
+
+    return np.sqrt(eps)
+
+
 def _effective_material_polygons(
     structures: list[Structure2D],
     materials: dict[Material, int],
@@ -334,7 +460,7 @@ def _effective_material_polygons(
     ordered_groups: list[tuple[int, shapely.Geometry]] = []
     for group_structs in grouped.values():
         mat_idx = materials[group_structs[0].material]
-        poly = unary_union([s.geometry._shapely_polygon() for s in group_structs])
+        poly: Any = unary_union([s.geometry._shapely_polygon() for s in group_structs])
         ordered_groups.append((mat_idx, poly))
 
     effective_by_mat: dict[int, shapely.Geometry] = {}
@@ -343,7 +469,9 @@ def _effective_material_polygons(
         eff = poly.difference(occupied)
         if not eff.is_empty:
             if mat_idx in effective_by_mat:
-                effective_by_mat[mat_idx] = unary_union([effective_by_mat[mat_idx], eff])
+                effective_by_mat[mat_idx] = unary_union(
+                    [effective_by_mat[mat_idx], eff]
+                )
             else:
                 effective_by_mat[mat_idx] = eff
         occupied = unary_union([occupied, poly])
