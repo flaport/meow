@@ -10,7 +10,7 @@ import numpy as np
 import sax
 
 from meow.eme.solve import tsvd_solve
-from meow.mode import Modes
+from meow.mode import Modes, inner_product
 
 PassivityMethod: TypeAlias = Literal["none", "clip", "invert", "subtract"]
 
@@ -29,8 +29,8 @@ def overlap_matrix(
 def compute_interface_s_matrix(
     modes1: Modes,
     modes2: Modes,
-    inner_product: Callable,
     *,
+    inner_product: Callable = inner_product,
     tsvd_rcond: float = 1e-3,
     passivity_method: PassivityMethod = "invert",
     enforce_reciprocity: bool = True,
@@ -94,8 +94,8 @@ def compute_interface_s_matrix(
 
 def compute_interface_s_matrices(
     modes: list[Modes],
-    inner_product: Callable,
     *,
+    inner_product: Callable = inner_product,
     tsvd_rcond: float = 1e-3,
     passivity_method: PassivityMethod = "invert",
     enforce_reciprocity: bool = True,

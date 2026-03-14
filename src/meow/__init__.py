@@ -45,8 +45,13 @@ from meow.cross_section import (
 from meow.eme import (
     compute_interface_s_matrices,
     compute_interface_s_matrix,
+    compute_propagation_s_matrices,
+    compute_propagation_s_matrix,
+    compute_s_matrix,
+    compute_s_matrix_sax,
     enforce_passivity,
     overlap_matrix,
+    select_ports,
     tsvd_solve,
 )
 from meow.environment import (
@@ -171,6 +176,10 @@ __all__ = [
     "compute_modes",
     "compute_modes_lumerical",
     "compute_modes_tidy3d",
+    "compute_propagation_s_matrices",
+    "compute_propagation_s_matrix",
+    "compute_s_matrix",
+    "compute_s_matrix_sax",
     "create_cells",
     "create_lumerical_geometries",
     "cross_section",
@@ -204,6 +213,7 @@ __all__ = [
     "overlap_matrix",
     "pml_fraction",
     "post_process_modes",
+    "select_ports",
     "silicon",
     "silicon_nitride",
     "silicon_oxide",
