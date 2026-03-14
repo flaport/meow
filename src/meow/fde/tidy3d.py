@@ -13,7 +13,8 @@ from scipy.constants import c
 from tidy3d.components.mode.solver import compute_modes as _compute_modes
 
 from meow.cross_section import CrossSection
-from meow.mode import Mode, Modes, inner_product, is_pml_mode, normalize, zero_phase
+from meow.fde.post_process import post_process_modes
+from meow.mode import Mode, Modes
 
 
 def compute_modes_tidy3d(
@@ -21,8 +22,7 @@ def compute_modes_tidy3d(
     num_modes: PositiveInt = 10,
     target_neff: PositiveFloat | None = None,
     precision: Literal["single", "double"] = "double",
-    pml_mode_threshold: float = 1.0,
-    inner_product: Callable = inner_product,
+    post_process: Callable = post_process_modes,
 ) -> Modes:
     """Compute ``Modes`` for a given ``CrossSection``."""
     if num_modes < 1:
@@ -99,8 +99,5 @@ def compute_modes_tidy3d(
             for i in range(num_modes)
         ]
 
-    modes = [zero_phase(normalize(mode, inner_product)) for mode in modes]
     modes = sorted(modes, key=lambda m: float(np.real(m.neff)), reverse=True)
-    modes = [m for m in modes if not is_pml_mode(m, pml_mode_threshold)]
-
-    return modes
+    return post_process(modes)

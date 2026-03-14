@@ -379,18 +379,24 @@ def inner_product(
     mode1: Mode,
     mode2: Mode,
     *,
-    symmetric: bool = True,
+    symmetric: bool = False,
     conjugate: bool = False,
     ignore_pml: bool = True,
     interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None = None,
 ) -> complex:
     """The modal inner product for z-normal mode planes.
 
-    ``symmetric=False`` corresponds to the historical MEOW product:
-    ``0.5 * (E1 x H2)_z``.
+    Args:
+        mode1: the left mode
+        mode2: the right mode
+        symmetric: use the symmetric inner product definition
+        conjugate: use the conjugage inner product definition (power normalization)
+        ignore_pml: ignore PML region while taking the inner product
+        interpolation: interpolate both modes to a certain field-grid position
+            before taking the inner product.
 
-    ``symmetric=True`` corresponds to the Tidy3D-style symmetric product:
-    ``0.25 * ((E1 x H2)_z - (H1 x E2)_z)``.
+    Returns:
+        the inner product
     """
     mode1 = mode1.interpolate(interpolation)
     mode2 = mode2.interpolate(interpolation)
@@ -435,45 +441,12 @@ def normalize(mode: Mode, inner_product: Callable) -> Mode:
     )
 
 
-def orthonormalize(
-    modes: Modes,
-    inner_product: Callable[[Mode, Mode], complex] = inner_product,
-) -> Modes:
-    """Orthogonalize and normalize modes with a user-defined inner product."""
-    if not modes:
-        return []
-
-    tol = 1e-12
-    orthogonalized: Modes = []
-    for mode in modes:
-        current = mode
-        for basis in orthogonalized:
-            basis_norm = inner_product(basis, basis)
-            if np.abs(basis_norm) < tol:
-                msg = "Encountered near-zero norm basis mode during orthogonalization."
-                raise ValueError(msg)
-            coeff = inner_product(basis, current) / basis_norm
-            current = current - coeff * basis
-
-        current_norm = inner_product(current, current)
-        if np.abs(current_norm) < tol:
-            warnings.warn(
-                "Skipping near-linearly-dependent mode during orthogonalization.",
-                RuntimeWarning,
-                stacklevel=2,
-            )
-            continue
-        orthogonalized.append(current / np.sqrt(current_norm))
-
-    return orthogonalized
-
-
 def electric_energy_density(
     mode: Mode,
 ) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
     """Get the electric energy density contained in a `Mode`."""
     epsx, epsy, epsz = mode.cs.nx**2, mode.cs.ny**2, mode.cs.nz**2
-    return (
+    return np.real(
         0.5
         * eps0
         * (
@@ -493,7 +466,7 @@ def magnetic_energy_density(
     mode: Mode,
 ) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
     """Get the magnetic energy density contained in a `Mode`."""
-    return (
+    return np.real(
         0.5 * mu0 * (np.abs(mode.Hx) ** 2 + np.abs(mode.Hy) ** 2 + np.abs(mode.Hz) ** 2)
     )
 
@@ -530,12 +503,11 @@ def normalize_energy(mode: Mode) -> Mode:
     )
 
 
-def is_pml_mode(mode: Mode, threshold: float) -> bool:
-    """Check whether a mode can be considered a PML mode."""
-    threshold = min(max(threshold, 0.0), 1.0)
-    if threshold > 0.999:
-        return False
+def pml_fraction(mode: Mode) -> float:
+    """Fraction of energy density in the PML region."""
     numx, numy = mode.mesh.num_pml
+    if numx == numy == 0:
+        return 0.0
     ed = energy_density(mode)
     m, n = ed.shape
     lft = ed[:numx, :]
@@ -544,11 +516,23 @@ def is_pml_mode(mode: Mode, threshold: float) -> bool:
     btm = ed[numx : m - numx, n - numy :]
     rest = ed[numx : m - numx, numy : n - numy]
     pml_sum = lft.sum() + rgt.sum() + top.sum() + btm.sum()
-    rest_sum = rest.sum()
+    total = pml_sum + rest.sum()
     # probably propper integration considering
     # the size of the mesh cells would be better here
-    is_pml = pml_sum > threshold * (rest_sum + pml_sum)
-    return is_pml
+    return float(pml_sum / total) if total > 0 else 1.0
+
+
+def is_pml_mode(mode: Mode, *, threshold: float = 0.1) -> bool:
+    """Check whether a mode can be considered a PML mode."""
+    threshold = min(max(float(threshold), 0.0), 1.0)
+    if threshold > 0.999:
+        return False
+    return abs(pml_fraction(mode)) > threshold
+
+
+def is_lossy_mode(mode: Mode, *, threshold: float = 1.0) -> bool:
+    """Check whether a mode can be considered lossy."""
+    return bool(abs(np.imag(mode.neff)) > threshold)
 
 
 def te_fraction(mode: Mode) -> float:

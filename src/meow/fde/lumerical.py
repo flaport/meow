@@ -11,7 +11,8 @@ from pydantic import PositiveInt
 from meow.arrays import ComplexArray2D
 from meow.cross_section import CrossSection
 from meow.environment import Environment
-from meow.mode import Mode, inner_product, normalize, zero_phase
+from meow.fde.post_process import post_process_modes
+from meow.mode import Mode
 from meow.structures import Structure3D
 
 _global = {"sim": None}
@@ -54,7 +55,7 @@ def compute_modes_lumerical(
     num_modes: PositiveInt = 10,
     sim: Sim | None = None,
     unit: float = 1e-6,
-    inner_product: Callable = inner_product,
+    post_process: Callable = post_process_modes,
 ) -> list[Mode]:
     """Compute ``Modes` for a given ``FdeSpec` (Lumerical backend)."""
     from lumapi import LumApiError  # type: ignore[reportMissingImports]
@@ -139,11 +140,10 @@ def compute_modes_lumerical(
             )
         except LumApiError:
             break
-        mode = normalize(mode, inner_product)
-        mode = zero_phase(mode)
         modes.append(mode)
 
-    return sorted(modes, key=lambda m: np.real(m.neff), reverse=True)
+    modes = sorted(modes, key=lambda m: np.real(m.neff), reverse=True)
+    return post_process(modes)
 
 
 def _lumerical_fields_to_mode(
