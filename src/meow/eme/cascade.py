@@ -36,7 +36,7 @@ def compute_s_matrix_sax(
     _, analyze_fn, evaluate_fn = circuit_backends[sax_backend]  # type: ignore[reportArgumentType]
     # TODO: use analyze_instances instead of manually converting to scoo ?
     net["instances"] = {k: sax.scoo(v) for k, v in net["instances"].items()}
-    analyzed = analyze_fn(net["instances"], net["connections"], net["ports"])
+    analyzed = analyze_fn(net["instances"], net["nets"], net["ports"])
     S, port_map = sax.sdense(
         evaluate_fn(
             analyzed,
@@ -88,7 +88,8 @@ def _get_netlist(
             continue
         ports[port_mode] = f"{propagation_keys[-1]},{port_mode}"
 
-    net = {"instances": instances, "connections": connections, "ports": ports}
+    nets = [{"p1": p1, "p2": p2} for p1, p2 in connections.items()]
+    net = {"instances": instances, "nets": nets, "ports": ports}
     return net
 
 
