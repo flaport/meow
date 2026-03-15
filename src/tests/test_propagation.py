@@ -27,7 +27,7 @@ def test_propagation():
     ex_l = np.zeros(len(modes[0]))
     ex_l[0] = 1.0
     ex_r = np.zeros(len(modes[-1]))
-    Ex, x = prop.propagate_modes(
+    Ex, _x = prop.propagate_modes(
         modes, cells, excitation_l=ex_l, excitation_r=ex_r, y=y, z=z
     )
     return Ex
@@ -105,7 +105,7 @@ def _mmi_modes(
 
 
 def _mmi_s_matrix(modes: list[list[mw.Mode]], cells: list[mw.Cell]) -> sax.SDense:
-    return mw.compute_s_matrix(modes, cells)
+    return mw.compute_s_matrix(modes, cells=cells)
 
 
 if __name__ == "__main__":

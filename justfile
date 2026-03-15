@@ -4,6 +4,9 @@ dev:
   uv pip install -e .
   uv run pre-commit install
 
+bump version="patch":
+    uvx --python 3.12 --from 'bver-cli==0.1.4' bver bump "{{ version }}"
+
 dist:
   uv run python -m build --wheel
 

@@ -1,5 +1,5 @@
 import pytest
-from mode_data import MODE_DATA  # type: ignore[reportMissingImports]
+from mode_data import MODE_DATA
 
 from meow import Mode
 

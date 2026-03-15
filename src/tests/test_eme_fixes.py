@@ -46,11 +46,9 @@ def test_enforce_passivity_clips_singular_values() -> None:
     assert np.allclose(result_none, sigma)
 
 
-def test_passivity_enforcement_in_interface_s_matrix(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
+def test_passivity_enforcement_in_interface_s_matrix() -> None:
     """Interface S-matrix with passivity_method='clip' has singular values <= 1."""
-    from mode_data import MODE_DATA  # type: ignore[reportMissingImports]
+    from mode_data import MODE_DATA
 
     mode = Mode.model_validate(MODE_DATA)
     modes_l = [mode]

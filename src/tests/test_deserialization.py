@@ -1,5 +1,5 @@
 import numpy as np
-from mode_data import MODE_DATA  # type: ignore[reportMissingImports]
+from mode_data import MODE_DATA
 
 import meow as mw
 

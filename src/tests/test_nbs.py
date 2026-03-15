@@ -1,3 +1,4 @@
+import os
 import shutil
 from collections.abc import Generator
 from pathlib import Path
@@ -19,7 +20,7 @@ NBS_FAIL_DIR.mkdir(exist_ok=True)
 
 def _find_notebooks(folder: Path) -> Generator[Path, None, None]:
     folder = Path(folder).resolve()
-    for root, _, files in folder.walk():
+    for root, _, files in os.walk(folder):
         for file in files:
             if ("checkpoint" in file) or (not file.endswith(".ipynb")):
                 continue

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 __author__ = "Floris Laporte"
-__version__ = "0.14.1"
+__version__ = "0.15.0"
 
 from meow import (
     arrays,
@@ -56,15 +56,22 @@ from meow.eme import (
     PassivityMethod,
     compute_interface_s_matrices,
     compute_interface_s_matrix,
+    compute_mode_amplitudes,
     compute_propagation_s_matrices,
     compute_propagation_s_matrix,
     compute_s_matrix,
     compute_s_matrix_sax,
     downselect_s,
     enforce_passivity,
+    l2r_matrices,
     overlap_matrix,
+    pi_pairs,
+    plot_fields,
+    propagate,
     propagate_modes,
+    r2l_matrices,
     select_ports,
+    split_square_matrix,
     track_modes,
     tsvd_solve,
 )
@@ -202,6 +209,7 @@ __all__ = [
     "cell",
     "compute_interface_s_matrices",
     "compute_interface_s_matrix",
+    "compute_mode_amplitudes",
     "compute_modes",
     "compute_modes_lumerical",
     "compute_modes_tidy3d",
@@ -231,6 +239,7 @@ __all__ = [
     "invert_mode",
     "is_lossy_mode",
     "is_pml_mode",
+    "l2r_matrices",
     "magnetic_energy",
     "magnetic_energy_density",
     "materials",
@@ -241,14 +250,19 @@ __all__ = [
     "normalize_modes",
     "orthonormalize_modes",
     "overlap_matrix",
+    "pi_pairs",
+    "plot_fields",
     "pml_fraction",
     "post_process_modes",
+    "propagate",
     "propagate_modes",
+    "r2l_matrices",
     "select_ports",
     "silicon",
     "silicon_nitride",
     "silicon_oxide",
     "sort_structures",
+    "split_square_matrix",
     "structures",
     "te_fraction",
     "track_modes",

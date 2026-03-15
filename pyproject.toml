@@ -26,7 +26,6 @@ dev = [
   "pytest-xdist>=3.6.0",
   "pytest>=8.3.0",
   "ruff>=0.15.5",
-  "tbump>=6.0.0",
   "tmm>=0.2.0",
   "towncrier>=24.0.0",
   "ty>=0.0.21"
@@ -55,7 +54,7 @@ dependencies = [
   "pyyaml>=6.0.2",
   "sax>=0.16.12",
   "shapely>=2.1.0",
-  "tidy3d>=2.8.0,<2.9.0",
+  "tidy3d>=2.8.0",
   "tqdm>=4.67.0",
   "trimesh[easy]>=4.6.0"
 ]
@@ -73,7 +72,19 @@ license = {text = "Apache Software License"}
 name = "meow-sim"
 readme = "README.md"
 requires-python = ">=3.11"
-version = "0.14.1"
+version = "0.15.0"
+
+[[tool.bver.file]]
+src = "README.md"
+
+[[tool.bver.file]]
+src = "pyproject.toml"
+
+[[tool.bver.file]]
+src = "src/meow/__init__.py"
+
+[tool.bver.git]
+actions = ["add-all", "commit", "tag", "push"]
 
 [tool.pytest.ini_options]
 addopts = '--tb=short'
@@ -128,11 +139,13 @@ select = ["ALL"]
 "*.ipynb" = [
   "ANN",  # flake8-annotations
   "ARG001",  # unused-function-argument
+  "BLE001",  # blind-exception
   "D",  # pydocstyle
   "E402",  # module-import-not-at-top-of-file
   "E501",  # line-too-long
   "EM101",  # raw-string-in-exception
   "F821",  # undefined-name
+  "FBT002",  # boolean-default-positional-argument
   "FBT003",  # boolean-positional-value-in-call
   "N816",  # mixed-case-variable-in-global-scope
   "PLC2401",  # non-ascii-name
@@ -167,27 +180,5 @@ convention = "google"
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.tbump]
-
-[[tool.tbump.file]]
-src = "README.md"
-
-[[tool.tbump.file]]
-src = "pyproject.toml"
-
-[[tool.tbump.file]]
-src = "src/meow/__init__.py"
-
-[tool.tbump.git]
-message_template = "Bump to {new_version}"
-tag_template = "{new_version}"
-
-[tool.tbump.version]
-current = "0.14.1"
-regex = '''
-  (?P<major>\d+)
-  \.
-  (?P<minor>\d+)
-  \.
-  (?P<patch>\d+)
-  '''
+[tool.ty.src]
+exclude = ["src/tests/**/*.ipynb"]
