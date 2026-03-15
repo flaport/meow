@@ -13,8 +13,8 @@ theme:
     code: Merriweather Mono
   # icon:
   #   logo: simple/materialformkdocs # https://squidfunk.github.io/mkdocs-material/reference/icons-emojis
-  logo: assets/logo.png
-  favicon: assets/favicon.ico
+  logo: assets/logo-small.svg
+  favicon: assets/logo-small.ico
   features:
     - navigation.footer
   search: true
