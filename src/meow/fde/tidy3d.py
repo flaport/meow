@@ -3,18 +3,18 @@
 from __future__ import annotations
 
 import warnings
+from collections.abc import Callable
 from types import SimpleNamespace
 from typing import Literal
 
 import numpy as np
-import tidy3d
-from packaging import version
 from pydantic import PositiveFloat, PositiveInt
 from scipy.constants import c
 from tidy3d.components.mode.solver import compute_modes as _compute_modes
 
-from ..cross_section import CrossSection
-from ..mode import Mode, Modes, is_pml_mode, normalize_product, zero_phase
+from meow.cross_section import CrossSection
+from meow.fde.post_process import post_process_modes
+from meow.mode import Mode, Modes
 
 
 def compute_modes_tidy3d(
@@ -22,7 +22,7 @@ def compute_modes_tidy3d(
     num_modes: PositiveInt = 10,
     target_neff: PositiveFloat | None = None,
     precision: Literal["single", "double"] = "double",
-    pml_mode_threshold: float = 1.0,
+    post_process: Callable = post_process_modes,
 ) -> Modes:
     """Compute ``Modes`` for a given ``CrossSection``."""
     if num_modes < 1:
@@ -30,11 +30,7 @@ def compute_modes_tidy3d(
         raise ValueError(msg)
 
     od = np.zeros_like(cs.nx)  # off diagonal entry
-    new_tidy3d = version.parse(tidy3d.__version__) >= version.parse("2.2.0")
-    if new_tidy3d:
-        eps_cross = [cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2]
-    else:
-        eps_cross = [cs.nx**2, cs.ny**2, cs.nz**2]
+    eps_cross = [cs.nx**2, od, od, od, cs.ny**2, od, od, od, cs.nz**2]
 
     if np.isinf(cs.mesh.bend_radius) or np.isnan(cs.mesh.bend_radius):
         bend_radius = None
@@ -58,6 +54,7 @@ def compute_modes_tidy3d(
     )
 
     with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", message=".*Input has data type int64.*")
         warnings.filterwarnings("ignore", message=".*divide by zero.*")
         warnings.filterwarnings("ignore", message=".*overflow encountered.*")
         warnings.filterwarnings("ignore", message=".*invalid value.*")
@@ -83,7 +80,7 @@ def compute_modes_tidy3d(
                 Hx=Hx,
                 Hy=Hy,
                 Hz=Hz,
-                neff=float(neffs.real) + 1j * float(neffs.imag),
+                neff=np.asarray(neffs, dtype=np.complex128).item(),
             )
             for _ in range(num_modes)
         ]
@@ -102,8 +99,5 @@ def compute_modes_tidy3d(
             for i in range(num_modes)
         ]
 
-    modes = [zero_phase(normalize_product(mode)) for mode in modes]
     modes = sorted(modes, key=lambda m: float(np.real(m.neff)), reverse=True)
-    modes = [m for m in modes if not is_pml_mode(m, pml_mode_threshold)]
-
-    return modes
+    return post_process(modes)

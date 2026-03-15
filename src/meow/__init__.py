@@ -5,57 +5,256 @@ from __future__ import annotations
 __author__ = "Floris Laporte"
 __version__ = "0.14.1"
 
-from .arrays import Dim as Dim
-from .arrays import DType as DType
-from .arrays import NDArray as NDArray
-from .arrays import Shape as Shape
-from .base_model import BaseModel as BaseModel
-from .cell import Cell as Cell
-from .cell import create_cells as create_cells
-from .cross_section import CrossSection as CrossSection
-from .eme import compute_interface_s_matrices as compute_interface_s_matrices
-from .eme import compute_interface_s_matrix as compute_interface_s_matrix
-from .eme import compute_propagation_s_matrices as compute_propagation_s_matrices
-from .eme import compute_propagation_s_matrix as compute_propagation_s_matrix
-from .eme import compute_s_matrix as compute_s_matrix
-from .eme import select_ports as select_ports
-from .environment import Environment as Environment
-from .fde import compute_modes as compute_modes
-from .fde import compute_modes_lumerical as compute_modes_lumerical
-from .fde import compute_modes_tidy3d as compute_modes_tidy3d
-from .gds_structures import GdsExtrusionRule as GdsExtrusionRule
-from .gds_structures import extrude_gds as extrude_gds
-from .geometries import Box as Box
-from .geometries import Geometry2D as Geometry2D
-from .geometries import Geometry2DBase as Geometry2DBase
-from .geometries import Geometry3D as Geometry3D
-from .geometries import Geometry3DBase as Geometry3DBase
-from .geometries import Polygon2D as Polygon2D
-from .geometries import Prism as Prism
-from .geometries import Rectangle as Rectangle
-from .integrate import integrate_2d as integrate_2d
-from .integrate import integrate_interpolate_2d as integrate_interpolate_2d
-from .materials import IndexMaterial as IndexMaterial
-from .materials import Material as Material
-from .materials import MaterialBase as MaterialBase
-from .materials import SampledMaterial as SampledMaterial
-from .materials import TidyMaterial as TidyMaterial
-from .materials import silicon as silicon
-from .materials import silicon_nitride as silicon_nitride
-from .materials import silicon_oxide as silicon_oxide
-from .mesh import Mesh2D as Mesh2D
-from .mode import Mode as Mode
-from .mode import electric_energy as electric_energy
-from .mode import electric_energy_density as electric_energy_density
-from .mode import inner_product as inner_product
-from .mode import inner_product_conj as inner_product_conj
-from .mode import invert_mode as invert_mode
-from .mode import magnetic_energy as magnetic_energy
-from .mode import magnetic_energy_density as magnetic_energy_density
-from .mode import normalize_product as normalize_product
-from .mode import zero_phase as zero_phase
-from .structures import Structure as Structure
-from .structures import Structure2D as Structure2D
-from .structures import Structure3D as Structure3D
-from .visualize import vis as vis
-from .visualize import visualize as visualize
+from meow import (
+    arrays,
+    base_model,
+    cell,
+    cross_section,
+    eme,
+    environment,
+    fde,
+    gds_structures,
+    geometries,
+    materials,
+    mesh,
+    mode,
+    structures,
+    visualization,
+)
+from meow.arrays import (
+    ArraySchema,
+    BoolArray1D,
+    BoolArray2D,
+    Complex,
+    ComplexArray1D,
+    ComplexArray2D,
+    Dim,
+    DType,
+    FloatArray1D,
+    FloatArray2D,
+    IntArray1D,
+    IntArray2D,
+    NDArray,
+    SerializedArray,
+    Shape,
+)
+from meow.base_model import (
+    MODELS,
+    BaseModel,
+    ModelMetaclass,
+    cache,
+    cached_property,
+)
+from meow.cell import (
+    Cell,
+    create_cells,
+)
+from meow.cross_section import (
+    CrossSection,
+)
+from meow.eme import (
+    PassivityMethod,
+    compute_interface_s_matrices,
+    compute_interface_s_matrix,
+    compute_propagation_s_matrices,
+    compute_propagation_s_matrix,
+    compute_s_matrix,
+    compute_s_matrix_sax,
+    downselect_s,
+    enforce_passivity,
+    overlap_matrix,
+    propagate_modes,
+    select_ports,
+    track_modes,
+    tsvd_solve,
+)
+from meow.environment import (
+    Environment,
+)
+from meow.fde import (
+    Sim,
+    compute_modes,
+    compute_modes_lumerical,
+    compute_modes_tidy3d,
+    create_lumerical_geometries,
+    filter_modes,
+    get_sim,
+    normalize_modes,
+    orthonormalize_modes,
+    post_process_modes,
+)
+from meow.gds_structures import (
+    GdsExtrusionRule,
+    extrude_gds,
+)
+from meow.geometries import (
+    AxisDirection,
+    Box,
+    Geometry2D,
+    Geometry2DBase,
+    Geometry3D,
+    Geometry3DBase,
+    Polygon2D,
+    Prism,
+    Rectangle,
+)
+from meow.materials import (
+    MATERIALS,
+    IndexMaterial,
+    Material,
+    MaterialBase,
+    Materials,
+    SampledMaterial,
+    TidyMaterial,
+    silicon,
+    silicon_nitride,
+    silicon_oxide,
+)
+from meow.mesh import (
+    Mesh2D,
+)
+from meow.mode import (
+    Mode,
+    Modes,
+    electric_energy,
+    electric_energy_density,
+    energy,
+    energy_density,
+    inner_product,
+    invert_mode,
+    is_lossy_mode,
+    is_pml_mode,
+    magnetic_energy,
+    magnetic_energy_density,
+    normalize,
+    normalize_energy,
+    pml_fraction,
+    te_fraction,
+    zero_phase,
+)
+from meow.structures import (
+    DEFAULT_MESH_ORDER,
+    Structure,
+    Structure2D,
+    Structure3D,
+    sort_structures,
+)
+from meow.visualization import (
+    VISUALIZATION_MAPPING,
+    gf,
+    vis,
+    visualize,
+)
+
+__all__ = [
+    "DEFAULT_MESH_ORDER",
+    "MATERIALS",
+    "MODELS",
+    "VISUALIZATION_MAPPING",
+    "ArraySchema",
+    "AxisDirection",
+    "BaseModel",
+    "BoolArray1D",
+    "BoolArray2D",
+    "Box",
+    "Cell",
+    "Complex",
+    "ComplexArray1D",
+    "ComplexArray2D",
+    "CrossSection",
+    "DType",
+    "Dim",
+    "Environment",
+    "FloatArray1D",
+    "FloatArray2D",
+    "GdsExtrusionRule",
+    "Geometry2D",
+    "Geometry2DBase",
+    "Geometry3D",
+    "Geometry3DBase",
+    "IndexMaterial",
+    "IntArray1D",
+    "IntArray2D",
+    "Material",
+    "MaterialBase",
+    "Materials",
+    "Mesh2D",
+    "Mode",
+    "ModelMetaclass",
+    "Modes",
+    "NDArray",
+    "PassivityMethod",
+    "Polygon2D",
+    "Prism",
+    "Rectangle",
+    "SampledMaterial",
+    "SerializedArray",
+    "Shape",
+    "Sim",
+    "Structure",
+    "Structure2D",
+    "Structure3D",
+    "TidyMaterial",
+    "arrays",
+    "base_model",
+    "cache",
+    "cached_property",
+    "cell",
+    "compute_interface_s_matrices",
+    "compute_interface_s_matrix",
+    "compute_modes",
+    "compute_modes_lumerical",
+    "compute_modes_tidy3d",
+    "compute_propagation_s_matrices",
+    "compute_propagation_s_matrix",
+    "compute_s_matrix",
+    "compute_s_matrix_sax",
+    "create_cells",
+    "create_lumerical_geometries",
+    "cross_section",
+    "downselect_s",
+    "electric_energy",
+    "electric_energy_density",
+    "eme",
+    "energy",
+    "energy_density",
+    "enforce_passivity",
+    "environment",
+    "extrude_gds",
+    "fde",
+    "filter_modes",
+    "gds_structures",
+    "geometries",
+    "get_sim",
+    "gf",
+    "inner_product",
+    "invert_mode",
+    "is_lossy_mode",
+    "is_pml_mode",
+    "magnetic_energy",
+    "magnetic_energy_density",
+    "materials",
+    "mesh",
+    "mode",
+    "normalize",
+    "normalize_energy",
+    "normalize_modes",
+    "orthonormalize_modes",
+    "overlap_matrix",
+    "pml_fraction",
+    "post_process_modes",
+    "propagate_modes",
+    "select_ports",
+    "silicon",
+    "silicon_nitride",
+    "silicon_oxide",
+    "sort_structures",
+    "structures",
+    "te_fraction",
+    "track_modes",
+    "tsvd_solve",
+    "vis",
+    "visualization",
+    "visualize",
+    "zero_phase",
+]

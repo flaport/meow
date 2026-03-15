@@ -34,7 +34,7 @@ class Mesh2D(BaseModel):
         description="Polar angle of the propagation axis from the injection axis.",
     )
     bend_radius: Annotated[
-        float, BeforeValidator(lambda x: (np.nan if x is None else x))
+        float, BeforeValidator(lambda x: np.nan if x is None else x)
     ] = Field(
         default=np.nan,
         description=(
@@ -64,15 +64,6 @@ class Mesh2D(BaseModel):
     num_pml: tuple[NonNegativeInt, NonNegativeInt] = Field(
         default=(0, 0),
         description="Number of standard pml layers to add in the two tangential axes.",
-    )
-
-    ez_interfaces: bool = Field(
-        default=False,
-        description=(
-            "when enabled, the meshing algorithm will throw away any index values "
-            "at the interfaces which are not on even (Ez) half-grid locations. "
-            "Enabling this should result in more symmetric modes."
-        ),
     )
 
     @cached_property

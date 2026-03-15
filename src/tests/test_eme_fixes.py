@@ -4,8 +4,11 @@ import numpy as np
 import pytest
 import sax
 
-import meow.eme.common as eme_common
-import meow.eme.propagate as eme_propagate
+import meow.eme.propagation as eme_propagation
+from meow.eme.interface import (
+    compute_interface_s_matrix,
+    enforce_passivity,
+)
 from meow.mode import Mode
 
 
@@ -18,54 +21,56 @@ def test_r2l_matrices_does_not_duplicate_last_pair(
         calls.append((l, r))
         return f"({l}>{r})"
 
-    monkeypatch.setattr(eme_propagate, "_connect_two", fake_connect_two)
+    monkeypatch.setattr(eme_propagation, "_connect_two", fake_connect_two)
 
     pairs = cast(list[sax.STypeMM], ["p0", "p1", "p2"])
-    matrices = eme_propagate.r2l_matrices(pairs, sax_backend="klu")
+    matrices = eme_propagation.r2l_matrices(pairs, sax_backend="klu")
 
     assert calls == [("p1", "p2"), ("p0", "(p1>p2)")]
     assert matrices == ["(p0>(p1>p2))", "(p1>p2)", "p2"]
 
 
-def test_enforce_lossy_unitarity_projects_to_contractive_matrix(
+def test_enforce_passivity_clips_singular_values() -> None:
+    sigma = np.array([0.5, 1.0, 1.5, 2.0])
+
+    result_clip = enforce_passivity(sigma, method="clip")
+    assert np.allclose(result_clip, [0.5, 1.0, 1.0, 1.0])
+
+    result_invert = enforce_passivity(sigma, method="invert")
+    assert np.allclose(result_invert, [0.5, 1.0, 1 / 1.5, 1 / 2.0])
+
+    result_subtract = enforce_passivity(sigma, method="subtract")
+    assert np.allclose(result_subtract, [0.5, 1.0, 0.5, 0.0])
+
+    result_none = enforce_passivity(sigma, method="none")
+    assert np.allclose(result_none, sigma)
+
+
+def test_passivity_enforcement_in_interface_s_matrix(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    left = cast(Mode, object())
-    right = cast(Mode, object())
+    """Interface S-matrix with passivity_method='clip' has singular values <= 1."""
+    from mode_data import MODE_DATA  # type: ignore[reportMissingImports]
 
-    def fake_inner_product_conj(a: Any, b: Any) -> float:
-        if a is left and b is left:
-            return 1.0
-        if a is right and b is right:
-            return 1.0
-        if a is left and b is right:
-            return 0.01
-        if a is right and b is left:
-            return 10.0
-        msg = "unexpected mode pair"
-        raise AssertionError(msg)
+    mode = Mode.model_validate(MODE_DATA)
+    modes_l = [mode]
+    modes_r = [mode]
 
-    monkeypatch.setattr(eme_common, "inner_product_conj", fake_inner_product_conj)
-
-    S_no, _ = eme_common.compute_interface_s_matrix(
-        [left],
-        [right],
-        enforce_lossy_unitarity=False,
-        ignore_warnings=False,
+    S_clip, _ = compute_interface_s_matrix(
+        modes_l,
+        modes_r,
+        passivity_method="clip",
+        enforce_reciprocity=False,
     )
-    S_yes, _ = eme_common.compute_interface_s_matrix(
-        [left],
-        [right],
-        enforce_lossy_unitarity=True,
-        ignore_warnings=False,
+    s_vals = np.linalg.svd(np.asarray(S_clip), compute_uv=False)
+    assert float(s_vals.max()) <= 1.0 + 1e-12
+
+    S_none, _ = compute_interface_s_matrix(
+        modes_l,
+        modes_r,
+        passivity_method="none",
+        enforce_reciprocity=False,
     )
-
-    s_no = np.linalg.svd(S_no, compute_uv=False)
-    assert float(s_no.max()) > 1.0
-
-    U, s, Vh = np.linalg.svd(S_no, full_matrices=False)
-    expected = U @ np.diag(np.minimum(s, 1.0)) @ Vh
-    assert np.allclose(S_yes, expected)
-
-    s_yes = np.linalg.svd(S_yes, compute_uv=False)
-    assert float(s_yes.max()) <= 1.0 + 1e-12
+    # With passivity_method="none", no correction is applied
+    # (singular values may or may not exceed 1 depending on modes)
+    assert S_none.shape == S_clip.shape

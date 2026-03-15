@@ -11,7 +11,11 @@ uv:
   curl -LsSf https://astral.sh/uv/install.sh | sh
 
 inits:
-  cd src/meow && uv run mkinit --relative --recursive --write && uv run ruff format __init__.py
+  cd src/meow/fde && uv run mkinit --nomods --write
+  cd src/meow/eme && uv run mkinit --nomods --write
+  cd src/meow && uv run mkinit --write
+  uv run ruff check --fix || true
+  uv run ruff format
 
 ipykernel:
   uv run python -m ipykernel install --user --name meow --display-name meow
@@ -28,11 +32,11 @@ serve: docs
   uv run mkdocs serve -a localhost:8080
 
 nbrun: ipykernel
-  find nbs -maxdepth 2 -mindepth 1 -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" -not -path "./.venv/*" | xargs parallel -j `nproc --all` uv run papermill {} {} -k meow :::
+  find notebooks -maxdepth 2 -mindepth 1 -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" -not -path "./.venv/*" | xargs parallel -j `nproc --all` uv run papermill {} {} -k meow :::
 
 nbdocs:
   rm -rf docs/nbs/*.ipynb
-  find nbs -maxdepth 1 -mindepth 1 -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" -not -path "./.venv/*" | xargs parallel -j `nproc --all` uv run jupyter nbconvert --to markdown --embed-images {} --output-dir docs/nbs ':::'
+  find notebooks -maxdepth 1 -mindepth 1 -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" -not -path "./.venv/*" | xargs parallel -j `nproc --all` uv run jupyter nbconvert --to markdown --embed-images {} --output-dir docs/nbs ':::'
 
 nbclean-all:
   find . -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" -not -path "./.venv/*" | xargs just nbclean
@@ -50,7 +54,7 @@ tree:
 clean:
   find . -name "*.ipynb" | xargs just nbclean
   rm -rf .venv
-  rm -rf docs/nbs/*
+  rm -rf docs/notebooks/*
   rm -rf site
   rm -rf dist
   find . -name "*.egg_info" | xargs rm -rf

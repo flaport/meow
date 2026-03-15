@@ -27,6 +27,10 @@ class Geometry2DBase(BaseModel):
         msg = f"{self.__class__.__name__!r} cannot be masked."
         raise NotImplementedError(msg)
 
+    def _shapely_polygon(self) -> sg.Polygon:
+        msg = f"{self.__class__.__name__!r} has no shapely polygon."
+        raise NotImplementedError(msg)
+
     def _visualize(
         self,
         *,
@@ -56,13 +60,16 @@ class Rectangle(Geometry2DBase):
         )
         return mask
 
+    def _shapely_polygon(self) -> sg.Polygon:
+        return sg.box(self.x_min, self.y_min, self.x_max, self.y_max)
+
     def _visualize(
         self,
         *,
         ax: Any = None,
         show: bool = True,
         color: str | None = None,
-        **ignored: Any,  # noqa: ARG002
+        **_: Any,
     ) -> None:
         if ax is None:
             ax = plt.gca()
@@ -101,13 +108,16 @@ class Polygon2D(Geometry2DBase):
 
         return np.asarray(mask)
 
+    def _shapely_polygon(self) -> sg.Polygon:
+        return sg.Polygon(self.poly)
+
     def _visualize(
         self,
         *,
         ax: Any = None,
         show: bool = True,
         color: str | None = None,
-        **ignored: Any,  # noqa: ARG002
+        **_: Any,
     ) -> None:
         if ax is None:
             ax = plt.gca()
@@ -149,8 +159,8 @@ class Geometry3DBase(BaseModel):
         scale: tuple[float, float, float] | None = None,
         **ignored: Any,  # noqa: ARG002
     ) -> None:
-        from trimesh.scene import Scene  # fmt: skip
-        from trimesh.transformations import rotation_matrix  # fmt: skip
+        from trimesh.scene import Scene
+        from trimesh.transformations import rotation_matrix
 
         scene = Scene()
         scene.add_geometry(self._trimesh(scale=scale))
@@ -240,7 +250,7 @@ class Box(Geometry3DBase):
         prism = extrude_polygon(poly, self.z_max * sz - self.z_min * sz)
         prism = cast(Trimesh, prism.apply_translation((0, 0, self.z_min * sz)))
         if color is not None:
-            prism.visual.face_colors = _to_rgba(color)  # type: ignore[reportOptionalMemberAccess]
+            prism.visual.face_colors = _to_rgba(color)
         return prism
 
 
@@ -271,14 +281,14 @@ class Prism(Geometry3DBase):
             intersection_array = np.asarray(intersections.coords)
             if not intersection_array.shape[0]:
                 return []
-            intersections = sg.MultiLineString([intersections])  # type: ignore[reportArgumentType]
+            intersections = sg.MultiLineString([cast(sg.LineString, intersections)])
 
         geoms_2d = []
         for intersection in intersections.geoms:
             intersection = np.asarray(intersection.coords)
             if not intersection.shape[0]:
                 continue
-            (y_min, _), (y_max, _) = intersection  # type: ignore[reportGeneralTypeIssues]
+            (y_min, _), (y_max, _) = intersection
             y_min, y_max = min(y_min, y_max), max(y_min, y_max)
             x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
             rect = Rectangle(
@@ -304,14 +314,14 @@ class Prism(Geometry3DBase):
             intersection_array = np.asarray(intersections.coords)
             if not intersection_array.shape[0]:
                 return []
-            intersections = sg.MultiLineString([intersections])  # type: ignore[reportArgumentType]
+            intersections = sg.MultiLineString([cast(sg.LineString, intersections)])
 
         geoms_2d = []
         for intersection in intersections.geoms:
             intersection = np.asarray(intersection.coords)
             if not intersection.shape[0]:
                 continue
-            (_, x_min), (_, x_max) = intersection  # type: ignore[reportGeneralTypeIssues]
+            (_, x_min), (_, x_max) = intersection
             x_min, x_max = min(x_min, x_max), max(x_min, x_max)
             y_min, y_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
             rect = Rectangle(

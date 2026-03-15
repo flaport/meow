@@ -4,7 +4,7 @@
 
 [![PyPI version](https://badge.fury.io/py/meow-sim.svg)](https://badge.fury.io/py/meow-sim)
 
-![MEOW LOGO](docs/assets/logo-small.png)
+![MEOW LOGO](docs/assets/logo.svg)
 
 
 

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import sys
 from collections.abc import Callable, Iterable
 from typing import Any
@@ -15,14 +16,12 @@ from trimesh.transformations import rotation_matrix
 from meow.arrays import ComplexArray2D
 from meow.base_model import BaseModel
 from meow.cross_section import CrossSection
-from meow.structures import Structure3D, _sort_structures
+from meow.mode import Mode  # fmt: skip
+from meow.structures import Structure3D, sort_structures
 
-from .mode import Mode  # fmt: skip
-
-try:
+gf = None
+with contextlib.suppress(ImportError):
     import gdsfactory as gf
-except ImportError:
-    gf = None
 
 
 def _visualize_s_matrix(
@@ -289,7 +288,7 @@ def _visualize_structures(
 ) -> Any:
     """Easily visualize a collection (list) of `Structure3D` objects."""
     scene = Scene(
-        geometry=[s._trimesh(scale=scale) for s in _sort_structures(structures)]
+        geometry=[s._trimesh(scale=scale) for s in sort_structures(structures)]
     )
     scene.apply_transform(rotation_matrix(np.pi - np.pi / 6, (0, 1, 0)))
     return scene.show()

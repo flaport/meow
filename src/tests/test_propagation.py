@@ -7,7 +7,9 @@ import numpy as np
 import sax
 
 import meow as mw
-import meow.eme.propagate as prop
+import meow.eme.propagation as prop
+
+gf.gpdk.PDK.activate()
 
 
 def test_propagation():
@@ -25,7 +27,9 @@ def test_propagation():
     ex_l = np.zeros(len(modes[0]))
     ex_l[0] = 1.0
     ex_r = np.zeros(len(modes[-1]))
-    Ex, x = prop.propagate_modes(modes, cells, ex_l, ex_r, y, z)
+    Ex, x = prop.propagate_modes(
+        modes, cells, excitation_l=ex_l, excitation_r=ex_r, y=y, z=z
+    )
     return Ex
 
 

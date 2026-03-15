@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Annotated, Any, Self
+from typing import Annotated, Any, Self, TypeAlias
 
 import numpy as np
 from pydantic import (
@@ -158,7 +158,7 @@ def _get_ndarray_json_schema(_t, _h):  # noqa: ANN001,ANN202
 
 ArraySchema = GetPydanticSchema(_get_ndarray_core_schema, _get_ndarray_json_schema)
 
-NDArray = Annotated[
+NDArray: TypeAlias = Annotated[
     np.ndarray,
     ArraySchema,
     PlainSerializer(_serialize_ndarray),
@@ -166,13 +166,13 @@ NDArray = Annotated[
     AfterValidator(_coerce_immutable),
 ]
 
-ComplexArray2D = Annotated[NDArray, Dim(2), DType("complex128")]
-FloatArray2D = Annotated[NDArray, Dim(2), DType("float64")]
-BoolArray2D = Annotated[NDArray, Dim(2), DType("bool")]
-IntArray2D = Annotated[NDArray, Dim(2), DType("int64")]
-ComplexArray1D = Annotated[NDArray, Dim(1), DType("complex128")]
-FloatArray1D = Annotated[NDArray, Dim(1), DType("float64")]
-BoolArray1D = Annotated[NDArray, Dim(1), DType("bool")]
-IntArray1D = Annotated[NDArray, Dim(1), DType("int64")]
+ComplexArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("complex128")]
+FloatArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("float64")]
+BoolArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("bool")]
+IntArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("int64")]
+ComplexArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("complex128")]
+FloatArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("float64")]
+BoolArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("bool")]
+IntArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("int64")]
 
-Complex = Annotated[NDArray, Dim(0), DType("complex128")]
+Complex: TypeAlias = Annotated[NDArray, Dim(0), DType("complex128")]

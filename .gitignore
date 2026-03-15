@@ -6,6 +6,7 @@
 *.log
 *.manifest
 *.mo
+*.pdf
 *.pot
 *.py,cover
 *.py[cod]

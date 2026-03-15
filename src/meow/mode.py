@@ -16,13 +16,11 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from pydantic import Field
 from scipy.constants import epsilon_0 as eps0
 from scipy.constants import mu_0 as mu0
-from scipy.linalg import norm
 
 from meow.arrays import Complex, ComplexArray2D, FloatArray2D
 from meow.base_model import BaseModel, cached_property
 from meow.cross_section import CrossSection
 from meow.environment import Environment
-from meow.integrate import integrate_2d
 from meow.mesh import Mesh2D
 
 
@@ -50,9 +48,12 @@ class Mode(BaseModel):
     )
 
     def interpolate(
-        self, location: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"]
+        self,
+        location: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None,
     ) -> Mode:
         """Interpolate the mode to the given location."""
+        if location is None or location == self.interpolation:
+            return self
         if self.interpolation != "":
             msg = "Cannot interpolate from already interpolated mode!"
             raise RuntimeError(msg)
@@ -96,16 +97,6 @@ class Mode(BaseModel):
         """The z-component of the Poynting vector."""
         return self._pointing[2]
 
-    @cached_property
-    def A(self) -> float:
-        """Mode area."""
-        vecE = np.stack([self.Ex, self.Ey, self.Ez], axis=-1)
-        E_sq = np.asarray(norm(vecE, axis=-1, ord=2))
-        E_qu = E_sq**2
-        x = self.cs.mesh.x_
-        y = self.cs.mesh.y_
-        return integrate_2d(x, y, E_sq) ** 2 / integrate_2d(x, y, E_qu)
-
     @property
     def env(self) -> Environment:
         """The environment of the mode."""
@@ -128,9 +119,9 @@ class Mode(BaseModel):
         num_levels: int = 8,
         operation: Callable = _power,
         show: bool = True,
-        **ignored: Any,  # noqa: ARG002
+        **_: Any,
     ) -> None:
-        from meow.visualize import _figsize_visualize_mode
+        from meow.visualization import _figsize_visualize_mode
 
         W, H = _figsize_visualize_mode(self.cs, 6.4)
 
@@ -143,7 +134,7 @@ class Mode(BaseModel):
                 current_width = len(fields) * W
                 W, H = _figsize_visualize_mode(self.cs, 6.4 * max_width / current_width)
             if ax is None:
-                _, ax = plt.subplots(1, len(fields), figsize=(len(fields) * W, H))
+                _fig, ax = plt.subplots(1, len(fields), figsize=(len(fields) * W, H))
             if len(ax) < len(fields):
                 msg = (
                     f"Not enough axes supplied for the number of fields "
@@ -354,21 +345,88 @@ def invert_mode(mode: Mode) -> Mode:
     )
 
 
-def inner_product(mode1: Mode, mode2: Mode) -> float:
-    """The inner product of a `Mode` with another `Mode` is uniquely defined."""
+def _crop_non_pml(
+    mesh: Mesh2D,
+    arr: ComplexArray2D,
+    x: np.ndarray,
+    y: np.ndarray,
+) -> tuple[ComplexArray2D, np.ndarray, np.ndarray]:
+    numx, numy = mesh.num_pml
+
+    xs = slice(numx, -numx if numx > 0 else None)
+    ys = slice(numy, -numy if numy > 0 else None)
+
+    return arr[xs, ys], x[xs], y[ys]
+
+
+def _canonical_interpolation(
+    interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None,
+) -> Literal["Ex", "Ey", "Ez", "Hz"] | None:
+    return cast(
+        Literal["Ex", "Ey", "Ez", "Hz"],
+        {
+            "Ex": "Ex",
+            "Ey": "Ey",
+            "Ez": "Ez",
+            "Hx": "Ey",
+            "Hy": "Ex",
+            "Hz": "Hz",
+        }.get(str(interpolation)),
+    )
+
+
+def inner_product(
+    mode1: Mode,
+    mode2: Mode,
+    *,
+    symmetric: bool = False,
+    conjugate: bool = False,
+    ignore_pml: bool = True,
+    interpolation: Literal["Ex", "Ey", "Ez", "Hx", "Hy", "Hz"] | None = None,
+) -> complex:
+    """The modal inner product for z-normal mode planes.
+
+    Args:
+        mode1: the left mode
+        mode2: the right mode
+        symmetric: use the symmetric inner product definition
+        conjugate: use the conjugage inner product definition (power normalization)
+        ignore_pml: ignore PML region while taking the inner product
+        interpolation: interpolate both modes to a certain field-grid position
+            before taking the inner product.
+
+    Returns:
+        the inner product
+    """
+    mode1 = mode1.interpolate(interpolation)
+    mode2 = mode2.interpolate(interpolation)
+
     mesh = mode1.mesh
-    cross = mode1.Ex * mode2.Hy - mode1.Ey * mode2.Hx
-    return np.trapezoid(np.trapezoid(cross, mesh.y_), mesh.x_)
+    x = np.asarray(mesh.x_)
+    y = np.asarray(mesh.y_)
+
+    if conjugate:
+        ex1, ey1 = mode1.Ex.conj(), mode1.Ey.conj()
+        hx1, hy1 = mode1.Hx.conj(), mode1.Hy.conj()
+    else:
+        ex1, ey1 = mode1.Ex, mode1.Ey
+        hx1, hy1 = mode1.Hx, mode1.Hy
+
+    e1_cross_h2 = ex1 * mode2.Hy - ey1 * mode2.Hx
+    if symmetric:
+        h1_cross_e2 = hx1 * mode2.Ey - hy1 * mode2.Ex
+        integrand = 0.25 * (e1_cross_h2 - h1_cross_e2)
+    else:
+        integrand = 0.5 * e1_cross_h2
+
+    if ignore_pml:
+        integrand, x, y = _crop_non_pml(mesh, integrand, x, y)
+
+    arr = np.trapezoid(np.trapezoid(integrand, y), x)
+    return float(np.real(arr)) + float(np.imag(arr)) * 1j
 
 
-def inner_product_conj(mode1: Mode, mode2: Mode) -> float:
-    """The inner product of a `Mode` with another `Mode` is uniquely defined."""
-    mesh = mode1.mesh
-    cross = mode1.Ex * mode2.Hy.conj() - mode1.Ey * mode2.Hx.conj()
-    return np.trapezoid(np.trapezoid(cross, mesh.y_), mesh.x_)
-
-
-def normalize_product(mode: Mode) -> Mode:
+def normalize(mode: Mode, inner_product: Callable) -> Mode:
     """Normalize a `Mode` according to the `inner_product` with itself."""
     factor = np.sqrt(inner_product(mode, mode))
     return Mode(
@@ -388,7 +446,7 @@ def electric_energy_density(
 ) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
     """Get the electric energy density contained in a `Mode`."""
     epsx, epsy, epsz = mode.cs.nx**2, mode.cs.ny**2, mode.cs.nz**2
-    return (
+    return np.real(
         0.5
         * eps0
         * (
@@ -408,7 +466,7 @@ def magnetic_energy_density(
     mode: Mode,
 ) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
     """Get the magnetic energy density contained in a `Mode`."""
-    return (
+    return np.real(
         0.5 * mu0 * (np.abs(mode.Hx) ** 2 + np.abs(mode.Hy) ** 2 + np.abs(mode.Hz) ** 2)
     )
 
@@ -445,12 +503,11 @@ def normalize_energy(mode: Mode) -> Mode:
     )
 
 
-def is_pml_mode(mode: Mode, threshold: float) -> bool:
-    """Check whether a mode can be considered a PML mode."""
-    threshold = min(max(threshold, 0.0), 1.0)
-    if threshold > 0.999:
-        return False
+def pml_fraction(mode: Mode) -> float:
+    """Fraction of energy density in the PML region."""
     numx, numy = mode.mesh.num_pml
+    if numx == numy == 0:
+        return 0.0
     ed = energy_density(mode)
     m, n = ed.shape
     lft = ed[:numx, :]
@@ -459,11 +516,23 @@ def is_pml_mode(mode: Mode, threshold: float) -> bool:
     btm = ed[numx : m - numx, n - numy :]
     rest = ed[numx : m - numx, numy : n - numy]
     pml_sum = lft.sum() + rgt.sum() + top.sum() + btm.sum()
-    rest_sum = rest.sum()
+    total = pml_sum + rest.sum()
     # probably propper integration considering
     # the size of the mesh cells would be better here
-    is_pml = pml_sum > threshold * (rest_sum + pml_sum)
-    return is_pml
+    return float(pml_sum / total) if total > 0 else 1.0
+
+
+def is_pml_mode(mode: Mode, *, threshold: float = 0.1) -> bool:
+    """Check whether a mode can be considered a PML mode."""
+    threshold = min(max(float(threshold), 0.0), 1.0)
+    if threshold > 0.999:
+        return False
+    return abs(pml_fraction(mode)) > threshold
+
+
+def is_lossy_mode(mode: Mode, *, threshold: float = 1.0) -> bool:
+    """Check whether a mode can be considered lossy."""
+    return bool(abs(np.imag(mode.neff)) > threshold)
 
 
 def te_fraction(mode: Mode) -> float:
@@ -516,6 +585,7 @@ def _interpolate_Ex(mode: Mode) -> Mode:
         Hx=Hx_at_Ex,
         Hy=mode.Hy,
         Hz=Hz_at_Ex,
+        interpolation="Ex",
     )
 
 
@@ -536,6 +606,7 @@ def _interpolate_Ey(mode: Mode) -> Mode:
         Hx=mode.Hx,
         Hy=Hy_at_Ey,
         Hz=Hz_at_Ey,
+        interpolation="Ey",
     )
 
 
@@ -554,6 +625,7 @@ def _interpolate_Ez(mode: Mode) -> Mode:
             direction="backward",
             axis=1,
         ),
+        interpolation="Ez",
     )
 
 
@@ -570,4 +642,5 @@ def _interpolate_Hz(mode: Mode) -> Mode:
         Hx=_average(mode.Hx, direction="forward", axis=0),
         Hy=_average(mode.Hy, direction="forward", axis=1),
         Hz=mode.Hz,
+        interpolation="Hz",
     )

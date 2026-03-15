@@ -2,6 +2,36 @@
 build-backend = "setuptools.build_meta"
 requires = ["setuptools>=61", "uv", "build", "wheel"]
 
+[dependency-groups]
+dev = [
+  "build>=1.2.0",
+  "gdsfactory>=9.7.0",
+  "griffe>=1.5.6",
+  "ipykernel>=6.29.5",
+  "ipympl>=0.9.0",
+  "ipywidgets>=8.0.0",
+  "mkautodoc>=0.2.0",
+  "mkdocs-autorefs>=1.3.0",
+  "mkdocs-material>=9.6.0",
+  "mkdocs<2",
+  "mkdocstrings[python]>=0.27.0",
+  "mkinit>=1.1.0",
+  "nb-clean>=4.0.1",
+  "nbconvert>=7.16.6",
+  "nbstripout>=0.8.0",
+  "papermill>=2.6.0",
+  "pre-commit>=4.1.0",
+  "pytest-cov>=6.0.0",
+  "pytest-randomly>=3.16.0",
+  "pytest-xdist>=3.6.0",
+  "pytest>=8.3.0",
+  "ruff>=0.15.5",
+  "tbump>=6.0.0",
+  "tmm>=0.2.0",
+  "towncrier>=24.0.0",
+  "ty>=0.0.21"
+]
+
 [project]
 authors = [{name = "Floris Laporte", email = "floris.laporte@gmail.com"}]
 classifiers = [
@@ -23,7 +53,7 @@ dependencies = [
   "orjson>=3.0.0",
   "pydantic>=2.10.0",
   "pyyaml>=6.0.2",
-  "sax>=0.15.4",
+  "sax>=0.16.12",
   "shapely>=2.1.0",
   "tidy3d>=2.8.0,<2.9.0",
   "tqdm>=4.67.0",
@@ -44,44 +74,6 @@ name = "meow-sim"
 readme = "README.md"
 requires-python = ">=3.11"
 version = "0.14.1"
-
-[project.optional-dependencies]
-dev = [
-  "build>=1.2.0",
-  "gdsfactory>=9.7.0",
-  "griffe>=1.5.6",
-  "ipykernel>=6.29.5",
-  "ipympl>=0.9.0",
-  "ipywidgets>=8.0.0",
-  "mkautodoc>=0.2.0",
-  "mkdocs-autorefs>=1.3.0",
-  "mkdocs-material>=9.6.0",
-  "mkdocs>=1.6.1",
-  "mkdocstrings[python]>=0.27.0",
-  "mkinit>=1.1.0",
-  "nbconvert>=7.16.6",
-  "nbstripout>=0.8.0",
-  "papermill>=2.6.0",
-  "pre-commit>=4.1.0",
-  "pyright>=1.1.0",
-  "pytest-cov>=6.0.0",
-  "pytest-randomly>=3.16.0",
-  "pytest-xdist>=3.6.0",
-  "pytest>=8.3.0",
-  "ruff>=0.9.0",
-  "tbump>=6.0.0",
-  "tmm>=0.2.0",
-  "towncrier>=24.0.0",
-  "nb-clean>=4.0.1"
-]
-full = [
-  "gdsfactory>=9.0",
-  "gdspy>=1.6.13"
-]
-gf = [
-  "gdsfactory>=9.0",
-  "gdspy>=1.6.13"
-]
 
 [tool.pytest.ini_options]
 addopts = '--tb=short'
@@ -108,7 +100,6 @@ ignore = [
   "FIX004",  # line-contains-hack
   "N803",  # invalid-argument-name
   "N806",  # non-lowercase-variable-in-function
-  "PD901",  # pandas-df-variable-name
   "PLC0414",  # useless-import-alias
   "PLC0415",  # import-outside-top-level
   "PLR0911",  # too-many-return-statements
@@ -140,12 +131,17 @@ select = ["ALL"]
   "D",  # pydocstyle
   "E402",  # module-import-not-at-top-of-file
   "E501",  # line-too-long
+  "EM101",  # raw-string-in-exception
   "F821",  # undefined-name
   "FBT003",  # boolean-positional-value-in-call
   "N816",  # mixed-case-variable-in-global-scope
   "PLC2401",  # non-ascii-name
+  "RUF001",  # ambiguous-unicode-character-string
+  "RUF002",  # ambiguous-unicode-character-docstring
+  "RUF003",  # ambiguous-unicode-character-comment
   "S101",  # assert
-  "SLF001"  # private-member-access
+  "SLF001",  # private-member-access
+  "T201"  # print
 ]
 "src/meow/mesh.py" = [
   "D403",  # first-word-uncapitalized

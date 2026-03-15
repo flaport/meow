@@ -3,17 +3,19 @@
 from __future__ import annotations
 
 from itertools import pairwise
-from typing import Annotated, Any, cast, overload
+from typing import Annotated, Any, overload
 
 import numpy as np
+import shapely
 from pydantic import Field
-from scipy.ndimage import convolve
+from scipy.ndimage import binary_dilation
+from shapely.ops import unary_union
 
-from meow.arrays import BoolArray2D, Dim, DType, IntArray2D, NDArray
+from meow.arrays import Dim, DType, IntArray2D, NDArray
 from meow.base_model import BaseModel, cached_property
 from meow.materials import Material
 from meow.mesh import Mesh2D
-from meow.structures import Structure2D, Structure3D, _sort_structures
+from meow.structures import Structure2D, Structure3D, sort_structures
 
 
 class Cell(BaseModel):
@@ -46,7 +48,7 @@ class Cell(BaseModel):
     def materials(self) -> dict[Material, int]:
         """A mapping of the materials in the cell to their indices."""
         materials = {}
-        for i, structure in enumerate(_sort_structures(self.structures), start=1):
+        for i, structure in enumerate(sort_structures(self.structures), start=1):
             if structure.material not in materials:
                 materials[structure.material] = i
         return materials
@@ -74,7 +76,7 @@ class Cell(BaseModel):
         ax: Any = None,
         cbar: bool = True,
         show: bool = True,
-        **ignored: Any,  # noqa: ARG002
+        **_: Any,
     ) -> None:
         import matplotlib.pyplot as plt
         from matplotlib.colors import ListedColormap, to_rgba
@@ -161,128 +163,77 @@ def _create_full_material_array(
         structures, materials
     )
     for structs in structures_dict.values():
-        _m_full = _create_material_array(mesh, materials, structs)
+        _m_full = _rasterize_structure_group(mesh, structs, materials)
         mask = _m_full > 0
         m_full[mask] = _m_full[mask]
 
-    m_full = _fill_single_pixel_gaps(m_full)
-
     return m_full
 
 
-def _create_material_array(
+def _compute_pixel_cell_bounds(
     mesh: Mesh2D,
-    materials: dict[Material, int],
+) -> tuple[tuple[np.ndarray, np.ndarray], tuple[np.ndarray, np.ndarray]]:
+    """Compute (x_lo, x_hi) and (y_lo, y_hi) for each position in the full grid."""
+    x = mesh.x_full
+    y = mesh.y_full
+
+    x_mid = 0.5 * (x[:-1] + x[1:])
+    x_lo = np.empty_like(x)
+    x_hi = np.empty_like(x)
+    # Clamp edge dual-cell bounds to the simulation domain.
+    x_lo[0] = x[0]
+    x_lo[1:] = x_mid
+    x_hi[-1] = x[-1]
+    x_hi[:-1] = x_mid
+
+    y_mid = 0.5 * (y[:-1] + y[1:])
+    y_lo = np.empty_like(y)
+    y_hi = np.empty_like(y)
+    y_lo[0] = y[0]
+    y_lo[1:] = y_mid
+    y_hi[-1] = y[-1]
+    y_hi[:-1] = y_mid
+
+    return (x_lo, x_hi), (y_lo, y_hi)
+
+
+def _rasterize_structure_group(
+    mesh: Mesh2D,
     structures: list[Structure2D],
-) -> np.ndarray:
+    materials: dict[Material, int],
+) -> IntArray2D:
+    """Rasterize a group of structures with the same (mesh_order, material).
+
+    Uses point-in-polygon for interior pixels, then dilates by 1 pixel and
+    tests pixel-cell intersection with the polygon to fill boundary gaps.
+    """
+    mat_idx = materials[structures[0].material]
     m_full = np.zeros_like(mesh.X_full, dtype=np.int_)
+
+    # Step 1: point-in-polygon mask (existing _mask logic)
+    combined_mask = np.zeros_like(mesh.X_full, dtype=bool)
     for structure in structures:
-        mask = structure.geometry._mask(mesh.X_full, mesh.Y_full)
-        m_full[mask] = materials[structure.material]
+        combined_mask |= structure.geometry._mask(mesh.X_full, mesh.Y_full)
+    m_full[combined_mask] = mat_idx
 
-    if mesh.ez_interfaces:
-        mask_ez_horizontal = np.zeros_like(m_full, dtype=bool)
-        mask_ez_horizontal[:, ::2] = True
-        mask_ez_vertical = np.zeros_like(m_full, dtype=bool)
-        mask_ez_vertical[::2, :] = True
-        mask_boundaries_vertical = _get_boundary_mask_vertical(m_full)
-        mask_boundaries_vertical = mask_boundaries_vertical & (~mask_ez_vertical)
-        mask_boundaries_horizontal = _get_boundary_mask_horizontal(m_full)
-        mask_boundaries_horizontal = mask_boundaries_horizontal & (~mask_ez_horizontal)
-        mask_temp = mask_boundaries_vertical | mask_boundaries_horizontal
-        mask_corner_left = _fill_corner_left_mask(mask_temp)
-        mask_corner_right = _fill_corner_right_mask(mask_temp)
-        mask_to_remove = mask_temp | mask_corner_left | mask_corner_right
-        mask_to_keep = (m_full > 0) & (~mask_to_remove)
+    # Step 2: dilate by 1 pixel to find candidate boundary pixels
+    dilated = binary_dilation(combined_mask, structure=np.ones((3, 3)))
+    candidates = dilated & ~combined_mask
 
-        mask_ez = np.zeros_like(m_full, dtype=bool)
-        mask_ez[::2, ::2] = True
-        final_mask_to_keep = mask_to_keep & mask_ez
+    if not np.any(candidates):
+        return m_full
 
-        mask_ex = np.zeros_like(m_full, dtype=bool)
-        mask_ex[1::2, ::2] = True
-        final_mask_to_keep |= mask_to_keep & mask_ex
+    # Step 3: vectorized shapely intersection test on candidate pixels
+    (x_lo, x_hi), (y_lo, y_hi) = _compute_pixel_cell_bounds(mesh)
+    poly = unary_union([s.geometry._shapely_polygon() for s in structures])
 
-        mask_ey = np.zeros_like(m_full, dtype=bool)
-        mask_ey[::2, 1::2] = True
-        final_mask_to_keep |= mask_to_keep & mask_ey
+    ci, cj = np.where(candidates)
+    pixel_boxes = shapely.box(x_lo[ci], y_lo[cj], x_hi[ci], y_hi[cj])
+    # Do not fill pixels that only touch the polygon boundary with zero area.
+    overlap_area = shapely.area(shapely.intersection(poly, pixel_boxes))
+    hits = overlap_area > 0.0
+    m_full[ci[hits], cj[hits]] = mat_idx
 
-        mask_hz = np.zeros_like(m_full, dtype=bool)
-        mask_hz[1::2, 1::2] = True
-        final_mask_to_keep |= mask_to_keep & mask_hz
-
-        m_full[~final_mask_to_keep] = 0
-    return m_full
-
-
-def _fill_corner_left_mask(mask: BoolArray2D) -> BoolArray2D:
-    return (
-        convolve(np.asarray(mask, dtype=float), np.array([[-1.0, +1.0], [+1.0, -1.0]]))
-        > 1.0
-    )
-
-
-def _fill_corner_right_mask(mask: BoolArray2D) -> BoolArray2D:
-    return (
-        convolve(
-            np.asarray(mask, dtype=float),
-            np.array([[0.0, 0.0], [+1.0, -1.0], [-1.0, +1.0]]),
-        )
-        > 1
-    )
-
-
-def _get_boundary_mask_horizontal(
-    m_full: IntArray2D, *, negate: bool = False
-) -> BoolArray2D:
-    mask = np.zeros((m_full.shape[0] + 2, m_full.shape[1] + 2), dtype=bool)
-    mask[1:-1, 1:-1] = m_full > 0
-    if negate:
-        mask = ~mask
-    conv1 = cast(
-        np.ndarray, convolve(np.array(mask[:, :], dtype=int), np.array([[-1, 1]]))
-    )
-    conv2 = cast(
-        np.ndarray, convolve(np.array(mask[:, ::-1], dtype=int), np.array([[-1, 1]]))
-    )
-    conv3 = cast(
-        np.ndarray, convolve(np.array(mask[::-1, :], dtype=int), np.array([[-1, 1]]))
-    )
-    mask1 = (conv1 > 0.0)[:, :]
-    mask2 = (conv2 > 0.0)[:, ::-1]
-    mask3 = (conv3 > 0.0)[::-1, :]
-    mask = (mask1 | mask2 | mask3)[1:-1, 1:-1]
-    # don't mask edge of simulation area:
-    mask[:, 0] = mask[:, -1] = False
-    return mask
-
-
-def _get_boundary_mask_vertical(
-    m_full: IntArray2D, *, negate: bool = False
-) -> BoolArray2D:
-    return _get_boundary_mask_horizontal(m_full.T, negate=negate).T
-
-
-def _fill_single_pixel_gaps(m_full: IntArray2D) -> IntArray2D:
-    mat_x = np.maximum(
-        np.roll(m_full, shift=1, axis=0),
-        np.roll(m_full, shift=-1, axis=0),
-    )
-    mat_y = np.maximum(
-        np.roll(m_full, shift=1, axis=1),
-        np.roll(m_full, shift=-1, axis=1),
-    )
-    mat = mat_x | mat_y
-
-    mask = m_full > 0
-    mask_x = np.roll(mask, shift=1, axis=0) & (~mask) & np.roll(mask, shift=-1, axis=0)
-    mask_y = np.roll(mask, shift=1, axis=1) & (~mask) & np.roll(mask, shift=-1, axis=1)
-    mask = mask_x | mask_y
-    mask[:1, :] = False
-    mask[-1:, :] = False
-    mask[:, :1] = False
-    mask[:, -1:] = False
-    m_full[mask] = mat[mask]
     return m_full
 
 
@@ -304,7 +255,7 @@ def _classify_structures_by_mesh_order_and_material(
 ) -> (
     dict[tuple[int, int], list[Structure2D]] | dict[tuple[int, int], list[Structure3D]]
 ):
-    structures = _sort_structures(structures)
+    structures = sort_structures(structures)
     structures_dict = {}
     for structure in structures:
         mo = structure.mesh_order

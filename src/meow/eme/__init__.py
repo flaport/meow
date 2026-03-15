@@ -1,12 +1,43 @@
-"""EME Implementations & Backends."""
+"""SAX EME."""
 
-from __future__ import annotations
+from meow.eme.cascade import (
+    compute_s_matrix_sax,
+    downselect_s,
+)
+from meow.eme.default import (
+    compute_s_matrix,
+)
+from meow.eme.interface import (
+    PassivityMethod,
+    compute_interface_s_matrices,
+    compute_interface_s_matrix,
+    enforce_passivity,
+    overlap_matrix,
+)
+from meow.eme.propagation import (
+    compute_propagation_s_matrices,
+    compute_propagation_s_matrix,
+    propagate_modes,
+    select_ports,
+    track_modes,
+)
+from meow.eme.solve import (
+    tsvd_solve,
+)
 
-from .common import compute_interface_s_matrices as compute_interface_s_matrices
-from .common import compute_interface_s_matrix as compute_interface_s_matrix
-from .common import compute_propagation_s_matrices as compute_propagation_s_matrices
-from .common import compute_propagation_s_matrix as compute_propagation_s_matrix
-from .common import select_ports as select_ports
-from .sax import compute_s_matrix_sax as compute_s_matrix_sax
-
-compute_s_matrix = compute_s_matrix_sax
+__all__ = [
+    "PassivityMethod",
+    "compute_interface_s_matrices",
+    "compute_interface_s_matrix",
+    "compute_propagation_s_matrices",
+    "compute_propagation_s_matrix",
+    "compute_s_matrix",
+    "compute_s_matrix_sax",
+    "downselect_s",
+    "enforce_passivity",
+    "overlap_matrix",
+    "propagate_modes",
+    "select_ports",
+    "track_modes",
+    "tsvd_solve",
+]

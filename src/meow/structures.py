@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, overload
+from typing import Any, cast, overload
 
 from pydantic import Field
 
@@ -58,7 +58,7 @@ class Structure2D(BaseModel):
         default=DEFAULT_MESH_ORDER, description="the mesh order of the structure"
     )
 
-    def _visualize(self, **ignored: Any) -> None:  # noqa: ARG002
+    def _visualize(self, **_: Any) -> None:
         color = self.material.meta.get("color", None)
         return self.geometry._visualize(color=color)
 
@@ -101,22 +101,25 @@ class Structure3D(BaseModel):
     def _visualize(
         self,
         scale: tuple[float, float, float] | None = None,
-        **ignored: Any,  # noqa: ARG002
+        **_: Any,
     ) -> None:
         return self._trimesh(scale=scale).show()
 
 
 @overload
-def _sort_structures(structures: list[Structure3D]) -> list[Structure3D]: ...
+def sort_structures(structures: list[Structure3D]) -> list[Structure3D]: ...
 
 
 @overload
-def _sort_structures(structures: list[Structure2D]) -> list[Structure2D]: ...
+def sort_structures(structures: list[Structure2D]) -> list[Structure2D]: ...
 
 
-def _sort_structures(
+def sort_structures(
     structures: list[Structure3D] | list[Structure2D],
 ) -> list[Structure2D] | list[Structure3D]:
+    """Sort structures by mesh order, then by order of definition."""
     struct_info = [(s.mesh_order, -i, s) for i, s in enumerate(structures)]
     sorted_struct_info = sorted(struct_info, key=lambda I: (I[0], I[1]), reverse=True)
-    return [s for _, _, s in sorted_struct_info]  # type: ignore[reportReturnType]
+    return cast(
+        list[Structure2D] | list[Structure3D], [s for _, _, s in sorted_struct_info]
+    )
