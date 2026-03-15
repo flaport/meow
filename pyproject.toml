@@ -127,15 +127,18 @@ select = ["ALL"]
 [tool.ruff.lint.per-file-ignores]
 "*.ipynb" = [
   "ANN",  # flake8-annotations
-  "EM101",  # raw-string-in-exception
   "ARG001",  # unused-function-argument
   "D",  # pydocstyle
   "E402",  # module-import-not-at-top-of-file
   "E501",  # line-too-long
+  "EM101",  # raw-string-in-exception
   "F821",  # undefined-name
   "FBT003",  # boolean-positional-value-in-call
   "N816",  # mixed-case-variable-in-global-scope
   "PLC2401",  # non-ascii-name
+  "RUF001",  # ambiguous-unicode-character-string
+  "RUF002",  # ambiguous-unicode-character-docstring
+  "RUF003",  # ambiguous-unicode-character-comment
   "S101",  # assert
   "SLF001",  # private-member-access
   "T201"  # print
