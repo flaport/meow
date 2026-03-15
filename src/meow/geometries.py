@@ -250,7 +250,7 @@ class Box(Geometry3DBase):
         prism = extrude_polygon(poly, self.z_max * sz - self.z_min * sz)
         prism = cast(Trimesh, prism.apply_translation((0, 0, self.z_min * sz)))
         if color is not None:
-            prism.visual.face_colors = _to_rgba(color)  # type: ignore[reportOptionalMemberAccess]
+            prism.visual.face_colors = _to_rgba(color)
         return prism
 
 
@@ -288,7 +288,7 @@ class Prism(Geometry3DBase):
             intersection = np.asarray(intersection.coords)
             if not intersection.shape[0]:
                 continue
-            (y_min, _), (y_max, _) = intersection  # type: ignore[reportGeneralTypingIssues]
+            (y_min, _), (y_max, _) = intersection
             y_min, y_max = min(y_min, y_max), max(y_min, y_max)
             x_min, x_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
             rect = Rectangle(
@@ -321,7 +321,7 @@ class Prism(Geometry3DBase):
             intersection = np.asarray(intersection.coords)
             if not intersection.shape[0]:
                 continue
-            (_, x_min), (_, x_max) = intersection  # type: ignore[reportGeneralTypingIssues]
+            (_, x_min), (_, x_max) = intersection
             x_min, x_max = min(x_min, x_max), max(x_min, x_max)
             y_min, y_max = min(self.h_min, self.h_max), max(self.h_min, self.h_max)
             rect = Rectangle(
