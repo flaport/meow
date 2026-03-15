@@ -20,7 +20,26 @@ PassivityMethod: TypeAlias = Literal["none", "clip", "invert", "subtract"]
 def overlap_matrix(
     modes1: Modes, modes2: Modes, inner_product: Callable
 ) -> np.ndarray[tuple[int, int], np.dtype[np.complex128]]:
-    """Overlap matrix between two sets of modes in a different basis."""
+    """Build the modal overlap matrix between two mode sets.
+
+    The entry ``M[i, j]`` is ``inner_product(modes1[i], modes2[j])``. In the
+    interface derivation this is used both for self-overlaps (the metric ``G``)
+    and cross-overlaps between the left and right waveguide bases.
+
+    Sharp edge:
+        The meaning of the overlap matrix is entirely determined by the
+        ``inner_product`` callable. If modes were orthonormalized with one
+        inner product but overlaps are formed with another, the simplified
+        ``G = I`` interface formulas are no longer valid.
+
+    Args:
+        modes1: Left/test mode set.
+        modes2: Right/expansion mode set.
+        inner_product: Modal inner-product callable.
+
+    Returns:
+        Complex overlap matrix of shape ``(len(modes1), len(modes2))``.
+    """
     M = np.zeros((len(modes1), len(modes2)), dtype=np.complex128)
     for i, ma in enumerate(modes1):
         for j, mb in enumerate(modes2):
@@ -39,25 +58,63 @@ def compute_interface_s_matrix(
     enforce_reciprocity: bool = True,
     ignore_warnings: bool = True,
 ) -> sax.SDenseMM:
-    """Get the interface S-matrix.
+    """Compute the interface S-matrix between two modal bases.
+
+    This implements the overlap-based EME interface solve for a step
+    discontinuity. The transmission blocks are obtained from a TSVD-regularized
+    solve, then the reflection blocks are reconstructed from the two continuity
+    equations and averaged:
+
+    - ``R_LL = 0.5 * ((O_RL^adj @ T_LR - I) + (I - O_LR @ T_LR))``
+    - ``R_RR = 0.5 * ((O_LR^adj @ T_RL - I) + (I - O_RL @ T_RL))``
+
+    High-level assumptions:
+        - the supplied mode sets are already orthonormalized in the same metric
+          used by ``inner_product``;
+        - the interface formulas are therefore used in their simplified
+          ``G = I`` form;
+        - any remaining non-passivity is treated as a numerical/truncation
+          issue and corrected afterwards via singular-value processing.
+
+    Sharp edges:
+        - If modes were orthonormalized with a different inner product than the
+          one passed here, the result is not physically meaningful.
+        - ``conjugate`` must match the intended overlap convention. If omitted,
+          it is inferred from ``inner_product``.
+        - ``tsvd_rcond`` controls a stability/accuracy tradeoff. Too small can
+          amplify ill-conditioned directions; too large can discard physically
+          relevant channels.
+        - passivity correction modifies the raw interface solve. This is often
+          necessary for truncated bases, but it is still a model correction, not
+          a proof that the original solve was complete.
 
     Args:
         modes1: Modes on the left side of the interface.
         modes2: Modes on the right side of the interface.
-        inner_product: The inner product callable to use for overlap matrices.
+        inner_product: Inner-product callable used to form the overlap matrices.
+            This must be consistent with how the modes were orthonormalized.
         conjugate: Whether to use the conjugated (power-conserving) formulation.
             If None, inferred from the inner_product callable. Must match the
             conjugate setting used in inner_product for physical consistency:
             - conjugate=True: uses O_RL.conj().T (Hermitian transpose)
             - conjugate=False: uses O_RL.T (transpose)
-        tsvd_rcond: Reciprocal condition number for TSVD regularization.
+        tsvd_rcond: Relative singular-value cutoff for the TSVD solve used to
+            build the transmission blocks.
         passivity_method: Method for enforcing passivity
             ("none", "clip", "invert", "subtract").
-        enforce_reciprocity: Whether to enforce S = S^T symmetry.
+        enforce_reciprocity: Whether to symmetrize the final S-matrix as
+            ``0.5 * (S + S.T)``.
         ignore_warnings: Whether to suppress numerical warnings.
 
     Returns:
-        A tuple of (S-matrix, port_map) in SAX format.
+        A tuple ``(S, port_map)`` in SAX dense-matrix format.
+
+    Notes:
+        The default path is internally consistent because the default
+        ``meow.mode.inner_product`` is the asymmetric, unconjugated overlap and
+        the default mode post-processing uses that same callable. If you change
+        the interface inner product, you should generally use the same callable
+        during mode post-processing.
     """
     if ignore_warnings:
         with warnings.catch_warnings():
@@ -155,7 +212,15 @@ def compute_interface_s_matrices(
     enforce_reciprocity: bool = True,
     ignore_warnings: bool = True,
 ) -> dict[str, sax.SDenseMM]:
-    """Get all the S-matrices of all the interfaces between `CrossSection` objects."""
+    """Compute interface S-matrices for each adjacent pair of mode sets.
+
+    This is a thin wrapper around :func:`compute_interface_s_matrix` applied to
+    every neighboring pair in ``modes``.
+
+    The same sharp edges apply here as for the single-interface solve:
+    orthonormalization, inner-product choice, TSVD cutoff, and passivity method
+    must all be interpreted consistently across the full stack.
+    """
     return {
         f"i_{i}_{i + 1}": compute_interface_s_matrix(
             modes1=modes1,
@@ -174,7 +239,38 @@ def compute_interface_s_matrices(
 def enforce_passivity(
     singular_values: np.ndarray, *, method: PassivityMethod = "invert"
 ) -> np.ndarray:
-    """Enforce passivity."""
+    """Project singular values onto a passive interval.
+
+    This function post-processes the singular values of an S-matrix so that the
+    resulting matrix has singular values no larger than one.
+
+    Available methods:
+        - ``"none"``: leave the singular values unchanged.
+        - ``"clip"``: replace values larger than one by exactly one.
+        - ``"invert"``: replace ``sigma`` by ``1 / sigma`` when ``sigma > 1``.
+        - ``"subtract"``: replace ``sigma`` by ``max(0, 2 - sigma)`` when
+          ``sigma > 1``.
+
+    High-level interpretation:
+        ``clip`` is the most conservative algebraic projection. ``invert`` and
+        ``subtract`` both map modest gain above one to modest loss below one,
+        which can be useful when the excess gain is interpreted as missing
+        radiation channels in a truncated basis.
+
+    Sharp edge:
+        These are heuristic corrections on top of a truncated modal solve. They
+        are often useful, but they are not substitutes for a converged basis.
+
+    Args:
+        singular_values: Singular values to correct.
+        method: Passivity enforcement strategy.
+
+    Returns:
+        Corrected singular values.
+
+    Raises:
+        ValueError: If ``method`` is unknown.
+    """
     match method:
         case "none":
             return singular_values
@@ -193,7 +289,7 @@ def enforce_passivity(
 
 
 def _infer_conjugate(ip: Callable) -> bool:
-    """Infer the conjugate setting from an inner_product callable.
+    """Infer the ``conjugate`` flag from an inner-product callable.
 
     Works with functools.partial wrapping meow.mode.inner_product.
     Raises ValueError if the setting cannot be determined.

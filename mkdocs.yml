@@ -40,11 +40,9 @@ theme:
 
 nav:
   - home: index.md
-  - examples:
-    - quick start: nbs/00_introduction.md
-    - gds taper: nbs/01_gds_taper.md
-    - length sweep: nbs/02_taper_length_sweep.md
-    - unequal modes: nbs/03_unequal_number_of_modes.md
+  - algorithm: algorithm.md
+  - api:
+    - eme: api/eme.md
   - changelog: changelog.md
 
 plugins:
@@ -97,6 +95,9 @@ markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.superfences
+
+extra_javascript:
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 extra:
   social:

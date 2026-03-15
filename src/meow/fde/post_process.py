@@ -25,6 +25,15 @@ def post_process_modes(
         modes: the modes to post process
         inner_product: the inner product with which to post-process the modes
         gm_tolerance: Gramm-Schmidt orthonormalization tolerance
+
+    Returns:
+        Filtered and orthonormalized modes.
+
+    Notes:
+        This is the default ``post_process`` used by ``compute_modes``. The
+        choice of ``inner_product`` here matters downstream: if interface
+        overlaps are later built with a different inner product, the resulting
+        mode basis is no longer orthonormal in the interface metric.
     """
     return orthonormalize_modes(
         filter_modes(modes),
@@ -59,8 +68,9 @@ def filter_modes(
 def normalize_modes(modes: Modes, inner_product: Callable) -> Modes:
     """Self-normalize a set of modes.
 
-    Note to orthogonalize them too, use 'orthonormalize'.
-
+    This only fixes the norm of each mode individually. It does not make the
+    mode set mutually orthogonal. For overlap-based interface formulas, use
+    :func:`orthonormalize_modes` if you need the simplified ``G = I`` metric.
     """
     return [zero_phase(normalize(m, inner_product)) for m in modes]
 
@@ -78,6 +88,15 @@ def orthonormalize_modes(
         inner_product: the inner product to orthonormalize them under
         tolerance: any mode that can't expand the basis beyond this tolerance
             will be dropped.
+
+    Returns:
+        Orthonormalized mode basis.
+
+    Notes:
+        This routine first self-normalizes each mode and then applies
+        Gram-Schmidt. The ``inner_product`` passed here should generally be the
+        same one used later to build interface overlaps; otherwise the final
+        basis is orthonormal in the wrong metric.
     """
     if not modes:
         return []
