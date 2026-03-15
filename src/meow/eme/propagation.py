@@ -47,11 +47,13 @@ def compute_propagation_s_matrices(
         cell_lengths: Optional explicit lengths. If omitted, they are derived
             from ``cell.length``.
     """
-    if len(cells) != len(modes):
-        msg = f"len(cells) != len(modes): {len(cells)} != {len(modes)}"
-        raise ValueError(msg)
-
     if cell_lengths is None:
+        if cells is None:
+            msg = "Either cells or cell_lengths must be provided."
+            raise ValueError(msg)
+        if len(cells) != len(modes):
+            msg = f"len(cells) != len(modes): {len(cells)} != {len(modes)}"
+            raise ValueError(msg)
         cell_lengths = [cell.length for cell in cells]
 
     if len(cell_lengths) != len(modes):
