@@ -46,6 +46,7 @@ nav:
       - taper length sweep: nbs/02_taper_length_sweep.md
       - different modes: nbs/03_unequal_number_of_modes.md
       - rib interface: nbs/04_rib_interface.md
+      - mode propagation: nbs/05_propagate_modes.md
   - algorithm: algorithm.md
   - api: api.md
   - changelog: changelog.md

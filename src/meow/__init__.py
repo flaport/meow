@@ -63,6 +63,7 @@ from meow.eme import (
     downselect_s,
     enforce_passivity,
     overlap_matrix,
+    propagate_modes,
     select_ports,
     tsvd_solve,
 )
@@ -241,6 +242,7 @@ __all__ = [
     "overlap_matrix",
     "pml_fraction",
     "post_process_modes",
+    "propagate_modes",
     "select_ports",
     "silicon",
     "silicon_nitride",

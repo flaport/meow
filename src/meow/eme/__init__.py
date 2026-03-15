@@ -17,6 +17,7 @@ from meow.eme.interface import (
 from meow.eme.propagation import (
     compute_propagation_s_matrices,
     compute_propagation_s_matrix,
+    propagate_modes,
     select_ports,
 )
 from meow.eme.solve import (
@@ -34,6 +35,7 @@ __all__ = [
     "downselect_s",
     "enforce_passivity",
     "overlap_matrix",
+    "propagate_modes",
     "select_ports",
     "tsvd_solve",
 ]
