@@ -40,9 +40,13 @@ theme:
 
 nav:
   - home: index.md
+  - quickstart: nbs/00_introduction.md
+  - examples:
+      - from gds: nbs/01_gds_taper.md
+      - taper length sweep: nbs/02_taper_length_sweep.md
+      - different modes: nbs/03_unequal_number_of_modes.md
   - algorithm: algorithm.md
-  - api:
-    - eme: api/eme.md
+  - api: api.md
   - changelog: changelog.md
 
 plugins:
