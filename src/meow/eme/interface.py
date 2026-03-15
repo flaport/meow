@@ -38,18 +38,19 @@ def compute_interface_s_matrix(
 ) -> sax.SDenseMM:
     """Get the interface S-matrix."""
     if ignore_warnings:
-        warnings.filterwarnings("ignore", message=".*divide by zero.*")
-        warnings.filterwarnings("ignore", message=".*overflow encountered.*")
-        warnings.filterwarnings("ignore", message=".*invalid value.*")
-        return compute_interface_s_matrix(
-            modes1=modes1,
-            modes2=modes2,
-            inner_product=inner_product,
-            tsvd_rcond=tsvd_rcond,
-            passivity_method=passivity_method,
-            enforce_reciprocity=enforce_reciprocity,
-            ignore_warnings=False,
-        )
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", message=".*divide by zero.*")
+            warnings.filterwarnings("ignore", message=".*overflow encountered.*")
+            warnings.filterwarnings("ignore", message=".*invalid value.*")
+            return compute_interface_s_matrix(
+                modes1=modes1,
+                modes2=modes2,
+                inner_product=inner_product,
+                tsvd_rcond=tsvd_rcond,
+                passivity_method=passivity_method,
+                enforce_reciprocity=enforce_reciprocity,
+                ignore_warnings=False,
+            )
 
     # Supports unequal number of modes on left and right
     N_L, N_R = len(modes1), len(modes2)
