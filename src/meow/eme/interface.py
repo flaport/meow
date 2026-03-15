@@ -51,43 +51,62 @@ def compute_interface_s_matrix(
             ignore_warnings=False,
         )
 
-    # TODO: this should work mL != mR too, no?
-    N = min(len(modes1), len(modes2))
-    mL = modes1[:N]
-    mR = modes2[:N]
-    O_LR = overlap_matrix(mL, mR, inner_product)
-    O_RL = overlap_matrix(mR, mL, inner_product)
+    # Supports unequal number of modes on left and right
+    N_L, N_R = len(modes1), len(modes2)
 
-    I_N = np.eye(N)
+    # Overlap matrices: O_LR is (N_L, N_R), O_RL is (N_R, N_L)
+    O_LR = overlap_matrix(modes1, modes2, inner_product)
+    O_RL = overlap_matrix(modes2, modes1, inner_product)
 
-    A_LR = O_LR + O_RL.T
-    T_LR, *_ = tsvd_solve(A_LR, 2.0 * I_N, rcond=tsvd_rcond)
+    I_L = np.eye(N_L)
+    I_R = np.eye(N_R)
 
-    A_RL = O_RL + O_LR.T
-    T_RL, *_ = tsvd_solve(A_RL, 2.0 * I_N, rcond=tsvd_rcond)
+    # T_LR: (N_R, N_L) — maps N_L left inputs to N_R right outputs
+    # Solve: A_LR @ T_LR = 2 * I_L, where A_LR is (N_L, N_R)
+    # tsvd_solve(A, B) returns pinv(A) @ B
+    # pinv(A_LR) is (N_R, N_L), so result is (N_R, N_L) @ (N_L, N_L) = (N_R, N_L)
+    A_LR = O_LR + O_RL.T  # (N_L, N_R)
+    T_LR, *_ = tsvd_solve(A_LR, 2.0 * I_L, rcond=tsvd_rcond)  # (N_R, N_L)
+
+    # T_RL: (N_L, N_R) — maps N_R right inputs to N_L left outputs
+    # pinv(A_RL) is (N_L, N_R), so result is (N_L, N_R) @ (N_R, N_R) = (N_L, N_R)
+    A_RL = O_RL + O_LR.T  # (N_R, N_L)
+    T_RL, *_ = tsvd_solve(A_RL, 2.0 * I_R, rcond=tsvd_rcond)  # (N_L, N_R)
 
     # Compute R from both continuity equations and average; this reduces sensitivity
     # to cancellation relative to directly forming (O_RL^T - O_LR).
-    R_LL_e = O_RL.T @ T_LR - I_N
-    R_LL_h = I_N - O_LR @ T_LR
+    # R_LL: (N_L, N_L)
+    R_LL_e = O_RL.T @ T_LR - I_L  # (N_L, N_R) @ (N_R, N_L) = (N_L, N_L)
+    R_LL_h = I_L - O_LR @ T_LR  # (N_L, N_R) @ (N_R, N_L) = (N_L, N_L)
     R_LL = 0.5 * (R_LL_e + R_LL_h)
 
-    R_RR_e = O_LR.T @ T_RL - I_N
-    R_RR_h = I_N - O_RL @ T_RL
+    # R_RR: (N_R, N_R)
+    R_RR_e = O_LR.T @ T_RL - I_R  # (N_R, N_L) @ (N_L, N_R) = (N_R, N_R)
+    R_RR_h = I_R - O_RL @ T_RL  # (N_R, N_L) @ (N_L, N_R) = (N_R, N_R)
     R_RR = 0.5 * (R_RR_e + R_RR_h)
 
     # Full S-matrix: [a-; b+] = S [a+; b-]
+    # Shape: (N_L + N_R, N_L + N_R)
+    # Block structure:
+    #   [[R_LL (N_L, N_L),  T_RL (N_L, N_R)],
+    #    [T_LR (N_R, N_L),  R_RR (N_R, N_R)]]
     S = np.block(
         [
             [R_LL, T_RL],
             [T_LR, R_RR],
         ]
     )
-    S = enforce_passivity(S, method=passivity_method)
+
+    # Passivity enforcement via SVD
+    U, sigma, Vh = np.linalg.svd(S, full_matrices=False)
+    sigma_corrected = enforce_passivity(sigma, method=passivity_method)
+    S = (U * sigma_corrected) @ Vh
+
     if enforce_reciprocity:
         S = 0.5 * (S + S.T)
-    in_ports = [f"left@{i}" for i in range(len(modes1))]
-    out_ports = [f"right@{i}" for i in range(len(modes2))]
+
+    in_ports = [f"left@{i}" for i in range(N_L)]
+    out_ports = [f"right@{i}" for i in range(N_R)]
     port_map = {p: i for i, p in enumerate(in_ports + out_ports)}
     return jnp.asarray(S), port_map
 
