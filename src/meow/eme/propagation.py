@@ -189,10 +189,11 @@ def propagate(
     for l2r, r2l in zip(l2rs, r2ls, strict=False):
         s_l2r, pm_l2r = sax.sdense(l2r)
         s_r2l, pm_r2l = sax.sdense(r2l)
-        ports = _sorted_ports(pm_l2r)
-        s_l2r, _ = select_ports((s_l2r, pm_l2r), ports)
-        s_r2l, _ = select_ports((s_r2l, pm_r2l), ports)
-        n_right = len([key for key in ports if "right" in key])
+        ports_l2r = _sorted_ports(pm_l2r)
+        ports_r2l = _sorted_ports(pm_r2l)
+        s_l2r, _ = select_ports((s_l2r, pm_l2r), ports_l2r)
+        s_r2l, _ = select_ports((s_r2l, pm_r2l), ports_r2l)
+        n_right = len([key for key in ports_l2r if "right" in key])
         fwd, bwd = compute_mode_amplitudes(
             np.asarray(s_l2r), np.asarray(s_r2l), n_right, excitation_l, excitation_r
         )
