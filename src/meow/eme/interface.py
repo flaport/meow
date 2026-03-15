@@ -183,9 +183,10 @@ def enforce_passivity(
         case "invert":
             return np.where(singular_values > 1.0, 1 / singular_values, singular_values)
         case "subtract":
-            return np.where(
+            singular_values = np.where(
                 singular_values > 1.0, 2.0 - singular_values, singular_values
             )
+            return np.where(singular_values < 0.0, 0.0, singular_values)
         case _:
             msg = f"Unknown passivity enforcement method {method}."
             raise ValueError(msg)
