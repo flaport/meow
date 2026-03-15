@@ -93,6 +93,15 @@ def _get_netlist(
     return net
 
 
+def downselect_s(S: sax.SDenseMM, ports: list[str]) -> sax.SDenseMM:
+    """Downselect the S-matrix to the given ports."""
+    S_matrix, port_map = S
+    idxs = [port_map[port] for port in ports]
+    S_matrix = S_matrix[idxs, :][:, idxs]
+    port_map = {port: i for i, port in enumerate(ports)}
+    return S_matrix, port_map
+
+
 def _other_port(port_mode: str) -> str:
     if "left" in port_mode:
         return port_mode.replace("left", "right")

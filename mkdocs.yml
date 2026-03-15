@@ -45,6 +45,7 @@ nav:
       - from gds: nbs/01_gds_taper.md
       - taper length sweep: nbs/02_taper_length_sweep.md
       - different modes: nbs/03_unequal_number_of_modes.md
+      - rib interface: nbs/04_rib_interface.md
   - algorithm: algorithm.md
   - api: api.md
   - changelog: changelog.md
