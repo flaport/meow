@@ -65,6 +65,7 @@ from meow.eme import (
     overlap_matrix,
     propagate_modes,
     select_ports,
+    track_modes,
     tsvd_solve,
 )
 from meow.environment import (
@@ -250,6 +251,7 @@ __all__ = [
     "sort_structures",
     "structures",
     "te_fraction",
+    "track_modes",
     "tsvd_solve",
     "vis",
     "visualization",

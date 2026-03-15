@@ -19,6 +19,7 @@ from meow.eme.propagation import (
     compute_propagation_s_matrix,
     propagate_modes,
     select_ports,
+    track_modes,
 )
 from meow.eme.solve import (
     tsvd_solve,
@@ -37,5 +38,6 @@ __all__ = [
     "overlap_matrix",
     "propagate_modes",
     "select_ports",
+    "track_modes",
     "tsvd_solve",
 ]

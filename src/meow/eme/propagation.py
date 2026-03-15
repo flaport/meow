@@ -9,11 +9,12 @@ import jax.numpy as jnp
 import numpy as np
 import sax
 from sax.backends import circuit_backends
+from scipy.optimize import linear_sum_assignment
 
 from meow.arrays import ComplexArray1D, ComplexArray2D, FloatArray1D
 from meow.cell import Cell
 from meow.eme.interface import compute_interface_s_matrices, compute_interface_s_matrix
-from meow.mode import Mode, Modes
+from meow.mode import Mode, Modes, inner_product
 
 
 def compute_propagation_s_matrix(modes: Modes, cell_length: float) -> sax.SDictMM:
@@ -70,6 +71,16 @@ def select_ports(S: sax.SDenseMM, ports: list[str]) -> sax.SDenseMM:
     s = s[idxs, :][:, idxs]
     new_port_map = {p: i for i, p in enumerate(ports)}
     return s, new_port_map
+
+
+def _sorted_ports(port_map: dict[str, int]) -> list[str]:
+    """Return ports in canonical left-then-right order by mode index."""
+
+    def sort_key(port: str) -> tuple[int, int]:
+        side, mode = port.split("@")
+        return (0 if side == "left" else 1, int(mode))
+
+    return sorted(port_map, key=sort_key)
 
 
 def _connect_two(
@@ -176,8 +187,11 @@ def propagate(
     forwards = []
     backwards = []
     for l2r, r2l in zip(l2rs, r2ls, strict=False):
-        s_l2r, ports = sax.sdense(l2r)
-        s_r2l, _ = sax.sdense(r2l)
+        s_l2r, pm_l2r = sax.sdense(l2r)
+        s_r2l, pm_r2l = sax.sdense(r2l)
+        ports = _sorted_ports(pm_l2r)
+        s_l2r, _ = select_ports((s_l2r, pm_l2r), ports)
+        s_r2l, _ = select_ports((s_r2l, pm_r2l), ports)
         n_right = len([key for key in ports if "right" in key])
         fwd, bwd = compute_mode_amplitudes(
             np.asarray(s_l2r), np.asarray(s_r2l), n_right, excitation_l, excitation_r
@@ -243,6 +257,61 @@ def _default_z(cells: list[Cell], num_z: int) -> FloatArray1D:
     return np.linspace(cells[0].z_min, cells[-1].z_max, num_z)
 
 
+def track_modes(
+    modes: list[Modes],
+    *,
+    inner_product_fn: Callable = inner_product,
+) -> list[Modes]:
+    """Track modal order and phase continuously across a cell stack.
+
+    Modes are solved independently in each cell, so neighboring cells may differ
+    by permutation and arbitrary complex phase. This helper reorders each mode
+    set by maximum overlap with the previous cell and phase-aligns matched modes
+    so that the tracking overlap is real-positive.
+
+    Unmatched modes are appended after the matched subset in their original
+    order. This function does not change the physics of the interface solve; it
+    only makes the local basis more continuous for reconstruction and plotting.
+    """
+    if not modes:
+        return []
+
+    tracked: list[Modes] = [list(modes[0])]
+    for current in modes[1:]:
+        previous = tracked[-1]
+        n_prev = len(previous)
+        n_curr = len(current)
+        if n_prev == 0 or n_curr == 0:
+            tracked.append(list(current))
+            continue
+
+        overlaps = np.zeros((n_prev, n_curr), dtype=np.complex128)
+        for i, mode_prev in enumerate(previous):
+            for j, mode_curr in enumerate(current):
+                overlaps[i, j] = inner_product_fn(mode_prev, mode_curr)
+
+        row_ind, col_ind = linear_sum_assignment(-np.abs(overlaps))
+        matched_cols = set(col_ind.tolist())
+
+        reordered: list[Mode] = []
+        for i, j in sorted(
+            zip(row_ind, col_ind, strict=True), key=lambda pair: pair[0]
+        ):
+            overlap = overlaps[i, j]
+            if np.abs(overlap) > 0:
+                phase = np.exp(-1j * np.angle(overlap))
+                reordered.append(current[j] * phase)
+            else:
+                reordered.append(current[j])
+
+        reordered.extend(
+            mode for j, mode in enumerate(current) if j not in matched_cols
+        )
+        tracked.append(reordered)
+
+    return tracked
+
+
 def propagate_modes(
     modes: list[list[Mode]],
     cells: list[Cell],
@@ -256,6 +325,8 @@ def propagate_modes(
     num_z: int = 1000,
     sax_backend: sax.BackendLike = "default",
     interface_kwargs: dict[str, Any] | None = None,
+    track: bool = True,
+    tracking_inner_product: Callable = inner_product,
     interfaces_fn: Callable = compute_interface_s_matrices,
     interface_fn: Callable = compute_interface_s_matrix,
 ) -> tuple[ComplexArray2D, FloatArray1D]:
@@ -284,6 +355,9 @@ def propagate_modes(
         sax_backend: SAX backend used for cascading.
         interface_kwargs: Optional keyword arguments forwarded to both
             ``interfaces_fn`` and ``interface_fn``.
+        track: Whether to reorder and phase-align modes between neighboring
+            cells before propagation.
+        tracking_inner_product: Inner product used for mode tracking.
         interfaces_fn: Factory for interface S-matrices across the stack.
         interface_fn: Factory for the identity-like same-basis interface used to
             seed the left-to-right accumulation.
@@ -316,13 +390,17 @@ def propagate_modes(
     if z is None:
         z = _default_z(cells, num_z)
 
-    propagations = compute_propagation_s_matrices(modes, cells)
-    interfaces = interfaces_fn(modes, **interface_kwargs)
-    identity = interface_fn(modes[0], modes[0], **interface_kwargs)
+    tracked_modes = (
+        track_modes(modes, inner_product_fn=tracking_inner_product) if track else modes
+    )
+
+    propagations = compute_propagation_s_matrices(tracked_modes, cells)
+    interfaces = interfaces_fn(tracked_modes, **interface_kwargs)
+    identity = interface_fn(tracked_modes[0], tracked_modes[0], **interface_kwargs)
 
     pairs = pi_pairs(propagations, interfaces, actual_sax_backend)
     l2rs = l2r_matrices(pairs, identity, actual_sax_backend)
     r2ls = r2l_matrices(pairs, actual_sax_backend)
 
     forwards, backwards = propagate(l2rs, r2ls, excitation_l, excitation_r)
-    return plot_fields(modes, cells, forwards, backwards, y, z)
+    return plot_fields(tracked_modes, cells, forwards, backwards, y, z)
