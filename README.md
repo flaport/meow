@@ -34,7 +34,7 @@ The documentation is available at
 ## Contributors
 
 - [@flaport](https://github.com/flaport): creator of MEOW
-- [@jan-david-black](https://github.com/jan-david-black): fixing mode overlaps and more
+- [@jan-david-fischbach](https://github.com/jan-david-fischbach): fixing mode overlaps and more
 
 ## Credits
 
