@@ -20,11 +20,11 @@ jobs:
         uses: taiki-e/install-action@just
       - name: Run notebooks
         run: just dev nbrun
-      - name: Upload artifacts [nbs]
+      - name: Upload artifacts [notebooks]
         uses: actions/upload-artifact@v4
         with:
-          name: nbs
-          path: ./nbs
+          name: notebooks
+          path: ./notebooks
 
   docs:
     name: Build Docs
@@ -34,11 +34,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Download artifacts [nbs]
+      - name: Download artifacts [notebooks]
         uses: actions/download-artifact@v4
         with:
-          name: nbs
-          path: ./nbs
+          name: notebooks
+          path: ./notebooks
       - name: Install UV
         uses: astral-sh/setup-uv@v5
       - name: Install Just
