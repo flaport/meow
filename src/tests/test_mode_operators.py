@@ -11,7 +11,7 @@ def test_multiply_modes():
     """multiplying two modes objects is not supported and should raise a TypeError"""
     try:
         mode1 * mode2  # type: ignore[reportOperatorIssue]
-        pytest.fail("Expected TypeError when multiplying two modes objects")
+        pytest.fail("Expected TypeError when multiplying two modes objects")  # type: ignore[invalid-argument-type]
     except TypeError:
         pass
 
