@@ -7,36 +7,10 @@ repo_name: flaport/meow
 copyright: Copyright © 2025, Floris Laporte, Apache-2.0
 
 theme:
-  name: material
-  font:
-    text: Merriweather Sans
-    code: Merriweather Mono
-  # icon:
-  #   logo: simple/materialformkdocs # https://squidfunk.github.io/mkdocs-material/reference/icons-emojis
+  name: shadcn
   logo: assets/logo-small.svg
   favicon: assets/logo-small.ico
-  features:
-    - navigation.footer
-  search: true
-  palette:
-    - media: "(prefers-color-scheme)"
-      toggle:
-        icon: material/brightness-auto
-        name: Switch to light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      toggle:
-        icon: material/weather-sunny
-        name: switch to dark mode
-      primary: blue
-      accent: deep purple
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      toggle:
-        icon: material/weather-night
-        name: switch to system default
-      primary: blue
-      accent: deep purple
+  katex_options: {}
 
 nav:
   - home: index.md
@@ -86,7 +60,6 @@ markdown_extensions:
   - attr_list
   - toc:
       permalink: true
-  - pymdownx.emoji
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -101,11 +74,3 @@ markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.superfences
-
-extra_javascript:
-  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
-
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/flaport
