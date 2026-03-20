@@ -1,7 +1,7 @@
 site_name: meow
 repo_url: https://github.com/flaport/meow
 site_url: https://flaport.github.io/meow
-site_description: Autograd and XLA for S-parameters
+site_description: Modeling of Eigenmodes and Overlaps in Waveguides
 site_author: Floris Laporte
 repo_name: flaport/meow
 copyright: Copyright © 2025, Floris Laporte, Apache-2.0
@@ -25,6 +25,9 @@ nav:
   - api: api.md
   - changelog: changelog.md
 
+hooks:
+  - docs/hooks.py
+
 plugins:
   - search
   - autorefs
@@ -38,6 +41,7 @@ plugins:
             - https://www.mkdocs.org/objects.inv
             - https://python-markdown.github.io/objects.inv
           options:
+            allow_inspection: true
             docstring_style: google
             docstring_options:
               ignore_init_summary: true
