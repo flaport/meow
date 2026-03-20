@@ -188,7 +188,9 @@ class SampledMaterial(MaterialBase):
 
 
 Material = IndexMaterial | SampledMaterial | TidyMaterial
+"""A material: `IndexMaterial`, `SampledMaterial`, or `TidyMaterial`."""
 Materials = list[Material]
+"""A list of `Material` objects."""
 MATERIALS: dict[str, MaterialBase] = {}
 
 

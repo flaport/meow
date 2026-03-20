@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import warnings
 from secrets import token_hex
-from typing import Annotated, Any, Literal, cast
+from typing import Annotated, Any, Literal, TypeAlias, cast
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,6 +18,7 @@ from meow.arrays import BoolArray2D, DType, FloatArray2D, NDArray, Shape
 from meow.base_model import BaseModel
 
 AxisDirection = Literal["x", "y", "z"]
+"""Axis direction: ``"x"``, ``"y"``, or ``"z"``."""
 
 
 class Geometry2DBase(BaseModel):
@@ -144,6 +145,7 @@ class Polygon2D(Geometry2DBase):
 
 
 Geometry2D = Rectangle | Polygon2D
+"""A 2D geometry: either a `Rectangle` or a `Polygon2D`."""
 
 
 class Geometry3DBase(BaseModel):
@@ -430,6 +432,10 @@ class Prism(Geometry3DBase):
 
 
 Geometry3D = Box | Prism
+"""A 3D geometry: either a `Box` or a `Prism`."""
+
+Geometry: TypeAlias = Geometry2D | Geometry3D
+"""Any 2D or 3D geometry."""
 
 
 def _to_rgba(c: Any) -> tuple[float, float, float, float]:

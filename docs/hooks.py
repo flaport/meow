@@ -76,8 +76,6 @@ def _format_admonition(admonition_type: str, lines: list[str]) -> str:
 _ALIASES: dict[str, str | None] = {
     "compute_modes": "meow.compute_modes_tidy3d",
     "compute_s_matrix": "meow.compute_s_matrix_sax",
-    "Material": "meow.MaterialBase",  # type alias, not documented by mkdocstrings
-    "Geometry": None,
 }
 
 

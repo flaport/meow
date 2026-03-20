@@ -291,6 +291,7 @@ class Mode(BaseModel):
 
 
 Modes = list[Mode]
+"""A list of `Mode` objects."""
 
 
 def zero_phase(mode: Mode) -> Mode:

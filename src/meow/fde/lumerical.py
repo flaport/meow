@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, TypeAlias
 
 import numpy as np
 from pydantic import PositiveInt
@@ -15,7 +15,8 @@ from meow.fde.post_process import post_process_modes
 from meow.mode import Mode
 from meow.structures import Structure3D
 
-Sim = Any
+Sim: TypeAlias = Any
+"""A lumerical simulation object."""
 _sim: Sim | None = None
 
 

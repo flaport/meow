@@ -165,14 +165,24 @@ NDArray: TypeAlias = Annotated[
     BeforeValidator(_validate_ndarray),
     AfterValidator(_coerce_immutable),
 ]
+"""A numpy ndarray with pydantic serialization support."""
 
 ComplexArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("complex128")]
+"""2D complex128 numpy array."""
 FloatArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("float64")]
+"""2D float64 numpy array."""
 BoolArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("bool")]
+"""2D boolean numpy array."""
 IntArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("int64")]
+"""2D int64 numpy array."""
 ComplexArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("complex128")]
+"""1D complex128 numpy array."""
 FloatArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("float64")]
+"""1D float64 numpy array."""
 BoolArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("bool")]
+"""1D boolean numpy array."""
 IntArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("int64")]
+"""1D int64 numpy array."""
 
 Complex: TypeAlias = Annotated[NDArray, Dim(0), DType("complex128")]
+"""0D (scalar) complex128 numpy array."""

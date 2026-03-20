@@ -15,6 +15,7 @@ from meow.eme.solve import tsvd_solve
 from meow.mode import Modes, inner_product
 
 PassivityMethod: TypeAlias = Literal["none", "clip", "invert", "subtract"]
+"""Method for enforcing S-matrix passivity: ``"none"``, ``"clip"``, ``"invert"``, or ``"subtract"``."""
 
 
 def overlap_matrix(
