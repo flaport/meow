@@ -7,7 +7,7 @@ import warnings
 from collections.abc import Callable
 from itertools import product
 from pathlib import Path
-from typing import Any, Literal, cast
+from typing import Any, Literal, TypeAlias, cast
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -290,7 +290,7 @@ class Mode(BaseModel):
         return self + other * (-1.0)
 
 
-Modes = list[Mode]
+Modes: TypeAlias = list[Mode]
 """A list of `Mode` objects."""
 
 

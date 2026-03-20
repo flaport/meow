@@ -97,6 +97,7 @@ from meow.gds_structures import (
 from meow.geometries import (
     AxisDirection,
     Box,
+    Geometry,
     Geometry2D,
     Geometry2DBase,
     Geometry3D,
@@ -175,6 +176,7 @@ __all__ = [
     "FloatArray1D",
     "FloatArray2D",
     "GdsExtrusionRule",
+    "Geometry",
     "Geometry2D",
     "Geometry2DBase",
     "Geometry3D",

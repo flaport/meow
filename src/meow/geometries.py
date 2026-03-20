@@ -17,7 +17,7 @@ from pydantic import Field
 from meow.arrays import BoolArray2D, DType, FloatArray2D, NDArray, Shape
 from meow.base_model import BaseModel
 
-AxisDirection = Literal["x", "y", "z"]
+AxisDirection: TypeAlias = Literal["x", "y", "z"]
 """Axis direction: ``"x"``, ``"y"``, or ``"z"``."""
 
 
@@ -144,7 +144,7 @@ class Polygon2D(Geometry2DBase):
             plt.show()
 
 
-Geometry2D = Rectangle | Polygon2D
+Geometry2D: TypeAlias = Rectangle | Polygon2D
 """A 2D geometry: either a `Rectangle` or a `Polygon2D`."""
 
 
@@ -431,7 +431,7 @@ class Prism(Geometry3DBase):
         }[self.axis]
 
 
-Geometry3D = Box | Prism
+Geometry3D: TypeAlias = Box | Prism
 """A 3D geometry: either a `Box` or a `Prism`."""
 
 Geometry: TypeAlias = Geometry2D | Geometry3D
