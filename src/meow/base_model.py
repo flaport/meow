@@ -181,7 +181,14 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
 
 
 def cache(prop: Callable) -> Callable:
-    """Decorator to cache the result of a property method."""
+    """Decorator to cache the result of a property method.
+
+    Args:
+        prop: the property method whose result should be cached.
+
+    Returns:
+        A wrapped callable that caches and returns the computed value.
+    """
     prop_name = getattr(prop, "__name__", "")
     if not prop_name:
         return prop
@@ -201,7 +208,14 @@ def cache(prop: Callable) -> Callable:
 
 
 def cached_property(method: Callable):  # noqa: ANN201
-    """Decorator to cache the result of a property method."""
+    """Decorator to cache the result of a property method.
+
+    Args:
+        method: the method to wrap as a cached property.
+
+    Returns:
+        A property descriptor that caches the method's return value.
+    """
     return property(cache(method))
 
 

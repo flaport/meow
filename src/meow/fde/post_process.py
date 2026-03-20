@@ -71,6 +71,13 @@ def normalize_modes(modes: Modes, inner_product: Callable) -> Modes:
     This only fixes the norm of each mode individually. It does not make the
     mode set mutually orthogonal. For overlap-based interface formulas, use
     :func:`orthonormalize_modes` if you need the simplified ``G = I`` metric.
+
+    Args:
+        modes: the modes to normalize.
+        inner_product: callable computing the inner product between two modes.
+
+    Returns:
+        The normalized (and zero-phased) modes.
     """
     return [zero_phase(normalize(m, inner_product)) for m in modes]
 

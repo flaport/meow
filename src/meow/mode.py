@@ -295,7 +295,14 @@ Modes: TypeAlias = list[Mode]
 
 
 def zero_phase(mode: Mode) -> Mode:
-    """Normalize (zero out) the phase of a `Mode`."""
+    """Normalize (zero out) the phase of a `Mode`.
+
+    Args:
+        mode: the mode to normalize the phase of.
+
+    Returns:
+        A new mode with zeroed-out phase.
+    """
     e = np.abs(energy_density(mode))
     m, n = np.array(np.where(e == e.max()))[:, 0]
     phase = np.exp(-1j * np.angle(np.array(mode.Hx))[m][n])
@@ -333,7 +340,14 @@ def _sum_around(field: FloatArray2D, m: int, n: int, r: int = 2) -> float:
 
 
 def invert_mode(mode: Mode) -> Mode:
-    """Invert a `Mode`."""
+    """Invert a `Mode`.
+
+    Args:
+        mode: the mode to invert.
+
+    Returns:
+        A new mode with all field components negated.
+    """
     return Mode(
         neff=mode.neff,
         cs=mode.cs,
@@ -428,7 +442,15 @@ def inner_product(
 
 
 def normalize(mode: Mode, inner_product: Callable) -> Mode:
-    """Normalize a `Mode` according to the `inner_product` with itself."""
+    """Normalize a `Mode` according to the `inner_product` with itself.
+
+    Args:
+        mode: the mode to normalize.
+        inner_product: a callable computing the inner product of two modes.
+
+    Returns:
+        A new mode normalized such that its self-inner-product is unity.
+    """
     factor = np.sqrt(inner_product(mode, mode))
     return Mode(
         neff=mode.neff,
@@ -445,7 +467,14 @@ def normalize(mode: Mode, inner_product: Callable) -> Mode:
 def electric_energy_density(
     mode: Mode,
 ) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
-    """Get the electric energy density contained in a `Mode`."""
+    """Get the electric energy density contained in a `Mode`.
+
+    Args:
+        mode: the mode to compute the electric energy density of.
+
+    Returns:
+        A 2D array of electric energy density values.
+    """
     epsx, epsy, epsz = mode.cs.nx**2, mode.cs.ny**2, mode.cs.nz**2
     return np.real(
         0.5
@@ -459,36 +488,78 @@ def electric_energy_density(
 
 
 def electric_energy(mode: Mode) -> float:
-    """Get the electric energy contained in a `Mode`."""
+    """Get the electric energy contained in a `Mode`.
+
+    Args:
+        mode: the mode to compute the electric energy of.
+
+    Returns:
+        The total electric energy summed over the cross section.
+    """
     return electric_energy_density(mode).sum()
 
 
 def magnetic_energy_density(
     mode: Mode,
 ) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
-    """Get the magnetic energy density contained in a `Mode`."""
+    """Get the magnetic energy density contained in a `Mode`.
+
+    Args:
+        mode: the mode to compute the magnetic energy density of.
+
+    Returns:
+        A 2D array of magnetic energy density values.
+    """
     return np.real(
         0.5 * mu0 * (np.abs(mode.Hx) ** 2 + np.abs(mode.Hy) ** 2 + np.abs(mode.Hz) ** 2)
     )
 
 
 def magnetic_energy(mode: Mode) -> float:
-    """Get the magnetic energy contained in a `Mode`."""
+    """Get the magnetic energy contained in a `Mode`.
+
+    Args:
+        mode: the mode to compute the magnetic energy of.
+
+    Returns:
+        The total magnetic energy summed over the cross section.
+    """
     return magnetic_energy_density(mode).sum()
 
 
 def energy_density(mode: Mode) -> np.ndarray[tuple[int, int], np.dtype[np.float64]]:
-    """Get the energy density contained in a `Mode`."""
+    """Get the energy density contained in a `Mode`.
+
+    Args:
+        mode: the mode to compute the energy density of.
+
+    Returns:
+        A 2D array of total (electric + magnetic) energy density values.
+    """
     return electric_energy_density(mode) + magnetic_energy_density(mode)
 
 
 def energy(mode: Mode) -> float:
-    """Get the energy contained in a `Mode`."""
+    """Get the energy contained in a `Mode`.
+
+    Args:
+        mode: the mode to compute the energy of.
+
+    Returns:
+        The total energy summed over the cross section.
+    """
     return energy_density(mode).sum()
 
 
 def normalize_energy(mode: Mode) -> Mode:
-    """Normalize a mode according to the energy it contains."""
+    """Normalize a mode according to the energy it contains.
+
+    Args:
+        mode: the mode to normalize.
+
+    Returns:
+        A new mode with fields scaled so that electric and magnetic energies are 0.5.
+    """
     e = np.sqrt(2 * electric_energy(mode))
     h = np.sqrt(2 * magnetic_energy(mode))
 
@@ -505,7 +576,14 @@ def normalize_energy(mode: Mode) -> Mode:
 
 
 def pml_fraction(mode: Mode) -> float:
-    """Fraction of energy density in the PML region."""
+    """Fraction of energy density in the PML region.
+
+    Args:
+        mode: the mode to evaluate.
+
+    Returns:
+        The fraction of total energy density located in the PML region (0.0 to 1.0).
+    """
     numx, numy = mode.mesh.num_pml
     if numx == numy == 0:
         return 0.0
@@ -524,7 +602,15 @@ def pml_fraction(mode: Mode) -> float:
 
 
 def is_pml_mode(mode: Mode, *, threshold: float = 0.1) -> bool:
-    """Check whether a mode can be considered a PML mode."""
+    """Check whether a mode can be considered a PML mode.
+
+    Args:
+        mode: the mode to check.
+        threshold: PML energy fraction above which the mode is considered a PML mode.
+
+    Returns:
+        True if the PML energy fraction exceeds the threshold.
+    """
     threshold = min(max(float(threshold), 0.0), 1.0)
     if threshold > 0.999:
         return False
@@ -532,12 +618,27 @@ def is_pml_mode(mode: Mode, *, threshold: float = 0.1) -> bool:
 
 
 def is_lossy_mode(mode: Mode, *, threshold: float = 1.0) -> bool:
-    """Check whether a mode can be considered lossy."""
+    """Check whether a mode can be considered lossy.
+
+    Args:
+        mode: the mode to check.
+        threshold: imaginary neff value above which the mode is considered lossy.
+
+    Returns:
+        True if the absolute imaginary part of neff exceeds the threshold.
+    """
     return bool(abs(np.imag(mode.neff)) > threshold)
 
 
 def te_fraction(mode: Mode) -> float:
-    """The TE polarization fraction of the `Mode`."""
+    """The TE polarization fraction of the `Mode`.
+
+    Args:
+        mode: the mode to compute the TE fraction of.
+
+    Returns:
+        The TE fraction (0.0 for pure TM, 1.0 for pure TE).
+    """
     epsx = np.real(mode.cs.nx**2)
     e = np.sum(0.5 * eps0 * epsx * np.abs(mode.Ex) ** 2)
     h = np.sum(0.5 * mu0 * np.abs(mode.Hx) ** 2)
