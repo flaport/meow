@@ -37,9 +37,18 @@ plugins:
           paths:
             - src
           inventories:
+            - https://docs.jax.dev/en/latest/objects.inv
+            - https://docs.kidger.site/jaxtyping/objects.inv
             - https://docs.python.org/3/objects.inv
-            - https://www.mkdocs.org/objects.inv
+            - https://docs.xarray.dev/en/stable/objects.inv
+            - https://flaport.github.io/sax/objects.inv
+            - https://matplotlib.org/stable/objects.inv
+            - https://numpy.org/doc/stable/objects.inv
+            - https://pandas.pydata.org/docs/objects.inv
             - https://python-markdown.github.io/objects.inv
+            - https://scipy.github.io/devdocs/objects.inv
+            - https://typing.readthedocs.io/en/latest/objects.inv
+            - https://www.mkdocs.org/objects.inv
           options:
             allow_inspection: true
             docstring_style: google
