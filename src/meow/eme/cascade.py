@@ -46,7 +46,7 @@ def compute_s_matrix_sax(
     propagations = propagations_fn(modes, cells, cell_lengths=cell_lengths)
     interfaces = interfaces_fn(modes)
     net = _get_netlist(propagations, interfaces)
-    _, analyze_fn, evaluate_fn = circuit_backends[sax_backend]  # type: ignore[reportArgumentType]
+    _, analyze_fn, evaluate_fn = circuit_backends[sax_backend]  # type: ignore[reportArgumentType]  # ty: ignore[invalid-assignment]
     # TODO: use analyze_instances instead of manually converting to scoo ?
     net["instances"] = {k: sax.scoo(v) for k, v in net["instances"].items()}
     analyzed = analyze_fn(net["instances"], net["nets"], net["ports"])

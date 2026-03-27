@@ -64,7 +64,7 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
         return obj
 
     @classmethod
-    def model_validate(  # type: ignore[reportIncompatibleMethodOverride]
+    def model_validate(  # type: ignore[reportIncompatibleMethodOverride]  # ty: ignore[invalid-method-override]
         cls,
         obj: Any,
         *,
@@ -99,7 +99,7 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
         )
 
     @classmethod
-    def model_validate_json(  # type: ignore[reportIncompatibleMethodOverride]
+    def model_validate_json(  # type: ignore[reportIncompatibleMethodOverride]  # ty: ignore[invalid-method-override]
         cls,
         json_data: str | bytes | bytearray,
         *,
@@ -329,5 +329,5 @@ def _eq(self: object, other: object) -> bool:
             return _eq(list(self), list(other))
         return all(_eq(a, b) for a, b in zip(self, other, strict=False))
     if isinstance(self, float) or isinstance(other, float):
-        return abs(self - other) < 1e-6  # type: ignore[reportOperatorIssue]
+        return abs(self - other) < 1e-6  # type: ignore[reportOperatorIssue]  # ty: ignore[unsupported-operator]
     return self == other

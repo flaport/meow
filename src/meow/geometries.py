@@ -252,7 +252,7 @@ class Box(Geometry3DBase):
         prism = extrude_polygon(poly, self.z_max * sz - self.z_min * sz)
         prism = cast(Trimesh, prism.apply_translation((0, 0, self.z_min * sz)))
         if color is not None:
-            prism.visual.face_colors = _to_rgba(color)  # type: ignore[invalid-assignment]
+            prism.visual.face_colors = _to_rgba(color)  # type: ignore[invalid-assignment]  # ty: ignore[invalid-assignment]
         return prism
 
 

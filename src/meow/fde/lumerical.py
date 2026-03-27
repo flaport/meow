@@ -39,7 +39,9 @@ def compute_modes_lumerical(
     Returns:
         The computed and post-processed list of modes.
     """
-    from lumapi import LumApiError  # type: ignore[reportMissingImports]
+    from lumapi import (  # ty: ignore[unresolved-import]
+        LumApiError,  # type: ignore[reportMissingImports]
+    )
 
     sim = get_sim(sim=sim)
 

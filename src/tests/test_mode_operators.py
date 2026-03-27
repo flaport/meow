@@ -10,7 +10,7 @@ mode2 = Mode.model_validate(MODE_DATA)
 def test_multiply_modes():
     """multiplying two modes objects is not supported and should raise a TypeError"""
     try:
-        mode1 * mode2  # type: ignore[reportOperatorIssue]
+        mode1 * mode2  # type: ignore[reportOperatorIssue]  # ty: ignore[unsupported-operator]
         pytest.fail("Expected TypeError when multiplying two modes objects")
     except TypeError:
         pass
