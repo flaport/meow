@@ -92,13 +92,7 @@
        x1="0"
        y1="54.018993"
        x2="132.29166"
-       y2="68.19204" /></defs><rect
-     style="fill:#fbfcfe;fill-opacity:1;stroke:none"
-     id="rect-background"
-     width="132.29166"
-     height="132.29166"
-     x="0"
-     y="0" /><path
+       y2="68.19204" /></defs><path
      id="rect15-9-9"
      style="fill:url(#headerGradient);fill-opacity:1;stroke:none;stroke-width:0.161662;stroke-opacity:1"
      d="M 30.574361,0 V 44.744039 H 0 V 62.084065 H 132.29166 V 44.744039 H 101.22121 V 0 Z" /><path
