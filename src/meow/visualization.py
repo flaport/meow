@@ -325,6 +325,9 @@ def visualize(obj: Any, **kwargs: Any) -> Any:
         obj: the meow object to visualize
         **kwargs: extra configuration to visualize the object
 
+    Returns:
+        The result of the visualization function for the given object.
+
     Note:
         Most meow objects have a `._visualize` method.
         Check out its help to see which kwargs are accepted.

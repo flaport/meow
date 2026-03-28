@@ -23,6 +23,13 @@ def compute_propagation_s_matrix(modes: Modes, cell_length: float) -> sax.SDictM
     Each mode acquires a phase ``exp(2j * pi * neff / wl * cell_length)`` while
     propagating through the cell. Backward propagation is mirrored by the
     bidirectional port mapping in the returned SAX dictionary.
+
+    Args:
+        modes: Modal basis for the cell.
+        cell_length: Physical length of the cell.
+
+    Returns:
+        SAX dictionary mapping port pairs to complex transmission values.
     """
     s_dict = {
         (f"left@{i}", f"right@{i}"): jnp.exp(
@@ -67,7 +74,15 @@ def compute_propagation_s_matrices(
 
 
 def select_ports(S: sax.SDenseMM, ports: list[str]) -> sax.SDenseMM:
-    """Keep a subset of ports from an S-matrix."""
+    """Keep a subset of ports from an S-matrix.
+
+    Args:
+        S: A tuple ``(s_matrix, port_map)`` in SAX dense multimode format.
+        ports: Port names to retain.
+
+    Returns:
+        A new ``(s_matrix, port_map)`` tuple with only the selected ports.
+    """
     s, pm = S
     idxs = jnp.array([pm[port] for port in ports], dtype=jnp.int32)
     s = s[idxs, :][:, idxs]
@@ -112,7 +127,16 @@ def pi_pairs(
     interfaces: dict[str, sax.SDenseMM],
     sax_backend: sax.Backend,
 ) -> list[sax.STypeMM]:
-    """Return propagation-interface pairs for a full stack."""
+    """Return propagation-interface pairs for a full stack.
+
+    Args:
+        propagations: Propagation S-matrices keyed by cell index.
+        interfaces: Interface S-matrices keyed by adjacent cell pairs.
+        sax_backend: SAX backend used for cascading.
+
+    Returns:
+        List of cascaded propagation-interface S-matrices, one per cell.
+    """
     pairs: list[sax.STypeMM] = []
     for i in range(len(propagations)):
         propagation = propagations[f"p_{i}"]
@@ -128,7 +152,16 @@ def pi_pairs(
 def l2r_matrices(
     pairs: list[sax.STypeMM], identity: sax.SDenseMM, sax_backend: sax.Backend
 ) -> list[sax.STypeMM]:
-    """Return cumulative left-to-right S-matrices."""
+    """Return cumulative left-to-right S-matrices.
+
+    Args:
+        pairs: Propagation-interface pair S-matrices from ``pi_pairs``.
+        identity: Identity-like S-matrix used as the initial accumulator.
+        sax_backend: SAX backend used for cascading.
+
+    Returns:
+        List of cumulative S-matrices from the left boundary up to each cell.
+    """
     matrices: list[sax.STypeMM] = [identity]
     for pair in pairs[:-1]:
         matrices.append(_connect_two(matrices[-1], pair, sax_backend))
@@ -138,7 +171,15 @@ def l2r_matrices(
 def r2l_matrices(
     pairs: list[sax.STypeMM], sax_backend: sax.Backend
 ) -> list[sax.STypeMM]:
-    """Return cumulative right-to-left S-matrices."""
+    """Return cumulative right-to-left S-matrices.
+
+    Args:
+        pairs: Propagation-interface pair S-matrices from ``pi_pairs``.
+        sax_backend: SAX backend used for cascading.
+
+    Returns:
+        List of cumulative S-matrices from each cell to the right boundary.
+    """
     matrices = [pairs[-1]]
     for pair in pairs[-2::-1]:
         matrices.append(_connect_two(pair, matrices[-1], sax_backend))
@@ -150,7 +191,15 @@ def split_square_matrix(
 ) -> tuple[
     tuple[ComplexArray2D, ComplexArray2D], tuple[ComplexArray2D, ComplexArray2D]
 ]:
-    """Split a square matrix into its four block submatrices."""
+    """Split a square matrix into its four block submatrices.
+
+    Args:
+        matrix: Square matrix to split.
+        idx: Row/column index at which to split.
+
+    Returns:
+        Nested tuple ``((top_left, top_right), (bottom_left, bottom_right))``.
+    """
     if matrix.shape[0] != matrix.shape[1]:
         msg = "Matrix has to be square."
         raise ValueError(msg)
@@ -167,7 +216,18 @@ def compute_mode_amplitudes(
     excitation_l: ComplexArray1D,
     excitation_r: ComplexArray1D,
 ) -> tuple[ComplexArray1D, ComplexArray1D]:
-    """Solve for the forward and backward modal amplitudes in one cell."""
+    """Solve for the forward and backward modal amplitudes in one cell.
+
+    Args:
+        u: Cumulative left-to-right S-matrix (dense array).
+        v: Cumulative right-to-left S-matrix (dense array).
+        m: Number of right-side (forward) modes.
+        excitation_l: Left boundary excitation vector.
+        excitation_r: Right boundary excitation vector.
+
+    Returns:
+        Tuple ``(forward, backward)`` of complex amplitude vectors.
+    """
     n = u.shape[0] - m
     _, [u21, u22] = split_square_matrix(u, n)
     [v11, v12], _ = split_square_matrix(v, m)
@@ -185,7 +245,18 @@ def propagate(
     excitation_l: ComplexArray1D,
     excitation_r: ComplexArray1D,
 ) -> tuple[list[ComplexArray1D], list[ComplexArray1D]]:
-    """Propagate boundary excitations through cumulative S-matrices."""
+    """Propagate boundary excitations through cumulative S-matrices.
+
+    Args:
+        l2rs: Cumulative left-to-right S-matrices for each cell.
+        r2ls: Cumulative right-to-left S-matrices for each cell.
+        excitation_l: Left boundary excitation vector.
+        excitation_r: Right boundary excitation vector.
+
+    Returns:
+        Tuple ``(forwards, backwards)`` where each element is a list of
+        complex amplitude vectors, one per cell.
+    """
     forwards = []
     backwards = []
     for l2r, r2l in zip(l2rs, r2ls, strict=False):
@@ -212,7 +283,20 @@ def plot_fields(
     y: float,
     z: FloatArray1D,
 ) -> tuple[ComplexArray2D, FloatArray1D]:
-    """Reconstruct an ``Ex(x, z)`` field slice from propagated modal amplitudes."""
+    """Reconstruct an ``Ex(x, z)`` field slice from propagated modal amplitudes.
+
+    Args:
+        modes: Mode sets for each cell.
+        cells: Cells defining the geometry and mesh.
+        forwards: Forward amplitude vectors per cell.
+        backwards: Backward amplitude vectors per cell.
+        y: Transverse y-coordinate at which to sample the field.
+        z: Global z-grid on which to reconstruct the field.
+
+    Returns:
+        Tuple ``(field, x)`` where ``field`` is the complex ``Ex(z, x)``
+        array and ``x`` is the transverse sampling grid.
+    """
     mesh_y = cells[0].mesh.y
     mesh_x = cells[0].mesh.x
     mesh_x = mesh_x[:-1] + np.diff(mesh_x) / 2
@@ -275,6 +359,14 @@ def track_modes(
     Unmatched modes are appended after the matched subset in their original
     order. This function does not change the physics of the interface solve; it
     only makes the local basis more continuous for reconstruction and plotting.
+
+    Args:
+        modes: Ordered list of modal bases across the stack.
+        inner_product_fn: Inner-product callable used to compute overlaps
+            between neighboring mode sets.
+
+    Returns:
+        Reordered and phase-aligned list of modal bases.
     """
     if not modes:
         return []

@@ -64,7 +64,7 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
         return obj
 
     @classmethod
-    def model_validate(  # type: ignore[reportIncompatibleMethodOverride]
+    def model_validate(  # type: ignore[reportIncompatibleMethodOverride]  # ty: ignore[invalid-method-override]
         cls,
         obj: Any,
         *,
@@ -99,7 +99,7 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
         )
 
     @classmethod
-    def model_validate_json(  # type: ignore[reportIncompatibleMethodOverride]
+    def model_validate_json(  # type: ignore[reportIncompatibleMethodOverride]  # ty: ignore[invalid-method-override]
         cls,
         json_data: str | bytes | bytearray,
         *,
@@ -181,7 +181,14 @@ class BaseModel(_BaseModel, metaclass=ModelMetaclass):
 
 
 def cache(prop: Callable) -> Callable:
-    """Decorator to cache the result of a property method."""
+    """Decorator to cache the result of a property method.
+
+    Args:
+        prop: the property method whose result should be cached.
+
+    Returns:
+        A wrapped callable that caches and returns the computed value.
+    """
     prop_name = getattr(prop, "__name__", "")
     if not prop_name:
         return prop
@@ -201,7 +208,14 @@ def cache(prop: Callable) -> Callable:
 
 
 def cached_property(method: Callable):  # noqa: ANN201
-    """Decorator to cache the result of a property method."""
+    """Decorator to cache the result of a property method.
+
+    Args:
+        method: the method to wrap as a cached property.
+
+    Returns:
+        A property descriptor that caches the method's return value.
+    """
     return property(cache(method))
 
 
@@ -315,5 +329,5 @@ def _eq(self: object, other: object) -> bool:
             return _eq(list(self), list(other))
         return all(_eq(a, b) for a, b in zip(self, other, strict=False))
     if isinstance(self, float) or isinstance(other, float):
-        return abs(self - other) < 1e-6  # type: ignore[reportOperatorIssue]
+        return abs(self - other) < 1e-6  # type: ignore[reportOperatorIssue]  # ty: ignore[unsupported-operator]
     return self == other

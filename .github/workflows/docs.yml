@@ -53,6 +53,7 @@ jobs:
 
   pages:
     name: Deploy Docs
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs:
       - docs

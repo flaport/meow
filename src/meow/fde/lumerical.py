@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, TypeAlias
 
 import numpy as np
 from pydantic import PositiveInt
@@ -15,7 +15,8 @@ from meow.fde.post_process import post_process_modes
 from meow.mode import Mode
 from meow.structures import Structure3D
 
-Sim = Any
+Sim: TypeAlias = Any
+"""A lumerical simulation object."""
 _sim: Sim | None = None
 
 
@@ -26,8 +27,21 @@ def compute_modes_lumerical(
     post_process: Callable = post_process_modes,
     sim: Sim | None = None,
 ) -> list[Mode]:
-    """Compute ``Modes` for a given ``FdeSpec` (Lumerical backend)."""
-    from lumapi import LumApiError  # type: ignore[reportMissingImports]
+    """Compute ``Modes`` for a given ``CrossSection`` (Lumerical backend).
+
+    Args:
+        cs: the cross-section to solve modes for.
+        num_modes: number of modes to compute.
+        unit: unit scaling factor (default 1e-6 for micrometres).
+        post_process: callable applied to the raw mode list before returning.
+        sim: optional Lumerical simulation object; uses the global one if None.
+
+    Returns:
+        The computed and post-processed list of modes.
+    """
+    from lumapi import (  # ty: ignore[unresolved-import]
+        LumApiError,  # type: ignore[reportMissingImports]
+    )
 
     sim = get_sim(sim=sim)
 
@@ -121,7 +135,14 @@ def create_lumerical_geometries(
     env: Environment,
     unit: float,
 ) -> None:
-    """Create Lumerical geometries from a list of structures."""
+    """Create Lumerical geometries from a list of structures.
+
+    Args:
+        sim: the Lumerical simulation object.
+        structures: 3-D structures to add to the simulation.
+        env: the environment containing material/wavelength info.
+        unit: unit scaling factor.
+    """
     sim = get_sim(sim=sim)
     sim.switchtolayout()
     sim.deleteall()
@@ -130,7 +151,15 @@ def create_lumerical_geometries(
 
 
 def get_sim(**kwargs: Any) -> Sim:
-    """Get the Lumerical simulation object."""
+    """Get the Lumerical simulation object.
+
+    Args:
+        **kwargs: keyword arguments; pass ``sim`` to set and return a specific
+            simulation object.
+
+    Returns:
+        The active Lumerical simulation object.
+    """
     global _sim  # noqa: PLW0603
     sim = kwargs.get("sim", None)
     if sim is not None:

@@ -15,6 +15,7 @@ from meow.eme.solve import tsvd_solve
 from meow.mode import Modes, inner_product
 
 PassivityMethod: TypeAlias = Literal["none", "clip", "invert", "subtract"]
+"""Method for enforcing S-matrix passivity."""
 
 
 def overlap_matrix(
@@ -220,6 +221,20 @@ def compute_interface_s_matrices(
     The same sharp edges apply here as for the single-interface solve:
     orthonormalization, inner-product choice, TSVD cutoff, and passivity method
     must all be interpreted consistently across the full stack.
+
+    Args:
+        modes: Ordered list of modal bases across the stack.
+        inner_product: Inner-product callable for forming overlap matrices.
+        conjugate: Whether to use the conjugated formulation. Inferred from
+            inner_product if None.
+        tsvd_rcond: Relative singular-value cutoff for the TSVD solve.
+        passivity_method: Method for enforcing S-matrix passivity.
+        enforce_reciprocity: Whether to symmetrize each interface S-matrix.
+        ignore_warnings: Whether to suppress numerical warnings.
+
+    Returns:
+        Dict mapping interface names (e.g. ``"i_0_1"``) to SAX dense
+        multimode S-matrix tuples.
     """
     return {
         f"i_{i}_{i + 1}": compute_interface_s_matrix(

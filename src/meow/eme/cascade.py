@@ -29,11 +29,24 @@ def compute_s_matrix_sax(
     propagations_fn: Callable = compute_propagation_s_matrices,
     **_: Any,
 ) -> sax.SDenseMM:
-    """Calculate the S-matrix for given sets of modes."""
+    """Calculate the S-matrix for given sets of modes.
+
+    Args:
+        modes: Modal basis for each cell in the stack.
+        cells: Cells from which to derive propagation lengths. Either cells
+            or cell_lengths must be provided.
+        cell_lengths: Optional explicit propagation lengths per cell.
+        sax_backend: SAX backend used for circuit evaluation.
+        interfaces_fn: Callable that computes interface S-matrices.
+        propagations_fn: Callable that computes propagation S-matrices.
+
+    Returns:
+        A tuple ``(S, port_map)`` in SAX dense multimode format.
+    """
     propagations = propagations_fn(modes, cells, cell_lengths=cell_lengths)
     interfaces = interfaces_fn(modes)
     net = _get_netlist(propagations, interfaces)
-    _, analyze_fn, evaluate_fn = circuit_backends[sax_backend]  # type: ignore[reportArgumentType]
+    _, analyze_fn, evaluate_fn = circuit_backends[sax_backend]  # type: ignore[reportArgumentType]  # ty: ignore[invalid-assignment]
     # TODO: use analyze_instances instead of manually converting to scoo ?
     net["instances"] = {k: sax.scoo(v) for k, v in net["instances"].items()}
     analyzed = analyze_fn(net["instances"], net["nets"], net["ports"])
@@ -94,7 +107,15 @@ def _get_netlist(
 
 
 def downselect_s(S: sax.SDenseMM, ports: list[str]) -> sax.SDenseMM:
-    """Downselect the S-matrix to the given ports."""
+    """Downselect the S-matrix to the given ports.
+
+    Args:
+        S: A tuple ``(S_matrix, port_map)`` in SAX dense multimode format.
+        ports: Port names to keep.
+
+    Returns:
+        A new ``(S_matrix, port_map)`` tuple containing only the selected ports.
+    """
     S_matrix, port_map = S
     idxs = [port_map[port] for port in ports]
     S_matrix = S_matrix[idxs, :][:, idxs]

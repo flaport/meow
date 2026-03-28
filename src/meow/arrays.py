@@ -131,19 +131,43 @@ def _assert_dtype(arr: np.ndarray, dtype: str) -> np.ndarray:
 
 
 def Dim(ndim: int, *, coerce: bool = True) -> AfterValidator:  # noqa: N802
-    """Validator to ensure the array has a specific number of dimensions."""
+    """Validator to ensure the array has a specific number of dimensions.
+
+    Args:
+        ndim: the required number of dimensions.
+        coerce: if True, reshape the array to match; if False, raise on mismatch.
+
+    Returns:
+        A pydantic AfterValidator that checks or coerces the array dimensions.
+    """
     f = _coerce_dim if coerce else _assert_dim
     return AfterValidator(partial(f, ndim=ndim))
 
 
 def DType(dtype: str, *, coerce: bool = True) -> AfterValidator:  # noqa: N802
-    """Validator to ensure the array has a specific dtype."""
+    """Validator to ensure the array has a specific dtype.
+
+    Args:
+        dtype: the required data type as a string (e.g. "float64").
+        coerce: if True, cast the array to the dtype; if False, raise on mismatch.
+
+    Returns:
+        A pydantic AfterValidator that checks or coerces the array dtype.
+    """
     f = _coerce_dtype if coerce else _assert_dtype
     return AfterValidator(partial(f, dtype=dtype))
 
 
 def Shape(*shape: int, coerce: bool = True) -> AfterValidator:  # noqa: N802
-    """Validator to ensure the array has a specific shape."""
+    """Validator to ensure the array has a specific shape.
+
+    Args:
+        *shape: the required dimensions of the array.
+        coerce: if True, reshape the array to match; if False, raise on mismatch.
+
+    Returns:
+        A pydantic AfterValidator that checks or coerces the array shape.
+    """
     f = _coerce_shape if coerce else _assert_shape
     return AfterValidator(partial(f, shape=shape))
 
@@ -165,14 +189,24 @@ NDArray: TypeAlias = Annotated[
     BeforeValidator(_validate_ndarray),
     AfterValidator(_coerce_immutable),
 ]
+"""A numpy ndarray with pydantic serialization support."""
 
 ComplexArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("complex128")]
+"""2D complex128 numpy array."""
 FloatArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("float64")]
+"""2D float64 numpy array."""
 BoolArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("bool")]
+"""2D boolean numpy array."""
 IntArray2D: TypeAlias = Annotated[NDArray, Dim(2), DType("int64")]
+"""2D int64 numpy array."""
 ComplexArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("complex128")]
+"""1D complex128 numpy array."""
 FloatArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("float64")]
+"""1D float64 numpy array."""
 BoolArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("bool")]
+"""1D boolean numpy array."""
 IntArray1D: TypeAlias = Annotated[NDArray, Dim(1), DType("int64")]
+"""1D int64 numpy array."""
 
 Complex: TypeAlias = Annotated[NDArray, Dim(0), DType("complex128")]
+"""0D (scalar) complex128 numpy array."""

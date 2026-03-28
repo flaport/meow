@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 import re
 from pathlib import Path
-from typing import Annotated, Any, Self, cast
+from typing import Annotated, Any, Self, TypeAlias, cast
 
 import numpy as np
 import pandas as pd
@@ -187,8 +187,10 @@ class SampledMaterial(MaterialBase):
         return np.squeeze(n)
 
 
-Material = IndexMaterial | SampledMaterial | TidyMaterial
-Materials = list[Material]
+Material: TypeAlias = IndexMaterial | SampledMaterial | TidyMaterial
+"""A material: `IndexMaterial`, `SampledMaterial`, or `TidyMaterial`."""
+Materials: TypeAlias = list[Material]
+"""A list of `Material` objects."""
 MATERIALS: dict[str, MaterialBase] = {}
 
 

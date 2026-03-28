@@ -122,7 +122,17 @@ def create_cells(
     Ls: Annotated[NDArray, Dim(1), DType("float64")],
     z_min: float = 0.0,
 ) -> list[Cell]:
-    """Create multiple `Cell` objects with a `Mesh` and a collection of cell lengths."""
+    """Create multiple `Cell` objects with a `Mesh` and a collection of cell lengths.
+
+    Args:
+        structures: the 3D structures shared by all cells.
+        mesh: a single mesh or a list of meshes, one per cell.
+        Ls: a 1D array of cell lengths.
+        z_min: the starting z-coordinate for the first cell.
+
+    Returns:
+        A list of Cell objects spanning the given lengths.
+    """
     Ls = np.asarray(Ls, float)
     if Ls.ndim != 1:
         msg = f"Ls should be 1D. Got shape: {Ls.shape}."

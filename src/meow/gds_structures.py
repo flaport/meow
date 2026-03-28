@@ -66,12 +66,15 @@ def extrude_gds(
     cell: Any,  # gf.Component | gdspy.Cell | gdstk.Cell
     extrusions: dict[tuple[int, int], list[GdsExtrusionRule]],
 ) -> list[Structure3D]:
-    """Extrude a gds cell given a dictionary of extruson rules.
+    """Extrude a gds cell given a dictionary of extrusion rules.
 
     Args:
-        cell: a gdspy or gdstk Cell to extrude
+        cell: a gdspy or gdstk Cell to extrude.
         extrusions: the extrusion rules to use
-            (if not given, the example extrusions will be used.)
+            (if not given, the example extrusions will be used).
+
+    Returns:
+        A list of Structure3D objects created from the extruded polygons.
     """
     structs = []
     for layer, polys in _get_polygons(cell).items():

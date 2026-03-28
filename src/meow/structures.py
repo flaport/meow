@@ -38,7 +38,16 @@ def Structure(  # noqa: N802
     geometry: Geometry2D | Geometry3D,
     mesh_order: int = DEFAULT_MESH_ORDER,
 ) -> Structure2D | Structure3D:
-    """Create a Structure from a Material and Geometry."""
+    """Create a Structure from a Material and Geometry.
+
+    Args:
+        material: the material of the structure.
+        geometry: a 2D or 3D geometry for the structure.
+        mesh_order: the mesh order used for rasterization priority.
+
+    Returns:
+        A Structure2D if geometry is 2D, otherwise a Structure3D.
+    """
     kwargs = {
         "material": material,
         "geometry": geometry,
@@ -117,7 +126,14 @@ def sort_structures(structures: list[Structure2D]) -> list[Structure2D]: ...
 def sort_structures(
     structures: list[Structure3D] | list[Structure2D],
 ) -> list[Structure2D] | list[Structure3D]:
-    """Sort structures by mesh order, then by order of definition."""
+    """Sort structures by mesh order, then by order of definition.
+
+    Args:
+        structures: the list of structures to sort.
+
+    Returns:
+        A new list of structures sorted by descending mesh order.
+    """
     struct_info = [(s.mesh_order, -i, s) for i, s in enumerate(structures)]
     sorted_struct_info = sorted(struct_info, key=lambda I: (I[0], I[1]), reverse=True)
     return cast(

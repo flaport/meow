@@ -24,7 +24,18 @@ def compute_modes_tidy3d(
     precision: Literal["single", "double"] = "double",
     post_process: Callable = post_process_modes,
 ) -> Modes:
-    """Compute ``Modes`` for a given ``CrossSection``."""
+    """Compute ``Modes`` for a given ``CrossSection``.
+
+    Args:
+        cs: the cross-section to solve modes for.
+        num_modes: number of modes to compute.
+        target_neff: effective index near which to search for modes.
+        precision: floating-point precision, ``"single"`` or ``"double"``.
+        post_process: callable applied to the raw mode list before returning.
+
+    Returns:
+        The computed and post-processed collection of modes.
+    """
     if num_modes < 1:
         msg = "You need to request at least 1 mode."
         raise ValueError(msg)
